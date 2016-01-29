@@ -1,12 +1,41 @@
 # Exp-player
 
-This README outlines the details of collaborating on this Ember addon.
+An Ember addon for the Experimenter player. This repo will eventually include:
+
+- the core exp-player component
+- exp- components to be used with the player
 
 ## Installation
 
 * `git clone` this repository
 * `npm install`
 * `bower install`
+
+Locally link the module:
+* `npm link`
+
+And in the app you want to install the addon:
+* `npm link exp-player`
+
+And in your package.json add:
+``json
+{
+  ...
+  "dependencies": {
+    "exp-player": "latest"
+  }
+}
+```
+
+Use the exp-player like: `{{exp-player frames=[...]}}`
+      
+## Frame development
+
+This addon includes blueprints for creating frames:
+`ember g exp-frame exp-<name>`
+
+which will create a new component and corresponding template for the new frame.
+
 
 ## Running
 

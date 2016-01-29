@@ -1,4 +1,4 @@
-import ExpFrameBaseComponent from 'components/exp-frame-base';
+import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 
 export default ExpFrameBaseComponent.extend({
 
