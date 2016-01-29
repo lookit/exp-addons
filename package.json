@@ -1,7 +1,7 @@
 {
   "name": "exp-player",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "The Experimenter player and associated components",
   "directories": {
     "doc": "doc",
     "test": "tests"
