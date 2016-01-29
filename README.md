@@ -18,7 +18,7 @@ And in the app you want to install the addon:
 * `npm link exp-player`
 
 And in your package.json add:
-``json
+```json
 {
   ...
   "dependencies": {
