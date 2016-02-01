@@ -19,7 +19,6 @@ export default Ember.Component.extend({
     ctx: {
         data: {}
     },
-    _registry: Ember.inject.service('exp-frame-registry'),
     onInit: function() {
         this.set('frameIndex', 0);
     }.on('init'),
