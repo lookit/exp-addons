@@ -18,7 +18,7 @@ And in the app you want to install the addon:
 * `npm link exp-player`
 
 And in your package.json add:
-``json
+```json
 {
   ...
   "dependencies": {
@@ -32,9 +32,11 @@ Use the exp-player like: `{{exp-player frames=[...]}}`
 ## Frame development
 
 This addon includes blueprints for creating frames. If you want to create a frame in the shared addon project use:
+
 `ember g addon-exp-frame exp-<name>`
 
 otherwise to generate a project-specific frame use:
+
 `ember g exp-frame exp-<name>`
 
 which will create a new component and corresponding template for the new frame.
