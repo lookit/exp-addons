@@ -24,6 +24,9 @@ export default Ember.Component.extend({
     }.on('didReceiveAttrs'),
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames');
+        if (!frames.length) {
+            frames = NO_FRAMES;
+        }
         var frameIndex = this.get('frameIndex');
         return frames[frameIndex];
     }),
