@@ -21,7 +21,7 @@ export default Ember.Component.extend({
     },
     onInit: function() {
         this.set('frameIndex', 0);
-    }.on('init'),
+    }.on('didReceiveAttrs'),
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames');
         var frameIndex = this.get('frameIndex');
@@ -53,6 +53,13 @@ export default Ember.Component.extend({
             context[currentFrame.id] = null;
         }       
         return context[currentFrame.id];
+    }),
+    currentFrameCtx: Ember.computed('currentFrame', function() {
+        // deepcopy global context
+        var ctx = Ember.copy(this.get('ctx'));
+        ctx.frameIndex = this.get('frameIndex');
+
+        return ctx;
     }),
     actions: {
         next() {

@@ -1,31 +1,25 @@
 // app/components/exp-frame-base.js
 import Ember from 'ember';
 
-function NotImplemnetedError(message) {
-   this.message = message;
-   this.name = 'NotImplementedError';
-}
-
 export default Ember.Component.extend({
     /** An abstract component for defining experimenter frames
      **/
-    id: null,
+    meta: {
+        name: 'Base Experimenter Frame',
+        description: 'The abstract base frame for Experimenter frames.',
+        parameters: {}
+    },
     willRender() {
         this._super(...arguments);
 
+        var defaultParams = {};
+        Object.keys(this.get('meta.parameters.properties')).forEach((key) => {
+            defaultParams[key] = this.get(`meta.parameters.properties.${key}.default`);
+        });
         var params = this.get('params') || {};
-        var paramKeys = Object.keys(params);
-        for (var i = 0; i < paramKeys.length; i++) {
-            var key = paramKeys[i];
-            this.set(key, params[key]);
-        }
-
-        var id = this.get('id');
-        if (!id) {
-            throw new NotImplemnetedError('ExpFrameBase subclasses must specify an id');
-        }
-        // deepcopy global context
-        this.set('ctx', Ember.copy(this.get('ctx')));
+        Object.keys(defaultParams).forEach((key) => {
+            this.set(key, params[key] || defaultParams[key]);
+        });
     },
     actions: {
         next() {
