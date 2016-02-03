@@ -17,13 +17,21 @@ export default Ember.Component.extend({
         description: 'The abstract base frame for Experimenter frames.',
         parameters: {}
     },
-    onInit: function() {
+    setupParams(params) {
+        params = params || this.get('params');
+
         var defaultParams = {};
-        Object.keys(this.get('meta.parameters.properties')).forEach((key) => {
+        Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
             defaultParams[key] = this.get(`meta.parameters.properties.${key}.default`);
         });
+
+        Ember.merge(defaultParams, params);
+        return defaultParams;
+    },
+    onInit: function() {
+        var defaultParams = this.setupParams();
         Object.keys(defaultParams).forEach((key) => {
-            this.set(key, this.get(`params.${key}`) || defaultParams[key]);
+            this.set(key, defaultParams[key]);
         });
 
         if (!this.get('id')) {

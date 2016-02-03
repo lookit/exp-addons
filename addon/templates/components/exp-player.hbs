@@ -1,7 +1,10 @@
-<div class="col-md-8">
-  <div class="row">
-    <div class="col-md-8">
-      {{component currentFrameTemplate type=currentFrameId next=(action 'next') last=(action 'last') previous=(action 'previous') ctx=currentFrameIndex data=currentFrameData id=currentFrameId params=currentFrame}}
+<div class="col-md-12">
+  {{#if noFrames }}
+    <div class="panel">
+      <h1> No frames specified </h1>
+      <p> You'll needs to specifiy some frames for this experiment. See our getting started page: ...</p>
     </div>
-  </div>
+  {{else}}
+    {{component currentFrameTemplate type=currentFrameId next=(action 'next') last=(action 'last') previous=(action 'previous') ctx=currentFrameIndex data=currentFrameData id=currentFrameId params=currentFrame}}
+  {{/if}}
 </div>

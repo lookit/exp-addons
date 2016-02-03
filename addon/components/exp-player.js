@@ -1,35 +1,21 @@
 import Ember from 'ember';
 
-let NO_FRAMES = [
-    {
-        id: 'NO_FRAMES',
-        type: 'info',
-        title: 'No frames specified',
-        body: 'You\'ll needs to specifiy some frames for this experiment. See our getting started page: ...'
-    }
-];
-
-let NOT_FOUND = 'exp-not-found';
-
-
 export default Ember.Component.extend({
-    frames: NO_FRAMES,
+    frames: null,
     frameIndex: null,
     _last: null,
     ctx: {
         data: {}
     },
     onInit: function() {
-        this.set('frameIndex', 0);
+        this.set('frameIndex', this.get('frameIndex') || 0);
     }.on('didReceiveAttrs'),
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
-        var frames = this.get('frames');
-        if (!frames.length) {
-            frames = NO_FRAMES;
-        }
+        var frames = this.get('frames') || [];
         var frameIndex = this.get('frameIndex');
         return frames[frameIndex];
     }),
+    noFrames: Ember.computed.empty('frames'),
     currentFrameType: Ember.computed('currentFrame', function() {
         var currentFrame = this.get('currentFrame');
         return !!currentFrame ? currentFrame.type : '';
@@ -40,7 +26,6 @@ export default Ember.Component.extend({
 
         if (!this.container.lookup(`component:${componentName}`)) {
             console.warn(`No component named ${componentName} is registered.`);
-            return NOT_FOUND;
         }
         return componentName;
     }),
@@ -51,10 +36,10 @@ export default Ember.Component.extend({
     currentFrameData: Ember.computed('currentFrame', function() {
         var currentFrame = this.get('currentFrame');
         var context = this.get('ctx');
-        
+
         if (!context[currentFrame.id]) {
             context[currentFrame.id] = null;
-        }       
+        }
         return context[currentFrame.id];
     }),
     currentFrameCtx: Ember.computed('currentFrame', function() {
@@ -67,11 +52,22 @@ export default Ember.Component.extend({
     actions: {
         next() {
             console.log('next');
+
+            var frameIndex = this.get('frameIndex');
+            if (frameIndex > (this.get('frames').length - 1)) {
+                this.set('frameIndex', frameIndex + 1);
+            }
         },
         previous() {
             console.log('previous');
+
+            var frameIndex = this.get('frameIndex');
+            if (frameIndex !== 0) {
+                this.set('frameIndex', frameIndex - 1);
+            }
         },
         last() {
+            // TODO
             console.log('last');
         },
         skipTo(index) {
