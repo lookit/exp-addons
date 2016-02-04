@@ -11,22 +11,6 @@ An Ember addon for the Experimenter player. This repo will eventually include:
 * `npm install`
 * `bower install`
 
-Locally link the module:
-* `npm link`
-
-And in the app you want to install the addon:
-* `npm link exp-player`
-
-And in your package.json add:
-```json
-{
-  ...
-  "dependencies": {
-    "exp-player": "latest"
-  }
-}
-```
-
 Use the exp-player like: `{{exp-player frames=[...]}}`
       
 ## Frame development
