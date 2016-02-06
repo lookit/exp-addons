@@ -10,7 +10,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "preinstall": "./scripts/link.sh"
   },
   "repository": "",
   "engines": {
@@ -35,6 +36,8 @@
     "ember-data": "^2.3.0",
     "ember-disable-proxy-controllers": "^1.0.1",
     "ember-export-application-global": "^1.0.4",
-    "ember-resolver": "^2.0.3"
+    "ember-resolver": "^2.0.3",
+    "exp-player": "latest",
+    "exp-models": "latest"
   }
 }
