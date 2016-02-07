@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/CenterForOpenScience/exp-addons#readme",
   "dependencies": {
-    "exp-player": "file:./exp-player",
-    "exp-models": "file:./exp-models"
+    "exp-player": "file:../exp-player",
+    "exp-models": "file:../exp-models"
   }
 }
