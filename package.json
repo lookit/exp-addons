@@ -1,5 +1,5 @@
 {
-  "name": "exp-addons",
+  "name": "ember-cli-exp-addons",
   "version": "1.0.0",
   "description": "A shared home for all of our shared addons",
   "main": "index.js",
