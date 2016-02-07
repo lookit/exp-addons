@@ -10,7 +10,8 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npm install -S file:./exp-player && npm install -S file:./exp-models"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,5 @@
   "bugs": {
     "url": "https://github.com/CenterForOpenScience/exp-addons/issues"
   },
-  "homepage": "https://github.com/CenterForOpenScience/exp-addons#readme",
-  "dependencies": {
-    "exp-player": "file:../exp-player",
-    "exp-models": "file:../exp-models"
-  }
+  "homepage": "https://github.com/CenterForOpenScience/exp-addons#readme"
 }
