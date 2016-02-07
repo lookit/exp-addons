@@ -4,6 +4,29 @@ A shared home for all of our shared addons
 
 # Installation
 
+This repo module should included as a submodule in the Ember project where you want to use these addons.
+An example setup might be:
+```
+/<ember-project>
+  /ext
+    /exp-addons
+  /app
+    ...    
+```
+
+And the corresponding package.json entries are:
+
+```json
+{
+  ...,
+  "dependencies": {
+    "exp-player": "file:./ext/exp-addons/exp-player",
+    "exp-models": "file:./ext/exp-addons/exp-models"
+  }
+}
+
+```
+
 ## Development
 
 To install locally without publishing these addons, `cd` into that addon directory and:
