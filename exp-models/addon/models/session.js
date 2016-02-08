@@ -16,11 +16,10 @@ export default DS.Model.extend(JamModel, {
 
     // JamDB requires two pieces of info to unambiguously identify a record
     profile: DS.belongsTo('profile'),
+    profileId: DS.attr('string'), // Store ID of related record
     profileVersion: DS.attr('string'),  // TODO: safe to always assume newest profile version?
 
     experiment: DS.belongsTo('experiment'),
+    experimentId: DS.attr('string'),
     experimentVersion: DS.attr('string'),
-
-
-    // TODO: Can we add computed properties for experiment name/ ID from a relationship?
 });
