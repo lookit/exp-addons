@@ -29,34 +29,16 @@ And the corresponding package.json entries are:
 
 ## Development
 
-To install locally without publishing these addons, `cd` into that addon directory and:
+If your work requires that you make changes to one of the exp-addon modules you can use `npm link` for
+local development. This allows you to make changes to the code without having to push to github. To do
+this:
 
-Locally link the module:
-* `npm link`
-
-And in the app you want to install the addon:
-* `npm link exp-player`
-
-And in your package.json add:
-```json
-{
-  ...
-  "dependencies": {
-    "exp-player": "latest"
-  }
-}
+```bash
+cd ext/exp-addons/exp-player
+npm link
+cd ../../..
+npm link exp-player
 ```
 
-__NOTE__: You will not be able to run `npm install` with these entries in your package.json. Until we find a workaround:
-
-1. remove the linked modules from package.json
-2. `npm install`
-3. re-add the removed modules
-
-:hearts: apologies in advance :hearts:
-
----
-
-The linked package should automagically be updated in the destination project, but if you add
-more files to the addon project, you may need to rerun the `npm link` process.
-
+Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
+now be automagically reflected in the consuming project.
