@@ -16,16 +16,6 @@ An example setup might be:
     ...    
 ```
 
-For example:
-
-```bash
-cd ext/exp-addons
-git submodule init
-git submodule update
-cd ../..
-npm install
-```
-
 And the corresponding package.json entries are:
 
 ```json
@@ -37,6 +27,16 @@ And the corresponding package.json entries are:
   }
 }
 
+```
+
+For example:
+
+```bash
+cd ext/exp-addons
+git submodule init
+git submodule update
+cd ../..
+npm install
 ```
 
 ## Development
