@@ -5,13 +5,6 @@ A shared home for all of our shared addons
 # Installation
 
 ## Install the submodule:
-```bash
-cd ext/exp-addons
-git submodule init
-git submodule update
-cd ../..
-npm install
-```
 
 This repo module should included as a submodule in the Ember project where you want to use these addons.
 An example setup might be:
@@ -21,6 +14,16 @@ An example setup might be:
     /exp-addons
   /app
     ...    
+```
+
+For example:
+
+```bash
+cd ext/exp-addons
+git submodule init
+git submodule update
+cd ../..
+npm install
 ```
 
 And the corresponding package.json entries are:
