@@ -1,6 +1,8 @@
-/* jshint node: true */
-'use strict';
-
+/*jshint node:true*/
 module.exports = {
-  name: 'exp-player'
+  name: 'exp-player',
+
+  isDevelopingAddon: function() {
+    return true;
+  }
 };
