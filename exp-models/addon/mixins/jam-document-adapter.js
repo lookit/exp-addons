@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
     findRecordUrlTemplate: '{+host}/{+namespace}/documents{/id}',
     findAllUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/documents',
-    queryUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/_search',
+    queryUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/documents',
 
     // TODO: Support creation and deletion of records
 
