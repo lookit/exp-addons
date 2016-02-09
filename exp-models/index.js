@@ -1,6 +1,8 @@
-/* jshint node: true */
-'use strict';
-
+/*jshint node:true*/
 module.exports = {
-  name: 'exp-models'
+  name: 'exp-models',
+
+  isDevelopingAddon: function() {
+    return true;
+  }
 };

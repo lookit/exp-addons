@@ -6,7 +6,7 @@ export default ExpFrameBaseComponent.extend({
         name: '<%= classifiedModuleName %>',
         description: 'TODO: a description of this frame goes here.',
         parameters: {
-            type: "object",
+            type: 'object',
             properties: {
                 id: {
                     type: 'string',
@@ -17,7 +17,7 @@ export default ExpFrameBaseComponent.extend({
             required: ['id']
         },
         data: {
-            type: "object",
+            type: 'object',
             properties: {
                 // define data structure here
             }

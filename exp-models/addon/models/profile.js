@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 import JamModel from '../mixins/jam-model';
@@ -10,7 +11,6 @@ export default DS.Model.extend(JamModel, {
 
     account: DS.belongsTo('account'),
     history: DS.hasMany('history'),
-    sessions: DS.hasMany('session'),
 
     fullName: Ember.computed('firstName', 'lastName', function() {
         return `${this.get('firstName')} ${this.get('lastName')}`;

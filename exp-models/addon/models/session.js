@@ -6,16 +6,20 @@ import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
 export default DS.Model.extend(JamModel, {
-    softwareVersion: DS.Store('string'),
-    parameters: DS.Store(), // TODO: Nested document
-    data: DS.Store(),  // TODO: Nested document
-    timestamp: DS.Store('date'),  // Should we instead rely on Jam meta fields as stamp?
+    parameters: DS.attr(),
+    softwareVersion: DS.attr('string'),
+    expData: DS.attr(),  // Data is a reserved keyword in ember
+    timestamp: DS.attr('date'),  // Should we instead rely on Jam meta fields as stamp?
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),
+
     // JamDB requires two pieces of info to unambiguously identify a record
-    profileID: DS.belongsTo('account'),
-    //profileVersion: DS.Store('string'),  // TODO: safe to always assume newest profile version?
-    experiment: DS.hasMany('experiment'),
-    experimentVersion: DS.Store('string'),
+    profile: DS.belongsTo('profile'),
+    profileId: DS.attr('string'), // Store ID of related record
+    profileVersion: DS.attr('string'),  // TODO: safe to always assume newest profile version?
+
+    experiment: DS.belongsTo('experiment'),
+    experimentId: DS.attr('string'),
+    experimentVersion: DS.attr('string'),
 });

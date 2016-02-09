@@ -20,7 +20,7 @@ export default Ember.Component.extend({
         var currentFrame = this.get('currentFrame');
         return !!currentFrame ? currentFrame.type : '';
     }),
-    currentFrameTemplate: Ember.computed(function() {
+    currentFrameTemplate: Ember.computed('currentFrame', function() {
         var currentFrame = this.get('currentFrame');
         var componentName = `exp-${currentFrame.type}`;
 

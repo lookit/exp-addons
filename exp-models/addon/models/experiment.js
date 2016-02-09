@@ -8,7 +8,10 @@ import JamModel from '../mixins/jam-model';
 export default DS.Model.extend(JamModel, {
     title: DS.attr('string'),
     description: DS.attr('string'),
-    active: DS.attr('boolean'),
+    active: DS.attr('string'),
+    beginDate: DS.attr('date'),	// TODO: ISODate
+    endDate: DS.attr('date'),	// TODO: ISODate
+    lastEdited: DS.attr('date'),	// TODO: ISODate
     structure: DS.attr(),
     permissions: DS.attr(),
 
