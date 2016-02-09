@@ -3,7 +3,6 @@ import layout from '../templates/components/exp-player';
 
 export default Ember.Component.extend({
     layout: layout,
-
     frames: null,
     frameIndex: null,
     _last: null,
