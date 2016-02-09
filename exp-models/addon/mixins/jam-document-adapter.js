@@ -10,8 +10,8 @@ export default Ember.Mixin.create({
     urlSegments: {
         // Allows serializer to be reused across multiple types
         search(type, id, snapshot, query) {
-		  return query.q ? '_search' : 'documents';
-		},
+            return query.q ? '_search' : 'documents';
+        },
         collectionId: (type, id, snapshot, query) => Ember.Inflector.inflector.pluralize(type),
     }
 });
