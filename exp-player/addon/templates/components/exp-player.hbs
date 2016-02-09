@@ -2,9 +2,19 @@
   {{#if noFrames }}
     <div class="panel">
       <h1> No frames specified </h1>
-      <p> You'll needs to specifiy some frames for this experiment. See our getting started page: ...</p>
+      <p> You'll need to specify some frames for this experiment. See our getting started page: ...</p>
     </div>
   {{else}}
-    {{component currentFrameTemplate type=currentFrameId next=(action 'next') last=(action 'last') previous=(action 'previous') ctx=currentFrameIndex data=currentFrameData id=currentFrameId params=currentFrame}}
+    {{component
+        currentFrameTemplate
+        type=currentFrameId
+        next=(action 'next')
+        last=(action 'last')
+        previous=(action 'previous')
+        ctx=currentFrameIndex
+        data=currentFrameData
+        id=currentFrameId
+        params=currentFrame
+    }}
   {{/if}}
 </div>
