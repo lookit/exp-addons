@@ -17,6 +17,16 @@ export default Ember.Mixin.create({
         return this.modelName || this._super(key);
     },
 
+    extractAttributes: function(modelClass, resourceHash) {
+        // Keep track of the original ID values (string) alongside any relationships;
+        //  may help avoid a second API call when we want to display IDs of related records
+        var attributes = this._super(...arguments);
+        for (var item of this.relationAttrs) {
+            attributes[item + 'Id'] = resourceHash.attributes[item];
+        }
+        return attributes;
+    },
+
     extractRelationships: function(modelClass, resourceHash) {
         var relationships = this._super(...arguments);
         // Some relationships are stored as ID list under attributes; convert to JSONAPI format
