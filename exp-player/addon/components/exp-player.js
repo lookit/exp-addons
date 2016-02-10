@@ -77,6 +77,11 @@ export default Ember.Component.extend({
             this.set('eventTimings', timings);
         },
 
+        saveFrame(frameId, frameData) {
+            // TODO: Implement
+            console.log('Save frame action called', frameId, frameData);
+        },
+
         next() {
             console.log('next');
 

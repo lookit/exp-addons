@@ -4,7 +4,7 @@ import layout from '../templates/components/exp-consent';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,
-    meta: {
+    meta: {  // Configuration for all fields available on the component/template
         name: 'Consent Form',
         description: 'A simple consent form.',
         parameters: {
@@ -25,19 +25,22 @@ export default ExpFrameBaseComponent.extend({
                 consentLabel: {
                     type: 'string',
                     default: 'I agree'
+                },
+                consentGranted: {
+                    type: 'boolean',
+                    default: false,
                 }
             }
         },
-        data: {
-            type: "object",
+        data: {  // Control serialization of saved data. We may want to change to a list so that schema is controlled in one place, only.
+            type: 'object',
             properties: {
                 consentGranted: {
                     type: 'boolean',
-                    default: false
-                }
+                },
             },
             required: ['consentGranted']
         }
     },
-    consentNotGranted: Ember.computed.not('consentGranted')
+    consentNotGranted: Ember.computed.not('consentGranted'),
 });
