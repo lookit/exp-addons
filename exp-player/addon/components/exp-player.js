@@ -9,12 +9,8 @@ export default Ember.Component.extend({
     ctx: {
         data: {}
     },
-    startTime: Date.now(),
-    eventTimings: null,   // TODO: Move to expData?
-
     onInit: function() {
-        this.set('frameIndex', this.get('frameIndex') || 0);
-        this.set('eventTimings', this.get('eventTimings') || {});
+        this.set('frameIndex', this.get('frameIndex') || 0);  // TODO: Is this necessary?
     }.on('didReceiveAttrs'),
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames') || [];
@@ -56,27 +52,6 @@ export default Ember.Component.extend({
         return ctx;
     }),
     actions: {
-        startTimer() {
-            // Reset 0-index of the timer
-            this.set('startTime', Date.now());
-        },
-
-        setTimeEvent(eventName, frameId, extra) {
-            // Track a particular timing event
-            var curTime = (Date.now() - this.get('startTime')) / 1000;  // All times expressed in seconds relative to start.
-            // TODO: Do we really want times to be relative? There are advantages to absolute times, and we could process for readability after the fact.
-            var eventData = {
-                eventType: eventName,
-                timestamp: curTime
-            };
-            Ember.merge(eventData, extra || {});
-            // Copy timing event into parent dict; TODO is there a more elegant way?
-            var timings = this.get('eventTimings');
-            timings[frameId] = timings[frameId] || [];
-            timings[frameId].push(eventData);
-            this.set('eventTimings', timings);
-        },
-
         saveFrame(frameId, frameData) {
             // TODO: Implement
             console.log('Save frame action called', frameId, frameData);
@@ -89,8 +64,6 @@ export default Ember.Component.extend({
             if (frameIndex < (this.get('frames').length - 1)) {
                 this.set('frameIndex', frameIndex + 1);
             }
-            // TODO: It may be better to intercept transition events, once exp-player pagination mechanism is fleshed out
-            this.send('setTimeEvent', 'nextFrame', frameIndex); //{additionalKey: 'this is a sample event'});
         },
         previous() {
             console.log('previous');

@@ -17,6 +17,7 @@ export default Ember.Component.extend({
         description: 'The abstract base frame for Experimenter frames.',
         parameters: {}
     },
+    eventTimings: [], // TODO: Simplify default values mechanism
     setupParams(params) {
         params = params || this.get('params');
 
@@ -41,10 +42,25 @@ export default Ember.Component.extend({
         }
     }.on('didReceiveAttrs'),
     actions: {
+        setTimeEvent(eventName, extra) {
+            // Track a particular timing event
+            var curTime = new Date();
+            var eventData = {
+                eventType: eventName,
+                timestamp: curTime.toISOString(),
+            };
+            Ember.merge(eventData, extra || {});
+            // Copy timing event into parent dict; TODO is there a more elegant way?
+            var timings = this.get('eventTimings');
+            timings.push(eventData);
+            this.set('eventTimings', timings);
+        },
         next() {
-            //this.get('sendContent')(); // TODO: Better transition mechanism?
+            // TODO: It may be better to intercept transition events, once exp-player pagination mechanism is fleshed out
+            this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
+
             this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply
-            this.sendAction('next'); // todo send a named action?
+            this.sendAction('next'); // TODO: Better way to propagate up to exp-player?
         },
         last() {
             this.sendAction('last');
@@ -53,7 +69,6 @@ export default Ember.Component.extend({
             this.sendAction('previous');
         }
     },
-
     serializeContent: function () {
         // Serialize selected parameters for this frame, plus eventTiming data
         var toSerialize = Object.keys(this.get('meta.data.properties'));
