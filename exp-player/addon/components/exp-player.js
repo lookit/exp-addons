@@ -3,12 +3,15 @@ import layout from '../templates/components/exp-player';
 
 export default Ember.Component.extend({
     layout: layout,
+    store: Ember.inject.service('store'),
+
     frames: null,
     frameIndex: null,
     _last: null,
     ctx: {
         data: {}
     },
+    expData: {},
     onInit: function() {
         this.set('frameIndex', this.get('frameIndex') || 0);  // TODO: Is this necessary?
     }.on('didReceiveAttrs'),
@@ -53,16 +56,26 @@ export default Ember.Component.extend({
     }),
     actions: {
         saveFrame(frameId, frameData) {
-            // TODO: Implement
+            // Save the data from a completed frame to the session data item
             console.log('Save frame action called', frameId, frameData);
+            var expData = this.get('expData');
+            expData[frameId] = frameData;
+            this.set('expData', expData);
         },
-
+        saveSession() {
+            var record = this.get('store').createRecord('session', {expData: this.get('expData')});
+            record.save();
+        },
         next() {
             console.log('next');
 
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
                 this.set('frameIndex', frameIndex + 1);
+            } else {
+                // TODO Very ugly hack: clicking next on final frame acts as a save instead
+                console.log('Attempting to save session, which will not go well');
+                this.send('saveSession');
             }
         },
         previous() {
@@ -79,6 +92,7 @@ export default Ember.Component.extend({
         },
         skipTo(index) {
             this.set('frameIndex', index);
-        }
+        },
+
     }
 });

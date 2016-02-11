@@ -56,7 +56,6 @@ export default Ember.Component.extend({
             this.set('eventTimings', timings);
         },
         next() {
-            // TODO: It may be better to intercept transition events, once exp-player pagination mechanism is fleshed out
             this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
 
             this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply
