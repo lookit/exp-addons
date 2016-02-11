@@ -48,12 +48,17 @@ export default Ember.Mixin.create({
                 } else {
                     newRel = relData.map(makeRel);
                 }
-
                 relationships[relName] = {
                     data: newRel,
                 };
             }
         }
         return relationships;
+    },
+    serialize: function(snapshot, options) {
+        var serialized = this._super(...arguments);
+        console.log('serialized:', serialized);
+        delete serialized.data.relationships;
+        return serialized;
     }
 });

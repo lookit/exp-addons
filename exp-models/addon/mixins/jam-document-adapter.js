@@ -5,6 +5,7 @@ export default Ember.Mixin.create({
     findAllUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/documents',
     queryUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/documents',
 
+    createRecordUrlTemplate: '{+host}/{+namespace}/collections{/jamNamespace}.{+collectionId}/documents',
     // TODO: Support creation and deletion of records
 
     urlSegments: {
