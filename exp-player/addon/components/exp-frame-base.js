@@ -57,9 +57,9 @@ export default Ember.Component.extend({
         },
         next() {
             this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
-
+            // When exiting frame, save the data to the base player using the provided saveHandler
             this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply
-            this.sendAction('next'); // TODO: Better way to propagate up to exp-player?
+            this.sendAction('next');
         },
         last() {
             this.sendAction('last');

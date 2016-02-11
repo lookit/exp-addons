@@ -57,13 +57,19 @@ export default Ember.Component.extend({
     actions: {
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
-            console.log('Save frame action called', frameId, frameData);
             var expData = this.get('expData');
             expData[frameId] = frameData;
             this.set('expData', expData);
         },
         saveSession() {
-            var record = this.get('store').createRecord('session', {expData: this.get('expData')});
+            var payload = {
+                profileId: 'experimenter.profiles.prof2',
+                experimentId: 'experimenter.experiments.test1',
+                expData: this.get('expData'),
+                parameters: {IAmTheVery: 'ModelOfAMajorGeneral', information: 'AnimalVegetableMineral'},
+                timestamp: new Date(),
+            };
+            var record = this.get('store').createRecord('session', payload);
             record.save();
         },
         next() {
@@ -73,8 +79,7 @@ export default Ember.Component.extend({
             if (frameIndex < (this.get('frames').length - 1)) {
                 this.set('frameIndex', frameIndex + 1);
             } else {
-                // TODO Very ugly hack: clicking next on final frame acts as a save instead
-                console.log('Attempting to save session, which will not go well');
+                // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
                 this.send('saveSession');
             }
         },
