@@ -2,6 +2,8 @@
 Manage data about one or more documents in the admin collection
  */
 
+// TODO: This document is a proposed candidate for deletion. What is the present value proposition?
+
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 

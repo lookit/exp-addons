@@ -10,6 +10,7 @@ export default DS.Model.extend(JamModel, {
     softwareVersion: DS.attr('string'),
     expData: DS.attr(),  // Data is a reserved keyword in ember
     timestamp: DS.attr('date'),  // Should we instead rely on Jam meta fields as stamp?
+
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),

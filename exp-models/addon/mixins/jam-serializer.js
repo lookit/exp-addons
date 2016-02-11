@@ -57,7 +57,7 @@ export default Ember.Mixin.create({
     },
     serialize: function(snapshot, options) {
         var serialized = this._super(...arguments);
-        console.log('serialized:', serialized);
+        // Jam does not support sending relationships to the server
         delete serialized.data.relationships;
         return serialized;
     }
