@@ -11,6 +11,8 @@ export default DS.Model.extend(JamModel, {
     permissions: DS.attr(),
 
     account: DS.belongsTo('account'),
+    accountId: DS.attr('string'),
+
     history: DS.hasMany('history'),
 
     fullName: Ember.computed('firstName', 'lastName', function() {

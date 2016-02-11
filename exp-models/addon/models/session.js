@@ -22,5 +22,5 @@ export default DS.Model.extend(JamModel, {
 
     experiment: DS.belongsTo('experiment'),
     experimentId: DS.attr('string'),
-    experimentVersion: DS.attr('string'),
+    experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 });
