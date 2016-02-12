@@ -5,5 +5,4 @@ import JamDocumentSerializer from '../mixins/jam-document-serializer';
 
 export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer, {
     modelName: 'session',
-    relationAttrs: ['profile', 'experiment']
 });

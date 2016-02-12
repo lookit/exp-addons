@@ -2,6 +2,7 @@
 Manage data about one or more documents in the sessions collection
  */
 
+import Ember from'ember';
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
@@ -11,16 +12,24 @@ export default DS.Model.extend(JamModel, {
     expData: DS.attr(),  // Data is a reserved keyword in ember
     timestamp: DS.attr('date'),  // Should we instead rely on Jam meta fields as stamp?
 
+    // JamDB requires two pieces of info to unambiguously identify a record
+    profileId: DS.attr('string'), // Store ID of related record
+    profileVersion: DS.attr('string'), // TODO: Safe to always assume newest profile version?
+
+    experimentId: DS.attr('string'),
+    experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
+
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),
 
-    // JamDB requires two pieces of info to unambiguously identify a record
-    profile: DS.belongsTo('profile'),
-    profileId: DS.attr('string'), // Store ID of related record
-    profileVersion: DS.attr('string'),  // TODO: safe to always assume newest profile version?
+    profile: Ember.computed('profileId', function() {
+        var storeId = this.get('profileId');
+        return this.store.findRecord('profile', storeId);
+    }),
 
-    experiment: DS.belongsTo('experiment'),
-    experimentId: DS.attr('string'),
-    experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
+    experiment: Ember.computed('experimentId', function() {
+        var storeId = this.get('experimentId');
+        return this.store.findRecord('experiment', storeId);
+    }),
 });
