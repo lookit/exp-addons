@@ -1,9 +1,11 @@
 import Em from 'ember';
-import ENV from 'experimenter/config/environment';
 import Base from 'ember-simple-auth/authenticators/base';
 
+
+import config from 'ember-get-config';
+
 export default Base.extend({
-    url: `${ENV.JAMDB.url}/v1/auth`,
+    url: `${config.JAMDB.url}/v1/auth`,
 
     restore(data) {
         let accessToken = data.accessToken;
@@ -26,7 +28,7 @@ export default Base.extend({
             return res.data.attributes;
         });
     },
-    authenticate(access_token, expires) {
+    authenticate(access_token, _ /* expires */) {
         return Em.$.ajax({
             method: 'POST',
             url: this.url,
