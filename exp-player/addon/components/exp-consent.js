@@ -28,7 +28,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 consentGranted: { // TODO: Remove from here once better default-setter in place (see note below)
                     type: 'boolean',
-                    default: false,
+                    default: false
                 }
             }
         },
@@ -38,11 +38,11 @@ export default ExpFrameBaseComponent.extend({
             properties: {
                 consentGranted: {
                     type: 'boolean',
-                    default: false,
-                },
+                    default: false
+                }
             },
             required: ['consentGranted']
         }
     },
-    consentNotGranted: Ember.computed.not('consentGranted'),
+    consentNotGranted: Ember.computed.not('consentGranted')
 });

@@ -68,7 +68,7 @@ export default Ember.Component.extend({
                 experimentId: null, // TODO: fetch this from experiment record
                 expData: this.get('expData'),
                 parameters: {},  // TODO: Future field
-                timestamp: new Date(),
+                timestamp: new Date()
             };
             var record = this.get('store').createRecord('session', payload);
             record.save();
@@ -98,7 +98,6 @@ export default Ember.Component.extend({
         },
         skipTo(index) {
             this.set('frameIndex', index);
-        },
-
+        }
     }
 });
