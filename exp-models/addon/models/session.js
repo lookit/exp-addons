@@ -10,7 +10,6 @@ export default DS.Model.extend(JamModel, {
     parameters: DS.attr(),
     softwareVersion: DS.attr('string'),
     expData: DS.attr(),  // Data is a reserved keyword in ember
-    timestamp: DS.attr('date'),  // Should we instead rely on Jam meta fields as stamp?
 
     // JamDB requires two pieces of info to unambiguously identify a record
     profileId: DS.attr('string'), // Store ID of related record
