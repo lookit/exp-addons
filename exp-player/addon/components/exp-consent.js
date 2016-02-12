@@ -1,8 +1,10 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import layout from '../templates/components/exp-consent';
 
 export default ExpFrameBaseComponent.extend({
-    meta: {
+    layout: layout,
+    meta: {  // Configuration for all fields available on the component/template
         name: 'Consent Form',
         description: 'A simple consent form.',
         parameters: {
@@ -23,19 +25,24 @@ export default ExpFrameBaseComponent.extend({
                 consentLabel: {
                     type: 'string',
                     default: 'I agree'
+                },
+                consentGranted: { // TODO: Remove from here once better default-setter in place (see note below)
+                    type: 'boolean',
+                    default: false,
                 }
             }
         },
-        data: {
-            type: "object",
+        data: {  // Control parameters that are tracked and serialized. Ideally should provide validation mechanism.
+            // TODO: The player should merge data fields as well as params- or ideally, add some scoping
+            type: 'object',
             properties: {
                 consentGranted: {
                     type: 'boolean',
-                    default: false
-                }
+                    default: false,
+                },
             },
             required: ['consentGranted']
         }
     },
-    consentNotGranted: Ember.computed.not('consentGranted')
+    consentNotGranted: Ember.computed.not('consentGranted'),
 });

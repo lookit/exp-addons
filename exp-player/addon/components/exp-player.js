@@ -1,14 +1,19 @@
 import Ember from 'ember';
+import layout from '../templates/components/exp-player';
 
 export default Ember.Component.extend({
+    layout: layout,
+    store: Ember.inject.service('store'),
+
     frames: null,
     frameIndex: null,
     _last: null,
     ctx: {
         data: {}
     },
+    expData: {},
     onInit: function() {
-        this.set('frameIndex', this.get('frameIndex') || 0);
+        this.set('frameIndex', this.get('frameIndex') || 0);  // TODO: Is this necessary?
     }.on('didReceiveAttrs'),
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames') || [];
@@ -50,12 +55,33 @@ export default Ember.Component.extend({
         return ctx;
     }),
     actions: {
+        saveFrame(frameId, frameData) {
+            // Save the data from a completed frame to the session data item
+            var expData = this.get('expData');
+            expData[frameId] = frameData;
+            this.set('expData', expData);
+        },
+        saveSession() {
+            // Construct payload and send to server
+            var payload = {
+                profileId: null,  // TODO: fetch this from a page session with user id
+                experimentId: null, // TODO: fetch this from experiment record
+                expData: this.get('expData'),
+                parameters: {},  // TODO: Future field
+                timestamp: new Date(),
+            };
+            var record = this.get('store').createRecord('session', payload);
+            record.save();
+        },
         next() {
             console.log('next');
 
             var frameIndex = this.get('frameIndex');
-            if (frameIndex > (this.get('frames').length - 1)) {
+            if (frameIndex < (this.get('frames').length - 1)) {
                 this.set('frameIndex', frameIndex + 1);
+            } else {
+                // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
+                this.send('saveSession');
             }
         },
         previous() {
@@ -72,6 +98,7 @@ export default Ember.Component.extend({
         },
         skipTo(index) {
             this.set('frameIndex', index);
-        }
+        },
+
     }
 });

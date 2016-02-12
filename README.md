@@ -32,10 +32,10 @@ And the corresponding package.json entries are:
 For example:
 
 ```bash
-cd ext/exp-addons
+cd lib
 git submodule init
 git submodule update
-cd ../..
+cd exp-models
 npm install
 ```
 

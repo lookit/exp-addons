@@ -17,6 +17,7 @@ export default Ember.Component.extend({
         description: 'The abstract base frame for Experimenter frames.',
         parameters: {}
     },
+    eventTimings: [], // TODO: Simplify default values mechanism
     setupParams(params) {
         params = params || this.get('params');
 
@@ -41,14 +42,41 @@ export default Ember.Component.extend({
         }
     }.on('didReceiveAttrs'),
     actions: {
+        setTimeEvent(eventName, extra) {
+            // Track a particular timing event
+            var curTime = new Date();
+            var eventData = {
+                eventType: eventName,
+                timestamp: curTime.toISOString(),
+            };
+            Ember.merge(eventData, extra || {});
+            // Copy timing event into parent dict; TODO is there a more elegant way?
+            var timings = this.get('eventTimings');
+            timings.push(eventData);
+            this.set('eventTimings', timings);
+        },
         next() {
-            this.get('next')();
+            this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
+            // When exiting frame, save the data to the base player using the provided saveHandler
+            this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply
+            this.sendAction('next');
         },
         last() {
-            this.get('last')();
+            this.sendAction('last');
         },
         previous() {
-            this.get('previous')();
+            this.sendAction('previous');
         }
-    }
+    },
+    serializeContent: function () {
+        // Serialize selected parameters for this frame, plus eventTiming data
+        var toSerialize = Object.keys(this.get('meta.data.properties'));
+        var fields = new Map();
+        var self = this;  // todo: do we need to do this?
+        toSerialize.forEach(function(item) {
+            fields[item] = self.get(item);
+        });
+        return {fields: fields, eventTimings: this.get('eventTimings')};
+    },
+
 });

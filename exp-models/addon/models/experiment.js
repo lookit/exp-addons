@@ -9,13 +9,14 @@ export default DS.Model.extend(JamModel, {
     title: DS.attr('string'),
     description: DS.attr('string'),
     active: DS.attr('string'),
-    beginDate: DS.attr('date'),	// TODO: ISODate
-    endDate: DS.attr('date'),	// TODO: ISODate
-    lastEdited: DS.attr('date'),	// TODO: ISODate
+    beginDate: DS.attr('date'),
+    endDate: DS.attr('date'),
+    lastEdited: DS.attr('date'),
+
+    eligibilityCriteria: DS.attr(),
     structure: DS.attr(),
+
     permissions: DS.attr(),
 
-    administrators: DS.hasMany('admin'),
     history: DS.hasMany('history'),
-    sessions: DS.hasMany('session'),
 });

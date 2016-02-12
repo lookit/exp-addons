@@ -48,12 +48,30 @@ export default Ember.Mixin.create({
                 } else {
                     newRel = relData.map(makeRel);
                 }
-
                 relationships[relName] = {
                     data: newRel,
                 };
             }
         }
         return relationships;
+    },
+    serialize: function(snapshot, options) {
+        var serialized = this._super(...arguments);
+        // Jam does not support sending relationships to the server
+        var serData = serialized.data;
+        delete serData.relationships;
+
+        // Jam doesn't store relations automatically and the serializer can't access relationship fields directly.
+        // We need to move relationship data into the attributes field, which takes some trickery via the client-side "<relAttr>Id" field (text)
+        //  TODO: I sincerely hope that there is a better way to do this.
+        for (var item of this.relationAttrs) {
+            var relId = `${item}Id`;
+            if (serData.attributes.hasOwnProperty(relId)) {
+                // Move the value in `profileId` to `profile` in the JSON payload sent to server.
+                serData.attributes[item] = serialized.data.attributes[relId];
+                delete serData.attributes[relId];
+            }
+        }
+        return serialized;
     }
 });
