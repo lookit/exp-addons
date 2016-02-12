@@ -62,11 +62,12 @@ export default Ember.Component.extend({
             this.set('expData', expData);
         },
         saveSession() {
+            // Construct payload and send to server
             var payload = {
-                profileId: 'experimenter.profiles.prof2',
-                experimentId: 'experimenter.experiments.test1',
+                profileId: null,  // TODO: fetch this from a page session with user id
+                experimentId: null, // TODO: fetch this from experiment record
                 expData: this.get('expData'),
-                parameters: {IAmTheVery: 'ModelOfAMajorGeneral', information: 'AnimalVegetableMineral'},
+                parameters: {},  // TODO: Future field
                 timestamp: new Date(),
             };
             var record = this.get('store').createRecord('session', payload);

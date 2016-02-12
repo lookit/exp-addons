@@ -26,17 +26,19 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string',
                     default: 'I agree'
                 },
-                consentGranted: {
+                consentGranted: { // TODO: Remove from here once better default-setter in place (see note below)
                     type: 'boolean',
                     default: false,
                 }
             }
         },
-        data: {  // Control serialization of saved data. We may want to change to a list so that schema is controlled in one place, only.
+        data: {  // Control parameters that are tracked and serialized. Ideally should provide validation mechanism.
+            // TODO: The player should merge data fields as well as params- or ideally, add some scoping
             type: 'object',
             properties: {
                 consentGranted: {
                     type: 'boolean',
+                    default: false,
                 },
             },
             required: ['consentGranted']
