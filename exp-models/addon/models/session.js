@@ -2,7 +2,7 @@
 Manage data about one or more documents in the sessions collection
  */
 
-import Ember from'ember';
+import Ember from 'ember';
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
