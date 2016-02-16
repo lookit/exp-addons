@@ -47,7 +47,7 @@ export default Ember.Component.extend({
             var curTime = new Date();
             var eventData = {
                 eventType: eventName,
-                timestamp: curTime.toISOString(),
+                timestamp: curTime.toISOString()
             };
             Ember.merge(eventData, extra || {});
             // Copy timing event into parent dict; TODO is there a more elegant way?
@@ -77,6 +77,6 @@ export default Ember.Component.extend({
             fields[item] = self.get(item);
         });
         return {fields: fields, eventTimings: this.get('eventTimings')};
-    },
+    }
 
 });
