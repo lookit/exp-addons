@@ -7,7 +7,7 @@ import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
 import SessionAdapter from '../adapters/session';
-import SessionModel from '../models/session'
+import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
 
@@ -38,7 +38,7 @@ export default DS.Model.extend(JamModel, {
     sessionCollectionId: Ember.computed('shortId', function() {
         // Return a string corresponding to the session collection shortID, to be used by model/adapter/serializer
         // Eg an experiment called 'test0' would have a collection 'session-test0'
-        return `session-${this.get('shortId')}`;
+        return `session${this.get('shortId')}s`; // FIXME: the spurious s is a requirement imposed by genschemas...
     }),
 
     _registerSessionModels() {
