@@ -17,7 +17,9 @@ export default DS.Model.extend(JamModel, {
     profileById: function(profileId) {
         // Scan the list of profiles and gets first one with matching ID (else undefined). Assumes profileIds are unique.
         var profiles = this.get('profiles') || [];
-        var getProfile = function(item) {return item.profileId === profileId};
+        var getProfile = function(item) {
+            return item.profileId === profileId;
+        };
         return profiles.filter(getProfile)[0];
     }
 });

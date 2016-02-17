@@ -2,8 +2,11 @@ import ApplicationAdapter from './application';
 import JamDocumentAdapter from '../mixins/jam-document-adapter';
 
 export default ApplicationAdapter.extend(JamDocumentAdapter, {
-    sessionCollectionId: null,  // TODO: This will dictate the new collection name to try
+    sessionCollectionId: null,  // Define the collection name associated with this adapter. Set in subclasses.
     urlSegments: {
-        collectionId: (type /*, id, snapshot, query*/) => this.get('sessionCollectionId') || type, // TODO: test that this works
+        collectionId: function(type /*, id, snapshot, query*/) {
+            // TODO: May not want to fall back on type
+            return this.get('sessionCollectionId') || type;
+        },
     }
 });

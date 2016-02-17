@@ -6,7 +6,7 @@ Convert JamDB responses to and from models
 export default Ember.Mixin.create({
     modelName: null,  // Collection items specify a generic type of "documents"; specify model to use explicitly
 
-    keyForAttribute: function(attr, method) {
+    keyForAttribute: function(attr /* method */) {
         // Override the default ember data behavior, so that Jam can use exactly the same keys as in the model (no dasherizing)
         return attr;
     },
