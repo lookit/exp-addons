@@ -14,5 +14,4 @@ export default DS.Model.extend(JamModel, {
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),
-    administrators: DS.hasMany('admin'),  // TODO: Field as candidate for deletion?
 });

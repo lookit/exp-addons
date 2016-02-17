@@ -67,8 +67,7 @@ export default Ember.Component.extend({
                 profileId: null,  // TODO: fetch this from a page session with user id
                 experimentId: null, // TODO: fetch this from experiment record
                 expData: this.get('expData'),
-                parameters: {},  // TODO: Future field
-                timestamp: new Date()
+                parameters: {}  // TODO: Future field
             };
             var record = this.get('store').createRecord('session', payload);
             record.save();
