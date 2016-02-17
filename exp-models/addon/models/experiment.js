@@ -21,14 +21,12 @@ export default DS.Model.extend(JamModel, {
         return Ember.isEqual(this.get('active'), 'Active');
     }),
 
-    administrators: DS.hasMany('admin'),
-    history: DS.hasMany('history'),
-    sessions: DS.hasMany('session'),
-
     eligibilityCriteria: DS.attr('string'),
     eligibilityString: Ember.computed('eligibilityCriteria', function() {
         var eligibility = this.get('eligibilityCriteria');
         // TODO
         return eligibility || "None";
-    })
+    }),
+
+    history: DS.hasMany('history'),
 });
