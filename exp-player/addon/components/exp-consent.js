@@ -26,7 +26,7 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string',
                     default: 'I agree'
                 },
-                consentGranted: { // TODO: Remove from here once better default-setter in place (see note below)
+                consentGranted: {
                     type: 'boolean',
                     default: false
                 }

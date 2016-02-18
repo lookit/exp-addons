@@ -12,6 +12,11 @@ import SessionSerializer from '../serializers/session';
 
 
 export default DS.Model.extend(JamModel, {
+    ACTIVE: 'Active',
+    DRAFT: 'Draft',
+    ARCHIVED: 'Archived',
+    DELETED: 'Deleted',
+
     title: DS.attr('string'),
     description: DS.attr('string'),
     beginDate: DS.attr('date'),	// TODO: ISODate
@@ -21,9 +26,9 @@ export default DS.Model.extend(JamModel, {
 
     permissions: DS.attr(),
 
-    active: DS.attr('string'),
-    isActive: Ember.computed('active', function() {
-        return Ember.isEqual(this.get('active'), 'Active');
+    state: DS.attr('string'),
+    isActive: Ember.computed('state', function() {
+        return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
 
     eligibilityCriteria: DS.attr('string'),
