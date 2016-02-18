@@ -51,6 +51,7 @@ export default DS.Model.extend(JamModel, {
 
     init() {
         // When an experiment is loaded into the store, generate session-specific models
+        this._super(...arguments);
         this._registerSessionModels();
     },
 });
