@@ -48,4 +48,9 @@ export default DS.Model.extend(JamModel, {
         window.App.register(`adapter:${cId}`, SessionAdapter.extend({sessionCollectionId: cId})); // Override part of adapter URL
         window.App.register(`serializer:${cId}`, SessionSerializer.extend({modelName: cId})); // Tell serializer what model to use)
     },
+
+    init() {
+        // When an experiment is loaded into the store, generate session-specific models
+        this._registerSessionModels();
+    },
 });
