@@ -10,7 +10,7 @@ export default Ember.Mixin.create({
         modifiedBy: {serialize: false},
     },
 
-    payloadKeyFromModelName: function(modelName) {
+    payloadKeyFromModelName: function(/*modelName */) {
         // JamDB expects all collections to specify JSONAPI type 'documents'
         return 'documents';
     },
