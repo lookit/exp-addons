@@ -49,9 +49,10 @@ export default DS.Model.extend(JamModel, {
     _registerSessionModels() {
         // Dynamically register the required models for a session table associated with this experiment
         var cId = this.get('sessionCollectionId');
-        window.App.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
-        window.App.register(`adapter:${cId}`, SessionAdapter.extend({sessionCollectionId: cId})); // Override part of adapter URL
-        window.App.register(`serializer:${cId}`, SessionSerializer.extend({modelName: cId})); // Tell serializer what model to use)
+        var container = Ember.getOwner(this);
+        container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
+        container.register(`adapter:${cId}`, SessionAdapter.extend({'sessionCollectionId': cId})); // Override part of adapter URL
+        container.register(`serializer:${cId}`, SessionSerializer.extend({'modelName': cId})); // Tell serializer what model to use)
     },
 
     init() {
