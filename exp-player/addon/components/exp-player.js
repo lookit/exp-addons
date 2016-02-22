@@ -74,7 +74,6 @@ export default Ember.Component.extend({
 
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
-                //Ember.sendEvent(this, 'warnExit');
                 this.set('frameIndex', frameIndex + 1);
             } else {
                 // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
