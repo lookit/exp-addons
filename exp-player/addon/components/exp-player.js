@@ -64,19 +64,17 @@ export default Ember.Component.extend({
         saveSession() {
             // Construct payload and send to server
             var payload = {
-                profileId: null,  // TODO: fetch this from a page session with user id
-                experimentId: null, // TODO: fetch this from experiment record
                 expData: this.get('expData'),
                 parameters: {}  // TODO: Future field
             };
-            var record = this.get('store').createRecord('session', payload);
-            record.save();
+            this.sendAction('saveHandler', payload);  // call the passed-in action with payload
         },
         next() {
             console.log('next');
 
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
+                //Ember.sendEvent(this, 'warnExit');
                 this.set('frameIndex', frameIndex + 1);
             } else {
                 // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
