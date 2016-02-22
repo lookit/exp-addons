@@ -2,6 +2,9 @@
 Manage data about one or more documents in the accounts collection
  */
 
+import moment from 'moment';
+
+import Ember from 'ember';
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
@@ -20,6 +23,15 @@ export default DS.Model.extend(JamModel, {
         var getProfile = function(item) {
             return item.profileId === profileId;
         };
-        return profiles.filter(getProfile)[0];
+
+        var Profile = Ember.Object.extend({
+            age: Ember.computed('birthday', function() {
+                var bd = moment(this.get('birthday'));
+                return moment(new Date()).diff(bd, 'days');
+            })
+        });
+        return Profile.create(
+            profiles.filter(getProfile)[0]
+        );
     }
 });
