@@ -57,6 +57,7 @@ export default Ember.Component.extend({
             this.set('eventTimings', timings);
         },
         next() {
+            console.log('Leaving frame ID', this.get('id'));
             this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
             // When exiting frame, save the data to the base player using the provided saveHandler
             this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply

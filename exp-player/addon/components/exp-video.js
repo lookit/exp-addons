@@ -32,7 +32,8 @@ export default ExpFrameBaseComponent.extend({
                 },
                 sources: {
                     type: 'string',
-                    description: 'List of objects specifying video src and type'
+                    description: 'List of objects specifying video src and type',
+                    default: []
                 }
             }
         }
@@ -47,7 +48,6 @@ export default ExpFrameBaseComponent.extend({
             return;
         }
         var elem = this.$("#player-video")[0];
-        console.log('element', elem);
         if (elem.requestFullscreen) {
             elem.requestFullscreen();
         } else if (elem.msRequestFullscreen) {
