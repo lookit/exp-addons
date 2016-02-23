@@ -20,9 +20,9 @@ export default DS.Model.extend(JamModel, {
 
     title: DS.attr('string'),
     description: DS.attr('string'),
-    beginDate: DS.attr('date'), // TODO: ISODate
-    endDate: DS.attr('date'), // TODO: ISODate
-    lastEdited: DS.attr('date'), // TODO: ISODate
+    beginDate: DS.attr('date'),
+    endDate: DS.attr('date'),
+    lastEdited: DS.attr('date'),
     structure: DS.attr(),
 
     permissions: DS.attr(),
