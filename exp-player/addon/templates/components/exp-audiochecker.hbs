@@ -1,0 +1,28 @@
+<div class="row input-group">
+    <audio id="player-audio"
+           controls
+           autoplay={{autoplay}}
+           onended={{ if autoforwardOnEnd (action 'next') }}
+    >
+        {{#each sources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </audio>
+</div>
+
+<div class="row">
+    {{#each prompts as |prompt|}}
+        {{#if prompt.title}}
+            <h3>{{prompt.title}}</h3>
+        {{/if}}
+        <p>
+            {{prompt.text}}
+        </p>
+    {{/each}}
+</div>
+
+<div class="row exp-controls">
+  <button class="btn btn-default pull-right" {{ action 'next' }}>
+    Continue
+  </button>
+</div>
