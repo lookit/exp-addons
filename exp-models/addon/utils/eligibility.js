@@ -24,6 +24,22 @@ function parseDate(amount, unit='days') {
     return moment.duration(parseFloat(amount), `${singular}s`).asDays();
 }
 
+/** Compile an eligibiliy string into a function: (participant) -> boolean
+ *
+ * @param {string} elig: an eligibiliy string
+ * @returns {function (participant) -> boolean}
+ *
+ * Eligibilty strings should follow the general pattern: <attribute> <comparator> <value>
+ * These clauses can be joined with 'and' or 'or', and order of operations can be defined
+ * by wrapping a clause in '(' and ')'. <attribute>s must be attributes or computed values
+ * defined on the Profile class (e.g. 'age'). <comparator>s must be one of: '>', '>=', '<',
+ * '<=', 'is'. <value>s will be compared as numbers if $.isNumeric returns true when tested
+ * on that value.
+ *
+ * For the time being, 'age' is a special case that supports units of time. These units
+ * correspond directly with the units supported by the moment.duration constructor. This
+ * allows syntax like: 'age > 3 months' and also 'age < 5 years'.
+ **/
 function compileEligibilityString(elig) {
     var parts = elig.split(/(\(|\)|and|or)/).map((p) => p.trim()).filter((p) => p.length);
     var part = parts.shift();
