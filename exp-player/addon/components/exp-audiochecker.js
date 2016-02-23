@@ -4,6 +4,7 @@ import layout from '../templates/components/exp-audiochecker';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,
+    didFinishSound: false, // TODO: Placeholder until player merges data attrs into frame by default
     meta: {
         name: 'Audio checker',
         description: 'Component that plays a test sound clip',
@@ -35,8 +36,25 @@ export default ExpFrameBaseComponent.extend({
     },
 
     data: {
-        // This video does not explicitly capture any parameters from the user
+        type: 'object',
+        properties: {  // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
+            didFinishSound: {
+                type: 'boolean',
+                default: false
+            }
+        },
+        required: ['didFinishSound']
     },
 
-    // TODO: Write an onended action that sets variable, to be checked by next-action
+    actions: {
+        soundPlayed() {
+            this.set('didFinishSound', true);
+        }
+    },
+
+    allowNext: Ember.computed('didFinishSound', function() {
+        // Optionally force user to listen to clip
+        // TODO: fix the button on the page
+        return !this.get('mustPlay') || this.get('didFinishSound');
+    })
 });
