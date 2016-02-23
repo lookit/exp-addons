@@ -9,6 +9,7 @@ import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
 var Profile = Ember.Object.extend({
+    birthday: null,
     age: Ember.computed('birthday', function() {
         var bd = moment(this.get('birthday'));
         return moment(new Date()).diff(bd, 'days');
@@ -26,7 +27,6 @@ export default DS.Model.extend(JamModel, {
             });
         },
         set: function(value) {
-            debugger;
             this.set('_profiles', value);
         }
     }),
@@ -38,11 +38,9 @@ export default DS.Model.extend(JamModel, {
         // Scan the list of profiles and gets first one with matching ID (else undefined). Assumes profileIds are unique.
         var profiles = this.get('profiles') || [];
         var getProfile = function(item) {
-            return item.profileId === profileId;
+            return item.get('profileId') === profileId;
         };
 
-        return Profile.create(
-            profiles.filter(getProfile)[0]
-        );
+        return profiles.filter(getProfile)[0];
     }
 });

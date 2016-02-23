@@ -7,16 +7,18 @@ let bcrypt = dcodeIO.bcrypt;
 
 export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer, {
     modelName: 'account',
-
     serialize(record, options) {
-      if(record.record.get('isNew')) {
-        record = record.record;
-        var salt = bcrypt.genSaltSync(12);
-        record.set('password', bcrypt.hashSync(record.get('password'), salt));
-        record = record._createSnapshot();
-      }
+        record.profiles = record._profiles;
+        delete record._profiles;
 
-      return this._super(record, options);
+        if (record.record.get('isNew')) {
+            record = record.record;
+            var salt = bcrypt.genSaltSync(12);
+            record.set('password', bcrypt.hashSync(record.get('password'), salt));
+            record = record._createSnapshot();
+        }
+
+        return this._super(record, options);
     },
     normalize: function(modelClass, data) {
         data.attributes._profiles = data.attributes.profiles;
