@@ -10,7 +10,7 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-import {compile} from '../utils/eligibility';
+import compile from '../utils/eligibility';
 
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',

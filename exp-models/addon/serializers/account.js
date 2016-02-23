@@ -17,5 +17,10 @@ export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer,
       }
 
       return this._super(record, options);
+    },
+    normalize: function(modelClass, data) {
+        data.attributes._profiles = data.attributes.profiles;
+        delete data.attributes.profiles;
+        return this._super(modelClass, data);
     }
 });

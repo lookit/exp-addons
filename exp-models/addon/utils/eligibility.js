@@ -1,5 +1,10 @@
 // h/t @aaxelb
 
+import Ember from 'ember';
+import moment from 'moment';
+
+let {$} = Ember;
+
 var AND = (a, b) => {
     return function() {
         return a(...arguments) && b(...arguments);
@@ -11,19 +16,12 @@ var OR = (a, b) => {
     };
 };
 
-function parseDate(amount, unit) {
-    if (/days?/i.test(unit)) {
-        return amount;
-    }
-    else if (/weeks?/i.test(unit)) {
-        return amount * 7;
-    }
-    else if (/months?/i.test(unit)) {
-        return amount * 29.5; // approximately one lunar month
-    }
-    else { // years
-        return amount * 365;
-    }
+/**
+ * @return {integer}: number of days represented by amount/unit pair, e.g. 3 'weeks' -> 21
+ **/
+function parseDate(amount, unit='days') {
+    var singular = unit.replace(/s$/, '');
+    return moment.duration(parseFloat(amount), `${singular}s`).asDays();
 }
 
 function compileEligibilityString(elig) {
@@ -56,22 +54,22 @@ function compileEligibilityString(elig) {
         var opFn;
         if (op === '>') {
             opFn = function gt(a, b) {
-                return parseFloat(a) > parseFloat(b);
+                return a > b;
             };
         }
         if (op === '>=') {
             opFn = function gte(a, b) {
-                return parseFloat(a) >= parseFloat(b);
+                return a >= b;
             };
         }
         if (op === '<') {
             opFn = function lt(a, b) {
-                return parseFloat(a) < parseFloat(b);
+                return a < b;
             };
         }
         if (op === '<=') {
             opFn = function lte(a, b) {
-                return parseFloat(a) <= parseFloat(b);
+                return a <= b;
             };
         }
         if (op === 'is') {
@@ -86,7 +84,15 @@ function compileEligibilityString(elig) {
                 value = parseDate(value, unit);
             }
 
-            return opFn(participant.get(prop), value);
+            if ($.isNumeric(value)) {
+                return opFn(
+                    parseFloat(participant.get(prop)),
+                    parseFloat(value)
+                );
+            }
+            else {
+                return opFn(participant.get(prop), value);
+            }
         };
 
     }
@@ -103,6 +109,5 @@ function compileEligibilityString(elig) {
     return false;
 }
 
-export default {
-    compile: compileEligibilityString
-};
+var compile = compileEligibilityString;
+export default compile;
