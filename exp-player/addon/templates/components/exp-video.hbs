@@ -1,5 +1,8 @@
 <div class="input-group">
-    <video controls autoplay="{{autoplay}}">
+    <video controls
+           autoplay={{autoplay}}
+           poster="{{poster}}"
+    >
         {{#each sources as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}

@@ -15,7 +15,8 @@ export default Ember.Component.extend({
     meta: {
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
-        parameters: {}
+        parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
+        data: {},  // Controls what and how parameters are serialized and sent to the server
     },
     eventTimings: [], // TODO: Simplify default values mechanism
     setupParams(params) {
@@ -70,7 +71,7 @@ export default Ember.Component.extend({
     },
     serializeContent: function () {
         // Serialize selected parameters for this frame, plus eventTiming data
-        var toSerialize = Object.keys(this.get('meta.data.properties'));
+        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
         var fields = new Map();
         var self = this;  // todo: do we need to do this?
         toSerialize.forEach(function(item) {
