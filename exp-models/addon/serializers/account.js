@@ -8,9 +8,6 @@ let bcrypt = dcodeIO.bcrypt;
 export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer, {
     modelName: 'account',
     serialize(record, options) {
-        record.profiles = record._profiles;
-        delete record._profiles;
-
         if (record.record.get('isNew')) {
             record = record.record;
             var salt = bcrypt.genSaltSync(12);
@@ -19,10 +16,5 @@ export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer,
         }
 
         return this._super(record, options);
-    },
-    normalize: function(modelClass, data) {
-        data.attributes._profiles = data.attributes.profiles;
-        delete data.attributes.profiles;
-        return this._super(modelClass, data);
     }
 });
