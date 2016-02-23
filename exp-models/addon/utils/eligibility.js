@@ -20,8 +20,8 @@ var OR = (a, b) => {
  * @return {integer}: number of days represented by amount/unit pair, e.g. 3 'weeks' -> 21
  **/
 function parseDate(amount, unit='days') {
-    var singular = unit.replace(/s$/, '');
-    return moment.duration(parseFloat(amount), `${singular}s`).asDays();
+    var inflector = new Ember.Inflector();
+    return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
 }
 
 /** Compile an eligibiliy string into a function: (participant) -> boolean
