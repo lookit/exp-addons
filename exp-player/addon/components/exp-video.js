@@ -10,7 +10,7 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                autoforwardOnEnd: {
+                autoforwardOnEnd: {  // TODO: respect this option
                     type: 'boolean',
                     description: 'Whether to automatically advance to the next frame when the video is complete',
                     default: true,
@@ -40,8 +40,24 @@ export default ExpFrameBaseComponent.extend({
 
     data: {
         // This video does not explicitly capture any parameters from the user
-    }
+    },
 
-    // TODO: Implement ability to auto-forward to next frame at end of video
-    // TODO: Implement ability to go full screen automatically at start
+    autoFullscreen: function() {
+        if (!this.get('fullscreen')) {
+            return;
+        }
+        var elem = this.$("#player-video")[0];
+        console.log('element', elem);
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else {
+            console.log('Your browser does not appear to support fullscreen HTML5 video.');
+        }
+    }.on('didRender')  // TODO: Is there a better event to choose here?
 });
