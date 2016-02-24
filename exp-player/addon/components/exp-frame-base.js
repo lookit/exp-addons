@@ -22,8 +22,7 @@ export default Ember.Component.extend({
         },  // Controls what and how parameters are serialized and sent to the server
     },
 
-    init: function() {
-        this._super(...arguments);
+    onInit: function() {
         this.set('eventTimings', []);
 
         var defaultParams = this.setupParams();
