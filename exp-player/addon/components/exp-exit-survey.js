@@ -12,11 +12,13 @@ const defaultSchema = {
       "birthdate": {
         "type": "string",
         "format": "date",
-        "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos."
+        "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos.",
+        "required": true
       },
       "person": {
         "type":"string",
-        "title":"Which person would you (the parent) have trusted more to name objects accurately?"
+        "title":"Which person would you (the parent) have trusted more to name objects accurately?",
+        "required": true
       },
       "suggestions": {
         "type":"string",
@@ -84,7 +86,7 @@ export default ExpFrameBaseComponent.extend({
                 buttons: {
                     update: {
                         type: 'button',
-                        value: 'Update'
+                        value: 'Submit'
                     }
                 }
             };
