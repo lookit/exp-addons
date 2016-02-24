@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from '../templates/components/exp-audiochecker';
+import layout from '../templates/components/exp-audioplayer';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,
@@ -31,7 +31,7 @@ export default ExpFrameBaseComponent.extend({
                     type: 'array',
                     description: 'List of objects specifying image src, alt, and title',
                     default: [],
-                }
+                },
                 prompts: {
                     type: 'array',
                     description: 'Text of any header/prompt pararaphs to show the user',
@@ -70,7 +70,7 @@ export default ExpFrameBaseComponent.extend({
 
     preventNext: Ember.computed('didFinishSound', function() {
         if (!this.get('mustPlay')) {
-            return False;
+            return false;
         } else {
             // Optionally force user to listen to clip before continuing
             return !this.get('didFinishSound');

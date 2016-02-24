@@ -10,8 +10,9 @@
     </audio>
 
     {{#unless fullControls}}
-        <!-- TODO: Add style to component stylesheet, possibly including image -->
-        <button {{action 'loopSound'}}>Replay audio</button>
+        <button {{action 'loopSound'}} class="player-audio-replay-widget">
+            <br>Replay
+        </button>
     {{/unless}}
 </div>
 
