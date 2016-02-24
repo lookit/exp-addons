@@ -1,16 +1,16 @@
 import Ember from 'ember';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from '../templates/components/exp-dynamic-form';
+import layout from '../templates/components/exp-exit-survey';
 
 const defaultSchema = {
   "schema": {
-    "title":"Exit Survey",
+    "title":"Your Experience",
     "description":"How was your experience?",
     "type":"object",
     "properties": {
       "birthdate": {
-        "type":"text",
+        "type": "string",
         "format": "date",
         "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos."
       },
@@ -18,7 +18,7 @@ const defaultSchema = {
         "type":"string",
         "title":"Which person would you (the parent) have trusted more to name objects accurately?"
       },
-      "ranking": {
+      "suggestions": {
         "type":"string",
         "title":"Any comments or suggestions? (Did you get confused by any instructions? Did the study run smoothly?)",
       }
@@ -55,6 +55,11 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string',
                     description: 'A unique identifier for this item'
                 },
+                title: {
+                    type: 'string',
+                    description: 'A title for this item',
+                    default: 'Exit Survey'
+                },
                 form: {
                     type: 'jsonschema',
                     description: 'JSON-schema defining this item\'s form',
@@ -72,20 +77,27 @@ export default ExpFrameBaseComponent.extend({
             }
         }
     },
-    formSchema: Ember.computed('form', function() {
-        return {
-            schema: this.get('form'),
-            options: {
-                form: {
-                    buttons: {
-                        update: {
-                            type: 'button',
-                            value: 'Update'
-                        }
+    formSchema: Ember.computed('form', {
+        get() {
+            var newOptions = this.get('form.options');
+            newOptions.form = {
+                buttons: {
+                    update: {
+                        type: 'button',
+                        value: 'Update'
                     }
                 }
-            }
-        };
+            };
+            return {
+                schema: this.get('form.schema'),
+                options: newOptions        
+            };
+        },
+        set(_, value) {
+            this.set('formSchema', value);
+            return value;
+        }
+        
     }),
     formData: null,
     formActions: Ember.computed(function() {
