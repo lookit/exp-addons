@@ -52,9 +52,12 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    allowNext: Ember.computed('didFinishSound', function() {
-        // Optionally force user to listen to clip
-        // TODO: fix the button on the page
-        return !this.get('mustPlay') || this.get('didFinishSound');
+    preventNext: Ember.computed('didFinishSound', function() {
+        if (!this.get('mustPlay')) {
+            return False;
+        } else {
+            // Optionally force user to listen to clip before continuing
+            return !this.get('didFinishSound');
+        }
     })
 });
