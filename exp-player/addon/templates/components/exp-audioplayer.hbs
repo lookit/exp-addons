@@ -1,48 +1,56 @@
-<div class="row input-group">
-    <audio id="player-audio"
-           controls={{fullControls}}
-           autoplay={{autoplay}}
-           onended={{ if mustPlay (action 'soundPlayed') }}
-    >
-        {{#each sources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
-
-    {{#unless fullControls}}
-        <button {{action 'loopSound'}} class="player-audio-replay-widget">
-            <br>Replay
-        </button>
-    {{/unless}}
-</div>
-
-{{#if prompts}}
 <div class="row">
-    {{#each prompts as |prompt|}}
-        {{#if prompt.title}}
-            <h3>{{prompt.title}}</h3>
-        {{/if}}
-        <p>
-            {{prompt.text}}
-        </p>
-    {{/each}}
-</div>
-{{/if}}
-
-{{#if images}}
-<div class="row">
-    {{#each images as |image|}}
-        <!-- TODO: Add css styles for the exp-audio-player images-->
-        <img src="{{image.src}}" title="{{image.title}}" alt="{{image.alt}}">
-    {{/each}}
-</div>
-{{/if}}
-
-{{#if preventNext}}
-    <div class="row bg-danger"><!-- If this doesn't violate some sort of style guide, I'll buy a hat and eat it -->
-        Please play the sample audio before starting this study.
+    <div class="col-md-2">
+        {{#unless fullControls}}
+            <button {{action 'loopSound'}} class="player-audio-replay-widget">
+                <br>Replay
+            </button>
+        {{/unless}}
     </div>
-{{/if}}
+
+    <div class="col-md-10">
+        <audio id="player-audio"
+               controls={{fullControls}}
+               autoplay={{autoplay}}
+               onended={{ if mustPlay (action 'soundPlayed') }}
+        >
+            {{#each sources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+
+
+        {{#if prompts}}
+        {{#each prompts as |prompt|}}
+            {{#if prompt.title}}
+                <h3>{{prompt.title}}</h3>
+            {{/if}}
+            <p>
+                {{prompt.text}}
+            </p>
+        {{/each}}
+        {{/if}}
+
+        {{#if images}}
+        {{#each images as |image|}}
+            <!-- TODO: Add css styles for the exp-audio-player images-->
+        <div class="text-center">
+            <img class="center-block"
+                 src="{{image.src}}" title="{{image.title}}" alt="{{image.alt}}">
+        </div>
+
+        {{/each}}
+        {{/if}}
+
+        {{#if preventNext}}
+        <div class="row bg-danger"><!-- If this doesn't violate some sort of style guide, I'll buy a hat and eat it -->
+            Please play the sample audio before continuing.
+        </div>
+        {{/if}}
+    </div>
+
+</div>
+
+
 
 <div class="row exp-controls">
     <button class="btn btn-default pull-right" {{ action 'next' }} disabled={{ preventNext }}>
