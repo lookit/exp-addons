@@ -16,15 +16,26 @@ export default ExpFrameBaseComponent.extend({
                     description: 'Whether to autoplay the audio on load',
                     default: true,
                 },
+                fullControls: {
+                    type: 'boolean',
+                    description: 'Whether to use the full player controls. If false, display a single button to play audio from the start.',
+                    // TODO: Implement and add a style
+                    default: true,
+                },
                 mustPlay: {
                     type: 'boolean',
                     description: 'Should the user be forced to play the clip before leaving the page?',
                     default: true,
                 },
+                images: {
+                    type: 'array',
+                    description: 'List of objects specifying image src, alt, and title',
+                    default: [],
+                }
                 prompts: {
                     type: 'array',
                     description: 'Text of any header/prompt pararaphs to show the user',
-                    default: true,
+                    default: [],
                 },
                 sources: {
                     type: 'string',
@@ -47,6 +58,11 @@ export default ExpFrameBaseComponent.extend({
     },
 
     actions: {
+        loopSound() {
+            var elem = this.$("#player-audio")[0];
+            elem.currentTime = 0;
+            elem.play();
+        },
         soundPlayed() {
             this.set('didFinishSound', true);
         }

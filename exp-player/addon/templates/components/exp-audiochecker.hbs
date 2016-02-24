@@ -1,6 +1,6 @@
 <div class="row input-group">
     <audio id="player-audio"
-           controls
+           controls={{fullControls}}
            autoplay={{autoplay}}
            onended={{ if mustPlay (action 'soundPlayed') }}
     >
@@ -8,8 +8,14 @@
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
+
+    {{#unless fullControls}}
+        <!-- TODO: Add style to component stylesheet, possibly including image -->
+        <button {{action 'loopSound'}}>Replay audio</button>
+    {{/unless}}
 </div>
 
+{{#if prompts}}
 <div class="row">
     {{#each prompts as |prompt|}}
         {{#if prompt.title}}
@@ -20,6 +26,16 @@
         </p>
     {{/each}}
 </div>
+{{/if}}
+
+{{#if images}}
+<div class="row">
+    {{#each images as |image|}}
+        <!-- TODO: Add css styles for the exp-audio-player images-->
+        <img src="{{image.src}}" title="{{image.title}}" alt="{{image.alt}}">
+    {{/each}}
+</div>
+{{/if}}
 
 {{#if preventNext}}
     <div class="row bg-danger"><!-- If this doesn't violate some sort of style guide, I'll buy a hat and eat it -->
