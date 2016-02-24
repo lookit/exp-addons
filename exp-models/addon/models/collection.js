@@ -11,5 +11,5 @@ export default DS.Model.extend(JamModel, {
     }.property(),
     permissions: DS.attr(),
 
-    namespace: DS.belongsTo('namespace'),
+    namespace: DS.belongsTo('namespace')
 });
