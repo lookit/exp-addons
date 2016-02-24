@@ -12,17 +12,22 @@ export default Ember.Component.extend({
     id: null,
     type: null,
     ctx: null,
-    meta: {
+    meta: {  // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
-        parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
-        data: {
+        parameters: {  // Configuration parameters, which can be auto-populated from the experiment structure JSON
             type: 'object',
             properties: {}
-        },  // Controls what and how parameters are serialized and sent to the server
+        },
+        data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
+            type: 'object',
+            properties: {}
+        },
     },
+    eventTimings: null,
 
-    onInit: function() {
+    init: function() {
+        this._super(...arguments);
         this.set('eventTimings', []);
 
         var defaultParams = this.setupParams();
@@ -35,7 +40,7 @@ export default Ember.Component.extend({
             var type = this.get('type');
             this.set('id', `${type}-${frameIndex}`);
         }
-    }.on('didReceiveAttrs'),
+    },
 
     setupParams(params) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)

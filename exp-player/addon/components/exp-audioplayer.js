@@ -67,7 +67,7 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    preventNext: Ember.computed('didFinishSound', function() {
+    preventNext: Ember.computed('mustPlay', 'didFinishSound', function() {
         if (!this.get('mustPlay')) {
             return false;
         } else {
