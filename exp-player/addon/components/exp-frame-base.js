@@ -18,7 +18,12 @@ export default Ember.Component.extend({
         parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
         data: {},  // Controls what and how parameters are serialized and sent to the server
     },
-    eventTimings: [], // TODO: Simplify default values mechanism
+    init() {
+        // TODO: Add a mechanism for setting all params in data
+        this.set('eventTimings', []);
+        this._super(...arguments);
+    },
+
     setupParams(params) {
         params = params || this.get('params');
 
