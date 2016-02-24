@@ -10,6 +10,7 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
+import compile from '../utils/eligibility';
 
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
@@ -19,9 +20,8 @@ export default DS.Model.extend(JamModel, {
 
     title: DS.attr('string'),
     description: DS.attr('string'),
-    beginDate: DS.attr('date'),	// TODO: ISODate
-    endDate: DS.attr('date'),	// TODO: ISODate
-    lastEdited: DS.attr('date'),	// TODO: ISODate
+    beginDate: DS.attr('date'),
+    endDate: DS.attr('date'),
     structure: DS.attr(),
 
     permissions: DS.attr(),
@@ -37,6 +37,12 @@ export default DS.Model.extend(JamModel, {
         // TODO
         return eligibility || "None";
     }),
+    _isEligible: Ember.computed('eligibilityCriteria', function() {
+        return compile(this.get('eligibilityCriteria'));
+    }),
+    isEligible(participant) {
+        return this.get('_isEligible')(participant);
+    },
 
     history: DS.hasMany('history'),
 
@@ -57,6 +63,15 @@ export default DS.Model.extend(JamModel, {
     init() {
         // When an experiment is loaded into the store, generate session-specific models
         this._super(...arguments);
-        this._registerSessionModels();
+        if (Ember.isPresent(this.get('id'))) {
+            this._registerSessionModels();
+        }
     },
+    onCreate: function() {
+        this._registerSessionModels();
+        var collection = this.store.createRecord('collection', {
+            id: 'experimenter.' + this.get('sessionCollectionId')
+        });
+        collection.save();
+    }.on('didCreate')
 });
