@@ -18,11 +18,22 @@ export default Ember.Component.extend({
         parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
         data: {},  // Controls what and how parameters are serialized and sent to the server
     },
-    init() {
-        // TODO: Add a mechanism for setting all params in data
-        this.set('eventTimings', []);
+
+    init: function() {
         this._super(...arguments);
-    },
+        this.set('eventTimings', []);
+
+        var defaultParams = this.setupParams();
+        Object.keys(defaultParams).forEach((key) => {
+            this.set(key, defaultParams[key]);
+        });
+
+        if (!this.get('id')) {
+            var frameIndex = this.get('ctx.frameIndex');
+            var type = this.get('type');
+            this.set('id', `${type}-${frameIndex}`);
+        }
+    }.on('didReceiveAttrs'),
 
     setupParams(params) {
         params = params || this.get('params');
@@ -35,18 +46,18 @@ export default Ember.Component.extend({
         Ember.merge(defaultParams, params);
         return defaultParams;
     },
-    onInit: function() {
-        var defaultParams = this.setupParams();
-        Object.keys(defaultParams).forEach((key) => {
-            this.set(key, defaultParams[key]);
-        });
 
-        if (!this.get('id')) {
-            var frameIndex = this.get('ctx.frameIndex');
-            var type = this.get('type');
-            this.set('id', `${type}-${frameIndex}`);
-        }
-    }.on('didReceiveAttrs'),
+    serializeContent() {
+        // Serialize selected parameters for this frame, plus eventTiming data
+        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
+        var fields = new Map();
+        var self = this;  // todo: do we need to do this?
+        toSerialize.forEach(function(item) {
+            fields[item] = self.get(item);
+        });
+        return {fields: fields, eventTimings: this.get('eventTimings')};
+    },
+
     actions: {
         setTimeEvent(eventName, extra) {
             // Track a particular timing event
@@ -75,15 +86,4 @@ export default Ember.Component.extend({
             this.sendAction('previous');
         }
     },
-    serializeContent: function () {
-        // Serialize selected parameters for this frame, plus eventTiming data
-        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
-        var fields = new Map();
-        var self = this;  // todo: do we need to do this?
-        toSerialize.forEach(function(item) {
-            fields[item] = self.get(item);
-        });
-        return {fields: fields, eventTimings: this.get('eventTimings')};
-    }
-
 });
