@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-video';
 
@@ -36,11 +35,10 @@ export default ExpFrameBaseComponent.extend({
                     default: []
                 }
             }
-        }
-    },
-
-    data: {
-        // This video does not explicitly capture any parameters from the user
+        },
+        data: {
+            // This video does not explicitly capture any parameters from the user
+        },
     },
 
     autoFullscreen: function() {

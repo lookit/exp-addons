@@ -16,7 +16,10 @@ export default Ember.Component.extend({
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
         parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
-        data: {},  // Controls what and how parameters are serialized and sent to the server
+        data: {
+            type: 'object',
+            properties: {}
+        },  // Controls what and how parameters are serialized and sent to the server
     },
 
     init: function() {
@@ -36,11 +39,16 @@ export default Ember.Component.extend({
     }.on('didReceiveAttrs'),
 
     setupParams(params) {
+        // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
         params = params || this.get('params');
 
         var defaultParams = {};
         Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
             defaultParams[key] = this.get(`meta.parameters.properties.${key}.default`);
+        });
+
+        Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
+            defaultParams[key] = this.get(`meta.data.properties.${key}.default`);
         });
 
         Ember.merge(defaultParams, params);
