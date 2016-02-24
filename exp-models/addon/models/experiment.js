@@ -22,7 +22,6 @@ export default DS.Model.extend(JamModel, {
     description: DS.attr('string'),
     beginDate: DS.attr('date'),
     endDate: DS.attr('date'),
-    lastEdited: DS.attr('date'),
     structure: DS.attr(),
 
     permissions: DS.attr(),
@@ -64,6 +63,15 @@ export default DS.Model.extend(JamModel, {
     init() {
         // When an experiment is loaded into the store, generate session-specific models
         this._super(...arguments);
+        if (Ember.isPresent(this.get('id'))) {
+            this._registerSessionModels();
+        }
+    },
+    onCreate: function() {
         this._registerSessionModels();
-    }
+        var collection = this.store.createRecord('collection', {
+            id: 'experimenter.' + this.get('sessionCollectionId')
+        });
+        collection.save();
+    }.on('didCreate')
 });
