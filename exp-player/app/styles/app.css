@@ -1,0 +1,14 @@
+.player-audio-replay-widget {
+    position: relative;
+}
+
+.player-audio-replay-widget:before {
+    /* Style button with font awesome icons */
+    content: "\f01e";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: bold;
+    color: green;
+    font-size: xx-large;
+    padding: 15px;
+}

@@ -10,7 +10,7 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                autoforwardOnEnd: {  // TODO: respect this option
+                autoforwardOnEnd: {
                     type: 'boolean',
                     description: 'Whether to automatically advance to the next frame when the video is complete',
                     default: true,
