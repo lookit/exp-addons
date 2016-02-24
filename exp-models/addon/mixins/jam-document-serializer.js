@@ -7,7 +7,7 @@ export default Ember.Mixin.create({
         createdOn: {serialize: false},
         createdBy: {serialize: false},
         modifiedOn: {serialize: false},
-        modifiedBy: {serialize: false},
+        modifiedBy: {serialize: false}
     },
 
     payloadKeyFromModelName: function(/*modelName */) {

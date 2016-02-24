@@ -1,0 +1,18 @@
+<div class="input-group">
+    <video id="player-video"
+           controls
+           autoplay={{autoplay}}
+           poster="{{poster}}"
+           onended={{ if autoforwardOnEnd (action 'next') }}
+    >
+        {{#each sources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </video>
+</div>
+
+<div class="row exp-controls">
+  <button class="btn btn-default pull-right" {{ action 'next' }}>
+    Continue
+  </button>
+</div>

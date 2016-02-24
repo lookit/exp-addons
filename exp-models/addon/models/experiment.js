@@ -10,6 +10,7 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
+import compile from '../utils/eligibility';
 
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
@@ -19,9 +20,8 @@ export default DS.Model.extend(JamModel, {
 
     title: DS.attr('string'),
     description: DS.attr('string'),
-    beginDate: DS.attr('date'),	// TODO: ISODate
-    endDate: DS.attr('date'),	// TODO: ISODate
-    lastEdited: DS.attr('date'),	// TODO: ISODate
+    beginDate: DS.attr('date'),
+    endDate: DS.attr('date'),
     structure: DS.attr(),
 
     permissions: DS.attr(),
@@ -37,6 +37,12 @@ export default DS.Model.extend(JamModel, {
         // TODO
         return eligibility || "None";
     }),
+    _isEligible: Ember.computed('eligibilityCriteria', function() {
+        return compile(this.get('eligibilityCriteria'));
+    }),
+    isEligible(participant) {
+        return this.get('_isEligible')(participant);
+    },
 
     history: DS.hasMany('history'),
 
@@ -49,14 +55,24 @@ export default DS.Model.extend(JamModel, {
     _registerSessionModels() {
         // Dynamically register the required models for a session table associated with this experiment
         var cId = this.get('sessionCollectionId');
-        window.App.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
-        window.App.register(`adapter:${cId}`, SessionAdapter.extend({sessionCollectionId: cId})); // Override part of adapter URL
-        window.App.register(`serializer:${cId}`, SessionSerializer.extend({modelName: cId})); // Tell serializer what model to use)
+        var container = Ember.getOwner(this);
+        container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
+        container.register(`adapter:${cId}`, SessionAdapter.extend({'sessionCollectionId': cId})); // Override part of adapter URL
+        container.register(`serializer:${cId}`, SessionSerializer.extend({'modelName': cId})); // Tell serializer what model to use)
     },
 
     init() {
         // When an experiment is loaded into the store, generate session-specific models
         this._super(...arguments);
-        this._registerSessionModels();
+        if (Ember.isPresent(this.get('id'))) {
+            this._registerSessionModels();
+        }
     },
+    onCreate: function() {
+        this._registerSessionModels();
+        var collection = this.store.createRecord('collection', {
+            id: 'experimenter.' + this.get('sessionCollectionId')
+        });
+        collection.save();
+    }.on('didCreate')
 });
