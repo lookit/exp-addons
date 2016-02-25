@@ -4,7 +4,7 @@ import layout from '../templates/components/exp-consent';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,
-    meta: {  // Configuration for all fields available on the component/template
+    meta: {
         name: 'Consent Form',
         description: 'A simple consent form.',
         parameters: {
@@ -32,8 +32,7 @@ export default ExpFrameBaseComponent.extend({
                 }
             }
         },
-        data: {  // Control parameters that are tracked and serialized. Ideally should provide validation mechanism.
-            // TODO: The player should merge data fields as well as params- or ideally, add some scoping
+        data: {
             type: 'object',
             properties: {
                 consentGranted: {
