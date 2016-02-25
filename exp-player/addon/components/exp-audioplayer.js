@@ -43,18 +43,17 @@ export default ExpFrameBaseComponent.extend({
                     default: []
                 }
             }
-        }
-    },
-
-    data: {
-        type: 'object',
-        properties: {  // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
-            didFinishSound: {
-                type: 'boolean',
-                default: false
-            }
         },
-        required: ['didFinishSound']
+        data: {
+            type: 'object',
+            properties: {  // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
+                didFinishSound: {
+                    type: 'boolean',
+                    default: false
+                }
+            },
+            required: ['didFinishSound']
+        },
     },
 
     actions: {
@@ -68,7 +67,7 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    preventNext: Ember.computed('didFinishSound', function() {
+    preventNext: Ember.computed('mustPlay', 'didFinishSound', function() {
         if (!this.get('mustPlay')) {
             return false;
         } else {
