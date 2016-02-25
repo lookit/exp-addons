@@ -1,7 +1,7 @@
 <div class="row">
   <h4>{{title}}</h4>
   {{log formSchema}}
-  {{dynamic-form schema=formSchema}}
+  {{dynamic-form schema=formSchema changeAction=(action "updateOnChange")}}
 </div>
 <div class="row exp-controls">
   <!-- Next/Last/Previous controls. Modify as appropriate -->

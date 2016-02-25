@@ -102,13 +102,24 @@ export default ExpFrameBaseComponent.extend({
         
     }),
     formData: null,
-    formActions: Ember.computed(function() {
-        var root = this;
+    actions: {
+        updateOnChange: function(event) {
+            const propertyName = event.target.name;
+            const value = event.target.value;
+            this.send('update');
+        },
+        update: function() {
+            debugger;
+            this.set('formData', this.getValue());
+        }
+    }
+    // formActions: Ember.computed(function() {
+    //     var root = this;
 
-        return {
-            update: function() {
-                root.set('formData', this.getValue());
-            }
-        };
-    })
+    //     return {
+    //         update: function() {
+    //             root.set('formData', this.getValue());
+    //         }
+    //     };
+    // })
 });
