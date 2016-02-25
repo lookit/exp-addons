@@ -18,7 +18,15 @@ export default Ember.Component.extend({
     currentFrame: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames') || [];
         var frameIndex = this.get('frameIndex');
-        return frames[frameIndex];
+
+        var frameData = frames[frameIndex];
+        if (frameData.type === 'random-choice') {
+            // Select a random frame from the list of provided options
+            // Randomization must be done by the player, because a frame hasn't been selected yet
+            return frameData.options[Math.floor(Math.random() * frameData.options.length)];
+        } else {
+            return frameData;
+        }
     }),
     noFrames: Ember.computed.empty('frames'),
     currentFrameType: Ember.computed('currentFrame', function() {
