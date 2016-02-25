@@ -101,25 +101,15 @@ export default ExpFrameBaseComponent.extend({
         }
         
     }),
-    formData: null,
+    formData: [],
     actions: {
         updateOnChange: function(event) {
             const propertyName = event.target.name;
             const value = event.target.value;
-            this.send('update');
-        },
-        update: function() {
-            debugger;
-            this.set('formData', this.getValue());
+            console.log("Updating " + propertyName + " to " + value);
+            var data = this.get('formData');
+            data[propertyName] = value;
+            this.set('formData', data);
         }
     }
-    // formActions: Ember.computed(function() {
-    //     var root = this;
-
-    //     return {
-    //         update: function() {
-    //             root.set('formData', this.getValue());
-    //         }
-    //     };
-    // })
 });
