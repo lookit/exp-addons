@@ -11,7 +11,8 @@
     "alpaca": "1.5.14",
     "handlebars": "3.0.3",
     "bootstrap": "3.3.2",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "swfobject": "*"
   },
   "resolutions": {
     "ember": "2.2.0"

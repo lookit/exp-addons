@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xml:lang="en">	
+<file datatype="plaintext" original="videorecorder.fla" source-language="EN">	    
+<header></header>
+<body>			
+<trans-unit id="000" resname="IDS_BT_RECORD">			    
+<source>Înregistrează</source>
+</trans-unit>
+<trans-unit id="00a" resname="IDS_BT_RECORD_AGAIN">
+<source>Înregistrează din nou</source>
+</trans-unit>
+<trans-unit id="00b" resname="IDS_BT_STOP">
+<source>Stop</source>
+</trans-unit>
+<trans-unit id="001" resname="IDS_BT_PLAY">
+<source>Redă</source>
+</trans-unit>
+<trans-unit id="002" resname="IDS_BT_PAUSE">
+<source>Pauză</source>
+</trans-unit>
+<trans-unit id="003" resname="IDS_BT_SAVE">
+<source>Publică</source>
+</trans-unit>
+<trans-unit id="004" resname="IDS_BT_SETTINGS">
+<source>Setări</source>
+</trans-unit>
+<trans-unit id="005" resname="IDS_BT_OK">
+<source>Inserează!</source>
+</trans-unit>
+<trans-unit id="006" resname="IDS_BT_BUY">
+<source>Cumpără</source>
+</trans-unit>
+<trans-unit id="007" resname="IDS_TXT_LSETTINGS">
+<source>Se incarcă ...</source>
+</trans-unit>
+<trans-unit id="008" resname="IDS_TXT_IPKEY">
+<source>Vă rugăm sa introduceți cheia de licență!</source>
+</trans-unit>
+<trans-unit id="009" resname="IDS_TXT_SPKEY">
+<source>Cheia de licență e prea scurtă!</source>
+</trans-unit>
+<trans-unit id="010" resname="IDS_TXT_LOGIN">
+<source>Trebuie să fie logat în website înainte de a face o înregistrare!</source>
+</trans-unit>
+<trans-unit id="011" resname="IDS_TXT_LOADERR">
+<source>Eroare la incărcarea avc_settings.</source>
+</trans-unit>
+<trans-unit id="012" resname="IDS_TXT_LOADERR2">
+<source> de la webserver.</source>
+</trans-unit>
+<trans-unit id="014" resname="IDS_TXT_LOADERR3">
+<source>Apasă aici sa pentru a verifica de erori</source>
+</trans-unit>
+<trans-unit id="015" resname="IDS_TXT_CONNECT">
+<source>Se conectează...</source>
+</trans-unit>
+<trans-unit id="016" resname="IDS_TXT_CONNECTSTR_ERR">
+<source>Stringul de conexiune din avc_settings.</source>
+</trans-unit>
+<trans-unit id="017" resname="IDS_TXT_CONNECTSTR_ERR2">
+<source>este gol, pentru detalii vezi instruncțiunile de instalare!</source>
+</trans-unit>
+<trans-unit id="018" resname="IDS_TXT_CFAIL">
+<source>Conexiune eșuată</source>
+</trans-unit>
+<trans-unit id="019" resname="IDS_TXT_CREJECT">
+<source>Conexiune respinsă</source>
+</trans-unit>
+<trans-unit id="020" resname="IDS_TXT_CSUCCES">
+<source>Conexiune realizată, se așteaptă server-ul...</source>
+</trans-unit>
+<trans-unit id="021" resname="IDS_TXT_IAPP">
+<source>Aplicația 'hdfvr' nu a fost găsită pe media server</source>
+</trans-unit>
+<trans-unit id="022" resname="IDS_TXT_CCLOSED">
+<source>Conexiunea la Internet a căzut</source>
+</trans-unit>
+<trans-unit id="023" resname="IDS_TXT_CUNKNOWN">
+<source>Conexiune eșuată</source>
+</trans-unit>
+<trans-unit id="024" resname="IDS_TXT_ICAMERA">
+<source>Nu ai webcam.</source>			</trans-unit>
+<trans-unit id="025" resname="IDS_TXT_ICAMERA2">
+<source>Camera este blocată. Pentru a o activa apasă </source>
+</trans-unit>
+<trans-unit id="025a" resname="IDS_TXT_HERE">
+<source>aici</source>
+</trans-unit>
+<trans-unit id="025b" resname="IDS_TXT_REMANING">
+<source>rămas</source>
+</trans-unit>
+<trans-unit id="026" resname="IDS_TXT_HCAMERA">
+<source>Alege camera</source>
+</trans-unit>
+<trans-unit id="027" resname="IDS_TXT_INACTIVE">
+<source>este inactivă</source>
+</trans-unit>
+<trans-unit id="028" resname="IDS_TXT_HMICROPHONE">
+<source>Alege microfonul</source>
+</trans-unit>
+<trans-unit id="029" resname="IDS_TXT_INIT">
+<source>Se inițializează dispozitivul...</source>
+</trans-unit>
+<trans-unit id="030" resname="IDS_TXT_CAMERAINACTIVATED">
+<source>Camera este inactivă. Apasă pe setări pentru a o activa!</source>
+</trans-unit>
+<trans-unit id="031" resname="IDS_TXT_UPLOAD">
+<source>Se uploadează...</source>
+</trans-unit>
+<trans-unit id="032" resname="IDS_TXT_SD">
+<source>Versiunea asta este limitată la video SD (640x480 max)</source>
+</trans-unit>
+<trans-unit id="033" resname="IDS_TXT_BUFFERING">
+<source>Se încarcă...</source>
+</trans-unit>
+<trans-unit id="034" resname="IDS_TXT_RECORD">
+<source>înregistrează</source>
+</trans-unit>
+<trans-unit id="035" resname="IDS_TXT_PLAY">
+<source>redă</source>
+</trans-unit>
+<trans-unit id="036" resname="IDS_TXT_PAUSE">
+<source>pauză</source>
+</trans-unit>
+<trans-unit id="037" resname="IDS_TXT_STOP">
+<source>stop</source>
+</trans-unit>
+<trans-unit id="037b" resname="IDS_TXT_SETTINGS">
+<source>setări</source>
+</trans-unit>
+<trans-unit id="038" resname="IDS_TXT_SAVE">
+<source>salvează</source>
+</trans-unit>
+<trans-unit id="039" resname="IDS_TXT_SAVEFAILED">
+<source>Salvare eșuată!</source>
+</trans-unit>
+<trans-unit id="040" resname="IDS_TXT_SAVEOK">
+<source>Salvat</source>
+</trans-unit>
+<trans-unit id="041" resname="IDS_TXT_CAMERASTOPED">
+<source>Camera s-a oprit in timpul înregistrării</source>
+</trans-unit>
+<trans-unit id="042" resname="IDS_TXT_CHOOSECAM">
+<source>Selectează camera</source>
+</trans-unit>
+<trans-unit id="043" resname="IDS_TXT_CHOOSEMIC">
+<source>Selectează microfonul</source>
+</trans-unit>
+<trans-unit id="044" resname="IDS_TXT_CANCEL">
+<source>Anulează</source>
+</trans-unit>
+<trans-unit id="045" resname="IDS_TXT_CONTINUE">
+<source>Continuă</source>
+</trans-unit>
+<trans-unit id="046" resname="IDS_TXT_PAUSE_RECORDING">
+<source>pauză înregistrare</source>
+</trans-unit>
+<trans-unit id="047" resname="IDS_TXT_RESUME_RECORDING">
+<source>continuă înregistrarea</source>
+</trans-unit>
+<trans-unit id="048" resname="IDS_TXT_NO_MIC">
+<source>Nu ai un microfon instalat</source>
+</trans-unit>
+<trans-unit id="049" resname="IDS_RECORD_INIT">
+<source>Înregistrează Video</source>
+</trans-unit>
+<trans-unit id="050" resname="IDS_SELECT_ALLOW">
+<source>① Selectează [Allow]</source>
+</trans-unit>
+<trans-unit id="051" resname="IDS_CHECK_REMEMBER">
+<source>② Bifează Remember</source>
+</trans-unit>
+<trans-unit id="052" resname="IDS_CLICK_CLOSE">
+<source>③ Apasă [Close]</source>
+</trans-unit>
+<trans-unit id="053" resname="IDS_WEBCAM_SETTINGS">
+<source>Setări webcam</source>
+</trans-unit>
+<trans-unit id="054" resname="IDS_MIC_SETTINGS">
+<source>Setări microfon</source>
+</trans-unit>
+<trans-unit id="055" resname="IDS_TXT_SAVING">
+<source>Se salvează...</source>
+</trans-unit>
+</body>
+</file>
+</xliff>
