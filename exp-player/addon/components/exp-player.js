@@ -29,7 +29,7 @@ export default Ember.Component.extend({
         var currentFrame = this.get('currentFrame');
         var componentName = `exp-${currentFrame.type}`;
 
-        if (!this.container.lookup(`component:${componentName}`)) {
+        if (!Ember.getOwner(this).lookup(`component:${componentName}`)) {
             console.warn(`No component named ${componentName} is registered.`);
         }
         return componentName;
