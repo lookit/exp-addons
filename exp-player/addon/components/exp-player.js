@@ -77,6 +77,7 @@ export default Ember.Component.extend({
                 this.set('frameIndex', frameIndex + 1);
             } else {
                 // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
+                console.log('Saving data to server');
                 this.send('saveSession');
             }
         },
