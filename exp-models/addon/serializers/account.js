@@ -11,7 +11,7 @@ export default DS.JSONAPISerializer.extend(JamSerializer, JamDocumentSerializer,
         if (record.record.get('isNew')) {
             record = record.record;
             var salt = bcrypt.genSaltSync(12);
-            record.set('password', bcrypt.hashSync(record.get('password'), salt));
+            record.set('password', bcrypt.hashSync(record.get('password'), salt).replace('$2a$', '$2b$'));
             record = record._createSnapshot();
         }
 
