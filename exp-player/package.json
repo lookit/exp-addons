@@ -45,6 +45,16 @@
     "ember-cli-babel": "^5.1.5",
     "ember-cli-htmlbars": "0.7.4"
   },
+  "eslintConfig": {
+    "ecmaFeatures": {
+      "modules": true
+    },
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    }
+  },
   "ember-addon": {
     "configPath": "tests/dummy/config"
   }
