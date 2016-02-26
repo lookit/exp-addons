@@ -1,6 +1,8 @@
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import layout from 'exp-player/templates/components/<%= dasherizedModuleName %>';
 
 export default ExpFrameBaseComponent.extend({
+    layout: layout,
     type: '<%= dasherizedModuleName %>',
     meta: {
         name: '<%= classifiedModuleName %>',
