@@ -17,6 +17,9 @@ var profileProperties = ['birthday', 'firstName', 'profileId'];
 
 export default DS.Transform.extend({
     deserialize(serialized) {
+        if (!Ember.$.isArray(serialized)) {
+            return [];
+        }
         return serialized.map((profile) => {
             if (profile.get) {
                 return profile;
@@ -28,7 +31,12 @@ export default DS.Transform.extend({
     },
     serialize(deserialized) {
         var ret = {};
-        profileProperties.forEach((prop) => ret[prop] = deserialized.get(prop));
-        return ret;
+        if (deserialized) {
+            profileProperties.forEach((prop) => ret[prop] = deserialized.get(prop));
+            return ret;
+        }
+        else {
+            return {};
+        }
     }
 });
