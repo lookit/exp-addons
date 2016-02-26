@@ -52,7 +52,13 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            defaultParams[key] = this.get(`meta.data.properties.${key}.default`);
+            var value = this.get(key);
+            if (typeof value === 'undefined') {
+                defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
+            }
+            else {
+                defaultParams[key] = value;
+            }
         });
 
         Ember.merge(defaultParams, params);
