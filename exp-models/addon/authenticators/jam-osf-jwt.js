@@ -32,7 +32,7 @@ export default Base.extend({
             return res.data.attributes;
         });
     },
-    authenticate(accessToken, _ /* expires */) {
+    authenticate(accessToken /*, expires */) {
         return this._post(accessToken).then(function(res) {
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
