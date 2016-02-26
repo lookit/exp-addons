@@ -12,25 +12,24 @@ export default Ember.Component.extend({
     id: null,
     type: null,
     ctx: null,
-    meta: {
+    meta: {  // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
-        parameters: {},  // Configuration parameters, which can be auto-populated from the experiment structure JSON
-        data: {},  // Controls what and how parameters are serialized and sent to the server
+        parameters: {  // Configuration parameters, which can be auto-populated from the experiment structure JSON
+            type: 'object',
+            properties: {}
+        },
+        data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
+            type: 'object',
+            properties: {}
+        },
     },
-    eventTimings: [], // TODO: Simplify default values mechanism
-    setupParams(params) {
-        params = params || this.get('params');
+    eventTimings: null,
 
-        var defaultParams = {};
-        Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
-            defaultParams[key] = this.get(`meta.parameters.properties.${key}.default`);
-        });
+    init: function() {
+        this._super(...arguments);
+        this.set('eventTimings', []);
 
-        Ember.merge(defaultParams, params);
-        return defaultParams;
-    },
-    onInit: function() {
         var defaultParams = this.setupParams();
         Object.keys(defaultParams).forEach((key) => {
             this.set(key, defaultParams[key]);
@@ -41,7 +40,36 @@ export default Ember.Component.extend({
             var type = this.get('type');
             this.set('id', `${type}-${frameIndex}`);
         }
-    }.on('didReceiveAttrs'),
+    },
+
+    setupParams(params) {
+        // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
+        params = params || this.get('params');
+
+        var defaultParams = {};
+        Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
+            defaultParams[key] = this.get(`meta.parameters.properties.${key}.default`);
+        });
+
+        Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
+            defaultParams[key] = this.get(`meta.data.properties.${key}.default`);
+        });
+
+        Ember.merge(defaultParams, params);
+        return defaultParams;
+    },
+
+    serializeContent() {
+        // Serialize selected parameters for this frame, plus eventTiming data
+        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
+        var fields = new Map();
+        var self = this;  // todo: do we need to do this?
+        toSerialize.forEach(function(item) {
+            fields[item] = self.get(item);
+        });
+        return {fields: fields, eventTimings: this.get('eventTimings')};
+    },
+
     actions: {
         setTimeEvent(eventName, extra) {
             // Track a particular timing event
@@ -70,15 +98,4 @@ export default Ember.Component.extend({
             this.sendAction('previous');
         }
     },
-    serializeContent: function () {
-        // Serialize selected parameters for this frame, plus eventTiming data
-        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
-        var fields = new Map();
-        var self = this;  // todo: do we need to do this?
-        toSerialize.forEach(function(item) {
-            fields[item] = self.get(item);
-        });
-        return {fields: fields, eventTimings: this.get('eventTimings')};
-    }
-
 });
