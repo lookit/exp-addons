@@ -11,6 +11,7 @@ export default Ember.Component.extend({
      **/
     id: null,
     type: null,
+    params: null,
     ctx: null,
     meta: {  // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
@@ -22,12 +23,17 @@ export default Ember.Component.extend({
         data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
             type: 'object',
             properties: {}
-        },
+        }
     },
     eventTimings: null,
 
-    init: function() {
+    didReceiveAttrs: function() {
         this._super(...arguments);
+
+        if (!this.get('params')) {
+            return;
+        }
+
         this.set('eventTimings', []);
 
         var defaultParams = this.setupParams();
@@ -41,7 +47,6 @@ export default Ember.Component.extend({
             this.set('id', `${type}-${frameIndex}`);
         }
     },
-
     setupParams(params) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
         params = params || this.get('params');

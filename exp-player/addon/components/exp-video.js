@@ -12,17 +12,17 @@ export default ExpFrameBaseComponent.extend({
                 autoforwardOnEnd: {
                     type: 'boolean',
                     description: 'Whether to automatically advance to the next frame when the video is complete',
-                    default: true,
+                    default: true
                 },
                 autoplay: {
                     type: 'boolean',
                     description: 'Whether to autoplay the video on load',
-                    default: true,
+                    default: true
                 },
                 fullscreen: {
                     type: 'boolean',
                     description: 'Whether to show video as fullscreen',
-                    default: true,
+                    default: true
                 },
                 poster: {
                     type: 'string',
@@ -38,7 +38,7 @@ export default ExpFrameBaseComponent.extend({
         },
         data: {
             // This video does not explicitly capture any parameters from the user
-        },
+        }
     },
 
     autoFullscreen: function() {
