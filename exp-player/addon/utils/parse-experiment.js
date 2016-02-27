@@ -43,9 +43,9 @@ function resolveFrame(frameId, frames) {
         // Base case: this is a plain experiment frame
         return [reformatConfig(frameId, config)];
     } else if (config.kind === "block") {
-        return resolveBlock(config, frames);
+        return resolveBlock(frameId, frames);
     } else if (config.kind === "choice") {
-        return resolveRandom(config, frames);
+        return resolveRandom(frameId, frames);
     } else {
         throw `Experiment definition specifies an unknown kind of frame: ${config.kind}`;
     }
