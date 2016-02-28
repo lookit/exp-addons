@@ -24,6 +24,15 @@ export default DS.Model.extend(JamModel, {
     endDate: DS.attr('date'),
     structure: DS.attr(),
 
+    thumbnailId: DS.attr('string'),
+    thumbnail: Ember.computed('thumbnailId', function() {
+        var thumbnailId = this.get('thumbnailId');
+        if (thumbnailId) {
+            return this.get('store').findRecord('thumbnail', thumbnailId);
+        }
+        return null;
+    }),
+
     permissions: DS.attr(),
 
     state: DS.attr('string'),
@@ -74,5 +83,27 @@ export default DS.Model.extend(JamModel, {
             id: 'experimenter.' + this.get('sessionCollectionId')
         });
         collection.save();
-    }.on('didCreate')
+    }.on('didCreate'),
+
+    setThumbnail(raw) {
+        var self = this;
+
+        var thumbnailId = this.get('thumbnailId');
+        if (thumbnailId) {
+            return this.get('store').findRecord('thumbnail', thumbnailId)
+                .then(function(thumbnail) {
+                    thumbnail.set('raw', raw);
+                    return thumbnail.save();
+                });
+        }
+        else {
+            var thumbnail = this.get('store').createRecord('thumbnail', {
+                raw: raw
+            });
+            return thumbnail.save().then(function() {
+                self.set('thumbnailId', thumbnail.get('id'));
+                self.save();
+            });
+        }
+    }
 });
