@@ -10,15 +10,11 @@ const defaultSchema = {
     "type":"object",
     "properties": {
       "birthdate": {
-        "type": "string",
-        "format": "date",
-        "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos.",
-        "required": true
+        "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos. *"
       },
       "person": {
         "type":"string",
-        "title":"Which person would you (the parent) have trusted more to name objects accurately?",
-        "required": true
+        "title":"Which person would you (the parent) have trusted more to name objects accurately? *"
       },
       "suggestions": {
         "type":"string",
@@ -27,8 +23,11 @@ const defaultSchema = {
     }
   },
   "options": {
+    "renderForm": true,
     "fields": {
       "birthdate": {
+        "type": "date",
+        "manualEntry": false,
         "validator": "required-field",
         "message": "Please provide a complete and valid birthday.",
         "helper": "None of the information we collet is used to identify your child. However, if you are uncomfortable providing an exact birthday, you're welcome to give another date within that week.",
@@ -45,8 +44,7 @@ const defaultSchema = {
         "cols": 40,
       }
     }
-  },
-  "view": "bootstrap-create"    
+  }   
 };
 
 export default ExpFrameBaseComponent.extend({
@@ -98,7 +96,6 @@ export default ExpFrameBaseComponent.extend({
             console.log(newOptions);
             return {
                 schema: this.get('form.schema'),
-                view: 'bootstrap-create',
                 options: newOptions        
             };
         },
@@ -119,7 +116,7 @@ export default ExpFrameBaseComponent.extend({
             this.set('formData', data);
         },
         update: function() {
-            debugger;
+            // should save formData
         }
     }
 });
