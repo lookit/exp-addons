@@ -8,5 +8,7 @@ export default Ember.Object.extend({
             callback({"status": false, "message": message});
             return;
         }
+        callback({"status": true});
+        return;
     }
 });
