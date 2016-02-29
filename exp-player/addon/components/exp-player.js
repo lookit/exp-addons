@@ -1,67 +1,40 @@
 import Ember from 'ember';
 import layout from '../templates/components/exp-player';
+import parseExperiment from '../utils/parse-experiment';
 
 export default Ember.Component.extend({
     layout: layout,
-    store: Ember.inject.service('store'),
 
+    experiment: null, // Experiment model
     frames: null,
-    frameIndex: null,
-    _last: null,
-    ctx: {
-        data: {}
+
+    frameIndex: null,  // Index of the currently active frame
+
+    expData: {},  // Temporarily store data collected until we sent to server at end
+
+    init: function() {
+        this._super(...arguments);
+        this.set('frameIndex', 0);
+        var frameConfigs = parseExperiment(this.get('experiment.structure'));
+        this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
     },
-    expData: {},
-    onInit: function() {
-        this.set('frameIndex', this.get('frameIndex') || 0);  // TODO: Is this necessary?
-    }.on('didReceiveAttrs'),
-    currentFrame: Ember.computed('frames', 'frameIndex', function() {
+
+    currentFrameConfig: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames') || [];
         var frameIndex = this.get('frameIndex');
+        return frames[frameIndex];
+    }),
 
-        var frameData = frames[frameIndex];
-        if (frameData.type === 'random-choice') {
-            // Select a random frame from the list of provided options
-            // Randomization must be done by the player, because a frame hasn't been selected yet
-            return frameData.options[Math.floor(Math.random() * frameData.options.length)];
-        } else {
-            return frameData;
-        }
-    }),
-    noFrames: Ember.computed.empty('frames'),
-    currentFrameType: Ember.computed('currentFrame', function() {
-        var currentFrame = this.get('currentFrame');
-        return !!currentFrame ? currentFrame.type : '';
-    }),
-    currentFrameTemplate: Ember.computed('currentFrame', function() {
-        var currentFrame = this.get('currentFrame');
-        var componentName = `exp-${currentFrame.type}`;
+    currentFrameTemplate: Ember.computed('currentFrameConfig', function() {
+        var currentFrameConfig = this.get('currentFrameConfig');
+        var componentName = `${currentFrameConfig.kind}`;
 
         if (!Ember.getOwner(this).lookup(`component:${componentName}`)) {
             console.warn(`No component named ${componentName} is registered.`);
         }
         return componentName;
     }),
-    currentFrameId: Ember.computed('currentFrame', function() {
-        var currentFrame = this.get('currentFrame');
-        return currentFrame.id;
-    }),
-    currentFrameData: Ember.computed('currentFrame', function() {
-        var currentFrame = this.get('currentFrame');
-        var context = this.get('ctx');
 
-        if (!context[currentFrame.id]) {
-            context[currentFrame.id] = null;
-        }
-        return context[currentFrame.id];
-    }),
-    currentFrameCtx: Ember.computed('currentFrame', function() {
-        // deepcopy global context
-        var ctx = Ember.copy(this.get('ctx'));
-        ctx.frameIndex = this.get('frameIndex');
-
-        return ctx;
-    }),
     actions: {
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item

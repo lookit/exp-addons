@@ -4,7 +4,7 @@ import layout from '../templates/components/exp-audioplayer';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,
-    didFinishSound: false, // TODO: Placeholder until player merges data attrs into frame by default
+    didFinishSound: false,
     meta: {
         name: 'Audio checker',
         description: 'Component that plays a test sound clip',
