@@ -44,9 +44,12 @@ export default Ember.Component.extend({
         },
         saveSession() {
             // Construct payload and send to server
+            var frames = this.get('frames');
+            var sequence = frames.map((frame) => frame.id);
+
             var payload = {
                 expData: this.get('expData'),
-                parameters: {}  // TODO: Future field
+                sequence: sequence
             };
             this.sendAction('saveHandler', payload);  // call the passed-in action with payload
         },
