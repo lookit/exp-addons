@@ -20,8 +20,6 @@ export default Base.extend({
                     access_token: accessToken
                 }
             }})
-        }).error(function(/*xhr, status, error*/) {
-            this.transitionToRoute('login');
         });
     },
 
@@ -30,17 +28,12 @@ export default Base.extend({
         return this._post(accessToken).then(function(res) {
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
-        });
+        }).fail(this.invalidate);
     },
     authenticate(accessToken /*, expires */) {
         return this._post(accessToken).then(function(res) {
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
         });
-    },
-    invalidate(data) {
-        console.log('Invalidating data:');
-        console.log(data);
-        return this._super(data);
     }
 });
