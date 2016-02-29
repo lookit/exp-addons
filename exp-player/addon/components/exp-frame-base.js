@@ -10,8 +10,7 @@ export default Ember.Component.extend({
      @property {integer} ctx.frameIndex: the current exp-player frameIndex
      **/
     id: null,
-    type: null,
-    ctx: null,
+    kind: null,
     meta: {  // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
@@ -24,6 +23,9 @@ export default Ember.Component.extend({
             properties: {}
         },
     },
+
+    frameIndex: null,
+    frameConfig: null,
     eventTimings: null,
 
     init: function() {
@@ -36,15 +38,15 @@ export default Ember.Component.extend({
         });
 
         if (!this.get('id')) {
-            var frameIndex = this.get('ctx.frameIndex');
-            var type = this.get('type');
-            this.set('id', `${type}-${frameIndex}`);
+            var frameIndex = this.get('frameIndex');
+            var kind = this.get('kind');
+            this.set('id', `${kind}-${frameIndex}`);
         }
     },
 
     setupParams(params) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
-        params = params || this.get('params');
+        params = params || this.get('frameConfig');
 
         var defaultParams = {};
         Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
@@ -85,10 +87,11 @@ export default Ember.Component.extend({
             this.set('eventTimings', timings);
         },
         next() {
-            console.log('Leaving frame ID', this.get('id'));
+            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+            console.log('Leaving frame ID', frameId);
             this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
             // When exiting frame, save the data to the base player using the provided saveHandler
-            this.sendAction('saveHandler', this.get('id'), this.get('serializeContent').apply(this)); // todo ugly use of apply
+            this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
             this.sendAction('next');
         },
         last() {
