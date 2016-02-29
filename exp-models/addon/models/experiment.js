@@ -24,13 +24,38 @@ export default DS.Model.extend(JamModel, {
     endDate: DS.attr('date'),
     structure: DS.attr(),
 
+    // This needs to be a seperate collection because string fields of a certain length
+    // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
-    thumbnail: Ember.computed('thumbnailId', function() {
-        var thumbnailId = this.get('thumbnailId');
-        if (thumbnailId) {
-            return this.get('store').findRecord('thumbnail', thumbnailId);
+    thumbnail: Ember.computed('thumbnailId', {
+        get() {
+            var thumbnailId = this.get('thumbnailId');
+            if (thumbnailId) {
+                return this.get('store').findRecord('thumbnail', thumbnailId);
+            }
+            return null;
+        },
+        set (raw) {
+            var self = this;
+
+            var thumbnailId = this.get('thumbnailId');
+            if (thumbnailId) {
+                return this.get('store').findRecord('thumbnail', thumbnailId)
+                    .then(function(thumbnail) {
+                        thumbnail.set('raw', raw);
+                        return thumbnail.save();
+                    });
+            }
+            else {
+                var thumbnail = this.get('store').createRecord('thumbnail', {
+                    raw: raw
+                });
+                return thumbnail.save().then(function() {
+                    self.set('thumbnailId', thumbnail.get('id'));
+                    self.save();
+                });
+            }
         }
-        return null;
     }),
 
     permissions: DS.attr(),
@@ -83,27 +108,5 @@ export default DS.Model.extend(JamModel, {
             id: 'experimenter.' + this.get('sessionCollectionId')
         });
         collection.save();
-    }.on('didCreate'),
-
-    setThumbnail(raw) {
-        var self = this;
-
-        var thumbnailId = this.get('thumbnailId');
-        if (thumbnailId) {
-            return this.get('store').findRecord('thumbnail', thumbnailId)
-                .then(function(thumbnail) {
-                    thumbnail.set('raw', raw);
-                    return thumbnail.save();
-                });
-        }
-        else {
-            var thumbnail = this.get('store').createRecord('thumbnail', {
-                raw: raw
-            });
-            return thumbnail.save().then(function() {
-                self.set('thumbnailId', thumbnail.get('id'));
-                self.save();
-            });
-        }
-    }
+    }.on('didCreate')
 });

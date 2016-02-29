@@ -1,3 +1,6 @@
+/*
+ A model for storing raw image data.
+*/
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
