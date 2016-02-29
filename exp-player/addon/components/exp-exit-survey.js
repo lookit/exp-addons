@@ -29,9 +29,13 @@ const defaultSchema = {
   "options": {
     "fields": {
       "birthdate": {
+        "validator": "required-field",
+        "message": "Please provide a complete and valid birthday.",
         "helper": "None of the information we collet is used to identify your child. However, if you are uncomfortable providing an exact birthday, you're welcome to give another date within that week.",
       },
       "person" : {
+        "validator": "required-field",
+        "message": "Please name one woman by shirt color, or answer that you're not sure.",
         "size": 20,
         "helper": "You don't have to be sure -- if you had to choose, which person's answers would you have gone with?",
       },
@@ -41,7 +45,8 @@ const defaultSchema = {
         "cols": 40,
       }
     }
-  }    
+  },
+  "view": "bootstrap-create"    
 };
 
 export default ExpFrameBaseComponent.extend({
@@ -90,8 +95,10 @@ export default ExpFrameBaseComponent.extend({
                     }
                 }
             };
+            console.log(newOptions);
             return {
                 schema: this.get('form.schema'),
+                view: 'bootstrap-create',
                 options: newOptions        
             };
         },
@@ -110,6 +117,9 @@ export default ExpFrameBaseComponent.extend({
             var data = this.get('formData');
             data[propertyName] = value;
             this.set('formData', data);
+        },
+        update: function() {
+            debugger;
         }
     }
 });
