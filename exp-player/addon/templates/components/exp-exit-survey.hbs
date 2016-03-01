@@ -1,11 +1,19 @@
 <div class="row">
-  <h4>{{title}}</h4>
-  {{dynamic-form schema=formSchema changeAction=(action "updateOnChange")}}
-</div>
-<div class="row exp-controls">
-  <!-- Next/Last/Previous controls. Modify as appropriate -->
-  <div class="btn-group">
-    <button class="btn btn-default" {{ action 'previous' }} > Previous </button>
-    <button class="btn btn-default pull-right" {{ action 'next' }} > Next </button>
+  <div class="col-md-12">
+    <h4>{{title}}</h4>
+    {{#if section1}}
+      <p>{{exitThankYou}}</p>
+      {{dynamic-form schema=formSchema formActions=formActions}}
+    {{else}}
+      <p>Thanks! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
+      <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{progressValue}}
+        aria-valuemin="0" aria-valuemax="100" style="width:{{progressValue}}%">
+          {{progressValue}}% Complete
+        </div>
+      </div>
+      <p>{{exitMessage}}</p>
+      {{dynamic-form schema=additionalForm formActions=formActions}}
+    {{/if}}
   </div>
 </div>
