@@ -43,13 +43,12 @@ export default DS.Model.extend(JamModel, {
         set (raw) {
             var self = this;
 
-            var thumbnailId = this.get('thumbnailId');
-            if (thumbnailId) {
-                return this.get('store').findRecord('thumbnail', thumbnailId)
-                    .then(function(thumbnail) {
-                        thumbnail.set('raw', raw);
-                        return thumbnail.save();
-                    });
+            var getThumbnail = this.get('thumbnail');
+            if (getThumbnail) {
+                return getThumbnail.then(function(thumbnail) {
+                    thumbnail.set('raw', raw);
+                    return thumbnail.save();
+                });
             }
             else {
                 var thumbnail = this.get('store').createRecord('thumbnail', {
