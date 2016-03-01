@@ -1,10 +1,12 @@
 <div class="row">
-    {{
-    component currentFrameTemplate
-    frameIndex=frameIndex
-    frameConfig=currentFrameConfig
+    <div class="col-md-8">
+        {{
+        component currentFrameTemplate
+        frameIndex=frameIndex
+        frameConfig=currentFrameConfig
 
-    saveHandler=(action 'saveFrame')
-    next=(action 'next') last=(action 'last') previous=(action 'previous')
-    }}
+        saveHandler=(action 'saveFrame')
+        next=(action 'next') last=(action 'last') previous=(action 'previous')
+        }}
+    </div>
 </div>
