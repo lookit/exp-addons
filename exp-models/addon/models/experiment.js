@@ -24,6 +24,44 @@ export default DS.Model.extend(JamModel, {
     endDate: DS.attr('date'),
     structure: DS.attr(),
 
+    // Researchers can provide feedback to participants by writing to this field
+    feedback: DS.attr('string'),
+    // A flag for whether or not the participant has seen this feedback
+    hasReadFeedback: DS.attr('boolean'),
+
+    // This needs to be a seperate collection because string fields of a certain length
+    // cannot be indexed by Elasticsearch.
+    thumbnailId: DS.attr('string'),
+    thumbnail: Ember.computed('thumbnailId', {
+        get() {
+            var thumbnailId = this.get('thumbnailId');
+            if (thumbnailId) {
+                return this.get('store').findRecord('thumbnail', thumbnailId);
+            }
+            return null;
+        },
+        set (raw) {
+            var self = this;
+
+            var getThumbnail = this.get('thumbnail');
+            if (getThumbnail) {
+                return getThumbnail.then(function(thumbnail) {
+                    thumbnail.set('raw', raw);
+                    return thumbnail.save();
+                });
+            }
+            else {
+                var thumbnail = this.get('store').createRecord('thumbnail', {
+                    raw: raw
+                });
+                return thumbnail.save().then(function() {
+                    self.set('thumbnailId', thumbnail.get('id'));
+                    self.save();
+                });
+            }
+        }
+    }),
+
     permissions: DS.attr(),
 
     state: DS.attr('string'),
