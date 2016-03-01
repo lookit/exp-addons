@@ -1,14 +1,18 @@
 import Ember from 'ember';
 import layout from '../templates/components/exp-player';
+
+import FullScreen from '../mixins/full-screen';
 import parseExperiment from '../utils/parse-experiment';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(FullScreen, {
     layout: layout,
 
     experiment: null, // Experiment model
     frames: null,
 
     frameIndex: null,  // Index of the currently active frame
+
+    fullScreenElementId: 'experiment-player',
 
     expData: {},  // Temporarily store data collected until we sent to server at end
 
