@@ -86,41 +86,6 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string',
                     description: 'A unique identifier for this item'
                 },
-                title: {
-                    type: 'string',
-                    description: 'A title for this item',
-                    default: 'Exit Survey'
-                },
-                exitThankYou: {
-                    type: 'string',
-                    description: 'A thank you on the first section of the exit survey.',
-                    default: 'Thanks so much! We appreciate every family\'s help. No matter how your child responded, we can learn something from his or her behavior--for instance, if he or she got bored and decided to stop, we know we need to make studies that are more fun!'
-                },
-                exitMessage: {
-                    type: 'string',
-                    description: 'An exit message on the second section of the exit survey.',
-                    default: 'Every session helps us learn about your child\'s growing brain. We look forward to seeing your family again! You can complete your next \"Physics\" session as soon as tomorrow.'
-                },
-                currentSessionsCompleted: {
-                    type: 'integer',
-                    description: 'Number of sessions completed by current user.',
-                    default: 1
-                },
-                currentDaysSessionsCompleted: {
-                    type: 'integer',
-                    description: 'Number of days that the sessions have been completed by current user.',
-                    default: 1
-                },
-                idealSessionsCompleted: {
-                    type: 'integer',
-                    description: 'Ideal number of sessions completed by current user.',
-                    default: 2
-                },
-                idealDaysSessionsCompleted: {
-                    type: 'integer',
-                    description: 'Ideal number of days that the sessions have been completed by current user.',
-                    default: 7
-                },
                 form: {
                     type: 'jsonschema',
                     description: 'JSON-schema defining this item\'s form',
@@ -169,7 +134,6 @@ export default ExpFrameBaseComponent.extend({
     }),
     section1: true,
     formData: [],
-    additionalFormData: [],
     formActions: Ember.computed(function() {
         var root = this;
         return {
