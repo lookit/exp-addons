@@ -1,9 +1,9 @@
 <div class="row">
     {{
     component currentFrameTemplate
-    ctx=currentFrameCtx
-    data=currentFrameData
-    params=currentFrame
+    frameIndex=frameIndex
+    frameConfig=currentFrameConfig
+
     saveHandler=(action 'saveFrame')
     next=(action 'next') last=(action 'last') previous=(action 'previous')
     }}
