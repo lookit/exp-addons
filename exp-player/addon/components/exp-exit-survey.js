@@ -4,47 +4,73 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-exit-survey';
 
 const defaultSchema = {
-  "schema": {
-    "title":"Your Experience",
-    "description":"How was your experience?",
-    "type":"object",
-    "properties": {
-      "birthdate": {
-        "title":"What is the birthdate of the child who just participated in the study? We ask twice to check for typos. *"
-      },
-      "person": {
-        "type":"string",
-        "title":"Which person would you (the parent) have trusted more to name objects accurately? *"
-      },
-      "suggestions": {
-        "type":"string",
-        "title":"Any comments or suggestions? (Did you get confused by any instructions? Did the study run smoothly?)",
-      }
-    }
-  },
-  "options": {
-    "renderForm": true,
-    "fields": {
-      "birthdate": {
-        "type": "date",
-        "manualEntry": false,
-        "validator": "required-field",
-        "message": "Please provide a complete and valid birthday.",
-        "helper": "None of the information we collet is used to identify your child. However, if you are uncomfortable providing an exact birthday, you're welcome to give another date within that week.",
-      },
-      "person" : {
-        "validator": "required-field",
-        "message": "Please name one woman by shirt color, or answer that you're not sure.",
-        "size": 20,
-        "helper": "You don't have to be sure -- if you had to choose, which person's answers would you have gone with?",
-      },
-      "suggestions": {
-        "type": "textarea",
-        "rows": 5,
-        "cols": 40,
-      }
-    }
-  }   
+    "schema": {
+        "title":"Post-study survey",
+        "description":"How was your experience?",
+        "type":"object",
+        "properties": {
+            "birthdate": {
+                "title":"Please confirm your child's birthdate: *"
+            },
+            "feedback": {
+                "type":"string",
+                "title":"Your feedback:",
+            },
+            "privacy": {
+                "type": "string",
+                "title": "Select the privacy level for the video of your participation: *",
+                "enum": ['Publicity and educational use (video may be publicity or educational purposes online or in the press in addition to for research purposes)', 'Scientific use only', 'In-lab use only', 'WITHDRAW your data from this session']
+            }
+        }
+    },
+    "options": {
+        "fields": {
+            "birthdate": {
+                "type": "date",
+                "manualEntry": false,
+                "validator": "required-field",
+                "message": "Please provide a complete and valid birthday.",
+                "helper": "We ask again just to check for typos during registration or people accidentally selecting a different child at the start of the study.",
+            },
+            "feedback": {
+                "type": "textarea",
+                "rows": 5,
+                "cols": 40,
+                "helper": "Do you have any ideas about how to make this study easier or more fun for families? Did you experience any technical challenges?"
+            },
+            "privacy": {
+                "type": "radio",
+                "removeDefaultNone": true,
+                "validator": "required-field",
+                "message": "Please select a privacy level for your video."
+            }
+        }
+    }   
+};
+const emailOptOutSchema = {
+    "schema": {
+        "type":"object",
+        "properties": {
+            "emailOptOut": {
+                "title":"You are currently signed up to recieve email reminders about this study."
+            }
+        }
+    },
+    "options": {
+        "fields": {
+            "emailOptOut": {
+                "type": "checkbox",
+                "rightLabel": "Opt out"
+            }
+        },
+        "form": {
+            "buttons": {
+                "finish": {
+                    "title": "Back to Lookit home page"
+                }
+            }
+        }
+    }  
 };
 
 export default ExpFrameBaseComponent.extend({
@@ -65,10 +91,45 @@ export default ExpFrameBaseComponent.extend({
                     description: 'A title for this item',
                     default: 'Exit Survey'
                 },
+                exitThankYou: {
+                    type: 'string',
+                    description: 'A thank you on the first section of the exit survey.',
+                    default: 'Thanks so much! We appreciate every family\'s help. No matter how your child responded, we can learn something from his or her behavior--for instance, if he or she got bored and decided to stop, we know we need to make studies that are more fun!'
+                },
+                exitMessage: {
+                    type: 'string',
+                    description: 'An exit message on the second section of the exit survey.',
+                    default: 'Every session helps us learn about your child\'s growing brain. We look forward to seeing your family again! You can complete your next \"Physics\" session as soon as tomorrow.'
+                },
+                currentSessionsCompleted: {
+                    type: 'integer',
+                    description: 'Number of sessions completed by current user.',
+                    default: 1
+                },
+                currentDaysSessionsCompleted: {
+                    type: 'integer',
+                    description: 'Number of days that the sessions have been completed by current user.',
+                    default: 1
+                },
+                idealSessionsCompleted: {
+                    type: 'integer',
+                    description: 'Ideal number of sessions completed by current user.',
+                    default: 2
+                },
+                idealDaysSessionsCompleted: {
+                    type: 'integer',
+                    description: 'Ideal number of days that the sessions have been completed by current user.',
+                    default: 7
+                },
                 form: {
                     type: 'jsonschema',
                     description: 'JSON-schema defining this item\'s form',
                     default: defaultSchema
+                },
+                additionalForm: {
+                    type: 'jsonschema',
+                    description: 'JSON-schema defining second form.',
+                    default: emailOptOutSchema
                 }
             },
             required: ['id']
@@ -84,16 +145,17 @@ export default ExpFrameBaseComponent.extend({
     },
     formSchema: Ember.computed('form', {
         get() {
+            var root = this;
             var newOptions = this.get('form.options');
             newOptions.form = {
                 buttons: {
                     update: {
+                        title: 'Submit',
                         type: 'button',
-                        value: 'Submit'
+                        styles: 'btn btn-default'
                     }
                 }
             };
-            console.log(newOptions);
             return {
                 schema: this.get('form.schema'),
                 options: newOptions        
@@ -105,18 +167,28 @@ export default ExpFrameBaseComponent.extend({
         }
         
     }),
+    section1: true,
     formData: [],
-    actions: {
-        updateOnChange: function(event) {
-            const propertyName = event.target.name;
-            const value = event.target.value;
-            console.log("Updating " + propertyName + " to " + value);
-            var data = this.get('formData');
-            data[propertyName] = value;
-            this.set('formData', data);
-        },
-        update: function() {
-            // should save formData
+    additionalFormData: [],
+    formActions: Ember.computed(function() {
+        var root = this;
+        return {
+            update: function () {
+                this.refreshValidationState(true);
+                if (this.isValid(true)) {
+                   root.set('formData', this.getValue());
+                   root.set('section1', false);
+                }
+            },
+            finish: function() {
+                root.set('additionalFormData', this.getValue());
+                // TODO: save formData and additionalFormData
+                console.log('Post-study survey complete.')
+                root.actions.next();
+            }
         }
-    }
+    }),
+    progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
+        return (this.get('currentSessionsCompleted')/this.get('idealSessionsCompleted')) * 100;
+    })
 });
