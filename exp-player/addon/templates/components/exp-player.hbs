@@ -10,8 +10,9 @@
         next=(action 'next') last=(action 'last') previous=(action 'previous')
         }}
     </div>
+
     <div class="col-md-4 pull-right">
-        {{#if (and (not isFullScreen) experiment.displayFullscreen)}}
+        {{#if (and (not isFullscreen) experiment.displayFullscreen)}}
             <button class="btn btn-warning pull-right" {{ action 'showFullscreen' }}>Return to fullscreen</button>
         {{/if}}
     </div>
