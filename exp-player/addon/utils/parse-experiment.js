@@ -3,6 +3,22 @@ import Ember from 'ember';
 
 var frameNamePattern = new RegExp(/^exp(?:-\w+)+$/);
 
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ */
+function randomShuffleArray(array) {
+    array = array.slice();
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
 /* Modifies the data in the experiment schema definition to match the format expected by exp-player */
 function reformatConfig(frameId, config) {
     var newConfig = Ember.copy(config, true);
@@ -17,8 +33,17 @@ function resolveRandom(frameId, frames) {
     var choice;
     switch (randomizer) {
         case 'random':
+            // Pick one option at random
             choice = config.options[Math.floor(Math.random() * config.options.length)];
             break;
+        case 'shuffle':
+            // Shuffle and resolve the set of all options, rather than returning just one
+            var order = randomShuffleArray(config.options);
+            var resolvedConfigs = [];
+            order.forEach(function(frameId /* , index, array */) {
+                resolvedConfigs.push(...resolveFrame(frameId, frames));
+            });
+            return resolvedConfigs;
         default:
             throw "Unrecognized sampling method specified";
     }
