@@ -112,7 +112,13 @@ export default Ember.Service.extend({
   record() {
     if (!this.get('started')) throw new Error('Must call start before record');
     if (this.get('recording')) throw new Error('Already recording');
-    this.get('recorder').record();
+    let count = 0;
+    let id = window.setInterval(() => {
+        if (++count > 20) return clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'))
+        if (!this.get('recorder').record) return;
+        this.get('recorder').record()
+        clearInterval(id);
+    }, 100);
     return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {resolve, reject}));
   },
 
@@ -134,8 +140,8 @@ export default Ember.Service.extend({
 
   hide() {
     $(`#${this.get('divId')}-container`).css({
-      'top': '0%',
-      'left': '0%',
+      'top': '-10000px',
+      'left': '-10000px',
       'z-index': -1,
       'position': 'absolute',
     });
