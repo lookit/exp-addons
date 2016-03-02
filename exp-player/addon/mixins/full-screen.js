@@ -7,6 +7,7 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
     fullScreenElementId: null, // String containing the ID of the element to make full screen
     displayFullScreen: false,  // Whether to show this element in fullscreen mode by default
+    // TODO: Wonky capitalization
     isFullScreen: false,  // Keep track of state
 
     didRender: function() { // TODO: Find better event hook
@@ -14,18 +15,25 @@ export default Ember.Mixin.create({
         this.send('showFullscreen');
     },
 
+    checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
+        var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullscreenElement', 'msFullscreenElement']
+        for (var opt of opts) {
+            if (!!document[opt]) {return true;}
+        }
+        return false;
+    },
+
+    onFullscreen: function() {
+        this.set('isFullScreen', this.checkFullscreen());
+    },
+
     // TODO: Track full screen state using boolean for templates
-    // TODO: Fire events to set state based on fullscreenchange/fullscreenerror event
     // TODO: Add custom styles for fullscreen element (but only when fullscreen)
-    // TODO: add experiment player and frame configuration control over fullscreen state
-
-
-
-
+    // TODO fix fullscreen capitalization
     actions: {
-        showFullscreen: function (element) {
-            element = element || this.get('fullScreenElementId');
-            if (!element) {
+        showFullscreen: function (elementId) {
+            elementId = elementId || this.get('fullScreenElementId');
+            if (!elementId) {
                 throw Error('Must specify element Id to make fullscreen');
             }
 
@@ -33,7 +41,7 @@ export default Ember.Mixin.create({
                 return;
             }
 
-            var elem = this.$(`#${element}`)[0];
+            var elem = this.$(`#${elementId}`)[0];
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
             } else if (elem.msRequestFullscreen) {
@@ -45,6 +53,8 @@ export default Ember.Mixin.create({
             } else {
                 console.log('Your browser does not appear to support fullscreen rendering.');
             }
+
+            $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this));
         }
     }
 });

@@ -10,6 +10,8 @@
         }}
     </div>
     <div class="col-md-4 pull-right">
-        <button class="btn btn-warning pull-right" {{ action 'next' }}>Return to fullscreen</button> <!-- todo: hide button when not in use -->
+        {{#unless isFullScreen}}
+            <button class="btn btn-warning pull-right" {{ action 'showFullscreen' }}>Return to fullscreen</button>
+        {{/unless}}
     </div>
 </div>
