@@ -1,8 +1,11 @@
 import Ember from 'ember';
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-audioplayer';
 
-export default ExpFrameBaseComponent.extend({
+import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import MediaReload from '../mixins/media-reload';
+
+
+export default ExpFrameBaseComponent.extend(MediaReload, {
     layout: layout,
     didFinishSound: false,
     meta: {
