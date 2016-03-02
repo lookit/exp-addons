@@ -15,7 +15,7 @@ export default Ember.Mixin.create({
     },
 
     checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
-        var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullscreenElement', 'msFullscreenElement'];
+        var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
             if (!!document[opt]) {return true;}
         }
@@ -28,6 +28,7 @@ export default Ember.Mixin.create({
             return false;
         }
         var isFullscreen = this.checkFullscreen();
+
         this.set('isFullscreen', isFullscreen);
         if (isFullscreen) {
             elementSelector.addClass('player-fullscreen');
