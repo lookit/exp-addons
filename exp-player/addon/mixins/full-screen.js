@@ -23,6 +23,10 @@ export default Ember.Mixin.create({
     },
 
     onFullscreen: function(elementSelector) {
+        if (this.get('isDestroyed')) {
+            // Short-circuit if object is destroyed (eg we leave fullscreen because a video frame ended)
+            return false;
+        }
         var isFullscreen = this.checkFullscreen();
         this.set('isFullscreen', isFullscreen);
         if (isFullscreen) {
@@ -32,9 +36,6 @@ export default Ember.Mixin.create({
         }
     },
 
-    // TODO: Track full screen state using boolean for templates
-    // TODO: Add custom styles for fullscreen element (but only when fullscreen)
-    // TODO fix fullscreen capitalization
     actions: {
         showFullscreen: function (elementId) {
             elementId = elementId || this.get('fullScreenElementId');
