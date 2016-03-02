@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 
-var frameNamePattern = new RegExp(/^exp-\w+$/);
+var frameNamePattern = new RegExp(/^exp(?:-\w+)+$/);
 
 /* Modifies the data in the experiment schema definition to match the format expected by exp-player */
 function reformatConfig(frameId, config) {

@@ -11,6 +11,7 @@ export default Ember.Component.extend({
      **/
     id: null,
     kind: null,
+
     meta: {  // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
@@ -21,15 +22,21 @@ export default Ember.Component.extend({
         data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
             type: 'object',
             properties: {}
-        },
+        }
     },
 
     frameIndex: null,
     frameConfig: null,
     eventTimings: null,
 
-    init: function() {
+    session: null,
+    didReceiveAttrs: function() {
         this._super(...arguments);
+
+        if (!this.get('frameConfig')) {
+            return;
+        }
+
         this.set('eventTimings', []);
 
         var defaultParams = this.setupParams();
@@ -43,7 +50,6 @@ export default Ember.Component.extend({
             this.set('id', `${kind}-${frameIndex}`);
         }
     },
-
     setupParams(params) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
         params = params || this.get('frameConfig');
@@ -54,7 +60,13 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            defaultParams[key] = this.get(`meta.data.properties.${key}.default`);
+            var value = this.get(key);
+            if (typeof value === 'undefined') {
+                defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
+            }
+            else {
+                defaultParams[key] = value;
+            }
         });
 
         Ember.merge(defaultParams, params);
