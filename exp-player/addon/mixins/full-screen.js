@@ -6,9 +6,8 @@ import Ember from 'ember';
  */
 export default Ember.Mixin.create({
     fullScreenElementId: null, // String containing the ID of the element to make full screen
-    displayFullScreen: false,  // Whether to show this element in fullscreen mode by default
-    // TODO: Wonky capitalization
-    isFullScreen: false,  // Keep track of state
+    displayFullscreen: false,  // Whether to show this element in fullscreen mode by default
+    isFullscreen: false,  // Keep track of state
 
     didRender: function() { // TODO: Find better event hook
         this._super(arguments);
@@ -16,7 +15,7 @@ export default Ember.Mixin.create({
     },
 
     checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
-        var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullscreenElement', 'msFullscreenElement']
+        var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullscreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
             if (!!document[opt]) {return true;}
         }
@@ -25,7 +24,7 @@ export default Ember.Mixin.create({
 
     onFullscreen: function(elementSelector) {
         var isFullscreen = this.checkFullscreen();
-        this.set('isFullScreen', isFullscreen);
+        this.set('isFullscreen', isFullscreen);
         if (isFullscreen) {
             elementSelector.addClass('player-fullscreen');
         } else {
@@ -61,7 +60,7 @@ export default Ember.Mixin.create({
                 console.log('Your browser does not appear to support fullscreen rendering.');
             }
 
-            $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector));
+            Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector));
         }
     }
 });
