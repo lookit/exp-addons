@@ -42,7 +42,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         data: {
             // This video does not explicitly capture any parameters from the user
         }
-    }
+    },
 
     autoFullscreen: function() {
         if (!this.get('fullscreen')) {
