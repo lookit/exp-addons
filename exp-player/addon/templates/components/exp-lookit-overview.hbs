@@ -1,0 +1,40 @@
+<div class="col-md-12">
+<div class="row">
+  <h2>{{title}}</h2>
+  <ul>
+    <li> <strong> Duration: </strong> {{duration}} </li>
+    <li> <strong> What happens: </strong> {{whatHappens}} </li>
+    <li> <strong> What we're studying: </strong> {{purpose}} </li>
+  </ul>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="col-md-12">
+      <h3>
+        {{ subtitleLeft }}
+      </h3>
+      <img style="max-width: 100%;" src={{imgLeft}} />
+      <p>
+        {{captionLeft}}
+      </p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="col-md-12">
+      <h3>
+        {{ subtitleRight }}
+      </h3>
+      <img style="max-width: 100%;" src={{imgRight}} />
+      <p>
+        {{captionRight}}
+      </p>
+      </div>
+    </div>
+  </div>
+  <p>
+    {{summary}}
+  </p>
+</div>
+<div class="row exp-controls">
+  <button class="btn btn-default pull-right" {{ action 'next' }} > Next </button>
+</div>
+</div>
