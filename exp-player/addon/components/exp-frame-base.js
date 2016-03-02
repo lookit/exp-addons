@@ -32,7 +32,7 @@ export default Ember.Component.extend({
     didReceiveAttrs: function() {
         this._super(...arguments);
 
-        if (!this.get('params')) {
+        if (!this.get('frameConfig')) {
             return;
         }
 
