@@ -21,13 +21,14 @@ export default Ember.Component.extend({
         data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
             type: 'object',
             properties: {}
-        },
+        }
     },
 
     frameIndex: null,
     frameConfig: null,
     eventTimings: null,
 
+    session: null,
     init: function() {
         this._super(...arguments);
         this.set('eventTimings', []);
