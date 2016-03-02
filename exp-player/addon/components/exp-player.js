@@ -6,6 +6,7 @@ export default Ember.Component.extend({
     layout: layout,
 
     experiment: null, // Experiment model
+    session: null,
     frames: null,
 
     frameIndex: null,  // Index of the currently active frame
