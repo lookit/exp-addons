@@ -12,3 +12,9 @@
     font-size: xx-large;
     padding: 15px;
 }
+
+.player-fullscreen {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}

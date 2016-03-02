@@ -23,8 +23,14 @@ export default Ember.Mixin.create({
         return false;
     },
 
-    onFullscreen: function() {
-        this.set('isFullScreen', this.checkFullscreen());
+    onFullscreen: function(elementSelector) {
+        var isFullscreen = this.checkFullscreen();
+        this.set('isFullScreen', isFullscreen);
+        if (isFullscreen) {
+            elementSelector.addClass('player-fullscreen');
+        } else {
+            elementSelector.removeClass('player-fullscreen');
+        }
     },
 
     // TODO: Track full screen state using boolean for templates
@@ -41,7 +47,8 @@ export default Ember.Mixin.create({
                 return;
             }
 
-            var elem = this.$(`#${elementId}`)[0];
+            var selector = this.$(`#${elementId}`);
+            var elem = selector[0];
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
             } else if (elem.msRequestFullscreen) {
@@ -54,7 +61,7 @@ export default Ember.Mixin.create({
                 console.log('Your browser does not appear to support fullscreen rendering.');
             }
 
-            $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this));
+            $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector));
         }
     }
 });
