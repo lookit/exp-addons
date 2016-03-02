@@ -83,6 +83,11 @@ export default DS.Model.extend(JamModel, {
     },
 
     history: DS.hasMany('history'),
+    getCurrentVersion: function() {
+        return this.get('history').then(function(changes) {
+            return changes.objectAt(0).get('id');
+        });
+    },
 
     sessionCollectionId: Ember.computed('shortId', function() {
         // Return a string corresponding to the session collection shortID, to be used by model/adapter/serializer
