@@ -6,9 +6,10 @@ import Ember from 'ember';
  */
 export default Ember.Mixin.create({
     fullScreenElementId: null, // String containing the ID of the element to make full screen
+    displayFullScreen: false,  // Whether to show this element in fullscreen mode by default
     isFullScreen: false,  // Keep track of state
 
-    didRender: function() {
+    didRender: function() { // TODO: Find better event hook
         this._super(arguments);
         this.send('showFullscreen');
     },
@@ -26,6 +27,10 @@ export default Ember.Mixin.create({
             element = element || this.get('fullScreenElementId');
             if (!element) {
                 throw Error('Must specify element Id to make fullscreen');
+            }
+
+            if (!this.get('displayFullscreen')) {
+                return;
             }
 
             var elem = this.$(`#${element}`)[0];

@@ -39,23 +39,5 @@ export default ExpFrameBaseComponent.extend({
         data: {
             // This video does not explicitly capture any parameters from the user
         },
-    },
-
-    autoFullscreen: function() {
-        if (!this.get('fullscreen')) {
-            return;
-        }
-        var elem = this.$("#player-video")[0];
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else {
-            console.log('Your browser does not appear to support fullscreen HTML5 video.');
-        }
-    }.on('didRender')  // TODO: Is there a better event to choose here?
+    }
 });

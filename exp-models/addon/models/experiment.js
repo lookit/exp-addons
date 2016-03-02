@@ -23,13 +23,14 @@ export default DS.Model.extend(JamModel, {
     beginDate: DS.attr('date'),
     endDate: DS.attr('date'),
     structure: DS.attr(),
+    displayFullscreen: DS.attr('boolean'),
 
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
     // A flag for whether or not the participant has seen this feedback
     hasReadFeedback: DS.attr('boolean'),
 
-    // This needs to be a seperate collection because string fields of a certain length
+    // This needs to be a separate collection because string fields of a certain length
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
     thumbnail: Ember.computed('thumbnailId', {

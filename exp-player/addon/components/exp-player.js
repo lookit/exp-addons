@@ -12,6 +12,7 @@ export default Ember.Component.extend(FullScreen, {
 
     frameIndex: null,  // Index of the currently active frame
 
+    displayFullscreen: false,
     fullScreenElementId: 'experiment-player',
 
     expData: {},  // Temporarily store data collected until we sent to server at end
@@ -21,6 +22,7 @@ export default Ember.Component.extend(FullScreen, {
         this.set('frameIndex', 0);
         var frameConfigs = parseExperiment(this.get('experiment.structure'));
         this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
+        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
     },
 
     currentFrameConfig: Ember.computed('frames', 'frameIndex', function() {
