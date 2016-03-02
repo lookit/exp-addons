@@ -4,13 +4,13 @@ import layout from '../templates/components/exp-video-consent';
 
 export default ExpFrameBaseComponent.extend({
     layout,
-    videoRecorder: Em.inject.service(),
+    videoRecorder: Ember.inject.service(),
 
     didInsertElement() {
       this.get('videoRecorder').on('onUploadDone', () => {
         this.get('videoRecorder').destroy();
         this.get('videoRecorder').on('onUploadDone', null);
-        this.sendAction('next')
+        this.sendAction('next');
       });
       this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {record: false});
     },

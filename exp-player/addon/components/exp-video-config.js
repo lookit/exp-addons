@@ -1,22 +1,23 @@
+import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-video-config';
 
 export default ExpFrameBaseComponent.extend({
     layout,
-    videoRecorder: Em.inject.service(),
+    videoRecorder: Ember.inject.service(),
 
     didInsertElement() {
-      this.get('videoRecorder').start('', this.$('#recorder'), {
-        config: true,
-        record: false
+        this.get('videoRecorder').start('', this.$('#recorder'), {
+            config: true,
+            record: false
       });
     },
 
     actions: {
-      next() {
-        this.get('videoRecorder').stop({destroy: true});
-        this.sendAction('next');
-      }
+        next() {
+            this.get('videoRecorder').stop({destroy: true});
+            this.sendAction('next');
+        }
     },
 
     type: 'exp-videoconfig',
