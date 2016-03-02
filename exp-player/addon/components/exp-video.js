@@ -1,7 +1,10 @@
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-video';
 
-export default ExpFrameBaseComponent.extend({
+import MediaReload from '../mixins/media-reload';
+
+
+export default ExpFrameBaseComponent.extend(MediaReload, {
     layout: layout,
     meta: {
         name: 'Video player',
