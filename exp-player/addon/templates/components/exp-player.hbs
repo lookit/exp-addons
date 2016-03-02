@@ -11,8 +11,8 @@
         }}
     </div>
     <div class="col-md-4 pull-right">
-        {{#unless isFullscreen}}
+        {{#if (and (not isFullScreen) experiment.displayFullscreen)}}
             <button class="btn btn-warning pull-right" {{ action 'showFullscreen' }}>Return to fullscreen</button>
-        {{/unless}}
+        {{/if}}
     </div>
 </div>
