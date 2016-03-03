@@ -10,10 +10,10 @@ export default Ember.Mixin.create({
     didRender() {
         this._super(...arguments);
         for (var selector of this.get('mediaTags')) {
-            $(selector).each(function(){
+            Ember.$(selector).each(function(){
                 this.pause();
-                this.load()
-            })
+                this.load();
+            });
         }
     }
 });
