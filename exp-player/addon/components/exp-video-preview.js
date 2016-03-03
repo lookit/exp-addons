@@ -90,7 +90,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                 prompt: {
                     type: 'string',
                     description: 'Require a button press before showing the videos',
-                    default: false
+                    default: null
                 },
                 text: {
                     type: 'string',
