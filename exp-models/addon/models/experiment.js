@@ -33,31 +33,35 @@ export default DS.Model.extend(JamModel, {
     // This needs to be a separate collection because string fields of a certain length
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
-    _thumnail: Ember.computed('thumbnailId', function() {
+    _thumbnail: null,
+    onReady: function() {
         var thumbnailId = this.get('thumbnailId');
         if (thumbnailId) {
-            return this.get('store').findRecord('thumbnail', thumbnailId);
-        }
-        else {
-            return this.get('store').createRecord('thumbnail', {}).save().then((thumbnail) => {
-                this.set('thumbnailId', thumbnail.get('id'));
-                this.save();
+            this.get('store').findRecord('thumbnail', thumbnailId).then((thumbnail) => {
+                this.set('_thumbnail', thumbnail);
             });
         }
-    }),
+    }.on('ready'),
     thumbnail: Ember.computed('_thumbnail', {
         get() {
-            return DS.PromiseObject.create({
-                promise: this.get('_thumnail')
-            });
+            return this.get('_thumbnail');
         },
         set (_, raw) {
             var thumbnail = this.get('thumbnail');
-            thumbnail.set('raw', raw);
-            // thumbnail is a PromiseObject, be sure it's resolved
-            thumbnail.then(function(resolvedThumbail) {
-                resolvedThumbail.save();
-            });
+            if (!thumbnail) {
+                thumbnail = this.get('store').createRecord('thumbnail', {
+                    raw: raw
+                });
+                this.set('_thumbnail', thumbnail);
+                thumbnail.save().then((created) => {
+                    this.set('thumbnailId', created.get('id'));
+                    this.save();
+                });
+            }
+            else {
+                thumbnail.set('raw', raw);
+                thumbnail.save();
+            }
             return thumbnail;
         }
     }),
