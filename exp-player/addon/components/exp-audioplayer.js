@@ -17,28 +17,28 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                 autoplay: {
                     type: 'boolean',
                     description: 'Whether to autoplay the audio on load',
-                    default: true,
+                    default: true
                 },
                 fullControls: {
                     type: 'boolean',
                     description: 'Whether to use the full player controls. If false, display a single button to play audio from the start.',
                     // TODO: Implement and add a style
-                    default: true,
+                    default: true
                 },
                 mustPlay: {
                     type: 'boolean',
                     description: 'Should the user be forced to play the clip before leaving the page?',
-                    default: true,
+                    default: true
                 },
                 images: {
                     type: 'array',
                     description: 'List of objects specifying image src, alt, and title',
-                    default: [],
+                    default: []
                 },
                 prompts: {
                     type: 'array',
                     description: 'Text of any header/prompt pararaphs to show the user',
-                    default: [],
+                    default: []
                 },
                 sources: {
                     type: 'string',
