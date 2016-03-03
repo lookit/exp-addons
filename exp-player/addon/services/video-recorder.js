@@ -75,7 +75,7 @@ export default Ember.Service.extend({
     this.set('videoId', videoId);
     this.set('sscode', config ? 'asp' : 'php');
 
-    $(element).append(`<div id="${this.get('divId')}-container"></div`);
+    $(element).append(`<div id="${this.get('divId')}-container" style="height:100%"></div`);
     $(`#${this.get('divId')}-container`).append(`<div id="${this.get('divId')}"></div`);
 
     if (hidden) this.hide();
@@ -84,7 +84,7 @@ export default Ember.Service.extend({
       swfobject.embedSWF('VideoRecorder.swf', $(`#${this.get('divId')}`)[0], this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {
         if (!vr.success) reject(new Error('Install failed'));
 
-        $('#' + vr.id).css('height', '80vh');
+        $('#' + vr.id).css('height', '100%');
         this.set('recorder', $('#' + vr.id)[0]);
 
         if (record) return this.record();
