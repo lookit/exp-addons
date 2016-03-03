@@ -45,7 +45,7 @@ const defaultSchema = {
                 message: "Please select a privacy level for your video."
             }
         }
-    }   
+    }
 };
 const emailOptOutSchema = {
     schema: {
@@ -70,7 +70,7 @@ const emailOptOutSchema = {
                 }
             }
         }
-    }  
+    }
 };
 
 export default ExpFrameBaseComponent.extend({
@@ -110,7 +110,6 @@ export default ExpFrameBaseComponent.extend({
     },
     formSchema: Ember.computed('form', {
         get() {
-            var root = this;
             var newOptions = this.get('form.options');
             newOptions.form = {
                 buttons: {
@@ -123,14 +122,14 @@ export default ExpFrameBaseComponent.extend({
             };
             return {
                 schema: this.get('form.schema'),
-                options: newOptions        
+                options: newOptions
             };
         },
         set(_, value) {
             this.set('formSchema', value);
             return value;
         }
-        
+
     }),
     section1: true,
     formData: [],
@@ -148,10 +147,10 @@ export default ExpFrameBaseComponent.extend({
                 var formData = root.get('formData');
                 Ember.merge(formData, this.getValue());
                 root.set('formData', formData);
-                console.log('Post-study survey complete.')
+                console.log('Post-study survey complete.');
                 root.actions.next();
             }
-        }
+        };
     }),
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
         return (this.get('currentSessionsCompleted')/this.get('idealSessionsCompleted')) * 100;
