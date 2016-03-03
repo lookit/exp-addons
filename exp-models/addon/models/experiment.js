@@ -30,6 +30,9 @@ export default DS.Model.extend(JamModel, {
     // A flag for whether or not the participant has seen this feedback
     hasReadFeedback: DS.attr('boolean'),
 
+    // A url to direct the user to upon completion of the experiment
+    exitUrl: DS.attr('string'),
+
     // This needs to be a separate collection because string fields of a certain length
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
