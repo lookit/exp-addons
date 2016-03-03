@@ -1,14 +1,20 @@
 import Ember from 'ember';
 import layout from '../templates/components/exp-player';
+
+import FullScreen from '../mixins/full-screen';
 import parseExperiment from '../utils/parse-experiment';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(FullScreen, {
     layout: layout,
 
     experiment: null, // Experiment model
+    session: null,
     frames: null,
 
     frameIndex: null,  // Index of the currently active frame
+
+    displayFullscreen: false,
+    fullScreenElementId: 'experiment-player',
 
     expData: {},  // Temporarily store data collected until we sent to server at end
 
@@ -17,6 +23,7 @@ export default Ember.Component.extend({
         this.set('frameIndex', 0);
         var frameConfigs = parseExperiment(this.get('experiment.structure'));
         this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
+        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
     },
 
     currentFrameConfig: Ember.computed('frames', 'frameIndex', function() {

@@ -23,42 +23,46 @@ export default DS.Model.extend(JamModel, {
     beginDate: DS.attr('date'),
     endDate: DS.attr('date'),
     structure: DS.attr(),
+    displayFullscreen: DS.attr('boolean'),
 
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
     // A flag for whether or not the participant has seen this feedback
     hasReadFeedback: DS.attr('boolean'),
 
-    // This needs to be a seperate collection because string fields of a certain length
+    // This needs to be a separate collection because string fields of a certain length
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
-    thumbnail: Ember.computed('thumbnailId', {
+    _thumbnail: null,
+    onReady: function() {
+        var thumbnailId = this.get('thumbnailId');
+        if (thumbnailId) {
+            this.get('store').findRecord('thumbnail', thumbnailId).then((thumbnail) => {
+                this.set('_thumbnail', thumbnail);
+            });
+        }
+    }.on('ready'),
+    thumbnail: Ember.computed('_thumbnail', {
         get() {
-            var thumbnailId = this.get('thumbnailId');
-            if (thumbnailId) {
-                return this.get('store').findRecord('thumbnail', thumbnailId);
-            }
-            return null;
+            return this.get('_thumbnail');
         },
-        set (raw) {
-            var self = this;
-
-            var getThumbnail = this.get('thumbnail');
-            if (getThumbnail) {
-                return getThumbnail.then(function(thumbnail) {
-                    thumbnail.set('raw', raw);
-                    return thumbnail.save();
+        set (_, raw) {
+            var thumbnail = this.get('thumbnail');
+            if (!thumbnail) {
+                thumbnail = this.get('store').createRecord('thumbnail', {
+                    raw: raw
+                });
+                this.set('_thumbnail', thumbnail);
+                thumbnail.save().then((created) => {
+                    this.set('thumbnailId', created.get('id'));
+                    this.save();
                 });
             }
             else {
-                var thumbnail = this.get('store').createRecord('thumbnail', {
-                    raw: raw
-                });
-                return thumbnail.save().then(function() {
-                    self.set('thumbnailId', thumbnail.get('id'));
-                    self.save();
-                });
+                thumbnail.set('raw', raw);
+                thumbnail.save();
             }
+            return thumbnail;
         }
     }),
 
@@ -83,6 +87,11 @@ export default DS.Model.extend(JamModel, {
     },
 
     history: DS.hasMany('history'),
+    getCurrentVersion: function() {
+        return this.get('history').then(function(changes) {
+            return changes.objectAt(0).get('id');
+        });
+    },
 
     sessionCollectionId: Ember.computed('shortId', function() {
         // Return a string corresponding to the session collection shortID, to be used by model/adapter/serializer
