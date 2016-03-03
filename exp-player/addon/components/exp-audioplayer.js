@@ -44,6 +44,20 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                     type: 'string',
                     description: 'List of objects specifying audio src and type',
                     default: []
+                },
+                title: {
+                    type: 'string'
+                },
+                titlePrompt: {
+                    type: 'object',
+                    properties: {
+                        title: {
+                            type: 'string'
+                        },
+                        text: {
+                            type: 'string'
+                        }
+                    }
                 }
             }
         },
