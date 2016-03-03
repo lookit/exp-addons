@@ -1,3 +1,5 @@
+import Em from 'ember';
+
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-video-preview';
 import MediaReload from 'exp-player/mixins/media-reload';
@@ -19,20 +21,22 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     }.property('index'),
 
     didInsertElement() {
-    if (this.get('prompt') || !this.get('record')) return;
-      this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
-        record: true,
-        hidden: this.get('hideRecorder'),
-      });
+        if (this.get('prompt') || !this.get('record')) return;
+        this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
+            record: true,
+            hidden: this.get('hideRecorder')
+        });
     },
 
     actions:{
         accept() {
             this.set('prompt', false);
-            if (!this.get('record')) return;
+            if (!this.get('record')) {
+                return;
+            }
             this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
                 record: true,
-                hidden: this.get('hideRecorder'),
+                hidden: this.get('hideRecorder')
             });
         },
         nextVideo() {
@@ -40,7 +44,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         },
         previousVideo() {
             this.set('index', this.get('index') - 1);
-        },
+        }
     },
 
     type: 'exp-video-preview',
@@ -85,7 +89,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                 hideRecorder: {
                     type: 'boolean',
                     description: 'Hide the video recorder component',
-                    default: true,
+                    default: true
                 },
                 prompt: {
                     type: 'string',
