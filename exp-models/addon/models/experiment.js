@@ -120,7 +120,11 @@ export default DS.Model.extend(JamModel, {
         this._super(...arguments);
         this._registerSessionModels();
         var collection = this.store.createRecord('collection', {
-            id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`
+            id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`,
+            permissions: {
+                //TODO: replace with string ('CREATE') when JamDB updated
+                'jam-experimenter:account-*': 1 // Allow participants to create new session records. (Admins should get permission from namespace)
+            }
         });
         collection.save();
     }
