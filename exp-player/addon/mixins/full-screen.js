@@ -39,7 +39,7 @@ export default Ember.Mixin.create({
 
     actions: {
         showFullscreen: function (elementId) {
-            elementId = elementId || this.get('fullScreenElementId');
+            elementId = this.get('fullScreenElementId');
             if (!elementId) {
                 throw Error('Must specify element Id to make fullscreen');
             }
@@ -48,7 +48,7 @@ export default Ember.Mixin.create({
                 return;
             }
 
-            var selector = this.$(`#${elementId}`);
+            var selector = Ember.$(`#${elementId}`);
             var elem = selector[0];
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
