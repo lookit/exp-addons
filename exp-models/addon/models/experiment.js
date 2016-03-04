@@ -25,6 +25,10 @@ export default DS.Model.extend(JamModel, {
     structure: DS.attr(),
     displayFullscreen: DS.attr('boolean'),
 
+    duration: DS.attr('string'),
+    whatHappens: DS.attr('string'),
+    purpose: DS.attr('string'),
+
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
     // A flag for whether or not the participant has seen this feedback
@@ -123,6 +127,7 @@ export default DS.Model.extend(JamModel, {
         var collection = this.store.createRecord('collection', {
             id: 'experimenter.' + this.get('sessionCollectionId')
         });
+        // TODO set collection permissions
         collection.save();
     }.on('didCreate')
 });
