@@ -9,10 +9,10 @@
 
     <div class="col-md-10">
       {{#if title}}
-        {{title}}
+        <h3>{{title}}</h3>
       {{/if}}
       {{#if titlePrompt}}
-        {{#with titlePrompt as |title|}}
+        {{#with titlePrompt as |prompt|}}
           {{#if prompt.title}}
             <h3>{{prompt.title}}</h3>
           {{/if}}

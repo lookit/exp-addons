@@ -70,7 +70,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                 }
             },
             required: ['didFinishSound']
-        },
+        }
     },
 
     actions: {
