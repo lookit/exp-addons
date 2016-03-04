@@ -26,7 +26,7 @@ export default DS.Model.extend(JamModel, {
     displayFullscreen: DS.attr('boolean'),
 
     duration: DS.attr('string'),
-    whatHappens: DS.attr('string'),
+    whatHappens: Ember.computed.alias('description'),
     purpose: DS.attr('string'),
 
     // Researchers can provide feedback to participants by writing to this field
