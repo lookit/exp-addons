@@ -2,6 +2,7 @@
 Manage data about one or more documents in the experiments collection
  */
 import Ember from 'ember';
+import config from 'ember-get-config';
 
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
@@ -119,7 +120,7 @@ export default DS.Model.extend(JamModel, {
         this._super(...arguments);
         this._registerSessionModels();
         var collection = this.store.createRecord('collection', {
-            id: 'experimenter.' + this.get('sessionCollectionId')
+            id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`
         });
         collection.save();
     }
