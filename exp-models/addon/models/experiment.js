@@ -115,11 +115,12 @@ export default DS.Model.extend(JamModel, {
             this._registerSessionModels();
         }
     },
-    onCreate: function() {
+    didCreate() {
+        this._super(...arguments);
         this._registerSessionModels();
         var collection = this.store.createRecord('collection', {
             id: 'experimenter.' + this.get('sessionCollectionId')
         });
         collection.save();
-    }.on('didCreate')
+    }
 });
