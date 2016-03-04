@@ -31,5 +31,5 @@ export default DS.Model.extend(JamModel, {
     experiment: Ember.computed('experimentId', function() {
         var storeId = this.get('experimentId');
         return this.store.findRecord('experiment', storeId);
-    }),
+    })
 });

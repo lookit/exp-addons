@@ -60,7 +60,7 @@ export default Ember.Component.extend(FullScreen, {
             };
             var exitUrl = this.get('experiment.exitUrl');
             this.sendAction('saveHandler', payload,  () => {
-                    window.location = exitUrl;
+                window.location = exitUrl;
             });  // call the passed-in action with payload
         },
         next() {
