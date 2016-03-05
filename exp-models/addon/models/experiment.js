@@ -120,14 +120,11 @@ export default DS.Model.extend(JamModel, {
         this._super(...arguments);
         this._registerSessionModels();
 
-        // Allow participants to create new session records. (Admins should get permission from namespace)
-        var presetPermissions = {};
-        var permissionsString = `jam-${config.JAMDB.namespace}:accounts-*`;
-        presetPermissions[permissionsString] = 'CREATE';
-
         var collection = this.store.createRecord('collection', {
             id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`,
-            permissions: presetPermissions
+            permissions: {  // Allow participants to create new session records. (Admins should get permission from namespace)
+                [`jam-${config.JAMDB.namespace}:accounts-*`]: 'CREATE'
+            }
         });
         collection.save();
     }
