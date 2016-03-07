@@ -12,15 +12,13 @@
         <h3>{{title}}</h3>
       {{/if}}
       {{#if titlePrompt}}
-        {{#with titlePrompt as |prompt|}}
-          {{#if prompt.title}}
-            <h3>{{prompt.title}}</h3>
-          {{/if}}
-          <p>
-            {{prompt.text}}
-          </p>
-        {{/with}}
-      {{/if}}
+        {{#if titlePrompt.title}}
+          <h3>{{titlePrompt.title}}</h3>
+        {{/if}}
+        <p>
+          {{titlePrompt.text}}
+        </p>
+      {{g/if}}
         <audio id="player-audio"
                controls={{fullControls}}
                autoplay={{autoplay}}
