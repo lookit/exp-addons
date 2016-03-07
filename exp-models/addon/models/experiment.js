@@ -12,6 +12,8 @@ import SessionSerializer from '../serializers/session';
 
 import compile from '../utils/eligibility';
 
+import config from 'ember-get-config';
+
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
     DRAFT: 'Draft',
@@ -25,10 +27,17 @@ export default DS.Model.extend(JamModel, {
     structure: DS.attr(),
     displayFullscreen: DS.attr('boolean'),
 
+    duration: DS.attr('string'),
+    whatHappens: Ember.computed.alias('description'),
+    purpose: DS.attr('string'),
+
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
     // A flag for whether or not the participant has seen this feedback
     hasReadFeedback: DS.attr('boolean'),
+
+    // A url to direct the user to upon completion of the experiment
+    exitUrl: DS.attr('string'),
 
     // This needs to be a separate collection because string fields of a certain length
     // cannot be indexed by Elasticsearch.
@@ -118,8 +127,9 @@ export default DS.Model.extend(JamModel, {
     onCreate: function() {
         this._registerSessionModels();
         var collection = this.store.createRecord('collection', {
-            id: 'experimenter.' + this.get('sessionCollectionId')
+            id: `${config.JAMDB.namespace}${this.get('sessionCollectionId')}`
         });
+        // TODO set collection permissions
         collection.save();
     }.on('didCreate')
 });

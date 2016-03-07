@@ -1,0 +1,30 @@
+<div class="row">
+  <p class="exp-video-setup-title"> {{ title }} </p>
+  <p class="exp-video-setup-heading"> {{ heading }} </p>
+  <p> {{ headingText }} </p>
+</div>
+<div class="row" style="height: 25vh">
+  <div id="recorder" class="col-xs-4 col-md-4 col-md-offset-1" style="height:100%"></div>
+  <div class="col-md-4"></div>
+</div>
+<div class="row">
+  <span class="breaklines">{{ instructions }}</span>
+</div>
+<div class="row">
+  {{#each examples as |example|}}
+  <div class="col-md-4">
+    <img src={{ example.src }} />
+    <center> {{ example.caption }} </center>
+  </div>
+  {{/each}}
+</div>
+<br>
+<div class="row exp-controls">
+  <div class="col-xs-offset-1 col-xs-10">
+    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group" role="group">
+        <button class="btn btn-default" {{ action 'next' }} > Next </button>
+      </div>
+    </div>
+  </div>
+</div>

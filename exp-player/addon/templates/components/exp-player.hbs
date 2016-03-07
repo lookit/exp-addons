@@ -1,19 +1,16 @@
 <div class="row" id="experiment-player">
-    <div class="col-md-12">
-        {{
-        component currentFrameTemplate
-        frameIndex=frameIndex
-        frameConfig=currentFrameConfig
+    {{
+    component currentFrameTemplate
+    frameIndex=frameIndex
+    frameConfig=currentFrameConfig
 
-        session=session
-        saveHandler=(action 'saveFrame')
-        next=(action 'next') last=(action 'last') previous=(action 'previous')
-        }}
-    </div>
-
-    <div class="col-md-4 pull-right">
-        {{#if (and (not isFullscreen) experiment.displayFullscreen)}}
-            <button class="btn btn-warning pull-right" {{ action 'showFullscreen' }}>Return to fullscreen</button>
-        {{/if}}
-    </div>
+    session=session
+    saveHandler=(action 'saveFrame')
+    next=(action 'next') last=(action 'last') previous=(action 'previous')
+    }}
+</div>
+<div class="col-md-4 pull-right">
+    {{#if (and (not isFullscreen) experiment.displayFullscreen)}}
+    <button class="btn btn-warning pull-right" {{ action 'showFullscreen' }}>Return to fullscreen</button>
+    {{/if}}
 </div>
