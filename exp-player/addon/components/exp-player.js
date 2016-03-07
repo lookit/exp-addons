@@ -59,9 +59,9 @@ export default Ember.Component.extend(FullScreen, {
                 sequence: sequence
             };
             var exitUrl = this.get('experiment.exitUrl');
-            this.sendAction('saveHandler', payload,  () => {
+            this.sendAction('saveHandler', [payload,  () => {
                 window.location = exitUrl;
-            });  // call the passed-in action with payload
+            }]);  // call the passed-in action with payload
         },
         next() {
             console.log('next');
