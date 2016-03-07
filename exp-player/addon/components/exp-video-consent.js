@@ -1,27 +1,28 @@
-import Ember from 'ember';
+import Em from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-video-consent';
 
 export default ExpFrameBaseComponent.extend({
     layout,
-    videoRecorder: Ember.inject.service(),
-
+    videoRecorder: Em.inject.service(),
     didInsertElement() {
-      this.get('videoRecorder').on('onUploadDone', () => {
-        this.get('videoRecorder').destroy();
-        this.get('videoRecorder').on('onUploadDone', null);
-        this.sendAction('next');
-      });
-      this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {record: false});
+        this.get('videoRecorder').on('onUploadDone', () => {
+            this.get('videoRecorder').destroy();
+            this.get('videoRecorder').on('onUploadDone', null);
+            this.sendAction('next');
+        });
+        this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {
+            record: false
+        });
     },
 
     actions: {
-      record() {
-        this.get('videoRecorder').record();
-      },
-      finish() {
-        this.get('videoRecorder').stop();
-      }
+        record() {
+            this.get('videoRecorder').record();
+        },
+        finish() {
+            this.get('videoRecorder').stop();
+        }
     },
 
     meta: {
@@ -52,10 +53,10 @@ export default ExpFrameBaseComponent.extend({
                     default: false
                 },
                 videoId: {
-                  type: 'string'
+                    type: 'string'
                 }
             },
             required: ['consentGranted']
         }
-    },
+    }
 });

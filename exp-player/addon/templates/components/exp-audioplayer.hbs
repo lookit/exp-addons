@@ -1,13 +1,24 @@
 <div class="row">
+  {{#unless fullControls}}
     <div class="col-md-2">
-        {{#unless fullControls}}
-            <button {{action 'loopSound'}} class="player-audio-replay-widget">
-                <br>Replay
-            </button>
-        {{/unless}}
+      <button {{action 'loopSound'}} class="player-audio-replay-widget">
+        <br>Replay
+      </button>
     </div>
+  {{/unless}}
 
     <div class="col-md-10">
+      {{#if title}}
+        <h3>{{title}}</h3>
+      {{/if}}
+      {{#if titlePrompt}}
+        {{#if titlePrompt.title}}
+          <h3>{{titlePrompt.title}}</h3>
+        {{/if}}
+        <p>
+          {{titlePrompt.text}}
+        </p>
+      {{/if}}
         <audio id="player-audio"
                controls={{fullControls}}
                autoplay={{autoplay}}
@@ -25,7 +36,7 @@
                 <h3>{{prompt.title}}</h3>
             {{/if}}
             <p>
-                {{prompt.text}}
+              <span class="breaklines">{{prompt.text}}</span>
             </p>
         {{/each}}
         {{/if}}
@@ -53,7 +64,9 @@
 
 
 <div class="row exp-controls">
+  <div class="col-md-12">
     <button class="btn btn-default pull-right" {{ action 'next' }} disabled={{ preventNext }}>
         Continue
     </button>
+  </div>
 </div>
