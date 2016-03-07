@@ -3,6 +3,16 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-mood-questionnaire';
 
+const bootstrapControl = '<script type="text/x-handlebars-template"><div class="form-group">{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} control-label alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>';
+
+const bootstrapContainer = '<script type="text/x-handlebars-template"><div>{{#if options.label}}<legend class="{{#if options.labelClass}}{{options.labelClass}} {{/if}}alpaca-container-label">{{#if options.collapsible}}<span data-toggle="collapse">{{/if}}{{{options.label}}}{{#if options.collapsible}}</span>{{/if}}</legend>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>';
+
+const modifiedContainer = '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>';
+
+const modifiedControlRadio = '<script type="text/x-handlebars-template">{{#each selectOptions}}<div class="radio block">{{#if ../options.above}}<div>{{{text}}}</div>{{/if}}<label><input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/></label></div>{{/each}}</script>';
+
+const modifiedControl = '<script type="text/x-handlebars-template"><div><span class="row body">{{#if options.label}}<span class="col-xs-2 left-side"><label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label></span>{{/if}}<span class="col-xs-10 right-side">{{#control}}{{/control}}</span></span>{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>';
+
 const defaultSchema = {
     schema: {
         type:"object",
@@ -95,7 +105,7 @@ const defaultSchema = {
                             },
                             other: {
                                 type: "string",
-                                enum: ["No usual nap schedule", "Already due for a nap"]
+                                enum: ["No usual nap schedule ", "Already due for a nap "]
                             }
 
                         }
@@ -114,6 +124,7 @@ const defaultSchema = {
     options: {
         fields: {
             childMood: {
+                helper: "1 (not at all) to 7 (very much)",
                 fields: {
                     silly: {
                         label: "Silly",
@@ -164,6 +175,7 @@ const defaultSchema = {
                 }
             },
             parentMood: {
+                helper: "1 (not at all) to 7 (very much)",
                 fields: {
                     happy: {
                         label: "Happy",
@@ -238,44 +250,40 @@ const defaultSchema = {
     view: {
         parent: "bootstrap-edit",
         templates: {
-            "control-radio": '<script type="text/x-handlebars-template">{{#each selectOptions}}<div class="radio">{{#if ../options.above}}<div>{{{text}}}</div>{{/if}}<label><input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/></label></div>{{/each}}</script>',
-            control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<span class="col-xs-1"><label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label></span>{{/if}}<span class="col-xs-11">{{#control}}{{/control}}</span>{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>'
+            "control-radio": modifiedControlRadio,
+            container: modifiedContainer,
+            control: modifiedControl
         },
         fields: {
             "/childStats/schedule/other": {
                 templates: {
-                    control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>', // '../templates/components/exp-form-template.html',
+                    control: bootstrapControl,
                     "control-radio": '<script type="text/x-handlebars-template">{{#each selectOptions}}<div class="radio"><label><input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/>{{{text}}}</label></div>{{/each}}</script>'
+                }
+            },
+            "/childStats": {
+                templates: {
+                    container: bootstrapContainer
                 }
             },
             "/childStats/schedule/time": {
                 templates: {
-                    control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>', // '../templates/components/exp-form-template.html',
+                    control: bootstrapControl
                 }
             },
             "/childStats/wakeup": {
                 templates: {
-                    control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>', // '../templates/components/exp-form-template.html',
+                    control: bootstrapControl
                 }
             },
             "/childStats/eat": {
                 templates: {
-                    control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>', // '../templates/components/exp-form-template.html',
+                    control: bootstrapControl
                 }
             },
             "/childStats/previousActivities": {
                 templates: {
-                    control: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="{{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>', // '../templates/components/exp-form-template.html',
-                }
-            },
-            "/childMood": {
-                templates: {
-                    container: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-helper"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>', // '../templates/components/exp-form-template.html',
-                }
-            },
-            "/parentMood": {
-                templates: {
-                    container: '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-helper"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>', // '../templates/components/exp-form-template.html',
+                    control: bootstrapControl
                 }
             }
         }
