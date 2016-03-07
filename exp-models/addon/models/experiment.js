@@ -75,6 +75,22 @@ export default DS.Model.extend(JamModel, {
         }
     }),
 
+    schema: Ember.computed('shortId', {
+        get() {
+            return this.get('store')
+                .findRecord('collection', this.get('sessionCollectionId'))
+                .then((collection) => collection.schema);
+        },
+        set(raw) {
+            return this.get('store')
+            .findRecord('collection', this.get('sessionCollectionId'))
+            .then((collection) => {
+                collection.schema = raw;
+                return collection.save();
+            });
+        }
+    }),
+
     permissions: DS.attr(),
 
     state: DS.attr('string'),
