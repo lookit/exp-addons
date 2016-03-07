@@ -1,0 +1,25 @@
+.radio.block, .checkbox {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 40px;
+}
+
+.alpaca-field-object {
+    border: none;
+    padding: 0px;
+}
+
+.row.body {
+    display: table;
+    width: 100%;
+}
+
+.left-side {
+    float: none;
+    display: table-cell;
+}
+
+.right-side {
+    float: none;
+    display: table-cell;
+}
