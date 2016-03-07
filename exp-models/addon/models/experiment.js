@@ -12,6 +12,8 @@ import SessionSerializer from '../serializers/session';
 
 import compile from '../utils/eligibility';
 
+import config from 'ember-get-config';
+
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
     DRAFT: 'Draft',
@@ -125,7 +127,7 @@ export default DS.Model.extend(JamModel, {
     onCreate: function() {
         this._registerSessionModels();
         var collection = this.store.createRecord('collection', {
-            id: 'experimenter.' + this.get('sessionCollectionId')
+            id: `${config.JAMDB.namespace}${this.get('sessionCollectionId')}`
         });
         // TODO set collection permissions
         collection.save();
