@@ -2,3 +2,17 @@
 @import "components/exp-video-setup";
 @import "components/exp-video-consent";
 @import "components/exp-physics-info";
+
+.exp-text-large {
+    font-size: 2em;
+}
+.exp-text-medium {
+    font-size: 1.5em;
+}
+.exp-text-heavy {
+    font-weigh: 750;
+}
+
+.breaklines {
+    white-space: pre-wrap
+}
