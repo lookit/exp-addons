@@ -3,15 +3,80 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-mood-questionnaire';
 
-const bootstrapControl = '<script type="text/x-handlebars-template"><div class="form-group">{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} control-label alpaca-control-label" for="{{id}}">{{{options.label}}}</label>{{/if}}{{#control}}{{/control}}{{#if options.helpers}}{{#each options.helpers}}<p class="help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>';
+const modifiedContainer = `<script type="text/x-handlebars-template">
 
-const bootstrapContainer = '<script type="text/x-handlebars-template"><div>{{#if options.label}}<legend class="{{#if options.labelClass}}{{options.labelClass}} {{/if}}alpaca-container-label">{{#if options.collapsible}}<span data-toggle="collapse">{{/if}}{{{options.label}}}{{#if options.collapsible}}</span>{{/if}}</legend>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>';
+    <div>
 
-const modifiedContainer = '<script type="text/x-handlebars-template"><div>{{#if options.label}}<label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>{{/if}}{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#container}}{{/container}}</div></script>';
+        {{#if options.label}}
+        <label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>
+        {{/if}}
 
-const modifiedControlRadio = '<script type="text/x-handlebars-template">{{#each selectOptions}}<div class="radio block">{{#if ../options.above}}<div>{{{text}}}</div>{{/if}}<label><input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/></label></div>{{/each}}</script>';
+        {{#if options.helpers}}
+        {{#each options.helpers}}
+        <p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}">
+            <i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>
+            {{{.}}}
+        </p>
+        {{/each}}
+        {{/if}}
 
-const modifiedControl = '<script type="text/x-handlebars-template"><div><span class="row body">{{#if options.label}}<span class="col-xs-2 left-side"><label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label></span>{{/if}}<span class="col-xs-10 right-side">{{#control}}{{/control}}</span></span>{{#if options.helpers}}{{#each options.helpers}}<p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}"><i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>{{{.}}}</p>{{/each}}{{/if}}{{#if options.renderButtons}}{{#if options.buttons}}<div class="alpaca-control-buttons-container">{{#each options.buttons}}<button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>{{/each}}</div>{{/if}}{{/if}}</div></script>';
+        {{#container}}{{/container}}
+
+    </div>
+
+</script>`;
+
+const modifiedControlRadio = `<script type="text/x-handlebars-template">
+
+    {{#each selectOptions}}
+    <div class="radio block">
+        {{#if ../options.above}}
+            <div>{{{text}}}</div>
+        {{/if}}
+        <label>
+            <input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/>
+        </label>
+    </div>
+    {{/each}}
+
+</script>`;
+
+const modifiedControl = `<script type="text/x-handlebars-template">
+
+    <div>
+        <div class="row body">
+            {{#if options.label}}
+            <span class="col-xs-2 left-side">
+                <label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>
+            </span>
+            {{/if}}
+            <span class="col-xs-10 right-side">
+                {{#control}}{{/control}}
+            </span>
+        </div>
+
+        {{#if options.helpers}}
+        {{#each options.helpers}}
+        <p class="alpaca-helper help-block {{#if options.helperClass}}{{options.helperClass}}{{/if}}">
+            <i class="alpaca-icon-16 glyphicon glyphicon-info-sign"></i>
+            {{{.}}}
+        </p>
+        {{/each}}
+        {{/if}}
+
+        {{#if options.renderButtons}}
+            {{#if options.buttons}}
+            <div class="alpaca-control-buttons-container">
+                {{#each options.buttons}}
+                <button data-key="{{@key}}" type="{{type}}" class="alpaca-control-button alpaca-control-button-{{@key}} {{styles}}" {{#each value}}{{@key}}="{{value}}" {{/each}}>{{{value}}}</button>
+                {{/each}}
+            </div>
+            {{/if}}
+        {{/if}}
+
+    </div>
+
+</script>`;
 
 const defaultSchema = {
     schema: {
@@ -86,36 +151,6 @@ const defaultSchema = {
                     stressed: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    }
-                }
-            },
-            childStats: {
-                type: "object",
-                properties: {
-                    wakeup: {
-                        type: "string",
-                        format: "datetime"
-                    },
-                    schedule: {
-                        type: "object",
-                        properties: {
-                            time: {
-                                type: "string",
-                                format: "datetime"
-                            },
-                            other: {
-                                type: "string",
-                                enum: ["No usual nap schedule ", "Already due for a nap "]
-                            }
-
-                        }
-                    },
-                    eat: {
-                        type: "string",
-                        format: "datetime"
-                    },
-                    previousActivities: {
-                        type: "string"
                     }
                 }
             }
@@ -209,7 +244,57 @@ const defaultSchema = {
                         vertical: false
                     }
                 }
-            },
+            }
+        }
+    },
+    view: {
+        parent: "bootstrap-edit",
+        templates: {
+            "control-radio": modifiedControlRadio,
+            container: modifiedContainer,
+            control: modifiedControl
+        }
+    }
+};
+
+const childStatsSchema = {
+    schema: {
+        type:"object",
+        properties: {
+            childStats: {
+                type: "object",
+                properties: {
+                    wakeup: {
+                        type: "string",
+                        format: "datetime"
+                    },
+                    schedule: {
+                        type: "object",
+                        properties: {
+                            time: {
+                                type: "string",
+                                format: "datetime"
+                            },
+                            other: {
+                                type: "string",
+                                enum: ["No usual nap schedule ", "Already due for a nap "]
+                            }
+
+                        }
+                    },
+                    eat: {
+                        type: "string",
+                        format: "datetime"
+                    },
+                    previousActivities: {
+                        type: "string"
+                    }
+                }
+            }
+        }
+    },
+    options: {
+        fields: {
             childStats: {
                 fields: {
                     wakeup: {
@@ -228,6 +313,7 @@ const defaultSchema = {
                             },
                             other: {
                                 type: "radio",
+                                removeDefaultNone: true,
                                 vertical: false
                             }
                         }
@@ -247,47 +333,7 @@ const defaultSchema = {
             }
         }
     },
-    view: {
-        parent: "bootstrap-edit",
-        templates: {
-            "control-radio": modifiedControlRadio,
-            container: modifiedContainer,
-            control: modifiedControl
-        },
-        fields: {
-            "/childStats/schedule/other": {
-                templates: {
-                    control: bootstrapControl,
-                    "control-radio": '<script type="text/x-handlebars-template">{{#each selectOptions}}<div class="radio"><label><input type="radio" {{#if ../options.readonly}}readonly="readonly"{{/if}} name="{{../name}}" value="{{value}}" {{#compare value ../data}}checked="checked"{{/compare}}/>{{{text}}}</label></div>{{/each}}</script>'
-                }
-            },
-            "/childStats": {
-                templates: {
-                    container: bootstrapContainer
-                }
-            },
-            "/childStats/schedule/time": {
-                templates: {
-                    control: bootstrapControl
-                }
-            },
-            "/childStats/wakeup": {
-                templates: {
-                    control: bootstrapControl
-                }
-            },
-            "/childStats/eat": {
-                templates: {
-                    control: bootstrapControl
-                }
-            },
-            "/childStats/previousActivities": {
-                templates: {
-                    control: bootstrapControl
-                }
-            }
-        }
-    }
+    view: "bootstrap-edit"
 };
 
 export default ExpFrameBaseComponent.extend({
@@ -307,6 +353,11 @@ export default ExpFrameBaseComponent.extend({
                     type: 'jsonschema',
                     description: 'JSON-schema defining this item\'s form',
                     default: defaultSchema
+                },
+                childStatsForm: {
+                    type: 'jsonschema',
+                    description: 'JSON-schema defining this item\'s form',
+                    default: childStatsSchema
                 }
             },
             required: ['id']
@@ -324,15 +375,7 @@ export default ExpFrameBaseComponent.extend({
         get() {
             var root = this;
             var newOptions = this.get('form.options');
-            newOptions.form = {
-                buttons: {
-                    update: {
-                        title: 'Continue',
-                        type: 'button',
-                        styles: 'btn btn-default'
-                    }
-                }
-            };
+            newOptions.form = {};
             return {
                 schema: this.get('form.schema'),
                 options: newOptions,
@@ -345,16 +388,45 @@ export default ExpFrameBaseComponent.extend({
         }
 
     }),
+    childStatsFormSchema: Ember.computed('childStatsForm', {
+        get() {
+            var root = this;
+            var newOptions = this.get('childStatsForm.options');
+            newOptions.form = {
+                buttons: {
+                    update: {
+                        title: 'Continue',
+                        type: 'button',
+                        styles: 'btn btn-default'
+                    }
+                }
+            };
+            return {
+                schema: this.get('childStatsForm.schema'),
+                options: newOptions,
+                view: this.get('childStatsForm.view')
+            };
+        },
+        set(_, value) {
+            this.set('childStatsForm', value);
+            return value;
+        }
+
+    }),
     formData: [],
     formActions: Ember.computed(function() {
         var root = this;
         return {
             update: function () {
-                this.refreshValidationState(true);
-                if (this.isValid(true)) {
-                   root.set('formData', this.getValue());
-                   root.actions.next();
-                }
+                var moodData = $($('form')[0]).serializeArray();
+                var moodObject = {};
+                moodData.forEach(function(currentObj) {
+                    moodObject[currentObj.name] = currentObj.value;
+                });
+
+                Ember.merge(moodObject, this.getValue().childStats);
+                root.set('formData', moodObject);
+                root.actions.next.apply(root);
             }
         }
     })
