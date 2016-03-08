@@ -54,3 +54,7 @@ npm link exp-player
 
 Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
 now be automagically reflected in the consuming project.
+
+### COS is Hiring!
+
+Want to help save science? Want to get paid to develop free, open source software? [Check out our openings!](http://cos.io/jobs)
