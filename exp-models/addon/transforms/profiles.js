@@ -12,8 +12,6 @@ var Profile = Ember.Object.extend({
         return moment(new Date()).diff(bd, 'days');
     })
 });
-var profileProperties = ['birthday', 'firstName', 'profileId'];
-
 
 export default DS.Transform.extend({
     deserialize(serialized) {
@@ -30,13 +28,6 @@ export default DS.Transform.extend({
         });
     },
     serialize(deserialized) {
-        var ret = {};
-        if (deserialized) {
-            profileProperties.forEach((prop) => ret[prop] = deserialized.get(prop));
-            return ret;
-        }
-        else {
-            return {};
-        }
+        return deserialized;
     }
 });
