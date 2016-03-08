@@ -14,7 +14,7 @@ const defaultSchema = {
             },
             feedback: {
                 type:"string",
-                title:"Your feedback:",
+                title:"Your feedback:"
             },
             privacy: {
                 type: "string",
@@ -30,7 +30,7 @@ const defaultSchema = {
                 manualEntry: false,
                 validator: "required-field",
                 message: "Please provide a complete and valid birthday.",
-                helper: "We ask again just to check for typos during registration or people accidentally selecting a different child at the start of the study.",
+                helper: "We ask again just to check for typos during registration or people accidentally selecting a different child at the start of the study."
             },
             feedback: {
                 type: "textarea",
@@ -129,7 +129,6 @@ export default ExpFrameBaseComponent.extend({
             this.set('formSchema', value);
             return value;
         }
-
     }),
     section1: true,
     formData: [],
@@ -148,7 +147,7 @@ export default ExpFrameBaseComponent.extend({
                 Ember.merge(formData, this.getValue());
                 root.set('formData', formData);
                 console.log('Post-study survey complete.');
-                root.actions.next();
+                root.actions.next.apply(root);
             }
         };
     }),
