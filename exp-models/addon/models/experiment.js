@@ -80,11 +80,11 @@ export default DS.Model.extend(JamModel, {
                 .findRecord('collection', this.get('sessionCollectionId'))
                 .then((collection) => collection.schema);
         },
-        set(raw) {
+        set(key, value) {
             return this.get('store')
             .findRecord('collection', this.get('sessionCollectionId'))
             .then((collection) => {
-                collection.schema = raw;
+                collection.schema = value;
                 return collection.save();
             });
         }
