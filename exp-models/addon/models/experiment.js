@@ -2,6 +2,7 @@
 Manage data about one or more documents in the experiments collection
  */
 import Ember from 'ember';
+import config from 'ember-get-config';
 
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
@@ -11,8 +12,6 @@ import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
 import compile from '../utils/eligibility';
-
-import config from 'ember-get-config';
 
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
@@ -140,12 +139,16 @@ export default DS.Model.extend(JamModel, {
             this._registerSessionModels();
         }
     },
-    onCreate: function() {
+    didCreate() {
+        this._super(...arguments);
         this._registerSessionModels();
+
         var collection = this.store.createRecord('collection', {
-            id: `${config.JAMDB.namespace}${this.get('sessionCollectionId')}`
+            id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`,
+            permissions: {  // Allow participants to create new session records. (Admins should get permission from namespace)
+                [`jam-${config.JAMDB.namespace}:accounts-*`]: 'CREATE'
+            }
         });
-        // TODO set collection permissions
         collection.save();
-    }.on('didCreate')
+    }
 });
