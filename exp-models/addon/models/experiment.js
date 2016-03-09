@@ -132,6 +132,10 @@ export default DS.Model.extend(JamModel, {
         // Eg an experiment called 'test0' would have a collection 'session-test0'
         return `session${this.get('shortId')}s`; // FIXME: the spurious s is a requirement imposed by genschemas...
     }),
+    // Only use to check that the session collection is created when an
+    // experiment document is created. NOT a reliable way to fetch an
+    // experiment's session collection
+    _sessionCollection: null,
 
     _registerSessionModels() {
         // Dynamically register the required models for a session table associated with this experiment
@@ -139,7 +143,7 @@ export default DS.Model.extend(JamModel, {
         var container = Ember.getOwner(this);
         container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
         container.register(`adapter:${cId}`, SessionAdapter.extend({'sessionCollectionId': cId})); // Override part of adapter URL
-        container.register(`serializer:${cId}`, SessionSerializer.extend({'modelName': cId})); // Tell serializer what model to use)
+        container.register(`serializer:${cId}`, SessionSerializer.extend({'modelName': cId})); // Tell serializer what model to use
     },
 
     init() {
@@ -159,6 +163,7 @@ export default DS.Model.extend(JamModel, {
                 [`jam-${config.JAMDB.namespace}:accounts-*`]: 'CREATE'
             }
         });
+        this.set('_sessionCollection', collection);
         collection.save();
     }
 });
