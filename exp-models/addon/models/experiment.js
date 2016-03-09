@@ -96,6 +96,16 @@ export default DS.Model.extend(JamModel, {
     isActive: Ember.computed('state', function() {
         return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
+    onStateChange: function() {
+        var state = this.get('state');
+        // if changed from inactive to active
+        if(state === this.ACTIVE) {
+            this.set('beginDate', new Date());
+        }
+        else if (state !== this.DELETED) {
+            this.set('endDate', new Date());
+        }
+    }.observes('state'),
 
     eligibilityCriteria: DS.attr('string'),
     eligibilityString: Ember.computed('eligibilityCriteria', function() {
