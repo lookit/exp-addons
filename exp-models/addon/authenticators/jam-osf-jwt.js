@@ -1,15 +1,29 @@
-import Em from 'ember';
+import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
 
 
 import config from 'ember-get-config';
 
 export default Base.extend({
-    url: `${config.JAMDB.url}/v1/auth`,
+    authUrl: `${config.JAMDB.url}/v1/auth`,
+    namespaceUrl: `${config.JAMDB.url}/v1/id/namespaces/${config.JAMDB.namespace}`,
+    _get: function(accessToken) {
+        return Ember.$.ajax({
+            method: 'GET',
+            url: this.namespaceUrl,
+            dataType: 'json',
+            contentType: 'application/json',
+            xhrFields: {withCredentials: true},
+            headers: {
+                'Authorization': accessToken
+            }
+        });
+    },
+
     _post: function(accessToken) {
-        return Em.$.ajax({
+        return Ember.$.ajax({
             method: 'POST',
-            url: this.url,
+            url: this.authUrl,
             dataType: 'json',
             contentType: 'application/json',
             xhrFields: {withCredentials: true},
@@ -31,9 +45,19 @@ export default Base.extend({
         }).fail(this.invalidate);
     },
     authenticate(accessToken /*, expires */) {
-        return this._post(accessToken).then(function(res) {
+        return this._post(accessToken).done(function(res) {
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
+        }).then((res) => {
+            // Then try to make a request, eg to a namespace endpoint to see if user has appropriate permissions
+            // Injecting store fails, because it depends on authenticator. Query directly.
+            // TODO: Hardcoding a URL here makes me sad; alternate suggestions welcome.
+
+            return this._get(res.data.attributes.token)
+                .then(()=> res)
+                .fail((reason)=> {
+                    return Ember.RSVP.reject('User does not have permission to access this site');
+                });
         });
     }
 });
