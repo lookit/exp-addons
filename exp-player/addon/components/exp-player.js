@@ -17,8 +17,6 @@ export default Ember.Component.extend(FullScreen, {
     videoRecorder: Ember.inject.service(),
     fullScreenElementId: 'experiment-player',
 
-    expData: {},  // Temporarily store data collected until we sent to server at end
-
     init: function() {
         this._super(...arguments);
         var frameConfigs = parseExperiment(this.get('experiment.structure'));
@@ -44,7 +42,7 @@ export default Ember.Component.extend(FullScreen, {
 
     willDestroyElement() {
         this.get('videoRecorder').stop({destroy: true});
-        return this.super(...arguments);
+        return this._super(...arguments);
     },
 
     actions: {
@@ -52,7 +50,7 @@ export default Ember.Component.extend(FullScreen, {
             // Save the data from a completed frame to the session data item
             console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
             this.get('session.sequence').push(frameId);
-            this.get('session.expData')[frameId] = frameData;
+            this.get('session.expData')[frameId] = frameData.fields;
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
