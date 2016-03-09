@@ -14,6 +14,7 @@ export default Ember.Component.extend(FullScreen, {
     frameIndex: 0,  // Index of the currently active frame
 
     displayFullscreen: false,
+    videoRecorder: Ember.inject.service(),
     fullScreenElementId: 'experiment-player',
 
     expData: {},  // Temporarily store data collected until we sent to server at end
@@ -40,6 +41,11 @@ export default Ember.Component.extend(FullScreen, {
         }
         return componentName;
     }),
+
+    willDestroyElement() {
+        this.get('videoRecorder').stop({destroy: true});
+        return this.super(...arguments);
+    },
 
     actions: {
         saveFrame(frameId, frameData) {
