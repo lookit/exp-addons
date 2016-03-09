@@ -23,3 +23,14 @@
     float: none;
     display: table-cell;
 }
+
+// A slight hack to fix bootstrap's datetimepicker
+// positioning
+.form-group {
+    position: relative;
+
+    // position it on top of input
+    .dropdown-menu {
+        top: -245px !important;
+    }
+}
