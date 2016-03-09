@@ -17,6 +17,9 @@ export default DS.Model.extend(JamModel, {
     experimentId: DS.attr('string'),
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 
+    didComplete: DS.attr('boolean'),
+    earlyExit: DS.attr(),
+
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),

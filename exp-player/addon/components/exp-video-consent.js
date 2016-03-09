@@ -13,7 +13,7 @@ export default ExpFrameBaseComponent.extend({
                 this.get('videoRecorder').on('onUploadDone', null);
                 this.sendAction('next');
             });
-            this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$().find('.recorder'), {
+            this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, Em.$(this.element).find('.recorder'), {
                 record: false
             });
         }
