@@ -1,19 +1,19 @@
 import Ember from 'ember';
-import Base from 'ember-simple-auth/authenticators/base';
+import BaseAuthenticator from 'ember-simple-auth/authenticators/base';
 
 
 import config from 'ember-get-config';
 
-export default Base.extend({
+export default BaseAuthenticator.extend({
     authUrl: `${config.JAMDB.url}/v1/auth`,
     namespaceUrl: `${config.JAMDB.url}/v1/id/namespaces/${config.JAMDB.namespace}`,
-    _get: function(accessToken) {
+    // TODO: URL is hardcoded because store requires authentication; alternate suggestions welcome
+
+    _askNamespace: function(accessToken) {
         return Ember.$.ajax({
             method: 'GET',
             url: this.namespaceUrl,
             dataType: 'json',
-            contentType: 'application/json',
-            xhrFields: {withCredentials: true},
             headers: {
                 'Authorization': accessToken
             }
@@ -49,11 +49,8 @@ export default Base.extend({
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
         }).then((res) => {
-            // Then try to make a request, eg to a namespace endpoint to see if user has appropriate permissions
-            // Injecting store fails, because it depends on authenticator. Query directly.
-            // TODO: Hardcoding a URL here makes me sad; alternate suggestions welcome.
-
-            return this._get(res.data.attributes.token)
+            // Only allow someone to login to the admin panel if they have have namespace-level permissions for this project
+            return this._askNamespace(res.data.attributes.token)
                 .then(()=> res)
                 .fail((reason)=> {
                     return Ember.RSVP.reject('User does not have permission to access this site');
