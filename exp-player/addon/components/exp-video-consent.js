@@ -5,23 +5,28 @@ import layout from '../templates/components/exp-video-consent';
 export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Em.inject.service(),
-    didInsertElement() {
-        this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy();
-            this.get('videoRecorder').on('onUploadDone', null);
-            this.sendAction('next');
-        });
-        this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {
-            record: false
-        });
+    section: 'info',
+    didRender: function()  {
+        if (this.get('section') === 'capture') {
+            this.get('videoRecorder').on('onUploadDone', () => {
+                this.get('videoRecorder').destroy();
+                this.get('videoRecorder').on('onUploadDone', null);
+                this.sendAction('next');
+            });
+            this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$().find('.recorder'), {
+                record: false
+            });
+        }
     },
-
     actions: {
         record() {
             this.get('videoRecorder').record();
         },
         finish() {
             this.get('videoRecorder').stop();
+        },
+        nextSection() {
+            this.set('section', 'capture');
         }
     },
 
