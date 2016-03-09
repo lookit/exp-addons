@@ -30,11 +30,6 @@ export default DS.Model.extend(JamModel, {
     whatHappens: Ember.computed.alias('description'),
     purpose: DS.attr('string'),
 
-    // Researchers can provide feedback to participants by writing to this field
-    feedback: DS.attr('string'),
-    // A flag for whether or not the participant has seen this feedback
-    hasReadFeedback: DS.attr('boolean'),
-
     // A url to direct the user to upon completion of the experiment
     exitUrl: DS.attr('string'),
 

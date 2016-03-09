@@ -20,6 +20,11 @@ export default DS.Model.extend(JamModel, {
     didComplete: DS.attr('boolean'),
     earlyExit: DS.attr(),
 
+    // Researchers can provide feedback to participants by writing to this field
+    feedback: DS.attr('string'),
+    // A flag for whether or not the participant has seen this feedback
+    hasReadFeedback: DS.attr('boolean'),
+
     permissions: DS.attr(),
 
     history: DS.hasMany('history'),
