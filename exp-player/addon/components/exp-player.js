@@ -50,49 +50,38 @@ export default Ember.Component.extend(FullScreen, {
     actions: {
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
-            var expData = this.get('expData');
-            expData[frameId] = frameData;
-            this.set('expData', expData);
-        },
-        saveSession() {
-            // Construct payload and send to server
-            var frames = this.get('frames');
-            var sequence = frames.map((frame) => frame.id);
-
-            var payload = {
-                expData: this.get('expData'),
-                sequence: sequence
-            };
-            var exitUrl = this.get('experiment.exitUrl');
-            this.sendAction('saveHandler', [payload,  () => {
-                window.location = exitUrl;
-            }]);  // call the passed-in action with payload
+            console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
+            this.get('session.sequence').push(frameId);
+            this.get('session.expData')[frameId] = frameData;
+            //TODO Implement diff PATCHing
+            this.get('session').save();
         },
         next() {
-            console.log('next');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
+                console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this.set('frameIndex', frameIndex + 1);
-            } else {
-                // TODO Very ugly hack for demo purposes only: clicking next on final frame acts as a save instead
-                console.log('Saving data to server');
-                this.send('saveSession');
+                return;
             }
+
+            console.log(`Next: Saving session then redirecting to ${this.get('redirectUrl') || '/'}`);
+            this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
         },
         previous() {
-            console.log('previous');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex !== 0) {
+                console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
                 this.set('frameIndex', frameIndex - 1);
+            } else {
+                console.log('Previous: At frame 0');
             }
         },
         last() {
-            // TODO
-            console.log('last');
+            console.log('Last');
+            this.set('frameIndex', this.get('frames.length') - 1);
         },
         skipTo(index) {
+            console.log(`SkipTo: Jumping to frame ${index}`)
             this.set('frameIndex', index);
         }
     }
