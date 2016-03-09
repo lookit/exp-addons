@@ -164,11 +164,6 @@ export default DS.Model.extend(JamModel, {
             }
         });
         this.set('_sessionCollection', collection);
-        collection.save().then(() => {
-            this.set('sessionCollectionId', this.get('sessionCollectionId'));
-            // Must save the new record twice since the sessionCollectionId
-            // is a function of the experiment id
-            this.save();
-        });
+        collection.save();
     }
 });
