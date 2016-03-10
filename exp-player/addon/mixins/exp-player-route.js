@@ -12,9 +12,9 @@ export default Ember.Mixin.create({
     },
     _getSession(params, experiment) { // jshint ignore: line
         return this.get('currentUser').getCurrentUser().then(([account, profile]) => {
-            var session = this.store.createRecord(experiment.get('sessionCollectionId'), {
+            return this.store.createRecord(experiment.get('sessionCollectionId'), {
                 experimentId: experiment.id,
-                profileId: profile.get('id'),
+                profileId: profile.get('profileId'),
                 profileVersion: '', // TODO
                 completed: false,
                 feedback: '',
@@ -22,18 +22,6 @@ export default Ember.Mixin.create({
                 softwareVersion: '',
                 expData: {},
                 sequence: []
-            });
-
-            session.setProperties({
-                id: 'PREVIEW_DATA_DISREGARD'
-            });
-
-            return session.reopen({
-                save() {
-                    // TODO add UI for researcher to see data
-                    console.log('Preview Data Save:', this.toJSON());
-                    return Ember.RSVP.resolve(this);
-                }
             });
         });
     },
@@ -46,15 +34,16 @@ export default Ember.Mixin.create({
                 this._getSession(params, experiment).then((session) => {
                     this.set('_experiment', experiment);
                     this.set('_session', session);
-                    experiment.getCurrentVersion().then(versionId => {
-                        session.set('experimentVersion', versionId);
-                        session.save().then(() => {
-                            this.get('currentUser').getCurrentUser().then(([account, profile]) => {
-                                account.pastSessionsFor(experiment, profile).then(resolve);
-                            });
+                    //experiment.getCurrentVersion().then(versionId => {
+                    // TODO: waiting on jam history permissions updates
+                    session.set('experimentVersion', '');
+                    session.save().then(() => {
+                        this.get('currentUser').getCurrentUser().then(([account, profile]) => {
+                            account.pastSessionsFor(experiment, profile).then(resolve);
                         });
                     });
                 });
+                //});
             }).catch(reject);
         });
     },

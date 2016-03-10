@@ -35,10 +35,10 @@ export default Ember.Service.extend({
                 }
                 else if(data.provider === `${config.JAMDB.namespace}:accounts`) {
                     this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${data.id}`)
-                    .then((account) => {
-                        resolve([account, account.profileById(this.get('data.profile.profileId'))]);
-                    })
-                    .catch(reject);
+                        .then((account) => {
+                            resolve([account, account.profileById(this.get('session.data.profile.profileId'))]);
+                        })
+                        .catch(reject);
                 }
             }
         });
