@@ -25,8 +25,8 @@ export default Ember.Mixin.create({
                 return experiment.getCurrentVersion().then(versionId => {
                     session.set('experimentVersion', versionId);
                     return session.save().then(() => {
-                        return this.get('currentUser').getCurrentUser((account) => {
-                            return account.pastSessionsFor(experiment);
+                        return this.get('currentUser').getCurrentUser(([account, profile]) => {
+                            return account.pastSessionsFor(experiment, profile);
                         });
                     });
                 });
