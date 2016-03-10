@@ -21,9 +21,19 @@ export default Ember.Component.extend(FullScreen, {
 
     init: function() {
         this._super(...arguments);
-        var frameConfigs = parseExperiment(this.get('experiment.structure'));
+        var [frameConfigs, conditions] = parseExperiment(
+            this.get('experiment.structure'),
+            this.get('pastSessions').toArray()
+        );
         this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
         this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
+
+        var session = this.get('session');
+        session.setProperties({
+            sequence: frameConfigs.map((cfg) => cfg.id),
+            conditions: conditions
+        });
+        session.save();
     },
 
     currentFrameConfig: Ember.computed('frames', 'frameIndex', function() {
@@ -69,8 +79,7 @@ export default Ember.Component.extend(FullScreen, {
 
             var payload = {
                 expData: this.get('expData'),
-                sequence: sequence,
-                conditions: this.get('conditions')
+                sequence: sequence
             };
             var exitUrl = this.get('experiment.exitUrl');
             this.sendAction('saveHandler', [payload,  () => {
