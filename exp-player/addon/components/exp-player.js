@@ -44,6 +44,12 @@ export default Ember.Component.extend(FullScreen, {
         return componentName;
     }),
 
+    currentFrameContext: Ember.computed('pastSessions', function() {
+        return {
+            pastSessions: this.get('pastSessions')
+        };
+    }),
+
     actions: {
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
