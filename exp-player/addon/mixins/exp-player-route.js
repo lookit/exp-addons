@@ -4,33 +4,58 @@ export default Ember.Mixin.create({
     _experiment: null,
     _session: null,
 
+    store: Ember.inject.service(),
     currentUser: Ember.inject.service(),
 
     _getExperiment(params) { // jshint ignore: line
 
     },
     _getSession(params, experiment) { // jshint ignore: line
+        return this.get('currentUser').getCurrentUser().then(([account, profile]) => {
+            var session = this.store.createRecord(experiment.get('sessionCollectionId'), {
+                experimentId: experiment.id,
+                profileId: profile.get('id'),
+                profileVersion: '', // TODO
+                completed: false,
+                feedback: '',
+                hasReadFeedback: '',
+                softwareVersion: '',
+                expData: {},
+                sequence: []
+            });
 
+            session.setProperties({
+                id: 'PREVIEW_DATA_DISREGARD'
+            });
+
+            return session.reopen({
+                save() {
+                    // TODO add UI for researcher to see data
+                    console.log('Preview Data Save:', this.toJSON());
+                    return Ember.RSVP.resolve(this);
+                }
+            });
+        });
     },
     model(params) {
         // While a little gross, this ensures all the criteria for participation
         // are met before the route resolves. This has the benefit that the route's
         // loading state is active until all of this is complete.
-        return this._getExperiment(params).then((experiment) => {
-            return this._getSession(params, experiment).then((session) => {
-
-                this.set('_experiment', experiment);
-                this.set('_session', session);
-
-                return experiment.getCurrentVersion().then(versionId => {
-                    session.set('experimentVersion', versionId);
-                    return session.save().then(() => {
-                        return this.get('currentUser').getCurrentUser(([account, profile]) => {
-                            return account.pastSessionsFor(experiment, profile);
+        return new Ember.RSVP.Promise((resolve, reject) => {
+            this._getExperiment(params).then((experiment) => {
+                this._getSession(params, experiment).then((session) => {
+                    this.set('_experiment', experiment);
+                    this.set('_session', session);
+                    experiment.getCurrentVersion().then(versionId => {
+                        session.set('experimentVersion', versionId);
+                        session.save().then(() => {
+                            this.get('currentUser').getCurrentUser().then(([account, profile]) => {
+                                account.pastSessionsFor(experiment, profile).then(resolve);
+                            });
                         });
                     });
                 });
-            });
+            }).catch(reject);
         });
     },
     setupController(controller, pastSessions) {
