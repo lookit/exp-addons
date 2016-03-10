@@ -103,7 +103,10 @@ export default Ember.Service.extend({
   // Stop recording and save the video to the server
   // By default destroys the flash element
   stop({destroy: destroy}={destroy:false}) {
-    if (this.get('recording')) {this.get('recorder').stopVideo();}
+    if (this.get('recording')) {
+        this.get('recorder').stopVideo();
+        this.set('_recording', false);
+    }
     if (!this.get('started')) {return;}
     this.set('_started', false);
     if (destroy) {this.destroy();}
@@ -135,6 +138,7 @@ export default Ember.Service.extend({
 
   show() {
     $(`#${this.get('divId')}-container`).removeAttr('style');
+    $(`#${this.get('divId')}-container`).css({height: '100%'});
     return true;
   },
 

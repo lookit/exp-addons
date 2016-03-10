@@ -27,6 +27,7 @@ export default Ember.Component.extend({
 
     frameIndex: null,
     frameConfig: null,
+    frameContext: null,
     eventTimings: null,
 
     session: null,
@@ -100,7 +101,7 @@ export default Ember.Component.extend({
         },
         next() {
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
-            console.log('Leaving frame ID', frameId);
+            console.log(`Next: Leaving frame ID ${frameId}`);
             this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
             // When exiting frame, save the data to the base player using the provided saveHandler
             this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
@@ -110,6 +111,8 @@ export default Ember.Component.extend({
             this.sendAction('last');
         },
         previous() {
+            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+            console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');
         }
     }
