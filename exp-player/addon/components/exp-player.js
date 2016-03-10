@@ -56,6 +56,8 @@ export default Ember.Component.extend(FullScreen, {
             var expData = this.get('expData');
             expData[frameId] = frameData;
             this.set('expData', expData);
+            // TODO better incremental saving?
+            this.send('saveSession');
         },
         saveSession() {
             // Construct payload and send to server
