@@ -2,6 +2,11 @@ import Ember from 'ember';
 
 import config from 'ember-get-config';
 
+let ADMIN = {
+    id: 'ADMIN',
+    profileId: 'ADMIN.PROFILE'
+};
+
 export default Ember.Service.extend({
     store: Ember.inject.service(),
     session: Ember.inject.service(),
@@ -27,13 +32,22 @@ export default Ember.Service.extend({
 
                 var data = this.get('session.data.authenticated');
                 var accountId = null;
+                var profileId = null;
                 if(data.provider === 'osf') {
-                    accountId = config.JAMDB.testAccount.id;
+                    accountId = ADMIN.id;
+                    profileId = ADMIN.profileId;
                 }
                 else if(data.provider === `${config.JAMDB.namespace}:accounts`) {
                     accountId = data.id;
+                    profileId = this.get('data.profile.profileId');
                 }
-                resolve(this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${accountId}`).catch(reject));
+                resolve(
+                    this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${accountId}`)
+                        .then((account) => {
+                            return [account, account.profileById(profileId)];
+                        })
+                        .catch(reject)
+                );
             }
         });
     }

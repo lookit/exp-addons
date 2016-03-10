@@ -1,6 +1,7 @@
 /*
 Manage data about one or more documents in the accounts collection
  */
+import Ember from 'ember';
 import DS from 'ember-data';
 
 import JamModel from '../mixins/jam-model';
@@ -23,9 +24,10 @@ export default DS.Model.extend(JamModel, {
 
         return profiles.filter(getProfile)[0];
     },
-    pastSessionsFor(experiment) {
+    pastSessionsFor(experiment, profile) {
+        var profileId = Ember.get(profile, 'id') || '*';
         return this.get('store').queryRecord(experiment.get('sessionCollectionId'), {
-            q: `profileId:${this.get('id')}*`
+            q: `profileId:${this.get('id')}${profileId}`
         });
     }
 });
