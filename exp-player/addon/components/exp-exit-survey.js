@@ -187,6 +187,6 @@ export default ExpFrameBaseComponent.extend({
         return maxDate.diff(minDate, 'days') + 1;
     }),
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
-        return (this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100;
+        return Math.ceil((this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100);
     })
 });
