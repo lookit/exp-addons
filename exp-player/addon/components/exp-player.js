@@ -61,7 +61,7 @@ export default Ember.Component.extend(FullScreen, {
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
-
+            this.get('session').set('completed', true);
             console.log(`Next: Saving session then redirecting to ${this.get('redirectUrl') || '/'}`);
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
         },
@@ -73,10 +73,6 @@ export default Ember.Component.extend(FullScreen, {
             } else {
                 console.log('Previous: At frame 0');
             }
-        },
-        skipTo(index) {
-            console.log(`SkipTo: Jumping to frame ${index}`)
-            this.set('frameIndex', index);
         }
     }
 });
