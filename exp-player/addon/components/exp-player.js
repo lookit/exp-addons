@@ -64,7 +64,6 @@ export default Ember.Component.extend(FullScreen, {
         },
         saveSession() {
             // Construct payload and send to server
-            debugger;
             var frames = this.get('frames');
             var sequence = frames.map((frame) => frame.id);
 
