@@ -7,6 +7,14 @@ export default ExpFrameBaseComponent.extend({
     videoRecorder: Em.inject.service(),
     section: 'info',
 
+    didInsertElement() {
+        this.get('videoRecorder').on('onUploadDone', () => {
+            this.get('videoRecorder').destroy();
+            this.get('videoRecorder').on('onUploadDone', null);
+            this.sendAction('next');
+        });
+    },
+
     actions: {
         record() {
             this.get('videoRecorder').record();
@@ -18,12 +26,6 @@ export default ExpFrameBaseComponent.extend({
             this.set('section', 'capture');
 
             Em.run.scheduleOnce('afterRender', this, function() {
-                this.get('videoRecorder').on('onUploadDone', () => {
-                    this.get('videoRecorder').destroy();
-                    this.get('videoRecorder').on('onUploadDone', null);
-                    this.sendAction('next');
-                });
-
                 this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('.recorder'), {
                     record: false
                 });

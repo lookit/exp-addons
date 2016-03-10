@@ -72,20 +72,6 @@ export default Ember.Component.extend(FullScreen, {
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
-        saveSession() {
-            // Construct payload and send to server
-            var frames = this.get('frames');
-            var sequence = frames.map((frame) => frame.id);
-
-            var payload = {
-                expData: this.get('expData'),
-                sequence: sequence
-            };
-            var exitUrl = this.get('experiment.exitUrl');
-            this.sendAction('saveHandler', [payload,  () => {
-                window.location = exitUrl;
-            }]);  // call the passed-in action with payload
-        },
         next() {
             console.log('next');
 
