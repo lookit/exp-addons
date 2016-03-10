@@ -48,14 +48,13 @@ export default BaseAuthenticator.extend({
         return this._post(accessToken).then(function(res) {
             res.data.attributes.accessToken = accessToken;
             return res.data.attributes;
-        })
-            .then((res) => {
-               // Only allow someone to login to the admin panel if they have have namespace-level permissions for this project
-                return this._askNamespace(res.token)
-                    .then(() => {return res;})
-                    .fail(()=> {
-                        return Ember.RSVP.reject('User does not have permission to access this site');
-                    });
+        }).then((res) => {
+            // Only allow someone to login to the admin panel if they have have namespace-level permissions for this project
+            return this._askNamespace(res.token)
+                .then(() => res)
+                .fail(() => {
+                    return Ember.RSVP.reject('User does not have permission to access this site');
+                });
         });
     }
 });
