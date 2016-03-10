@@ -9,7 +9,9 @@ export default Ember.Component.extend(FullScreen, {
 
     experiment: null, // Experiment model
     session: null,
+    pastSessions: null,
     frames: null,
+    conditions: null,
 
     frameIndex: 0,  // Index of the currently active frame
 
@@ -40,6 +42,12 @@ export default Ember.Component.extend(FullScreen, {
         return componentName;
     }),
 
+    currentFrameContext: Ember.computed('pastSessions', function() {
+        return {
+            pastSessions: this.get('pastSessions')
+        };
+    }),
+
     willDestroyElement() {
         this.get('videoRecorder').stop({destroy: true});
         return this._super(...arguments);
@@ -54,7 +62,25 @@ export default Ember.Component.extend(FullScreen, {
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
+        saveSession() {
+            // Construct payload and send to server
+            debugger;
+            var frames = this.get('frames');
+            var sequence = frames.map((frame) => frame.id);
+
+            var payload = {
+                expData: this.get('expData'),
+                sequence: sequence,
+                conditions: this.get('conditions')
+            };
+            var exitUrl = this.get('experiment.exitUrl');
+            this.sendAction('saveHandler', [payload,  () => {
+                window.location = exitUrl;
+            }]);  // call the passed-in action with payload
+        },
         next() {
+            console.log('next');
+
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
@@ -66,6 +92,8 @@ export default Ember.Component.extend(FullScreen, {
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
         },
         previous() {
+            console.log('previous');
+
             var frameIndex = this.get('frameIndex');
             if (frameIndex !== 0) {
                 console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
