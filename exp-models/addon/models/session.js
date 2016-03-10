@@ -18,6 +18,7 @@ export default DS.Model.extend(JamModel, {
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 
     completed: DS.attr('boolean'),  // Filter out sessions that were started, but never finished
+    earlyExit: DS.attr(),
 
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
