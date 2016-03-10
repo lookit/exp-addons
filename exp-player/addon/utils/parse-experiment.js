@@ -19,11 +19,14 @@ function randomShuffleArray(array) {
 
 function rotateConditions(options, frameId, pastSessions) {
     if(pastSessions.length) {
+        pastSessions = pastSessions.filter(function(session) {
+            return session.get('conditions');
+        });
         pastSessions.sort(function(a, b) {
             return a.get('createdOn') > b.get('createdOn') ? -1: 1;
         });
-        var lastChoice = pastSessions[0].get(`conditions.${frameId}`)[0];
-        var offset = options.indexOf(lastChoice);
+        var lastChoice = (pastSessions[0].get(`conditions.${frameId}`) || options)[0];
+        var offset = options.indexOf(lastChoice) + 1;
         return options.concat(options).slice(offset, offset + options.length);
     }
     else {

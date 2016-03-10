@@ -8,6 +8,7 @@ import JamModel from '../mixins/jam-model';
 
 export default DS.Model.extend(JamModel, {
     sequence: DS.attr(),
+    conditions: DS.attr(),
     softwareVersion: DS.attr('string'),
     expData: DS.attr(),  // Data is a reserved keyword in ember
 
