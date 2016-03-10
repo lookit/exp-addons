@@ -6,7 +6,7 @@ export default Ember.Mixin.create({
             if(confirmed) {
                 controller.set('forceExit', true);
                 var session = this.get('controller.session');
-                session.set('didComplete', false);
+                session.set('complete', false);
                 session.set('earlyExit', data);
                 session.save();
                 transition.retry();
