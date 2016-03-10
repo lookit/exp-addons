@@ -11,6 +11,8 @@ export default Ember.Component.extend(FullScreen, {
     session: null,
     frames: null,
 
+    pastSessions: null,
+
     frameIndex: 0,  // Index of the currently active frame
 
     displayFullscreen: false,
@@ -20,6 +22,7 @@ export default Ember.Component.extend(FullScreen, {
 
     init: function() {
         this._super(...arguments);
+
         var frameConfigs = parseExperiment(this.get('experiment.structure'));
         this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
         this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
