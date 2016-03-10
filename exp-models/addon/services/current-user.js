@@ -18,12 +18,20 @@ export default Ember.Service.extend({
             else {
                 var data = this.get('session.data.authenticated');
                 if(data.provider === 'osf') {
-                    var Fake = Ember.Object.extend({});
-                    resolve([{
-                        id: ADMIN.id
-                    }, {
-                        profileId: ADMIN.profileId
-                    }].map((obj) => Fake.create(obj)));
+                    var FakeAccount = Ember.Object.extend({
+                        pastSessionsFor: function() {
+                            return Ember.RSVP.resolve([]);
+                        }
+                    });
+                    var FakeProfile = Ember.Object.extend({});
+                    resolve([
+                        FakeAccount.create({
+                            id: ADMIN.id
+                        }),
+                        FakeProfile.create({
+                            profileId: ADMIN.profileId
+                        })
+                    ]);
                 }
                 else if(data.provider === `${config.JAMDB.namespace}:accounts`) {
                     this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${data.id}`)
