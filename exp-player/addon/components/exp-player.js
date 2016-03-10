@@ -74,10 +74,6 @@ export default Ember.Component.extend(FullScreen, {
                 console.log('Previous: At frame 0');
             }
         },
-        last() {
-            console.log('Last');
-            this.set('frameIndex', this.get('frames.length') - 1);
-        },
         skipTo(index) {
             console.log(`SkipTo: Jumping to frame ${index}`)
             this.set('frameIndex', index);
