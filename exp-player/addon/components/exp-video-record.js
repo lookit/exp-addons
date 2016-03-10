@@ -17,8 +17,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
 
     didInsertElement() {
         this.get('videoRecorder').on('onUploadDone', () => {
-            this.send('next', true);
             this.get('videoRecorder').destroy();
+            this.get('videoRecorder').on('onCamAccess', null);
+            this.get('videoRecorder').on('onUploadDone', null);
+
+            this.send('next', true);
         });
 
         this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
