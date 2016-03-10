@@ -1,16 +1,18 @@
 import Ember from 'ember';
 
+import moment from 'moment';
+
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-exit-survey';
 
 const defaultSchema = {
     schema: {
-        title:"Post-study survey",
-        description:"How was your experience?",
-        type:"object",
+        title: "Post-study survey",
+        description: "How was your experience?",
+        type: "object",
         properties: {
             birthdate: {
-                title:"Please confirm your child's birthdate: *"
+                title: "Please confirm your child's birthdate: *"
             },
             feedback: {
                 type:"string",
@@ -49,10 +51,10 @@ const defaultSchema = {
 };
 const emailOptOutSchema = {
     schema: {
-        type:"object",
+        type: "object",
         properties: {
             emailOptOut: {
-                title:"You are currently signed up to recieve email reminders about this study."
+                title: "You are currently signed up to recieve email reminders about this study."
             }
         }
     },
@@ -95,6 +97,20 @@ export default ExpFrameBaseComponent.extend({
                     type: 'jsonschema',
                     description: 'JSON-schema defining second form.',
                     default: emailOptOutSchema
+                },
+                idealSessionsCompleted: {
+                    type: 'integer',
+                    default: 3
+                },
+                idealDaysSessionsCompleted: {
+                    type: 'integer',
+                    default: 14
+                },
+                exitMessage: {
+                    type: 'string'
+                },
+                exitThankYou: {
+                    type: 'string'
                 }
             },
             required: ['id']
@@ -135,11 +151,11 @@ export default ExpFrameBaseComponent.extend({
     formActions: Ember.computed(function() {
         var root = this;
         return {
-            update: function () {
+            update: function() {
                 this.refreshValidationState(true);
                 if (this.isValid(true)) {
-                   root.set('formData', this.getValue());
-                   root.set('section1', false);
+                    root.set('formData', this.getValue());
+                    root.set('section1', false);
                 }
             },
             finish: function() {
@@ -151,7 +167,26 @@ export default ExpFrameBaseComponent.extend({
             }
         };
     }),
+    currentSessionsCompleted: Ember.computed('frameContext', function() {
+        var pastSessions = this.get('frameContext.pastSessions');
+        if (pastSessions) {
+            return pastSessions.get('length');
+        }
+        return 0;
+    }),
+    currentDaysSessionsCompleted: Ember.computed('frameContext', function() {
+        // Warning, this implementation may be inaccurate1
+        // TODO, figure out what the client's expected behavior is here and resolve
+        // https://openscience.atlassian.net/browse/LEI-111
+        var pastSessionDates = this.get('frameContext.pastSessions').map((session) => {
+            return moment(session.get('createdOn'));
+        });
+        var minDate = moment.min(pastSessionDates);
+        var maxDate = moment.max(pastSessionDates);
+
+        return maxDate.diff(minDate, 'days') + 1;
+    }),
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
-        return (this.get('currentSessionsCompleted')/this.get('idealSessionsCompleted')) * 100;
+        return (this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100;
     })
 });
