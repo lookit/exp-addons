@@ -7,6 +7,6 @@ export default ApplicationAdapter.extend(JamDocumentAdapter, {
         collectionId: function(type /*, id, snapshot, query*/) {
             // TODO: May not want to fall back on type
             return this.get('sessionCollectionId') || type;
-        },
+        }
     }
 });
