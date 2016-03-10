@@ -10,44 +10,28 @@ let ADMIN = {
 export default Ember.Service.extend({
     store: Ember.inject.service(),
     session: Ember.inject.service(),
-    account: null,
-
-    init() {
-        this._super(...arguments);
-
-        this.get('session').on('invalidationSucceeded', () => {
-            this.set('account', null);
-        });
-    },
-
     getCurrentUser() {
         return new Ember.RSVP.Promise((resolve, reject) => {
             if(!this.get('session.isAuthenticated')) {
-                resolve(null);
+                resolve([null, null]);
             }
             else {
-                if (this.get('account')) {
-                    resolve(this.get('account'));
-                }
-
                 var data = this.get('session.data.authenticated');
-                var accountId = null;
-                var profileId = null;
                 if(data.provider === 'osf') {
-                    accountId = ADMIN.id;
-                    profileId = ADMIN.profileId;
+                    var Fake = Ember.Object.extend({});
+                    resolve([{
+                        id: ADMIN.id
+                    }, {
+                        profileId: ADMIN.profileId
+                    }].map((obj) => Fake.create(obj)));
                 }
                 else if(data.provider === `${config.JAMDB.namespace}:accounts`) {
-                    accountId = data.id;
-                    profileId = this.get('data.profile.profileId');
+                    this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${data.id}`)
+                    .then((account) => {
+                        resolve([account, account.profileById(this.get('data.profile.profileId'))]);
+                    })
+                    .catch(reject);
                 }
-                resolve(
-                    this.get('store').findRecord('account', `${config.JAMDB.namespace}.accounts.${accountId}`)
-                        .then((account) => {
-                            return [account, account.profileById(profileId)];
-                        })
-                        .catch(reject)
-                );
             }
         });
     }
