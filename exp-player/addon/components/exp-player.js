@@ -82,7 +82,7 @@ export default Ember.Component.extend(FullScreen, {
                 return;
             }
             this.get('session').set('completed', true);
-            console.log(`Next: Saving session then redirecting to ${this.get('redirectUrl') || '/'}`);
+            console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
         },
         previous() {
