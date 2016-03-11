@@ -18,6 +18,19 @@ function randomShuffleArray(array) {
     return array;
 }
 
+function rotateConditions(options, frameId, pastSessions) {
+    if(pastSessions.length) {
+        pastSessions.sort(function(a, b) {
+            return a.get('createdOn') > b.get('createdOn') ? -1: 1;
+        });
+        var lastChoice = (pastSessions[0].get(`conditions.${frameId}`) || options)[0];
+        var offset = options.indexOf(lastChoice);
+        return options.concat(options).slice(offset, offset + options.length);
+    }
+    else {
+        return options;
+    }
+}
 
 /* Modifies the data in the experiment schema definition to match the format expected by exp-player */
 function reformatConfig(frameId, config) {
