@@ -15,6 +15,15 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     // fullScreenElementId: 'player-video',
     videoRecorder: Ember.inject.service(),
 
+    videoId: function() {
+        return [
+            'video-record',
+            this.get('experiment.id'),
+            this.get('id'),
+            this.get('session.id')
+        ].join('-');
+    }.property('session', 'id', 'experiment'),
+
     didInsertElement() {
         this.get('videoRecorder').on('onUploadDone', () => {
             this.get('videoRecorder').destroy();
@@ -25,12 +34,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         });
 
         this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
-
-        this.set('videoId', [
-            this.get('experiment.id'),
-            this.get('id'),
-            this.get('session.id')
-        ].join('-'));
 
         this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'), {
             hidden: true,
