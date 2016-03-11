@@ -8,6 +8,7 @@ import JamModel from '../mixins/jam-model';
 
 export default DS.Model.extend(JamModel, {
     sequence: DS.attr(),
+    conditions: DS.attr(),
     softwareVersion: DS.attr('string'),
     expData: DS.attr(),  // Data is a reserved keyword in ember
 
@@ -18,6 +19,7 @@ export default DS.Model.extend(JamModel, {
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 
     completed: DS.attr('boolean'),  // Filter out sessions that were started, but never finished
+    earlyExit: DS.attr(),
 
     // Researchers can provide feedback to participants by writing to this field
     feedback: DS.attr('string'),
