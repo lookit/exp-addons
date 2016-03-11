@@ -7,13 +7,14 @@ export default ExpFrameBaseComponent.extend({
     videoRecorder: Em.inject.service(),
     section: 'info',
 
-    didInsertElement() {
-        this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy();
-            this.get('videoRecorder').on('onUploadDone', null);
-            this.sendAction('next');
-        });
-    },
+    videoId: function() {
+        return [
+            'video-consent',
+            this.get('experiment.id'),
+            this.get('id'),
+            this.get('session.id')
+        ].join('-');
+    }.property('session', 'id', 'experiment'),
 
     actions: {
         record() {
@@ -26,7 +27,13 @@ export default ExpFrameBaseComponent.extend({
             this.set('section', 'capture');
 
             Em.run.scheduleOnce('afterRender', this, function() {
-                this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('.recorder'), {
+                this.get('videoRecorder').on('onUploadDone', () => {
+                    this.get('videoRecorder').destroy();
+                    this.get('videoRecorder').on('onUploadDone', null);
+                    this.sendAction('next');
+                });
+
+                this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'), {
                     record: false
                 });
             });
@@ -64,7 +71,7 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string'
                 }
             },
-            required: ['consentGranted']
+            required: ['consentGranted', 'videoId']
         }
     }
 });
