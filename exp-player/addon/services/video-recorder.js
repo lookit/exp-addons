@@ -104,6 +104,10 @@ export default Ember.Service.extend({
   // By default destroys the flash element
   stop({destroy: destroy}={destroy:false}) {
     if (this.get('recording')) {
+        // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
+        if (1.5 - this.get('recorder').getStreamTime() > 0)
+            return setTimeout(this.stop.bind(this, {destroy: destroy}), 1.5 - this.get('recorder').getStreamTime());
+
         this.get('recorder').stopVideo();
         this.set('_recording', false);
     }
