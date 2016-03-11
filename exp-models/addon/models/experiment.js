@@ -3,8 +3,8 @@ Manage data about one or more documents in the experiments collection
  */
 import Ember from 'ember';
 import config from 'ember-get-config';
-
 import DS from 'ember-data';
+
 import JamModel from '../mixins/jam-model';
 
 import SessionAdapter from '../adapters/session';
@@ -12,6 +12,8 @@ import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
 import compile from '../utils/eligibility';
+import {permissionCreateForAccounts} from '../utils/constants';
+
 
 export default DS.Model.extend(JamModel, {
     ACTIVE: 'Active',
@@ -27,7 +29,7 @@ export default DS.Model.extend(JamModel, {
     displayFullscreen: DS.attr('boolean'),
 
     duration: DS.attr('string'),
-    whatHappens: Ember.computed.alias('description'),
+    whatHappens: Ember.computed.alias('description'),  // TODO: Deprecate
     purpose: DS.attr('string'),
 
     // A url to direct the user to upon completion of the experiment
@@ -148,17 +150,18 @@ export default DS.Model.extend(JamModel, {
             this._registerSessionModels();
         }
     },
+
     didCreate() {
         this._super(...arguments);
         this._registerSessionModels();
 
         var collection = this.store.createRecord('collection', {
             id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`,
-            permissions: {  // Allow participants to create new session records. (Admins should get permission from namespace)
-                [`jam-${config.JAMDB.namespace}:accounts-*`]: 'CREATE'
-            }
+            permissions: this.get('isActive') ? permissionCreateForAccounts : {}  // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
         });
         this.set('_sessionCollection', collection);
         collection.save();
     }
+
+    // TODO: In the future, we would like to automatically set session access appropriately when the value of isActive changed AND the experiment record is saved to the server (observer easy for one event, less so for the combination)
 });
