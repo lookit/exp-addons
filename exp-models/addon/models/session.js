@@ -37,6 +37,11 @@ export default DS.Model.extend(JamModel, {
 
     }),
 
+    anonProfileId: Ember.computed('profileId', function() {
+        // For a profile id of format `<acctShortId>.random`, strip off the identifying account ID
+        var profileId = this.get('profileId');
+        return profileId.split ? profileId.split('.')[1] : profileId;}),
+
     experiment: Ember.computed('experimentId', function() {
         var storeId = this.get('experimentId');
         return this.store.findRecord('experiment', storeId);
