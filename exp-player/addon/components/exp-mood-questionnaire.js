@@ -373,7 +373,6 @@ export default ExpFrameBaseComponent.extend({
     },
     formSchema: Ember.computed('form', {
         get() {
-            var root = this;
             var newOptions = this.get('form.options');
             newOptions.form = {};
             return {
@@ -390,7 +389,6 @@ export default ExpFrameBaseComponent.extend({
     }),
     childStatsFormSchema: Ember.computed('childStatsForm', {
         get() {
-            var root = this;
             var newOptions = this.get('childStatsForm.options');
             newOptions.form = {
                 buttons: {
@@ -428,6 +426,6 @@ export default ExpFrameBaseComponent.extend({
                 root.set('formData', moodObject);
                 root.actions.next.apply(root);
             }
-        }
+        };
     })
 });
