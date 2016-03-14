@@ -7,8 +7,6 @@ import layout from '../templates/components/exp-exit-survey';
 
 const defaultSchema = {
     schema: {
-        title: "Post-study survey",
-        description: "How was your experience?",
         type: "object",
         properties: {
             birthdate: {
