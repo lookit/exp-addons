@@ -172,7 +172,7 @@ export default ExpFrameBaseComponent.extend({
         if (pastSessions) {
             return pastSessions.get('length');
         }
-        return 0;
+        return 1;
     }),
     currentDaysSessionsCompleted: Ember.computed('frameContext', function() {
         // Warning, this implementation may be inaccurate1
