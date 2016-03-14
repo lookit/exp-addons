@@ -15,11 +15,9 @@ export default Ember.Mixin.create({
             return this.store.createRecord(experiment.get('sessionCollectionId'), {
                 experimentId: experiment.id,
                 profileId: profile.get('profileId'),
-                profileVersion: '', // TODO
                 completed: false,
                 feedback: '',
                 hasReadFeedback: '',
-                softwareVersion: '',
                 expData: {},
                 sequence: []
             });
