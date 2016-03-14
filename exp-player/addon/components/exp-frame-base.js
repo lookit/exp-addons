@@ -31,16 +31,20 @@ export default Ember.Component.extend({
     eventTimings: null,
 
     session: null,
-    didReceiveAttrs: function() {
+    didReceiveAttrs: function(diff) {
         this._super(...arguments);
 
         if (!this.get('frameConfig')) {
             return;
         }
 
+        var newAttrs = diff.newAttrs || {};
+        var oldAtrs = diff.oldAtrs || {};
+
         this.set('eventTimings', []);
 
-        var defaultParams = this.setupParams();
+        let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAtrs, 'frameIndex.value');
+        var defaultParams = this.setupParams(null, clean);
         Object.keys(defaultParams).forEach((key) => {
             this.set(key, defaultParams[key]);
         });
@@ -51,7 +55,7 @@ export default Ember.Component.extend({
             this.set('id', `${kind}-${frameIndex}`);
         }
     },
-    setupParams(params) {
+    setupParams(params, clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
         params = params || this.get('frameConfig');
 
@@ -61,7 +65,7 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            var value = this.get(key);
+            var value = !clean ? this.get(key): undefined;
             if (typeof value === 'undefined') {
                 defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
             }

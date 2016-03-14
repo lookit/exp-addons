@@ -30,7 +30,12 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
             this.get('videoRecorder').on('onCamAccess', null);
             this.get('videoRecorder').on('onUploadDone', null);
 
-            this.send('next', true);
+            if (this.get('mayProgress')) {
+                this.send('next');
+            }
+            else {
+                this.set('mayProgress', true);
+            }
         });
 
         this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
@@ -48,14 +53,18 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     },
 
     actions: {
-        next(param) {
-            if (param && this.get('mayProgress'))
-                return this.sendAction('next');
-
-            this.set('mayProgress', true);
+        videoFinished() {
+            if (!this.get('mayProgress')) {
+                this.set('mayProgress', true);
+            }
+            else {
+                this.send('next');
+            }
         },
         camAccess(hasAccess) {
-            if (!hasAccess) return;
+            if (!hasAccess) {
+                return;
+            }
             Ember.$('body').removeClass('modal-open');
             this.set('blockUI', false);
             this.get('videoRecorder').hide();
