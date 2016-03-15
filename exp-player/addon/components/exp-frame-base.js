@@ -65,6 +65,7 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
+            if (this[key] && this[key].isDescriptor) return;
             var value = !clean ? this.get(key): undefined;
             if (typeof value === 'undefined') {
                 defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
