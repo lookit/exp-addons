@@ -21,7 +21,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     }.property('index'),
 
     didInsertElement() {
-        if (this.get('prompt') || !this.get('record')) return;
+        if (this.get('prompt') || !this.get('record')) {return;}
         this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
             record: true,
             hidden: this.get('hideRecorder')

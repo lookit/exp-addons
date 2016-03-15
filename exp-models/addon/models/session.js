@@ -9,11 +9,9 @@ import JamModel from '../mixins/jam-model';
 export default DS.Model.extend(JamModel, {
     sequence: DS.attr(),
     conditions: DS.attr(),
-    softwareVersion: DS.attr('string'),
     expData: DS.attr(),  // Data is a reserved keyword in ember
 
     profileId: DS.attr('string'), // Store ID of related record
-    profileVersion: DS.attr('string'), // TODO: Safe to always assume newest profile version?
 
     experimentId: DS.attr('string'),
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
