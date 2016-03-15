@@ -403,7 +403,7 @@ export default ExpFrameBaseComponent.extend({
                 schema: this.get('childStatsForm.schema'),
                 options: newOptions,
                 view: this.get('childStatsForm.view')
-            };
+           };
         },
         set(_, value) {
             this.set('childStatsForm', value);
@@ -416,7 +416,7 @@ export default ExpFrameBaseComponent.extend({
         var root = this;
         return {
             update: function () {
-                var moodData = $($('form')[0]).serializeArray();
+                var moodData = Ember.$(Ember.$('form')[0]).serializeArray();
                 var moodObject = {};
                 moodData.forEach(function(currentObj) {
                     moodObject[currentObj.name] = currentObj.value;
