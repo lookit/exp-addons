@@ -146,7 +146,7 @@ export default ExpFrameBaseComponent.extend({
         }
     }),
     section1: true,
-    formData: {}, // Possible inconsistency with data.properties?
+    formData: {},
     formActions: Ember.computed(function() {
         var root = this;
         return {
