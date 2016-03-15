@@ -52,7 +52,7 @@ const emailOptOutSchema = {
         type: "object",
         properties: {
             emailOptOut: {
-                title: "You are currently signed up to recieve email reminders about this study."
+                title: "You are currently signed up to receive email reminders about this study."
             }
         }
     },
