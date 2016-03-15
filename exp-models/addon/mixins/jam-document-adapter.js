@@ -16,8 +16,7 @@ export default Ember.Mixin.create({
         search(type, id, snapshot, query) {
             return query.q ? '_search' : 'documents';
         },
-        namespaceId: () => config.JAMDB.namespace,
-        collectionId: (type) => Ember.Inflector.inflector.pluralize(type),
+        collectionId: (type) => Ember.Inflector.inflector.pluralize(type)
     },
     ajax: function(url, type, options={}) {
         options.traditional = true;
