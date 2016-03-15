@@ -10,4 +10,8 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, UrlTemplates, {
 
     host: config.JAMDB.url,
     namespace: 'v1/id',
+
+    urlSegments: {  // Make available to all adapters, not just documents. This appears to be extended rather than overwritten by children.
+        namespaceId: () => config.JAMDB.namespace
+    }
 });
