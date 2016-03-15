@@ -15,6 +15,10 @@ export default Ember.Mixin.create({
         return 'documents';
     },
 
+    extractId(modelClass, resourceHash) {
+        return resourceHash.id.split('.')[resourceHash.id.split('.').length-1];
+    },
+
     extractAttributes: function(modelClass, resourceHash) {
         // Merge meta attributes into the attributes available on model
         var attributes = this._super(...arguments);

@@ -10,9 +10,4 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, UrlTemplates, {
 
     host: config.JAMDB.url,
     namespace: 'v1/id',
-    urlSegments: {
-        jamNamespace: function() {
-            return config.JAMDB.namespace;
-        }
-    }
 });
