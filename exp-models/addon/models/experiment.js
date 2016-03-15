@@ -94,6 +94,9 @@ export default DS.Model.extend(JamModel, {
         return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
     onStateChange: function() {
+        if(this.get('isNew')) {
+            return;
+        }
         var state = this.get('state');
         // if changed from inactive to active
         if(state === this.ACTIVE) {
