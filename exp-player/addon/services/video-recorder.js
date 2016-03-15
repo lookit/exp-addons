@@ -105,9 +105,9 @@ export default Ember.Service.extend({
   stop({destroy: destroy}={destroy:false}) {
     if (this.get('recording')) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-        if (1.5 - this.get('recorder').getStreamTime() > 0)
+        if (1.5 - this.get('recorder').getStreamTime() > 0) {
             return setTimeout(this.stop.bind(this, {destroy: destroy}), 1.5 - this.get('recorder').getStreamTime());
-
+        }
         this.get('recorder').stopVideo();
         this.set('_recording', false);
     }
@@ -117,13 +117,13 @@ export default Ember.Service.extend({
   },
 
   record() {
-    if (!this.get('started')) throw new Error('Must call start before record');
-    if (this.get('recording')) throw new Error('Already recording');
+    if (!this.get('started')) {throw new Error('Must call start before record');}
+    if (this.get('recording')) {throw new Error('Already recording');}
     let count = 0;
     let id = window.setInterval(() => {
-        if (++count > 20) return clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'))
-        if (!this.get('recorder').record) return;
-        this.get('recorder').record()
+        if (++count > 20) {return clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));}
+        if (!this.get('recorder').record) {return;}
+        this.get('recorder').record();
         clearInterval(id);
     }, 100);
     return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {resolve, reject}));
@@ -163,7 +163,7 @@ export default Ember.Service.extend({
 
   // Begin Flash hooks
 
-  _onRecordingStarted(recorderId) {
+  _onRecordingStarted(recorderId) { // jshint ignore:line
     this.set('_recording', true);
     if (this.get('_recordingPromise')) {this.get('_recordPromise').resolve(true);}
   },
@@ -172,7 +172,7 @@ export default Ember.Service.extend({
     this.set('_recording', false);
   },
 
-  _onCamAccess(allowed, recorderId) {
+  _onCamAccess(allowed, recorderId) { // jshint ignore:line
     this.set('_camAccess', allowed);
   }
 

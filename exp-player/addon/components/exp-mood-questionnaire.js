@@ -373,7 +373,6 @@ export default ExpFrameBaseComponent.extend({
     },
     formSchema: Ember.computed('form', {
         get() {
-            var root = this;
             var newOptions = this.get('form.options');
             newOptions.form = {};
             return {
@@ -390,7 +389,6 @@ export default ExpFrameBaseComponent.extend({
     }),
     childStatsFormSchema: Ember.computed('childStatsForm', {
         get() {
-            var root = this;
             var newOptions = this.get('childStatsForm.options');
             newOptions.form = {
                 buttons: {
@@ -405,7 +403,7 @@ export default ExpFrameBaseComponent.extend({
                 schema: this.get('childStatsForm.schema'),
                 options: newOptions,
                 view: this.get('childStatsForm.view')
-            };
+           };
         },
         set(_, value) {
             this.set('childStatsForm', value);
@@ -418,7 +416,7 @@ export default ExpFrameBaseComponent.extend({
         var root = this;
         return {
             update: function () {
-                var moodData = $($('form')[0]).serializeArray();
+                var moodData = Ember.$(Ember.$('form')[0]).serializeArray();
                 var moodObject = {};
                 moodData.forEach(function(currentObj) {
                     moodObject[currentObj.name] = currentObj.value;
@@ -428,6 +426,6 @@ export default ExpFrameBaseComponent.extend({
                 root.set('formData', moodObject);
                 root.actions.next.apply(root);
             }
-        }
+        };
     })
 });
