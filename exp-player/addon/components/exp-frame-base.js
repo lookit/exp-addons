@@ -65,7 +65,9 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            if (this[key] && this[key].isDescriptor) {return;}
+            if (this[key] && this[key].isDescriptor) {
+                return;
+            }
             var value = !clean ? this.get(key): undefined;
             if (typeof value === 'undefined') {
                 // Make deep copy of the default value (to avoid subtle reference errors from reusing mutable containers)
@@ -82,17 +84,15 @@ export default Ember.Component.extend({
 
     serializeContent() {
         // Serialize selected parameters for this frame, plus eventTiming data
-        var toSerialize = Object.keys(this.get('meta.data.properties') || {});
-        var fields = new Map();
-        var self = this;  // todo: do we need to do this?
-        toSerialize.forEach(function(item) {
-            fields[item] = self.get(item);
-        });
-        return {fields: fields, eventTimings: this.get('eventTimings')};
+
+        var serialized = this.getProperties(Object.keys(this.get('meta.data.properties') || {}));
+        serialized.eventTimings = this.get('eventTimings');
+        return serialized;
     },
 
     actions: {
         setTimeEvent(eventName, extra) {
+            console.log(`Timing event captured for ${eventName}`);
             // Track a particular timing event
             var curTime = new Date();
             var eventData = {
@@ -108,7 +108,7 @@ export default Ember.Component.extend({
         next() {
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Next: Leaving frame ID ${frameId}`);
-            this.send('setTimeEvent', 'nextFrame', {additionalKey: 'this is a sample event'});
+            this.send('setTimeEvent', 'nextFrame');
             // When exiting frame, save the data to the base player using the provided saveHandler
             this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
             this.sendAction('next');

@@ -24,7 +24,22 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         ].join('-');
     }.property('session', 'id', 'experiment'),
 
+    spaceHandler: null,
     didInsertElement() {
+        var player = this.$().find('video')[0];
+        var spaceHandler = function(e) {
+            if (e.keyCode === 32) {
+                if (player.paused) {
+                    player.play();
+                }
+                else {
+                    player.pause();
+                }
+            }
+        };
+        Ember.$(document).on('keypress', spaceHandler);
+        this.set('spaceHandler', spaceHandler);
+
         this.get('videoRecorder').on('onUploadDone', () => {
             this.get('videoRecorder').destroy();
             this.get('videoRecorder').on('onCamAccess', null);
@@ -54,6 +69,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
 
     actions: {
         videoFinished() {
+            this.send('setTimeEvent', 'videoFinished');
             if (!this.get('mayProgress')) {
                 this.set('mayProgress', true);
             }

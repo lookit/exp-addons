@@ -18,7 +18,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         this._super(...arguments);
 
         var player = this.$().find('video')[0];
-
         var spaceHandler = function(e) {
             console.log('keypress');
             if (e.keyCode === 32) {
