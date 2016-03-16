@@ -30,7 +30,7 @@ export default Ember.Component.extend(FullScreen, {
 
         var session = this.get('session');
         session.setProperties({
-            sequence: frameConfigs.map((cfg) => cfg.id),
+            sequence: [],  // Frame IDs will be appended by saveFrame action
             conditions: conditions
         });
         session.save();
@@ -81,6 +81,7 @@ export default Ember.Component.extend(FullScreen, {
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
+            // Hack: at last frame, save instead of advancing frame
             this.get('session').set('completed', true);
             console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
