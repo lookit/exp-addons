@@ -29,10 +29,7 @@ export default Ember.Component.extend(FullScreen, {
         this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
 
         var session = this.get('session');
-        session.setProperties({
-            sequence: frameConfigs.map((cfg) => cfg.id),
-            conditions: conditions
-        });
+        session.set('conditions', conditions);
         session.save();
     },
 
@@ -68,7 +65,7 @@ export default Ember.Component.extend(FullScreen, {
             // Save the data from a completed frame to the session data item
             console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
             this.get('session.sequence').push(frameId);
-            this.get('session.expData')[frameId] = frameData.fields;
+            this.get('session.expData')[frameId] = frameData;
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
