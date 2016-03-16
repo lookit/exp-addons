@@ -2,17 +2,12 @@
     margin-left: 5px;
     margin-right: 5px;
 }
-.exit-warning-modal {
-    margin-left: -30% !important;
-    max-height: 30% !important;
-    height: auto !important;
-}
-.exit-warning-modal .checkbox {
+.exit-warning .checkbox {
     margin: 3px;
 }
-.exit-warning-modal input[type="radio"] {
+.exit-warning input[type="radio"] {
     height: 12px;
 }
-.exit-warning-modal textarea {
-    width: 75%;
+.exit-warning textarea {
+    width: 100%;
 }

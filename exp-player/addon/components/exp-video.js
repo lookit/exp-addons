@@ -5,38 +5,14 @@ import layout from '../templates/components/exp-video';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
+import VideoPause from '../mixins/video-pause';
 
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
     layout: layout,
 
     displayFullscreen: true,  // force fullscreen for all uses of this component, always
     fullScreenElementId: 'player-video',
-
-    spaceHandler: null,
-    didRender() {
-        this._super(...arguments);
-
-        var player = this.$().find('video')[0];
-        var spaceHandler = function(e) {
-            console.log('keypress');
-            if (e.keyCode === 32) {
-                if (player.paused) {
-                    player.play();
-                }
-                else {
-                    player.pause();
-                }
-            }
-        };
-        Ember.$(document).on('keypress', spaceHandler);
-        this.set('spaceHandler', spaceHandler);
-    },
-    didDestroyElement() {
-        this._super(...arguments);
-        Ember.$(document).off('keypress', this.get('spaceHandler'));
-    },
-
     meta: {
         name: 'Video player',
         description: 'Component that plays a video',
