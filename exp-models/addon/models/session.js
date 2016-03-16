@@ -6,7 +6,9 @@ import Ember from 'ember';
 import DS from 'ember-data';
 import JamModel from '../mixins/jam-model';
 
-export default DS.Model.extend(JamModel, {
+const AnonJamModel = JamModel.without(['createdBy', 'modifiedBy']);
+
+export default DS.Model.extend(AnonJamModel, {
     sequence: DS.attr(),
     conditions: DS.attr(),
     expData: DS.attr(),  // Data is a reserved keyword in ember

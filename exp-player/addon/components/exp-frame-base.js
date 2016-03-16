@@ -31,15 +31,15 @@ export default Ember.Component.extend({
     eventTimings: null,
 
     session: null,
-    didReceiveAttrs: function(diff) {
+    didReceiveAttrs: function(options) {
         this._super(...arguments);
 
         if (!this.get('frameConfig')) {
             return;
         }
 
-        var newAttrs = diff.newAttrs || {};
-        var oldAttrs = diff.oldAttrs || {};
+        var newAttrs = options.newAttrs || {};
+        var oldAttrs = options.oldAttrs || {};
 
         this.set('eventTimings', []);
 
