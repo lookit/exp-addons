@@ -157,7 +157,7 @@ export default ExpFrameBaseComponent.extend({
                 }
             },
             finish: function() {
-                var formData = root.get('formData');
+                var formData = root.get('formData') || {};
                 Ember.merge(formData, this.getValue());
                 root.set('formData', formData);
                 console.log('Post-study survey complete.');

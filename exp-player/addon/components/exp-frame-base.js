@@ -39,11 +39,11 @@ export default Ember.Component.extend({
         }
 
         var newAttrs = diff.newAttrs || {};
-        var oldAtrs = diff.oldAtrs || {};
+        var oldAttrs = diff.oldAttrs || {};
 
         this.set('eventTimings', []);
 
-        let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAtrs, 'frameIndex.value');
+        let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
         var defaultParams = this.setupParams(null, clean);
         Object.keys(defaultParams).forEach((key) => {
             this.set(key, defaultParams[key]);
@@ -65,7 +65,9 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            if (this[key] && this[key].isDescriptor) return;
+            if (this[key] && this[key].isDescriptor) {
+                return;
+            }
             var value = !clean ? this.get(key): undefined;
             if (typeof value === 'undefined') {
                 defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
