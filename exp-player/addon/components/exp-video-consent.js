@@ -30,7 +30,7 @@ export default ExpFrameBaseComponent.extend({
                 this.get('videoRecorder').on('onUploadDone', () => {
                     this.get('videoRecorder').destroy();
                     this.get('videoRecorder').on('onUploadDone', null);
-                    this.sendAction('next');
+                    this.send('next');
                 });
 
                 this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'), {
@@ -63,15 +63,11 @@ export default ExpFrameBaseComponent.extend({
         data: {
             type: 'object',
             properties: {
-                consentGranted: {
-                    type: 'boolean',
-                    default: false
-                },
                 videoId: {
                     type: 'string'
                 }
             },
-            required: ['consentGranted', 'videoId']
+            required: ['videoId']
         }
     }
 });

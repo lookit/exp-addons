@@ -11,7 +11,7 @@ export default ExpFrameBaseComponent.extend({
         this.get('videoRecorder').on('onUploadDone', () => {
             this.get('videoRecorder').destroy();
             this.get('videoRecorder').on('onUploadDone', null);
-            this.sendAction('next');
+            this.send('next');
         });
         this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {
             record: false

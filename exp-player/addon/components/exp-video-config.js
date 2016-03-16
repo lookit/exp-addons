@@ -16,7 +16,7 @@ export default ExpFrameBaseComponent.extend({
     actions: {
         next() {
             this.get('videoRecorder').stop({destroy: true});
-            this.sendAction('next');
+            this._super(...arguments);
         }
     },
 
