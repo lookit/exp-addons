@@ -8,21 +8,19 @@
 
 <div class="row" id="experiment-player">
 <div class="col-xs-12">
-    <div id="component-here">
-        {{
-        component currentFrameTemplate
-        frameIndex=frameIndex
-        frameConfig=currentFrameConfig
-        frameContext=currentFrameContext
+    {{
+    component currentFrameTemplate
+    frameIndex=frameIndex
+    frameConfig=currentFrameConfig
+    frameContext=currentFrameContext
 
-        session=session
-        experiment=experiment
+    session=session
+    experiment=experiment
 
-        next=(action 'next')
-        previous=(action 'previous')
-        saveHandler=(action 'saveFrame')
-        }}
-    </div>
+    next=(action 'next')
+    previous=(action 'previous')
+    saveHandler=(action 'saveFrame')
+    }}
 </div>
 </div>
 
