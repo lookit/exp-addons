@@ -52,7 +52,7 @@ const emailOptOutSchema = {
         type: "object",
         properties: {
             emailOptOut: {
-                title: "You are currently signed up to recieve email reminders about this study."
+                title: "You are currently signed up to receive email reminders about this study."
             }
         }
     },
@@ -117,7 +117,8 @@ export default ExpFrameBaseComponent.extend({
             type: 'object',
             properties: {
                 formData: {
-                    type: 'object'
+                    type: 'object',
+                    default: {}
                 }
             }
         }
@@ -145,7 +146,7 @@ export default ExpFrameBaseComponent.extend({
         }
     }),
     section1: true,
-    formData: [],
+    formData: {},
     formActions: Ember.computed(function() {
         var root = this;
         return {

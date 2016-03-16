@@ -65,10 +65,11 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            if (this[key] && this[key].isDescriptor) return;
+            if (this[key] && this[key].isDescriptor) {return;}
             var value = !clean ? this.get(key): undefined;
             if (typeof value === 'undefined') {
-                defaultParams[key] =  this.get(`meta.data.properties.${key}.default`);
+                // Make deep copy of the default value (to avoid subtle reference errors from reusing mutable containers)
+                defaultParams[key] =  Ember.copy(this.get(`meta.data.properties.${key}.default`), true);
             }
             else {
                 defaultParams[key] = value;
