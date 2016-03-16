@@ -14,10 +14,12 @@
 </div>
 
 <video id="player-video" style="width: 100%"
-        controls
         poster="{{poster}}"
+        autoplay
         ontimeupdate={{action 'timeUpdate'}}
         onended={{ if autoforwardOnEnd (action 'next' autoforwardOnEnd) }}
+        onplaying={{action 'setTimeEvent' 'videoPlayed'}}
+        onpause={{action 'setTimeEvent' 'videoPaused'}}
 >
     {{#each sources as |stream|}}
         <source src="{{stream.src}}" type="{{stream.type}}">

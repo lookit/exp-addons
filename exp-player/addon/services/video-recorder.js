@@ -7,7 +7,7 @@ const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDon
 const ATTRIBUTES = {
   align: 'middle',
   id:   'VideoRecorder',
-  name: 'VideoRecorder',
+  name: 'VideoRecorder'
 };
 
 const FLASHVARS = {
@@ -17,7 +17,7 @@ const FLASHVARS = {
   qualityurl: 'audio_video_quality_profiles/320x240x30x90.xml',
   recorderId: '123',
   sscode: 'php',
-  userId : 'XXY',
+  userId : 'XXY'
 };
 
 const PARAMS = {
@@ -151,7 +151,7 @@ export default Ember.Service.extend({
       'top': '-10000px',
       'left': '-10000px',
       'z-index': -1,
-      'position': 'absolute',
+      'position': 'absolute'
     });
     return true;
   },
