@@ -4,10 +4,11 @@ import layout from '../templates/components/exp-video-record';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 // import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
+import VideoPause from '../mixins/video-pause';
 
 
 //TODO Fullsceen issues/functionality
-export default ExpFrameBaseComponent.extend(MediaReload, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
     layout: layout,
     blockUI: false,
     mayProgress: false,
@@ -26,19 +27,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
 
     spaceHandler: null,
     didInsertElement() {
-        var player = this.$().find('video')[0];
-        var spaceHandler = function(e) {
-            if (e.keyCode === 32) {
-                if (player.paused) {
-                    player.play();
-                }
-                else {
-                    player.pause();
-                }
-            }
-        };
-        Ember.$(document).on('keypress', spaceHandler);
-        this.set('spaceHandler', spaceHandler);
+        this._super(...arguments);
 
         this.get('videoRecorder').on('onUploadDone', () => {
             this.get('videoRecorder').destroy();
