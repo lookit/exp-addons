@@ -1,21 +1,3 @@
-<div class="row" id="experiment-player">
-<div class="col-xs-12">
-    {{
-    component currentFrameTemplate
-    frameIndex=frameIndex
-    frameConfig=currentFrameConfig
-    frameContext=currentFrameContext
-
-    session=session
-    experiment=experiment
-
-    next=(action 'next')
-    previous=(action 'previous')
-    saveHandler=(action 'saveFrame')
-    }}
-</div>
-</div>
-<br>
 <div class="row">
     <div class="col-xs-12">
         {{#if (and (not isFullscreen) experiment.displayFullscreen)}}
@@ -23,3 +5,24 @@
         {{/if}}
     </div>
 </div>
+
+<div class="row" id="experiment-player">
+<div class="col-xs-12">
+    <div id="component-here">
+        {{
+        component currentFrameTemplate
+        frameIndex=frameIndex
+        frameConfig=currentFrameConfig
+        frameContext=currentFrameContext
+
+        session=session
+        experiment=experiment
+
+        next=(action 'next')
+        previous=(action 'previous')
+        saveHandler=(action 'saveFrame')
+        }}
+    </div>
+</div>
+</div>
+
