@@ -31,19 +31,19 @@ export default Ember.Component.extend({
     eventTimings: null,
 
     session: null,
-    didReceiveAttrs: function(diff) {
+    didReceiveAttrs: function(options) {
         this._super(...arguments);
 
         if (!this.get('frameConfig')) {
             return;
         }
 
-        var newAttrs = diff.newAttrs || {};
-        var oldAtrs = diff.oldAtrs || {};
+        var newAttrs = options.newAttrs || {};
+        var oldAttrs = options.oldAttrs || {};
 
         this.set('eventTimings', []);
 
-        let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAtrs, 'frameIndex.value');
+        let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
         var defaultParams = this.setupParams(null, clean);
         Object.keys(defaultParams).forEach((key) => {
             this.set(key, defaultParams[key]);
