@@ -169,7 +169,7 @@ export default ExpFrameBaseComponent.extend({
     currentSessionsCompleted: Ember.computed('frameContext', function() {
         var pastSessions = this.get('frameContext.pastSessions');
         if (pastSessions) {
-            return pastSessions.get('length');
+            return pastSessions.get('length') || 1;
         }
         return 1;
     }),
