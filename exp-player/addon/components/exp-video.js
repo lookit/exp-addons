@@ -1,5 +1,3 @@
-import Ember from 'ember';
-
 import layout from '../templates/components/exp-video';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';

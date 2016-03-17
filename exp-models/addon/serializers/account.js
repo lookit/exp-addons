@@ -1,3 +1,4 @@
+/* global dcodeIO */
 import DS from 'ember-data';
 
 import JamSerializer from '../mixins/jam-serializer';
