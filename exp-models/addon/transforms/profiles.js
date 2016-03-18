@@ -1,9 +1,8 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 
-import Profile from '../models/profile';
-
 export default DS.Transform.extend({
+    store: Ember.inject.service(),
     deserialize(serialized) {
         if (!Ember.$.isArray(serialized)) {
             return [];
@@ -13,11 +12,12 @@ export default DS.Transform.extend({
                 return profile;
             }
             else {
-                return Profile.create(profile);
+                profile.birthday = new Date(profile.birthday);
+                return this.get('store').createRecord('profile', profile);
             }
         });
     },
     serialize(deserialized) {
-        return deserialized;
+        return deserialized.toArray().map((item) => item.toJSON());
     }
 });
