@@ -1,17 +1,7 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 
-import moment from 'moment';
-
-var Profile = Ember.Object.extend({
-    profileId: null,
-    firstName: null,
-    birthday: null,
-    age: Ember.computed('birthday', function() {
-        var bd = moment(this.get('birthday'));
-        return moment(new Date()).diff(bd, 'days');
-    })
-});
+import Profile from '../models/profile';
 
 export default DS.Transform.extend({
     deserialize(serialized) {
