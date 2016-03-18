@@ -11,6 +11,7 @@ import config from 'ember-get-config';
 
 export default DS.Model.extend(JamModel, {
     username: DS.attr('string'),
+    name: DS.attr('string'),
     password: DS.attr('string'),
     profiles: DS.attr('profiles'),
     permissions: DS.attr(),
