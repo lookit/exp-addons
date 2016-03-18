@@ -9,6 +9,7 @@ export default DS.Model.extend({
     birthday: DS.attr('date'),
     gender: DS.attr('string'),
     ageAtBirth: DS.attr('string'),
+    additionalInformation: DS.attr('string'),
     deleted: DS.attr('boolean', {default: false}),
 
     age: Ember.computed('birthday', function() {
