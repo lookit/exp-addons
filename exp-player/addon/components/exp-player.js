@@ -39,7 +39,13 @@ export default Ember.Component.extend(FullScreen, {
         return frames[frameIndex];
     }),
 
-    currentFrameTemplate: Ember.computed('currentFrameConfig', function() {
+    _currentFrameTemplate: null,
+    currentFrameTemplate: Ember.computed('currentFrameConfig', '_currentFrameTemplate', function() {
+        var currentFrameTemplate = this.get('_currentFrameTemplate');
+        if (currentFrameTemplate) {
+            return currentFrameTemplate;
+        }
+
         var currentFrameConfig = this.get('currentFrameConfig');
         var componentName = `${currentFrameConfig.kind}`;
 
@@ -55,9 +61,17 @@ export default Ember.Component.extend(FullScreen, {
         };
     }),
 
+
     willDestroyElement() {
         this.get('videoRecorder').stop({destroy: true});
         return this._super(...arguments);
+    },
+
+    _transition() {
+        Ember.run(() => {
+            this.set('_currentFrameTemplate', 'exp-blank');
+        });
+        this.set('_currentFrameTemplate', null);
     },
 
     actions: {
@@ -75,6 +89,7 @@ export default Ember.Component.extend(FullScreen, {
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
+                this._transition();
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
@@ -89,6 +104,7 @@ export default Ember.Component.extend(FullScreen, {
             var frameIndex = this.get('frameIndex');
             if (frameIndex !== 0) {
                 console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
+                this._transition();
                 this.set('frameIndex', frameIndex - 1);
             } else {
                 console.log('Previous: At frame 0');

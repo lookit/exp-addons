@@ -106,11 +106,11 @@ function parseExperiment(expStructure, pastSessions) {
     var expFrames = [];
 
     var choices = {};
-    sequence.forEach(function(frameId /*, index, array */) {
+    sequence.forEach(function(frameId, index /* array */) {
         var [resolved, choice] = resolveFrame(frameId, frames, pastSessions);
         expFrames.push(...resolved);
         if (choice) {
-            choices[frameId] = choice;
+            choices[`${index}-${frameId}`] = choice;
         }
     });
 
