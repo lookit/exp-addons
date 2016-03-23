@@ -1,0 +1,8 @@
+<div class="row">
+  {{dynamic-form schema=formSchema postRender=(action 'getForm')}}
+</div>
+<div class="row exp-controls">
+  <div class="btn-group">
+    <button class="btn btn-default pull-right" {{ action 'save' }} > Continue </button>
+  </div>
+</div>

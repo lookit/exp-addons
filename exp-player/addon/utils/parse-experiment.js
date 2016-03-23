@@ -34,6 +34,32 @@ function rotateConditions(options, frameId, pastSessions) {
     }
 }
 
+var URL_PATTERN = /^(URL|JSON):(.*)$/;
+
+function resolveDepenecies(frame) {
+    Object.keys(frame).forEach((key) => {
+        var match = URL_PATTERN.exec(frame[key]);
+        if (match) {
+            var opts = {
+                type: "GET",
+                url: match.pop(),
+                async: false,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                }
+            };
+            var res = Ember.$.ajax(opts);
+            if (frame[key].indexOf('JSON') === 0) {
+                frame[key] = JSON.parse(res.responseText);
+            }
+            else {
+                frame[key] = res.responseText;
+            }
+        }
+    });
+    return frame;
+}
+
 /* Modifies the data in the experiment schema definition to match the format expected by exp-player */
 function reformatConfig(frameId, config) {
     var newConfig = Ember.copy(config, true);
@@ -87,7 +113,7 @@ function resolveFrame(frameId, frames, pastSessions) {
     var config = frames[frameId];
     if (frameNamePattern.test(config.kind)) {
         // Base case: this is a plain experiment frame
-        return [[reformatConfig(frameId, config)], null];
+        return [[resolveDepenecies(reformatConfig(frameId, config))], null];
     } else if (config.kind === "block") {
         return resolveBlock(frameId, frames, pastSessions);
     } else if (config.kind === "choice") {
