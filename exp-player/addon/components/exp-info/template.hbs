@@ -4,14 +4,7 @@
       <p class="exp-text-large">{{title}}</p>
     {{/if}}
     {{#each blocks as |block|}}
-    {{#if block.title}}
-      <p class="exp-text-medium">{{block.title}}</p>
-    {{/if}}
-    {{#if block.text}}
-      <p>
-        {{exp-format block.text}}
-      </p>
-    {{/if}}
+    {{exp-text-block block=block}}
     {{/each}}
   </div>
 </div>

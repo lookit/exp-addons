@@ -12,12 +12,7 @@
         <h3>{{title}}</h3>
       {{/if}}
       {{#if titlePrompt}}
-        {{#if titlePrompt.title}}
-          <h3>{{titlePrompt.title}}</h3>
-        {{/if}}
-        <p>
-          {{titlePrompt.text}}
-        </p>
+        {{exp-text-block block=titlePrompt size=large}}
       {{/if}}
         <audio id="player-audio"
                controls={{fullControls}}
@@ -31,13 +26,8 @@
 
 
         {{#if prompts}}
-        {{#each prompts as |prompt|}}
-            {{#if prompt.title}}
-                <h3>{{prompt.title}}</h3>
-            {{/if}}
-            <p>
-              <span class="breaklines">{{prompt.text}}</span>
-            </p>
+          {{#each prompts as |prompt|}}
+          {{exp-text-block block=prompt}}
         {{/each}}
         {{/if}}
 

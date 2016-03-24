@@ -4,7 +4,6 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-mood-questionnaire';
 
 const modifiedContainer = `<script type="text/x-handlebars-template">
-
     <div>
 
         {{#if options.label}}
@@ -21,13 +20,10 @@ const modifiedContainer = `<script type="text/x-handlebars-template">
         {{/if}}
 
         {{#container}}{{/container}}
-
     </div>
-
 </script>`;
 
 const modifiedControlRadio = `<script type="text/x-handlebars-template">
-
     {{#each selectOptions}}
     <div class="radio block">
         {{#if ../options.above}}
@@ -38,11 +34,9 @@ const modifiedControlRadio = `<script type="text/x-handlebars-template">
         </label>
     </div>
     {{/each}}
-
 </script>`;
 
 const modifiedControl = `<script type="text/x-handlebars-template">
-
     <div>
         <div class="row body">
             {{#if options.label}}
@@ -73,9 +67,7 @@ const modifiedControl = `<script type="text/x-handlebars-template">
             </div>
             {{/if}}
         {{/if}}
-
     </div>
-
 </script>`;
 
 const defaultSchema = {
