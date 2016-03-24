@@ -25,10 +25,6 @@ export default ExpFrameBaseComponent.extend({
                 consentLabel: {
                     type: 'string',
                     default: 'I agree'
-                },
-                consentGranted: {
-                    type: 'boolean',
-                    default: false
                 }
             }
         },

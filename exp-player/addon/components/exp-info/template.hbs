@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-8">
+    {{#if title}}
+      <p class="exp-text-large">{{title}}</p>
+    {{/if}}
+    {{#each blocks as |block|}}
+    {{#if block.title}}
+      <p class="exp-text-medium">{{block.title}}</p>
+    {{/if}}
+    {{#if block.text}}
+      <p>
+        {{exp-format block.text}}
+      </p>
+    {{/if}}
+    {{/each}}
+  </div>
+</div>
+<div class="row exp-controls">
+  <div class="col-md-8">
+    <div class="btn-group pull-right">
+      <button class="btn btn-default" {{ action 'next' }} > Next </button>
+    </div>
+  </div>
+</div>
