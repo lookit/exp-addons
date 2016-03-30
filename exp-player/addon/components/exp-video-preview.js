@@ -6,7 +6,6 @@ import MediaReload from 'exp-player/mixins/media-reload';
 
 export default ExpFrameBaseComponent.extend(MediaReload, {
     layout,
-    videoRecorder: Em.inject.service(),
 
     noNext: function() {
         return this.get('index') >= this.get('videos.length') - 1;
@@ -31,13 +30,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     actions:{
         accept() {
             this.set('prompt', false);
-            if (!this.get('record')) {
-                return;
-            }
-            this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
-                record: true,
-                hidden: this.get('hideRecorder')
-            });
         },
         nextVideo() {
             this.set('index', this.get('index') + 1);
@@ -81,19 +73,17 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                     },
                     default: []
                 },
-                record: {
-                    type: 'boolean',
-                    description: 'Whether or not to record the user while they view the previews',
-                    default: true
-                },
-                hideRecorder: {
-                    type: 'boolean',
-                    description: 'Hide the video recorder component',
-                    default: true
-                },
                 prompt: {
-                    type: 'string',
+                    type: 'object',
                     description: 'Require a button press before showing the videos',
+                    properties: {
+                        title: {
+                            type: 'string'
+                        },
+                        text: {
+                            type: 'string'
+                        }
+                    },
                     default: null
                 },
                 text: {
@@ -102,7 +92,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                     default: ''
                 }
             },
-            required: ['videos', 'record', 'hideRecorder']
+            required: ['videos']
         },
         data: {type: 'object', properties: {}}
     }

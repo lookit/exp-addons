@@ -9,13 +9,8 @@
         </span>
       </center>
       <br>
-      {{#each blocks as |block|}}
-      <span class="exp-text-heavy exp-text-medium">
-        {{block.title}}
-      </span>
-      <p class="breaklines">
-        {{block.body}}
-      </p>
+      {{#each blocks as |prompt|}}
+      {{exp-text-block block=prompt}}
       {{/each}}
     </div>
   </div>

@@ -54,9 +54,24 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string',
                     default: 'Notice of Consent'
                 },
+                blocks: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            title: {
+                                type: 'string'
+                            },
+                            text: {
+                                type: 'string'
+                            }
+                        }
+                    },
+                    default: []
+                },
                 prompt: {
                     type: 'string',
-                    default: 'Say Words'
+                    default: 'I consent to participate in this study'
                 }
             }
         },
