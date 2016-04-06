@@ -9,18 +9,48 @@
   <p>
     If you do want to exit early, please select a privacy level for any video that was recorded during this session (<strong>*required</strong>):
   </p>
-  <div class="form-group">
-    <div class="checkbox">
-      {{radio-button value="publicity and educatonal" checked=exitPrivacy}} Publicity and educational (video may be used for publicity or educational purposes online or in the press in additon to for research purposes)
+  <div class="row">
+    <label> Data Sharing </label>
+    <div class="form-group">
+      <p>
+        <label>
+          Would you like to share your video and other data from this session with authorized users of the secure data library Databrary?
+        </label>
+      </p>
+      <div class="input-group">
+        {{radio-button value="yes" checked=databraryShare}} Yes
+        {{radio-button value="no" checked=databraryShare}} No
+      </div>
+      <p>
+        Only authorized researchers will have access to information in the library. Researchers who are granted access must agree to maintain confidentiality and not use information for commercial purposes. Data sharing will lead to faster progress in research on human development and behavior. If you have any questions about the data-sharing library, please visit <a href="https://nyu.databrary.org/">Databrary</a> or email <a href="mailto:ethics@databrary.org">ethics@databrary.org</a>.
+      </p>
     </div>
-    <div class="checkbox">
-      {{radio-button value="scientific" checked=exitPrivacy}} Scientific use only (e.g., a short clip may be shown at a scientific conference to demonstrate typical responses)
+  </div>
+  <div class="row">
+    <label> Use of video clips and images </label>
+    <div class="form-group">
+      <div class="checkbox">
+        {{radio-button value="private" checked=exitPrivacy}}Private: Video may only be viewed by authorized scientists.
+        {{if databraryShare '(researchers working on the Lookit project)' '(researchers working on the Lookit project and authorized Databrary users)'}}
+      </div>
+      <div class="checkbox">
+        {{radio-button value="scientific-and-educational" checked=exitPrivacy}} Scientific and educational: Video may be shared for scientific or educational purposes. For example, we might show a video clip in a talk at a scientific conference or an undergraduate class about cognitive development, or include an image or video in a scientific paper. In some circumstances, video or images may be available online, for instance as supplemental material in a scientific paper.
+      </div>
+      <div class="checkbox">
+        {{radio-button value="publicity" checked=exitPrivacy}} Publicity: Please select this option if you'd be excited about seeing your child featured on the Lookit website or in a news article about this study! Your video may be shared for publicity as well as scientific and educational purposes; it will never be used for commercial purposes. Video clips shared may be available online to the general public.
+      </div>
     </div>
-    <div class="checkbox">
-      {{radio-button value="in-lab" checked=exitPrivacy}} In-lab use only (only researchers from MIT's Early Childhood Cogni-on Lab may view your video)
-    </div>
-    <div class="checkbox">
-      {{radio-button value="widthdraw" checked=exitPrivacy}}WITHDRAW your data from this session (your video will be destroyed and no one may view it or use any text you submitted
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <label>Withdraw of video data</label>
+      <div class="form-group">
+        <div class="input-group-inline">
+          Even if something went wrong, every video is useful to us! However, if you need your video deleted (your spouse was discussing state secrets in the background, etc.), check here to completely withdraw your video data from this session from the study: {{radio-button value="withdraw" checkked=exitPrivacy}}
+        </div>
+        <br>
+        Only your consent video will be retained and it may only be viewed by Lookit researchers; other video will be deleted without viewing.
+      </div>
     </div>
   </div>
 </div>

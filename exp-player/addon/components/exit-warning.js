@@ -10,7 +10,8 @@ export default Ember.Component.extend({
         onConfirm() {
             this.get('onConfirm')({
                 reason: this.get('exitReason'),
-                privacy: this.get('exitPrivacy')
+                privacy: this.get('exitPrivacy'),
+                databrary: this.get('databraryShare')
             });
         },
         onReject() {
