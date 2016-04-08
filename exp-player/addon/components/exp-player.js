@@ -2,7 +2,7 @@ import Ember from 'ember';
 import layout from '../templates/components/exp-player';
 
 import FullScreen from '../mixins/full-screen';
-import parseExperiment from '../utils/parse-experiment';
+import ExperimentParser from '../utils/parse-experiment';
 
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
@@ -21,10 +21,11 @@ export default Ember.Component.extend(FullScreen, {
 
     init: function() {
         this._super(...arguments);
-        var [frameConfigs, conditions] = parseExperiment(
-            this.get('experiment.structure'),
-            this.get('pastSessions').toArray()
-        );
+	var parser = new ExperimentParser({
+	    structure: this.get('experiment.structure'),
+	    pastSessions: this.get('pastSessions').toArray()
+	});
+        var [frameConfigs, conditions] = parser.parse();
         this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
         this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
 
