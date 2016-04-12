@@ -3,6 +3,8 @@ import Ember from 'ember';
 var frameNamePattern = new RegExp(/^exp(?:-\w+)+$/);
 var urlPattern = /^(URL|JSON):(.*)$/;
 
+import * as randomizers from 'exp-player/randomizers/index';
+
 var ExperimentParser = function(context={
     pastSessions: [],
     structure: {
@@ -23,63 +25,21 @@ ExperimentParser.prototype._reformatFrame = function(frame, index) {
     newConfig.id = `${index}-${frame.id}`;
     return newConfig;
 };
-/**
- * Randomize array element order in-place.
- * Using Durstenfeld shuffle algorithm.
- **/
-ExperimentParser.prototype._randomShuffleArray = function(array) {
-    array = array.slice();
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
-};
-ExperimentParser.prototype._rotateConditions = function(frame) {
-    var pastSessions = this.pastSessions.filter(function(session) {
-        return session.get('conditions');
-    });
-    pastSessions.sort(function(a, b) {
-        return a.get('createdOn') > b.get('createdOn') ? -1: 1;
-    });
-    if(pastSessions.length) {
-        var lastChoice = (pastSessions[0].get(`conditions.${frame.id}`) || frame.options)[0];
-        var offset = frame.options.indexOf(lastChoice) + 1;
-        return frame.options.concat(frame.options).slice(offset, offset + frame.options.length);
-    }
-    else {
-        return frame.options;
-    }
-};
 /** Convert a random frame to a list of constituent 
  * frame config objects 
  **/
 ExperimentParser.prototype._resolveRandom = function(frame) {
     var randomizer = frame.sampler || 'random';  // Random sampling by default
-    var choice;
-    var sample;
-    if (randomizer === 'random') {
-        // Pick one option at random
-        sample = Math.floor(Math.random() * frame.options.length);
-        choice = frame.options[sample];	    
-	return this._resolveFrame(choice);
-    }
-    else if(randomizer === 'shuffle' || randomizer === 'rotate') {
-        // Shuffle and resolve the set of all options, rather than returning just one
-        var order = randomizer === 'shuffle' ? this._randomShuffleArray(frame.options): this._rotateConditions(frame);
-	
-        var resolvedConfigs = [];
-        order.forEach((frameId) => {
-	    resolvedConfigs.push(...this._resolveFrame(frameId));
-        });
-        return [[].concat.apply([], resolvedConfigs.filter((cfg) => !!cfg)), order];
+    if (!randomizers[randomizer]) {
+	throw new `Randomizer ${randomizer} not recognized`;
     }
     else {
-        throw "Unrecognized sampling method specified";
+	return randomizers[randomizer](
+	    frame,
+	    this.pastSessions,
+	    this._resolveFrame.bind(this)
+	);
     }
-    return [this._resolveFrame(choice), sample];
 };
 ExperimentParser.prototype._resolveDependencies = function(frame) {
     Object.keys(frame).forEach((key) => {
