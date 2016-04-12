@@ -3,7 +3,7 @@ import Ember from 'ember';
 var frameNamePattern = new RegExp(/^exp(?:-\w+)+$/);
 var urlPattern = /^(URL|JSON):(.*)$/;
 
-import * as randomizers from 'exp-player/randomizers/index';
+import randomizers from 'exp-player/randomizers/index';
 
 var ExperimentParser = function(context={
     pastSessions: [],
