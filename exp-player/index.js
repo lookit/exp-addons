@@ -334,4 +334,6 @@ var DEFAULT_OPTIONS = {
   //values: 1 for enabled, 0 for disasbled
   //default:0 (disabled)
   hideDeviceSettingsButtons: 0,
+
+  proxyType: null
 };
