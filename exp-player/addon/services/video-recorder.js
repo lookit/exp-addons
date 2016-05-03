@@ -195,6 +195,12 @@ export default Ember.Service.extend({
         $(`#${this.get('divId')}-container`).remove();
         this.set('recorder', null);
         this.set('_recording', false);
+	window.swfobject.removeSWF(this.get('_SWFId'));
+	return new Ember.RSVP.Promise((resolve) => {
+	    window.setTimeout(function() {
+		resolve();
+	    }, 0);
+	});
     },
 
     show() {

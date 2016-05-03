@@ -17,9 +17,10 @@ export default ExpFrameBaseComponent.extend({
 
     didInsertElement() {
 	this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy();
-            this.get('videoRecorder').on('onUploadDone', null);
-            this.send('next');
+            this.get('videoRecorder').destroy().then(() => {
+		this.get('videoRecorder').on('onUploadDone', null);
+		this.send('next');
+	    });
         });
 
         this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'), {

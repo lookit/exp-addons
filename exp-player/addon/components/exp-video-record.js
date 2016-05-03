@@ -30,16 +30,17 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
         this._super(...arguments);
 
         this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy();
-            this.get('videoRecorder').on('onCamAccess', null);
-            this.get('videoRecorder').on('onUploadDone', null);
+            this.get('videoRecorder').destroy().then(() => {
+		this.get('videoRecorder').on('onCamAccess', null);
+		this.get('videoRecorder').on('onUploadDone', null);
 
-            if (this.get('mayProgress')) {
-                this.send('next');
-            }
-            else {
-                this.set('mayProgress', true);
-            }
+		if (this.get('mayProgress')) {
+                    this.send('next');
+		}
+		else {
+                    this.set('mayProgress', true);
+		}
+	    });
         });
 
         this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
