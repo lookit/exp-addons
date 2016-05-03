@@ -15,7 +15,6 @@
 
 <video id="player-video" style="width: 100%"
         poster="{{poster}}"
-        autoplay
         ontimeupdate={{action 'timeUpdate'}}
         onended={{ if autoforwardOnEnd (action 'next' autoforwardOnEnd) }}
         onplaying={{action 'setTimeEvent' 'videoPlayed'}}
