@@ -35,7 +35,9 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
 		this.get('videoRecorder').on('onUploadDone', null);
 
 		if (this.get('mayProgress')) {
-                    this.send('next');
+		    if(this.get('autoforwardOnEnd')) {
+			this.send('next');
+		    }
 		}
 		else {
                     this.set('mayProgress', true);
@@ -64,7 +66,9 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
                 this.set('mayProgress', true);
             }
             else {
-                this.send('next');
+		if(this.get('autoforwardOnEnd')) {
+                    this.send('next');
+		}
             }
         },
         camAccess(hasAccess) {

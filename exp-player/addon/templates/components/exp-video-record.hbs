@@ -16,7 +16,7 @@
 <video id="player-video" style="width: 100%"
         poster="{{poster}}"
         ontimeupdate={{action 'timeUpdate'}}
-        onended={{ if autoforwardOnEnd (action 'next' autoforwardOnEnd) }}
+        onended={{action 'videoFinished'}}
         onplaying={{action 'setTimeEvent' 'videoPlayed'}}
         onpause={{action 'setTimeEvent' 'videoPaused'}}
 >
