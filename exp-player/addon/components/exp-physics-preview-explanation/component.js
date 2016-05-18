@@ -19,5 +19,10 @@ export default ExpFrameBaseComponent.extend({
                 // define data structure here
             }
         }
+    },
+    actions: {
+        skipone: function() {
+            this.get('skipone')();
+        }
     }
 });
