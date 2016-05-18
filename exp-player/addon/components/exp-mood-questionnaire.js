@@ -4,8 +4,7 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-mood-questionnaire';
 
 const modifiedContainer = `<script type="text/x-handlebars-template">
-    <div>
-
+    <div class="exp-mood-questionnaire">
         {{#if options.label}}
         <label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label">{{{options.label}}}</label>
         {{/if}}
@@ -408,7 +407,7 @@ export default ExpFrameBaseComponent.extend({
         var root = this;
         return {
             update: function () {
-                var moodData = Ember.$(Ember.$('form')[0]).serializeArray();
+                var moodData = Ember.$(Ember.$('.exp-mood-questionnaire').closest('form')[0]).serializeArray();
                 var moodObject = {};
                 moodData.forEach(function(currentObj) {
                     moodObject[currentObj.name] = currentObj.value;
