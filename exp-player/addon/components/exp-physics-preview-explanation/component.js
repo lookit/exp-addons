@@ -4,6 +4,11 @@ import layout from 'exp-player/templates/components/exp-physics-preview-explanat
 export default ExpFrameBaseComponent.extend({
     type: 'exp-physics-preview-explanation',
     layout: layout,
+    actions: {
+       skipone: function() {
+           this.get('skipone')();
+        }
+     },
     meta: {
         name: 'ExpPhysicsPreviewExplanation',
         description: 'Let parents know about blinding, give option to preview videos.',
