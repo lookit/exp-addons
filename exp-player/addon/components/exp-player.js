@@ -86,12 +86,26 @@ export default Ember.Component.extend(FullScreen, {
         },
         next() {
             console.log('next');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex + 1);
+                return;
+            }
+            // Hack: at last frame, save instead of advancing frame
+            this.get('session').set('completed', true);
+            console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
+            this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
+        },
+        skipone() {
+            console.log('skip one frame');
+
+            var frameIndex = this.get('frameIndex');
+            if (frameIndex < (this.get('frames').length - 2)) {
+                console.log(`Next: Transitioning to frame ${frameIndex + 2}`);
+                this._transition();
+                this.set('frameIndex', frameIndex + 2);
                 return;
             }
             // Hack: at last frame, save instead of advancing frame
