@@ -45,6 +45,9 @@
     "moment": "2.11.2",
     "moment-timezone": "0.5.0"
   },
+  "peerDependencies": {
+    "ember-scroll-to": "0.5.1"
+  },
   "keywords": [
     "ember-addon"
   ],
