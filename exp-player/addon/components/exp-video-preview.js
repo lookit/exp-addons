@@ -1,4 +1,4 @@
-import Em from 'ember';
+import Ember from 'ember';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-video-preview';
@@ -7,17 +7,19 @@ import MediaReload from 'exp-player/mixins/media-reload';
 export default ExpFrameBaseComponent.extend(MediaReload, {
     layout,
 
+    videoIndex: 0,
     noNext: function() {
-        return this.get('index') >= this.get('videos.length') - 1;
-    }.property('index'),
+        return this.get('videoIndex') >= this.get('videos.length') - 1;
+    }.property('videoIndex'),
 
     noPrev: function() {
-        return this.get('index') <= 0;
-    }.property('index'),
+        return this.get('videoIndex') <= 0;
+    }.property('videoIndex'),
 
-    currentVideo: function() {
-        return this.get('videos')[this.get('index')];
-    }.property('index'),
+    currentVideo: Ember.computed('videoIndex', function() {
+	console.log(this.get('videoIndex'));
+        return this.get('videos')[this.get('videoIndex')];
+    }),
 
     didInsertElement() {
         if (this.get('prompt') || !this.get('record')) {return;}
@@ -32,10 +34,10 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
             this.set('prompt', false);
         },
         nextVideo() {
-            this.set('index', this.get('index') + 1);
+            this.set('videoIndex', this.get('videoIndex') + 1);
         },
         previousVideo() {
-            this.set('index', this.get('index') - 1);
+            this.set('videoIndex', this.get('videoIndex') - 1);
         }
     },
 
