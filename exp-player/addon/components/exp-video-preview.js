@@ -20,7 +20,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     }.property('index'),
 
     didInsertElement() {
-        if (this.get('prompt') || !this.get('record')) {return;}
+        if (!this.get('record')) {return;}
         this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
             record: true,
             hidden: this.get('hideRecorder')
@@ -38,7 +38,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
             this.set('index', this.get('index') - 1);
         }
     },
-
     type: 'exp-video-preview',
     meta: {
         name: 'ExpVideoPreview',
@@ -67,9 +66,10 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                                     },
                                     required: ['src', 'type']
                                 }
-                            }
+                            },
+                            caption: {type: 'string'}
                         },
-                        required: ['sources']
+                        required: ['sources', 'captions']
                     },
                     default: []
                 },
