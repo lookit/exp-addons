@@ -1,4 +1,3 @@
-/* global swfobject */
 import Ember from 'ember';
 
 let {

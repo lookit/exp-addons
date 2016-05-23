@@ -28,13 +28,14 @@ ExperimentParser.prototype._reformatFrame = function(frame, index) {
 /** Convert a random frame to a list of constituent 
  * frame config objects 
  **/
-ExperimentParser.prototype._resolveRandom = function(frame) {
+ExperimentParser.prototype._resolveRandom = function(frame, frameId) {
     var randomizer = frame.sampler || 'random';  // Random sampling by default
     if (!randomizers[randomizer]) {
-	throw new `Randomizer ${randomizer} not recognized`;
+	throw new Error(`Randomizer ${randomizer} not recognized`);
     }
     else {
 	return randomizers[randomizer](
+	    frameId,
 	    frame,
 	    this.pastSessions,
 	    this._resolveFrame.bind(this)
@@ -74,11 +75,11 @@ ExperimentParser.prototype._resolveBlock = function(frame) {
 /** Convert any frame to a list of constituent frame config objects.
  * Centrally dispatches logic for all other frame types
  **/
-ExperimentParser.prototype._resolveFrame = function(frameId) {
-    var frame = this.frames[frameId];
+ExperimentParser.prototype._resolveFrame = function(frameId, frame) {
+    frame = frame || this.frames[frameId];
     if (frameNamePattern.test(frame.kind)) {
         // Base case: this is a plain experiment frame
-	frame.id = frameId;
+	frame.id = frame.id || frameId;
         return [[
 	    this._resolveDependencies(frame)
 	], null];

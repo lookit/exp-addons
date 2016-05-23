@@ -9,9 +9,10 @@ function shuffleArray(array) {
     return array;
 }
 
-function getConditions(lastSession) {
+function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    if (!lastSession) {
+    var lastConditions = lastSession ? lastSession.get(`conditions.${frameId}`): null;
+    if (!lastConditions) {
         startType = Math.floor(Math.random() * 4);
         showStay = Math.floor(Math.random() * 2);
         var whichObjectG = Math.floor(Math.random() * 6);
@@ -20,16 +21,16 @@ function getConditions(lastSession) {
         var whichObjectC = Math.floor(Math.random() * 6);
         whichObjects = [whichObjectG, whichObjectI, whichObjectS, whichObjectC];
     } else {
-        startType = lastSession.conditions.startType;
+        startType = lastConditions.startType;
         startType++;
         if (startType > 3) {
             startType = 0;
         }
 
-        showStay = lastSession.conditions.showStay;
+        showStay = lastConditions.showStay;
 	//parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
-        whichObjects = lastSession.conditions.whichObjects;
+        whichObjects = lastConditions.whichObjects;
         for (var i = 0; i < 4; i++) {
             whichObjects[i]++;
             if (whichObjects[i] > 5) {
@@ -207,8 +208,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
             allEvents.push(e);
-            var fname = 'sbs_' + e.compType + '_' + e.outcomeL + '_' + e.outcomeR +
-                    '_' + e.camera + '_' + e.background + '_' + e.flip;
+            var fname = `sbs_${e.compType}_${e.outcomeL}_${e.outcomeR}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
             filenames.push(fname);
         }
     }
@@ -216,10 +216,11 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     return [allEvents, filenames];
 }
 
-function toFrames(filenames) {
+function toFrames(frameId, filenames) {
     return filenames.map((fname) => {
 	return {
-	    kind: 'exp-video',
+	    kind: 'exp-video-record',
+	    id: `${frameId}`,
 	    autoplay: true,
 	    sources: [
 		{
@@ -231,7 +232,7 @@ function toFrames(filenames) {
                     "type": "video/ogg"
                 },
                 {
-                    "src": `${fname}.m4v`,
+                    "src": `${fname}.mp4`,
                     "type": "video/mp4"
                 }
 	    ]
@@ -239,14 +240,14 @@ function toFrames(filenames) {
     });
 }
 
-var randomizer = function(frame, pastSessions, resolveFrame) {
+var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
     pastSessions = pastSessions.filter(function(session) {
         return session.get('conditions');
     });
     pastSessions.sort(function(a, b) {
         return a.get('createdOn') > b.get('createdOn') ? -1: 1;
     });
-    var conditions = getConditions(pastSessions[0]);
+    var conditions = getConditions(pastSessions[0], frame.id);
     conditions.NPERTYPE = 6;
     var {
 	startType,
@@ -255,9 +256,13 @@ var randomizer = function(frame, pastSessions, resolveFrame) {
 	NPERTYPE
     } = conditions;
 
-    var [allEvents, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
+    var [, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
     
     // allEvents and filenames are a function of conditions (no need to store)
-    return [toFrames(filenames, allEvents), conditions];
+    var resolved = [];
+    toFrames(frameId, filenames).forEach((frame) => {
+	return resolved.push(...resolveFrame(null, frame)[0]);
+    });
+    return [resolved, conditions];
 };
 export default randomizer;

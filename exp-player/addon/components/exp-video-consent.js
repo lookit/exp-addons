@@ -5,6 +5,7 @@ import layout from '../templates/components/exp-video-consent';
 export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Em.inject.service(),
+    scroller: Em.inject.service(),
 
     videoId: function() {
         return [
@@ -29,6 +30,7 @@ export default ExpFrameBaseComponent.extend({
     },
     actions: {
         record() {
+	    this.get('scroller').scrollVertical(Em.$('.recorder'));
             this.get('videoRecorder').record();
         },
         finish() {
