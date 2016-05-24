@@ -75,12 +75,8 @@ const defaultSchema = {
         properties: {
             childMood: {
                 type: "object",
-                title: "Please rate how much each of these words describes your child right now:",
+                title: "Please rate how much each of these words describes your CHILD right now:",
                 properties: {
-                    silly: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
                     happy: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
@@ -101,10 +97,6 @@ const defaultSchema = {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
-                    focused: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
                     hungry: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
@@ -117,21 +109,13 @@ const defaultSchema = {
             },
             parentMood: {
                 type: "object",
-                title: "Please rate how much each of these words describes you right now:",
+                title: "Please rate how much each of these words describes YOU right now:",
                 properties: {
                     happy: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
                     energetic: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    calm: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    frustrated: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
@@ -152,12 +136,6 @@ const defaultSchema = {
             childMood: {
                 helper: "1 (not at all) to 7 (very much)",
                 fields: {
-                    silly: {
-                        label: "Silly",
-                        type: "radio",
-                        vertical: false,
-                        above: true
-                    },
                     happy: {
                         label: "Happy",
                         type: "radio",
@@ -180,11 +158,6 @@ const defaultSchema = {
                     },
                     tired: {
                         label: "Tired",
-                        type: "radio",
-                        vertical: false
-                    },
-                    focused: {
-                        label: "Focused",
                         type: "radio",
                         vertical: false
                     },
@@ -214,23 +187,13 @@ const defaultSchema = {
                         type: "radio",
                         vertical: false
                     },
-                    calm: {
-                        label: "Calm",
-                        type: "radio",
-                        vertical: false
-                    },
-                    frustrated: {
-                        label: "Frustrated",
-                        type: "radio",
-                        vertical: false
-                    },
                     tired: {
                         label: "Tired",
                         type: "radio",
                         vertical: false
                     },
                     stressed: {
-                        label: "Stressed",
+                        label: "Stressed out",
                         type: "radio",
                         vertical: false
                     }
@@ -289,7 +252,8 @@ const childStatsSchema = {
             childStats: {
                 fields: {
                     wakeup: {
-                        label: "When did your child last wake up from sleep or a nap?",
+                        helper: "hours:minutes",
+                        label: "About how long ago did your child last wake up from sleep or a nap?",
                         picker: {
                             format: "HH:mm"
                         }
@@ -297,20 +261,22 @@ const childStatsSchema = {
                     schedule: {
                         fields: {
                             time: {
-                                label: "If your child has a usual nap schedule, when is he due for his/her next nap?",
+                                helper: "hours:minutes",
+                                label: "If your child has a usual nap schedule, about how much longer until his/her next nap (or bedtime)?",
                                 picker: {
                                     format: "HH:mm"
                                 }
                             },
                             other: {
-                                type: "radio",
+                                type: "checkbox",
                                 removeDefaultNone: true,
                                 vertical: false
                             }
                         }
                     },
                     eat: {
-                        label: "When did your child last eat or drink?",
+                        helper: "hours:minutes",
+                        label: "About how long ago did your child last eat or drink?",
                         picker: {
                             format: "HH:mm"
                         }
@@ -386,7 +352,7 @@ export default ExpFrameBaseComponent.extend({
                     update: {
                         title: 'Continue',
                         type: 'button',
-                        styles: 'btn btn-default'
+                        styles: 'btn btn-success'
                     }
                 }
             };
