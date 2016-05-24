@@ -57,6 +57,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                     items: {
                         type: 'object',
                         properties: {
+                            imgSrc: {type: 'string', default: ''},
                             sources: {
                                 type: 'array',
                                 default: [],
@@ -71,7 +72,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                             },
                             caption: {type: 'string'}
                         },
-                        required: ['sources', 'captions']
+                        required: ['sources', 'caption']
                     },
                     default: []
                 },

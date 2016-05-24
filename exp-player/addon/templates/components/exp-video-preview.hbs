@@ -16,12 +16,20 @@
 
 <div class="row">
     <div class="col-xs-12 col-md-8 text-center">
-        <video controls style="width: 100%;">
+        {{#if currentVideo.imgSrc}}
+
+            <img class="exp-physics-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}}>
+
+        {{else}}
+
+        <video class="exp-physics-preview-video" controls style="width: 100%;">
             {{#each currentVideo.sources as |source|}}
                 <source src={{source.src}} type={{source.type}}>
             {{/each}}
             Your browser does not support the video tag.
         </video>
+
+        {{/if}}
     </div>
 </div>
 
