@@ -1,7 +1,7 @@
 .radio.block, .checkbox {
     margin-top: 0px;
     margin-bottom: 0px;
-    padding-left: 40px;
+    padding-left: 20px;
 }
 
 .alpaca-field-object {
@@ -33,4 +33,28 @@
     .dropdown-menu {
         bottom: -245px !important;
     }
+}
+
+// Arrange for possible left/right labels for radio groups
+.exp-physics-mood .alpaca-field-radio span {
+    text-align: center;
+    padding: 0px;
+}
+.exp-physics-mood .alpaca-field-radio span:first-child {
+    text-align: right;
+}
+.exp-physics-mood .alpaca-field-radio span:last-of-type {
+    text-align: left;
+}
+
+.exp-physics-mood .alpaca-control-label.radio-label {
+    font-weight: normal;
+}
+
+.exp-physics-mood .alpaca-field-time.exp-physics-time-entry > input {
+    max-width: 200px;
+}
+
+.exp-physics-mood .btn-success {
+    margin-bottom: 50px;
 }
