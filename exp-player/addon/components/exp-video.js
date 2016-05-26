@@ -36,11 +36,33 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
                     type: 'string',
                     description: 'List of objects specifying video src and type',
                     default: []
-                }
+                },
+                introSources: {
+                    type: 'string',
+                    description: 'List of objects specifying intro video src and type',
+                    default: []
+                },
             }
         },
         data: {
-            // This video does not explicitly capture any parameters from the user
+            // This video does not explicitly capture any parameters from the userdata:
+            type: 'object',
+            properties: {  // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
+                doingIntro: {
+                    type: 'boolean',
+                    default: true
+                }
+            },
+            required: ['doingIntro']
+        }
+    },
+    actions: {
+        playNext: function() {
+            if (this.get('doingIntro')) {
+                this.set('doingIntro', false);
+            } else {
+                this.get('next')();
+            }
         }
     }
 });
