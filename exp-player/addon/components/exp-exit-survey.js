@@ -5,21 +5,35 @@ import moment from 'moment';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-exit-survey';
 
+
+
 const defaultSchema = {
     schema: {
         type: "object",
         properties: {
             birthdate: {
-                title: "Please confirm your child's birthdate: *"
+                title: "Please confirm your child's birthdate:",
+                required: true
+            },
+            databrary: {
+                type: "string",
+                title: "Would you like to share your video and other data from this session with authorized users of the secure data library Databrary?",
+                enum: ['Yes', 'No'],
+                required: true
+            },
+            privacy: {
+                type: "string",
+                title: "Use of video clips and images:",
+                enum: ['Private', 'Scientific', 'Publicity'],
+                required: true
+            },
+            withdraw: {
+                type: "boolean",
+                title: "Withdrawal of video data"
             },
             feedback: {
                 type:"string",
                 title:"Your feedback:"
-            },
-            privacy: {
-                type: "string",
-                title: "Select the privacy level for the video of your participation: *",
-                enum: ['Publicity and educational use (video may be publicity or educational purposes online or in the press in addition to for research purposes)', 'Scientific use only', 'In-lab use only', 'WITHDRAW your data from this session']
             }
         }
     },
@@ -30,21 +44,59 @@ const defaultSchema = {
                 manualEntry: false,
                 validator: "required-field",
                 message: "Please provide a complete and valid birthday.",
-                helper: "We ask again just to check for typos during registration or people accidentally selecting a different child at the start of the study."
+                helper: "We ask again just to check for typos during registration or accidental selection of a different child at the start of the study.",
+                fieldClass: 'exp-physics-time-entry'
             },
-            feedback: {
-                type: "textarea",
-                rows: 5,
-                cols: 40,
-                helper: "Do you have any ideas about how to make this study easier or more fun for families? Did you experience any technical challenges?"
+            databrary: {
+                type: "radio",
+                hideNone: true,
+                events: {
+                    change: function(e) {
+                    console.log(this);
+                        console.log('postrender');
+                        switch (this.data) {
+                            case "Yes":
+                                $('#scientistDescription').html('authorized scientists (researchers working on the Lookit project and authorized Databrary users).');
+                                break;
+                            case "No":
+                                $('#scientistDescription').html('researchers working on the Lookit project.');
+                                break;
+                            default:
+                                $('#scientistDescription').html('authorized scientists.');
+                        }
+                    }
+                },
+                message: "Please select whether to share your data.",
+                helper: "Only authorized researchers will have access to information in the library. Researchers who are granted access must agree to maintain confidentiality and not use information for commercial purposes. Data sharing will lead to faster progress in research on human development and behavior. If you have any questions about the data-sharing library, please visit <a target='_blank' href='https://nyu.databrary.org/'> Databrary </a> or email ethics@databrary.org."
             },
             privacy: {
                 type: "radio",
-                removeDefaultNone: true,
-                validator: "required-field",
-                message: "Please select a privacy level for your video."
+                hideNone: true,
+                message: "Please select a privacy level for your video.",
+                optionLabels: ['<strong>Private:</strong> Video may only be viewed by <span id="scientistDescription">authorized scientists.</span>', '<strong>Scientific and educational:</strong> Video may be shared for scientific or educational purposes. For example, we might show a video clip in a talk at a scientific conference or an undergraduate class about cognitive development, or include an image or video in a scientific paper. In some circumstances, video or images may be available online, for instance as supplemental material in a scientific paper.', "<strong>Publicity:</strong> Please select this option if you'd be excited about seeing your child featured on the Lookit website or in a news article about this study! Your video may be shared for publicity as well as scientific and educational purposes; it will never be used for commercial purposes. Video clips shared may be available online to the general public."],
+                sort: function(a, b) { // This is an absurd hack because
+                        // I can't get false to work...
+                            var vals = ['Private', 'Scientific', 'Publicity']
+                    if (vals.indexOf(a.value) > vals.indexOf(b.value)) {
+                        return 1;
+                    } else if (vals.indexOf(a.value) < vals.indexOf(b.value)) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            },
+            withdraw: {
+                type: "checkbox",
+                rightLabel: "Every video helps us, even if something went wrong! However, if you need your video deleted (your spouse was discussing state secrets in the background, etc.), check here to completely withdraw your video data from this session from the study. Only your consent video will be retained and it may only be viewed by Lookit researchers; other video will be deleted without viewing."
+            },
+            feedback: {
+                type: "textarea",
+                rows: 3,
+                cols: 40,
+                helper: "Do you have any ideas about how to make this study easier or more fun for families? Did you experience any technical challenges?"
             }
-        }
+        },
+        hideInitValidationError: true
     }
 };
 const emailOptOutSchema = {
@@ -131,7 +183,7 @@ export default ExpFrameBaseComponent.extend({
                     update: {
                         title: 'Submit',
                         type: 'button',
-                        styles: 'btn btn-default'
+                        styles: 'btn btn-success'
                     }
                 }
             };

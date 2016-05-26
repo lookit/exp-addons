@@ -1,10 +1,12 @@
 <div class="row">
-  <div class="col-md-12">
-    <h4>{{title}}</h4>
+  <div class="col-md-8 exp-physics-exit-survey">
+
     {{#if section1}}
+    <h4>{{title1}}</h4>
       <p>{{exitThankYou}}</p>
       {{dynamic-form schema=formSchema formActions=formActions}}
     {{else}}
+        <h4>{{title2}}</h4>
       <p>Thanks! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
       <div class="progress">
         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{progressValue}}
