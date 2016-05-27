@@ -9,10 +9,9 @@ export default Ember.Mixin.create({
     displayFullscreen: false,  // Whether to show this element in fullscreen mode by default
     isFullscreen: false,  // Keep track of state
 
-    didRender: function() { // TODO: Find better event hook
-        this._super(arguments);
-        this.send('showFullscreen');
-    },
+    // Note: to avoid handler being called repeatedly (analogous to bubbling
+    // up?) I'm just having components that extend FullScreen call
+    // showFullscreen themselves. --kim
 
     checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
         var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
@@ -39,13 +38,15 @@ export default Ember.Mixin.create({
 
     actions: {
         showFullscreen: function () {
+
+            if (!this.get('displayFullscreen')) {
+                this.send('exitFullscreen');
+                return;
+            }
+
             var elementId = this.get('fullScreenElementId');
             if (!elementId) {
                 throw Error('Must specify element Id to make fullscreen');
-            }
-
-            if (!this.get('displayFullscreen')) {
-                return;
             }
 
             var selector = Ember.$(`#${elementId}`);
@@ -63,6 +64,24 @@ export default Ember.Mixin.create({
             }
 
             Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector));
+        },
+
+        exitFullscreen: function () {
+            console.log('exiting');
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.msExitFullscreen) {
+              document.msExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+              document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            }
+            this.set('isFullscreen', false);
+            var elementId = this.get('fullScreenElementId');
+            var selector = Ember.$(`#${elementId}`);
+            selector.removeClass('player-fullscreen');
         }
+
     }
 });

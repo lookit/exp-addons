@@ -207,9 +207,13 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     for (var nEvents = 0; nEvents < NPERTYPE; nEvents++) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
-            allEvents.push(e);
+
             var fname = `sbs_${e.compType}_${e.outcomeL}_${e.outcomeR}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
             filenames.push(fname);
+            var altName = `sbs_${e.compType}_${e.outcomeR}_${e.outcomeL}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
+            e.fname = fname;
+            e.altName = altName;
+            allEvents.push(e);
         }
     }
 
@@ -263,11 +267,11 @@ function parse_name(fname) {
 
 }
 
-function toFrames(frameId, filenames) {
-    return filenames.map((fname) => {
-        var features = parse_name(fname);
+function toFrames(frameId, eventVideos) {
+    return eventVideos.map((e) => {
+        var features = parse_name(e.fname);
         return {
-            kind: 'exp-video',
+            kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
             introSources: [
@@ -280,13 +284,33 @@ function toFrames(frameId, filenames) {
                         "type": "video/mp4"
                     }
             ],
-            sources: [
+            attnSources: [
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${fname}.webm`,
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.webm',
                         "type": "video/webm"
                     },
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${fname}.mp4`,
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.mp4',
+                        "type": "video/mp4"
+                    }
+            ],
+            sources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.webm`,
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.mp4`,
+                        "type": "video/mp4"
+                    }
+            ],
+            altSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.webm`,
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.mp4`,
                         "type": "video/mp4"
                     }
             ]
@@ -310,11 +334,14 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 	NPERTYPE
     } = conditions;
 
-    var [, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
+    var [eventVideos, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
+
+    // TODO: remove (for testing only--limit number of videos)
+    eventVideos = eventVideos.slice(0,4);
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
-    toFrames(frameId, filenames).forEach((frame) => {
+    toFrames(frameId, eventVideos).forEach((frame) => {
 	return resolved.push(...resolveFrame(null, frame)[0]);
     });
     return [resolved, conditions];

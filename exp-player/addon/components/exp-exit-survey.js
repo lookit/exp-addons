@@ -2,8 +2,11 @@ import Ember from 'ember';
 
 import moment from 'moment';
 
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-exit-survey';
+
+import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import FullScreen from '../mixins/full-screen';
+
 
 
 
@@ -125,9 +128,15 @@ const emailOptOutSchema = {
     }
 };
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(FullScreen, {
     layout: layout,
     type: 'exp-exit-survey',
+    displayFullscreen: false,
+    fullScreenElementId: 'experiment-player',
+    didRender() { // leave fullscreen when starting exit survey
+        this._super(...arguments);
+        this.send('exitFullscreen');
+    },
     meta: {
         name: 'ExpExitSurvey',
         description: 'Exit survey for Lookit.',
