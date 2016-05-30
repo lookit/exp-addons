@@ -10,9 +10,11 @@
   <br>
   </div>
 </div>
-<div class="row exp-controls">
-  <div class="col-md-8">
-    <button class="btn btn-default pull-left" {{ action 'next' }} > I'd like to preview the videos </button>
+
+<div class="row exp-controls col-md-8">
+    <button class="btn btn-default pull-left" {{ action 'previous' }} > Previous </button>
+    <button class="btn btn-primary pull-right" {{ action 'next' }} > I'd like to preview the videos </button>
+</div>
+<div class="exp-controls col-md-8 row">
     <button class="btn btn-success pull-right" {{ action 'skipone' }} > Skip preview </button>
-  </div>
 </div>

@@ -348,10 +348,15 @@ export default ExpFrameBaseComponent.extend({
             var newOptions = this.get('childStatsForm.options');
             newOptions.form = {
                 buttons: {
+                    prev: {
+                        title: 'Previous',
+                        type: 'button',
+                        styles: 'btn btn-default pull-left'
+                    },
                     update: {
                         title: 'Continue',
                         type: 'button',
-                        styles: 'btn btn-success'
+                        styles: 'btn btn-success pull-right'
                     }
                 }
             };
@@ -383,6 +388,11 @@ export default ExpFrameBaseComponent.extend({
                 root.set('formData', moodObject);
                 root.actions.next.apply(root);
 
+            },
+
+            prev: function () { // skip over preview section entirely on 'back'
+                root.get('previous')();
+                root.get('previous')();
             }
         };
     })
