@@ -50,7 +50,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 title: {
                     type: 'string',
-                    default: 'Notice of Consent'
+                    default: 'Consent to participate in behavioral research: <br> Inference and induction study'
                 },
                 blocks: {
                     type: 'array',
