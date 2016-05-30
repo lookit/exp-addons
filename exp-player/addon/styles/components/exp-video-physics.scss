@@ -33,3 +33,6 @@
     vertical-align: middle;
 }
 
+video.player-fullscreen::-webkit-media-controls {
+  display:none !important;
+}
