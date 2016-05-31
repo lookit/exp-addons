@@ -1,42 +1,43 @@
 <div class="row video-consent-main">
-  <div class="col-md-6">
-    <p>If you'd like to participate, please read through the following information and then record your consent statement.</p>
-    <div class="well">
+  <div class="col-md-8">
+    <div class="well video-consent-doc">
       <center>
-        <span class="exp-text-heavy exp-text-large">
-          {{title}}
+        <span class="exp-text-medium">
+          {{{title}}}
         </span>
       </center>
       <br>
       {{#each blocks as |prompt|}}
-      {{exp-text-block block=prompt}}
+        {{exp-text-block block=prompt}}
       {{/each}}
     </div>
   </div>
-  <div class="col-md-6">
+
+
+  <div class="col-md-4">
     <blockquote>
       <p>
-        If you're ready to participate, please make a consent recording so we can get started! Press "record" and then read the statement below out loud.
+        If you're ready to participate, please make a consent recording to get started! Press "record" and then read the statement below (in green) out loud.
       </p>
     </blockquote>
-    <div class="well">
+    <div class="well video-consent-prompt">
       <span class="breaklines exp-video-consent-prompt">{{prompt}}</span>
     </div>
-    <div class="row" style="height: 70vh; margin: 10px">
-      <div class="recorder col-xs-12 col-md-10 col-md-offset-1" style="height:100%"></div>
+
+    <div class="row recorder-container" style="height: 30vh; margin: 5px; ">
+      <div class="recorder col-xs-12 col-md-12" style="height:100%"></div>
     </div>
-  </div>
-</div>
-<div class="row exp-controls video-consent-controls">
-  <div class="col-xs-offset-1 col-xs-10">
-    <div class="btn-group btn-group-justified" role="group">
-      <div class="btn-group" role="group">
-        {{#if videoRecorder.recording}}
-          <button class="btn btn-default" {{ action 'finish' }}>Finish</button>
-        {{else}}
-          <button class="btn btn-default" {{ action 'record' }}>Record</button>
-        {{/if}}
-      </div>
+
+      <div class="row video-consent-controls">
+    {{#if videoRecorder.recording}}
+      <button class="btn btn-success pull-right" {{ action 'finish' }}>Finish</button>
+    {{else}}
+      <button class="btn btn-primary pull-left" {{ action 'record' }}>Record</button>
+    {{/if}}
     </div>
+
   </div>
+
+
 </div>
+

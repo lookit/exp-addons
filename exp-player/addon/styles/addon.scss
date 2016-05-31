@@ -5,6 +5,10 @@
 @import "components/exp-mood-questionnaire";
 @import "components/exit-warning";
 @import "components/exp-physics-preview-exp";
+@import "components/exp-physics-preview";
+@import "components/exp-physics-pre-video";
+@import "components/exp-exit-survey";
+@import "components/exp-video-physics";
 
 .exp-text-large {
     font-size: 2em;
@@ -18,4 +22,16 @@
 
 .breaklines {
     white-space: pre-wrap
+}
+
+div.col-md-8 {
+    max-width: 1200px;
+}
+
+.btn {
+    margin-bottom: 15px;
+}
+
+.exp-controls {
+    margin: 5px;
 }

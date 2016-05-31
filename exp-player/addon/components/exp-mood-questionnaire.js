@@ -17,7 +17,6 @@ const modifiedContainer = `<script type="text/x-handlebars-template">
         </p>
         {{/each}}
         {{/if}}
-
         {{#container}}{{/container}}
     </div>
 </script>`;
@@ -40,11 +39,15 @@ const modifiedControl = `<script type="text/x-handlebars-template">
         <div class="row body">
             {{#if options.label}}
             <span class="col-xs-2 left-side">
-                <label class="{{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>
+                <label class="radio-label {{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label}}}</label>
             </span>
             {{/if}}
-            <span class="col-xs-10 right-side">
+            <span class="col-xs-6 right-side">
                 {{#control}}{{/control}}
+            </span>
+            <span class="col-xs-10 right-side">
+                <label class="radio-label {{#if options.labelClass}}{{options.labelClass}}{{/if}} alpaca-control-label" for="{{id}}">{{{options.label2}}}</label>
+            </span>
             </span>
         </div>
 
@@ -75,9 +78,13 @@ const defaultSchema = {
         properties: {
             childMood: {
                 type: "object",
-                title: "Please rate how much each of these words describes your child right now:",
+                title: "How is your CHILD feeling right now?",
                 properties: {
-                    silly: {
+                    rested: {
+                        type: "string",
+                        enum: ["1", "2", "3", "4", "5", "6", "7"]
+                    },
+                    healthy: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
@@ -85,31 +92,7 @@ const defaultSchema = {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
-                    energetic: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    calm: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    fussy: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    tired: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    focused: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    hungry: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    sick: {
+                    active: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     }
@@ -117,29 +100,17 @@ const defaultSchema = {
             },
             parentMood: {
                 type: "object",
-                title: "Please rate how much each of these words describes you right now:",
+                title: "How are YOU feeling right now?",
                 properties: {
-                    happy: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
                     energetic: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
-                    calm: {
+                    ontopofstuff: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     },
-                    frustrated: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    tired: {
-                        type: "string",
-                        enum: ["1", "2", "3", "4", "5", "6", "7"]
-                    },
-                    stressed: {
+                    happy: {
                         type: "string",
                         enum: ["1", "2", "3", "4", "5", "6", "7"]
                     }
@@ -150,93 +121,62 @@ const defaultSchema = {
     options: {
         fields: {
             childMood: {
-                helper: "1 (not at all) to 7 (very much)",
+                //helper: "1 (not at all) to 7 (very much)",
                 fields: {
-                    silly: {
-                        label: "Silly",
+                    rested: {
+                        label: "Tired",
+                        label2: "Rested",
                         type: "radio",
                         vertical: false,
-                        above: true
+                        above: false,
+                        focus: true
+                    },
+                    healthy: {
+                        label: "Sick",
+                        label2: "Healthy",
+                        type: "radio",
+                        vertical: false
                     },
                     happy: {
-                        label: "Happy",
-                        type: "radio",
-                        vertical: false
-                    },
-                    energetic: {
-                        label: "Energetic",
-                        type: "radio",
-                        vertical: false
-                    },
-                    calm: {
-                        label: "Calm",
-                        type: "radio",
-                        vertical: false
-                    },
-                    fussy: {
                         label: "Fussy",
+                        label2: "Happy",
                         type: "radio",
                         vertical: false
                     },
-                    tired: {
-                        label: "Tired",
-                        type: "radio",
-                        vertical: false
-                    },
-                    focused: {
-                        label: "Focused",
-                        type: "radio",
-                        vertical: false
-                    },
-                    hungry: {
-                        label: "Hungry",
-                        type: "radio",
-                        vertical: false
-                    },
-                    sick: {
-                        label: "Sick",
+                    active: {
+                        label: "Calm",
+                        label2: "Active",
                         type: "radio",
                         vertical: false
                     }
                 }
             },
             parentMood: {
-                helper: "1 (not at all) to 7 (very much)",
+                //helper: "1 (not at all) to 7 (very much)",
                 fields: {
-                    happy: {
-                        label: "Happy",
+                    energetic: {
+                        label: "Tired",
+                        label2: "Energetic",
                         type: "radio",
                         vertical: false,
-                        above: true
+                        above: false // to show 1-7 labels above radio buttons
                     },
-                    energetic: {
-                        label: "Energetic",
+                    ontopofstuff: {
+                        label: "Overwhelmed",
+                        label2: "On top of things",
                         type: "radio",
                         vertical: false
                     },
-                    calm: {
-                        label: "Calm",
-                        type: "radio",
-                        vertical: false
-                    },
-                    frustrated: {
-                        label: "Frustrated",
-                        type: "radio",
-                        vertical: false
-                    },
-                    tired: {
-                        label: "Tired",
-                        type: "radio",
-                        vertical: false
-                    },
-                    stressed: {
-                        label: "Stressed",
+                    happy: {
+                        label: "Upset",
+                        label2: "Happy",
                         type: "radio",
                         vertical: false
                     }
                 }
             }
-        }
+        },
+        hideInitValidationError: true,
     },
     view: {
         parent: "bootstrap-edit",
@@ -257,31 +197,36 @@ const childStatsSchema = {
                 properties: {
                     wakeup: {
                         type: "string",
-                        format: "datetime"
+                        format: "time",
+                        required: true
                     },
-                    schedule: {
+                    hasSchedule: {
                         type: "object",
-                        properties: {
-                            time: {
-                                type: "string",
-                                format: "datetime"
-                            },
-                            other: {
-                                type: "string",
-                                enum: ["No usual nap schedule ", "Already due for a nap "]
-                            }
-
-                        }
+                        type: "string",
+                        enum: ["Yes", "Yes, and he/she is already due for a nap", "No"],
+                        required: true
+                    },
+                    nextNap: {
+                        type: "string",
+                        format: "time",
+                        dependencies: "hasSchedule",
+                        required: true
                     },
                     eat: {
                         type: "string",
-                        format: "datetime"
+                        format: "time",
+                        required: true
                     },
                     previousActivities: {
-                        type: "string"
+                        type: "string",
+                        required: true,
+                        minLength: 5
                     }
                 }
             }
+        },
+        dependencies: {
+            "time": ["hasSchedule"]
         }
     },
     options: {
@@ -289,40 +234,60 @@ const childStatsSchema = {
             childStats: {
                 fields: {
                     wakeup: {
-                        label: "When did your child last wake up from sleep or a nap?",
+                        //helper: "hours:minutes",
+                        placeholder: "hours:minutes",
+                        label: "About how long ago did your child last wake up from sleep or a nap?",
                         picker: {
                             format: "HH:mm"
-                        }
+                        },
+                        fieldClass: "exp-physics-time-entry",
+                        validate: true
                     },
-                    schedule: {
-                        fields: {
-                            time: {
-                                label: "If your child has a usual nap schedule, when is he due for his/her next nap?",
-                                picker: {
-                                    format: "HH:mm"
-                                }
-                            },
-                            other: {
-                                type: "radio",
-                                removeDefaultNone: true,
-                                vertical: false
-                            }
-                        }
+
+                    hasSchedule: {
+                        label: "Does your child have a usual nap schedule?",
+                        type: "radio",
+                        data: "Yes",
+                        removeDefaultNone: true,
+                        sort: false,
+                        vertical: true
                     },
+
+                    nextNap: {
+                        label: "About how much longer until his/her next nap (or bedtime?",
+                        //helper: "hours:minutes",
+                        placeholder: "hours:minutes",
+                        picker: {
+                            format: "HH:mm"
+                        },
+                        fieldClass: "exp-physics-time-entry",
+                        dependencies: {
+                            hasSchedule: "Yes"
+                        },
+                        validate: true
+                    },
+
                     eat: {
-                        label: "When did your child last eat or drink?",
+                        //helper: "hours:minutes",
+                        placeholder: "hours:minutes",
+                        label: "About how long ago did your child last eat or drink?",
                         picker: {
                             format: "HH:mm"
-                        }
+                        },
+                        fieldClass: "exp-physics-time-entry",
+                        validate: true
                     },
                     previousActivities: {
                         label: "What was your child doing before this?",
-                        helper: "e.g., having lunch, playing with his brother outside, going to the store with me",
-                        type: "text"
+                        placeholder: "examples: having lunch, playing outside, going to the store with me",
+                        type: "text",
+                        disallowOnlyEmptySpaces: true,
+                        validate: true
                     }
                 }
             }
-        }
+        },
+        hideInitValidationError: true
     },
     view: "bootstrap-edit"
 };
@@ -383,10 +348,15 @@ export default ExpFrameBaseComponent.extend({
             var newOptions = this.get('childStatsForm.options');
             newOptions.form = {
                 buttons: {
+                    prev: {
+                        title: 'Previous',
+                        type: 'button',
+                        styles: 'btn btn-default pull-left'
+                    },
                     update: {
                         title: 'Continue',
                         type: 'button',
-                        styles: 'btn btn-default'
+                        styles: 'btn btn-success pull-right'
                     }
                 }
             };
@@ -407,6 +377,7 @@ export default ExpFrameBaseComponent.extend({
         var root = this;
         return {
             update: function () {
+
                 var moodData = Ember.$(Ember.$('.exp-mood-questionnaire').closest('form')[0]).serializeArray();
                 var moodObject = {};
                 moodData.forEach(function(currentObj) {
@@ -416,6 +387,12 @@ export default ExpFrameBaseComponent.extend({
                 Ember.merge(moodObject, this.getValue().childStats);
                 root.set('formData', moodObject);
                 root.actions.next.apply(root);
+
+            },
+
+            prev: function () { // skip over preview section entirely on 'back'
+                root.get('previous')();
+                root.get('previous')();
             }
         };
     })

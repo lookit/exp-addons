@@ -77,7 +77,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["stay", "near", "next"]
     ];
     var comparisonsC = [
-        ["same", "A", "A"],
+        ["same", "A", "B"],
         ["salience", "interesting", "boring"]
     ];
 
@@ -118,8 +118,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     cameraAngles['reverse'] = ["c1", "c2"];
     cameraAngles['fall'] = ["c1"];
     cameraAngles['stay'] = ["c1"];
-    cameraAngles['same'] = ["c1", "c2"];
-    cameraAngles['salience'] = ["c1", "c2"];
+    cameraAngles['same'] = ["c1"];
+    cameraAngles['salience'] = ["c1"];
 
     var backgrounds = {};
     backgrounds['table'] = ["b1", "b2"];
@@ -129,8 +129,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     backgrounds['reverse'] = ["b1"];
     backgrounds['fall'] = ["b1", "b2"];
     backgrounds['stay'] = ["b1", "b2"];
-    backgrounds['same'] = ["b1", "b2"];
-    backgrounds['salience'] = ["b1", "b2"];
+    backgrounds['same'] = ["b1"];
+    backgrounds['salience'] = ["b1"];
 
     var flips = {};
     flips['table'] = ["NN"];
@@ -207,36 +207,115 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     for (var nEvents = 0; nEvents < NPERTYPE; nEvents++) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
-            allEvents.push(e);
+
             var fname = `sbs_${e.compType}_${e.outcomeL}_${e.outcomeR}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
             filenames.push(fname);
+            var altName = `sbs_${e.compType}_${e.outcomeR}_${e.outcomeL}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
+            e.fname = fname;
+            e.altName = altName;
+            allEvents.push(e);
         }
     }
 
     return [allEvents, filenames];
 }
 
-function toFrames(frameId, filenames) {
-    return filenames.map((fname) => {
-	return {
-	    kind: 'exp-video-record',
-	    id: `${frameId}`,
-	    autoplay: true,
-	    sources: [
-		{
-                    "src": `${fname}.webm`,
-                    "type": "video/webm"
-                },
-                {
-                    "src": `${fname}.ogg`,
-                    "type": "video/ogg"
-                },
-                {
-                    "src": `${fname}.mp4`,
-                    "type": "video/mp4"
-                }
-	    ]
-	};
+function parse_name(fname) {
+    var pieces = fname.split('_');
+    var features = {};
+
+
+    features.eventType = pieces[1];
+    features.leftEvent = pieces[2];
+    features.rightEvent = pieces[3];
+    features.object = pieces[4];
+    features.camera = pieces[5];
+    features.bg = pieces[6];
+    var variantExt = pieces[7];
+    features.variant = (variantExt.split('.'))[0];
+
+    //quick hack for dummy clips which have wrong names for some objects
+    // (so we can get a correct intro name)
+    switch (features.object) {
+        case "A":
+            features.object = "box";
+            break;
+        case "B":
+            features.object = "eraser";
+            break;
+        case "C":
+            features.object = "funnel";
+            break;
+        case "D":
+            features.object = "scissors";
+            break;
+        case "E":
+            features.object = "spoon";
+            break;
+        case "F":
+            features.object = "wrench";
+            break;
+        case "soap":
+            features.object = "lotion";
+            break;
+        case "spraybottle":
+            features.object = "spray";
+            break;
+    }
+
+    return features;
+
+}
+
+function toFrames(frameId, eventVideos) {
+    return eventVideos.map((e) => {
+        var features = parse_name(e.fname);
+        return {
+            kind: 'exp-video-physics',
+            id: `${frameId}`,
+            autoplay: true,
+            testLength: 5, // TODO: change to 20s for actual testing.
+            introSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_' + features.object + '.webm',
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_' + features.object + '.mp4',
+                        "type": "video/mp4"
+                    }
+            ],
+            attnSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.webm',
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.mp4',
+                        "type": "video/mp4"
+                    }
+            ],
+            sources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.webm`,
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.mp4`,
+                        "type": "video/mp4"
+                    }
+            ],
+            altSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.webm`,
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.mp4`,
+                        "type": "video/mp4"
+                    }
+            ]
+        };
     });
 }
 
@@ -256,11 +335,14 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 	NPERTYPE
     } = conditions;
 
-    var [, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
-    
+    var [eventVideos, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
+
+    // TODO: remove (for testing only--limit number of videos)
+    eventVideos = eventVideos.slice(0,2);
+
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
-    toFrames(frameId, filenames).forEach((frame) => {
+    toFrames(frameId, eventVideos).forEach((frame) => {
 	return resolved.push(...resolveFrame(null, frame)[0]);
     });
     return [resolved, conditions];

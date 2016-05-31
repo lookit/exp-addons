@@ -34,7 +34,7 @@ export default ExpFrameBaseComponent.extend({
                 instructions: {
                   type: 'string',
                   description: 'Instructions to display to the user',
-                  default: 'Configure your video camera for the upcoming sections. Press next when you are finished'
+                  default: 'Please make sure your video camera is working and shows up below!'
                 }
             },
             required: ['id']
