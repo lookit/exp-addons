@@ -7,13 +7,26 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
     fullScreenElementId: null, // String containing the ID of the element to make full screen
     displayFullscreen: false,  // Whether to show this element in fullscreen mode by default
-    isFullscreen: false,  // Keep track of state
 
-    // Note: to avoid handler being called repeatedly (analogous to bubbling
+    fsButtonID: false, // ID for button element to show if user leaves FS
+
+    // Note: to avoid handler being called repeatedly (bubbling
     // up?) I'm just having components that extend FullScreen call
     // showFullscreen themselves. --kim
 
+    // These are ridiculous workarounds for rare but reproducible problems with
+    // updating the isFullscreen field...
+
+    counter: 0,
+
+    updatedIsFullscreen: Ember.computed('counter', function() {
+        return this.checkFullscreen();
+    }),
+
+    isFullscreen: false, // Keep track of state
+
     checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
+
         var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
             if (!!document[opt]) {return true;}
@@ -21,18 +34,28 @@ export default Ember.Mixin.create({
         return false;
     },
 
-    onFullscreen: function(elementSelector) {
+    onFullscreen: function(elementSelector, buttonSelector) {
+        this.set('counter', this.get('counter') + 1);
         if (this.get('isDestroyed')) {
             // Short-circuit if object is destroyed (eg we leave fullscreen because a video frame ended)
             return false;
         }
-        var isFullscreen = this.checkFullscreen();
 
-        this.set('isFullscreen', isFullscreen);
-        if (isFullscreen) {
+        var isFS = this.checkFullscreen();
+        this.set('isFullscreen', isFS);
+
+        if (isFS) {
+           // alert('went fs');
             elementSelector.addClass('player-fullscreen');
+            if (this.displayFullscreen && this.fsButtonID) {
+                buttonSelector.hide();
+            }
         } else {
+            //alert('left fs');
             elementSelector.removeClass('player-fullscreen');
+            if (this.displayFullscreen && this.fsButtonID) {
+                buttonSelector.show();
+            }
         }
     },
 
@@ -49,6 +72,9 @@ export default Ember.Mixin.create({
                 throw Error('Must specify element Id to make fullscreen');
             }
 
+            var buttonId = this.get('fsButtonID');
+            var buttonSel = Ember.$(`#${buttonId}`);
+
             var selector = Ember.$(`#${elementId}`);
             var elem = selector[0];
             if (elem.requestFullscreen) {
@@ -63,11 +89,14 @@ export default Ember.Mixin.create({
                 console.log('Your browser does not appear to support fullscreen rendering.');
             }
 
-            Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector));
+            //this.checkFullscreen();
+
+            Ember.$(document).off('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange');
+            Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector, buttonSel));
         },
 
         exitFullscreen: function () {
-            console.log('exiting');
+            console.log('exiting FS mode');
             if (document.exitFullscreen) {
               document.exitFullscreen();
             } else if (document.msExitFullscreen) {

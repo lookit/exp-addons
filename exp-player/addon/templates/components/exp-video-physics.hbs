@@ -1,9 +1,10 @@
-<div class="input-group exp-video-physics">
+<div class="input-group exp-video-physics row col-md-6 ">
     <video id="player-video"
            class="intro"
            autoplay={{autoplay}}
            poster="{{poster}}"
            onended={{ if autoforwardOnEnd (action 'playNext') }}
+           onplay={{action 'startVideo'}}
     >
 
         {{#if doingAttn}}
@@ -36,6 +37,23 @@
             {{/if}}
         {{/if}}
     </video>
+
+    {{#if doingAttn}}
+
+            <p  class="pause-instructions"> Study paused </p>
+
+            {{#if updatedIsFullscreen}}
+            <p  class="pause-instructions"> Press space to resume </p>
+            <p  class="pause-instructions"> (You'll have a moment to turn around again.) </p>
+            {{/if}}
+
+    {{/if}}
+
+
+</div>
+
+<div class="row col-md-6 exp-video-physics">
+<button class="btn btn-success" style="display:none;" id="fsButton" {{ action 'showFullscreen'}} > please return to fullscreen </button>
 </div>
 
 {{#unless autoforwardOnEnd}}

@@ -11,6 +11,15 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
 
     displayFullscreen: true,  // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
+    fsButtonID: 'fsButton',
+
+    onFullscreen: function () {
+        this._super(...arguments);
+        if (!this.checkFullscreen()) {
+            this.send('pause');
+        }
+    },
+
     meta: {
         name: 'Video player',
         description: 'Component that plays a video',
@@ -52,6 +61,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
                     description: 'List of objects specifying attention-grabber video src and type',
                     default: []
                 },
+                testLength: {
+                    type: 'number',
+                    description: 'Length of test videos in seconds',
+                    default: 20
+                }
             }
         },
         data: {
@@ -69,6 +83,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
                 useAlternate: {
                     type: 'boolean',
                     default: false
+                },
+                timeoutID: {
+                    type: 'number',
+                    default: 0
                 }
             },
             required: ['doingIntro', 'doingAttn', 'useAlternate']
@@ -76,14 +94,58 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
     },
     actions: {
         playNext: function() {
-            if (this.get('doingIntro')) {
+            window.clearTimeout(this.get('timeoutID'));
+            if (this.get('doingIntro')) { // moving to test video
                 this.set('doingIntro', false);
-                $('#player-video').addClass('test');
-                $('#player-video').removeClass('intro attn');
+                $('#player-video')
+                    .attr('loop', true)
+                    .addClass('test')
+                    .removeClass('intro attn');
             } else {
-                this.get('next')();
+                this.get('next')(); // moving to intro video
+                $('#player-video')
+                    .removeClass('attn test')
+                    .addClass('intro')
+                    .attr('loop', false);
+            }
+        },
+        startVideo: function () {
+            if (!this.get('doingIntro') && !this.get('doingAttn')) {
+                var emberObj = this;
+                var t = window.setTimeout(function(emb) {
+                    emb.send('playNext');
+                    }, emberObj.get('testLength')*1000, emberObj);
+                this.set('timeoutID', t);
+            }
+        },
+        pause: function () {
+            var movie = $('#player-video')[0];
+            var emberObj = this;
+            window.clearTimeout(this.get('timeoutID'));
+            if (!emberObj.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the videos
+                emberObj.set('doingAttn', true);
+                $('#player-video')
+                    .addClass('attn')
+                    .removeClass('intro test')
+                    .attr('loop', true);
+            } else { // returning to the videos
+                 // if doing intro, just return, no change necessary.
+                 // but if we were on a test video...
+                if (!emberObj.get('doingIntro')) {
+                    // if it was already the alternate, just move on.
+                    if (emberObj.get('useAlternate')) {
+                        emberObj.send('next');
+                    } else {
+                    // if we still have the alternate to use, start at intro
+                        emberObj.set('useAlternate', true);
+                        emberObj.set('doingIntro', true);
+                    }
+                }
+
                 $('#player-video').removeClass('attn test');
                 $('#player-video').addClass('intro');
+                emberObj.set('doingAttn', false);
+                $('#player-video').attr('loop', false);
             }
         }
     },
@@ -92,33 +154,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
         this._super(...arguments);
         var emberObj = this;
         $(document).on("keypress", function (e) {
-            if (e.which == 32) { // space
-                var movie = $('#player-video')[0];
-
-                if (!emberObj.get('doingAttn')) { // pausing one of the videos
-                    emberObj.set('doingAttn', true);
-                    $('#player-video').addClass('attn');
-                    $('#player-video').removeClass('intro test');
-                } else { // returning to the videos
-                     // if doing intro, just return, no change necessary.
-                     // but if we were on a test video...
-                    if (!emberObj.get('doingIntro')) {
-                        // if it was already the alternate, just move on.
-                        if (emberObj.get('useAlternate')) {
-                            emberObj.get('next')();
-                        } else {
-                        // if we still have the alternate to use, start at intro
-                            emberObj.set('useAlternate', true);
-                            emberObj.set('doingIntro', true);
-                        }
-                    }
-
-                    $('#player-video').removeClass('attn test');
-                    $('#player-video').addClass('intro');
-                    emberObj.set('doingAttn', false);
+            if (emberObj.checkFullscreen()) {
+                if (e.which == 32) { // space
+                    emberObj.send('pause');
+                    // This isn't actually a function but somehow triggering the error works anyway so I'll take it for now...
+                    //emberObj.get('refresh')();
+                    emberObj.refresh();
                 }
-                // This isn't actually a function but somehow triggering the error works anyway so I'll take it for now...
-                emberObj.get('refresh')();
             }
         });
         this.send('showFullscreen');

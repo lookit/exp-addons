@@ -274,6 +274,7 @@ function toFrames(frameId, eventVideos) {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
+            testLength: 5, // TODO: change to 20s for actual testing.
             introSources: [
                     {
                         "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_' + features.object + '.webm',
@@ -337,7 +338,7 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
     var [eventVideos, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
 
     // TODO: remove (for testing only--limit number of videos)
-    eventVideos = eventVideos.slice(0,4);
+    eventVideos = eventVideos.slice(0,2);
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];

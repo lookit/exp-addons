@@ -15,6 +15,8 @@
     max-height: 30%;
 }
 
+
+
 #experiment-player.player-fullscreen div {
     height: 100%;
     width: 100%;
@@ -35,4 +37,32 @@
 
 video.player-fullscreen::-webkit-media-controls {
   display:none !important;
+}
+
+.exp-video-physics .pause-instructions {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right:auto;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.exp-video-physics button {
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 75px;
+    min-width: 300px;
+    position: relative;
+    display: block;
+    font-size: 2em;
+}
+
+.exp-video-physics video:not(.player-fullscreen) {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    position: relative;
+    display: block;
 }
