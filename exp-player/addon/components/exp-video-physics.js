@@ -1,9 +1,13 @@
+import Ember from 'ember';
+
 import layout from '../templates/components/exp-video-physics';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 import VideoPause from '../mixins/video-pause';
+
+let { $ } = Ember;
 
 
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
@@ -114,12 +118,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
                 var emberObj = this;
                 var t = window.setTimeout(function(emb) {
                     emb.send('playNext');
-                    }, emberObj.get('testLength')*1000, emberObj);
+                    }, emberObj.get('testLength') * 1000, emberObj);
                 this.set('timeoutID', t);
             }
         },
         pause: function () {
-            var movie = $('#player-video')[0];
             var emberObj = this;
             window.clearTimeout(this.get('timeoutID'));
             if (!emberObj.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the videos

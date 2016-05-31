@@ -277,11 +277,11 @@ function toFrames(frameId, eventVideos) {
             testLength: 5, // TODO: change to 20s for actual testing.
             introSources: [
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_' + features.object + '.webm',
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_${features.object}.webm`,
                         "type": "video/webm"
                     },
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_' + features.object + '.mp4',
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_${features.object}.mp4`,
                         "type": "video/mp4"
                     }
             ],
@@ -297,21 +297,21 @@ function toFrames(frameId, eventVideos) {
             ],
             sources: [
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.webm`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.fname}.webm`,
                         "type": "video/webm"
                     },
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.fname}.mp4`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.fname}.mp4`,
                         "type": "video/mp4"
                     }
             ],
             altSources: [
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.webm`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.altName}.webm`,
                         "type": "video/webm"
                     },
                     {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/' + `${e.altName}.mp4`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.altName}.mp4`,
                         "type": "video/mp4"
                     }
             ]
