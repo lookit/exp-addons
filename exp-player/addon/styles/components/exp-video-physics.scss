@@ -59,7 +59,7 @@ video.player-fullscreen::-webkit-media-controls {
     font-size: 2em;
 }
 
-.exp-video-physics video:not(.player-fullscreen) {
+#experiment-player:not(.player-fullscreen) video {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
