@@ -12,14 +12,14 @@ export default Ember.Component.extend({
     id: null,
     kind: null,
 
-    meta: {  // Configuration for all fields available on the component/template
+    meta: { // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
-        parameters: {  // Configuration parameters, which can be auto-populated from the experiment structure JSON
+        parameters: { // Configuration parameters, which can be auto-populated from the experiment structure JSON
             type: 'object',
             properties: {}
         },
-        data: {  // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
+        data: { // Controls what and how parameters are serialized and sent to the server. Ideally there should be a validation mechanism.
             type: 'object',
             properties: {}
         }
@@ -45,11 +45,11 @@ export default Ember.Component.extend({
 
         let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
         var defaultParams = this.setupParams(null, clean);
-	if (clean) {
+        if (clean) {
             Object.keys(defaultParams).forEach((key) => {
-		this.set(key, defaultParams[key]);
+                this.set(key, defaultParams[key]);
             });
-	}
+        }
 
         if (!this.get('id')) {
             var frameIndex = this.get('frameIndex');
@@ -70,12 +70,11 @@ export default Ember.Component.extend({
             if (this[key] && this[key].isDescriptor) {
                 return;
             }
-            var value = !clean ? this.get(key): undefined;
+            var value = !clean ? this.get(key) : undefined;
             if (typeof value === 'undefined') {
                 // Make deep copy of the default value (to avoid subtle reference errors from reusing mutable containers)
-                defaultParams[key] =  Ember.copy(this.get(`meta.data.properties.${key}.default`), true);
-            }
-            else {
+                defaultParams[key] = Ember.copy(this.get(`meta.data.properties.${key}.default`), true);
+            } else {
                 defaultParams[key] = value;
             }
         });
