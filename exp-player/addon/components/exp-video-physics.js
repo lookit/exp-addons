@@ -18,6 +18,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
     fsButtonID: 'fsButton',
 
     onFullscreen: function () {
+	if (this.get('isDestroyed')) {
+	    return;
+	}
+
         this._super(...arguments);
         if (!this.checkFullscreen()) {
             this.send('pause');
@@ -106,7 +110,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause,
                     .addClass('test')
                     .removeClass('intro attn');
             } else {
-                this.get('next')(); // moving to intro video
+                this.send('next');
                 $('#player-video')
                     .removeClass('attn test')
                     .addClass('intro')
