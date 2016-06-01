@@ -45,9 +45,11 @@ export default Ember.Component.extend({
 
         let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
         var defaultParams = this.setupParams(null, clean);
-        Object.keys(defaultParams).forEach((key) => {
-            this.set(key, defaultParams[key]);
-        });
+	if (clean) {
+            Object.keys(defaultParams).forEach((key) => {
+		this.set(key, defaultParams[key]);
+            });
+	}
 
         if (!this.get('id')) {
             var frameIndex = this.get('frameIndex');
