@@ -176,7 +176,7 @@ const defaultSchema = {
                 }
             }
         },
-        hideInitValidationError: true,
+        hideInitValidationError: true
     },
     view: {
         parent: "bootstrap-edit",
@@ -201,7 +201,6 @@ const childStatsSchema = {
                         required: true
                     },
                     hasSchedule: {
-                        type: "object",
                         type: "string",
                         enum: ["Yes", "Yes, and he/she is already due for a nap", "No"],
                         required: true
