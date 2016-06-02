@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+let {
+    $
+} = Ember;
+
 
 /*
     Allow components to specify fullscreen capabilities based on minimal configuration options
@@ -34,7 +38,7 @@ export default Ember.Mixin.create({
         return false;
     },
 
-    onFullscreen: function(elementSelector, buttonSelector) {
+    onFullscreen: function($element) {
         this.set('counter', this.get('counter') + 1);
         if (this.get('isDestroyed')) {
             // Short-circuit if object is destroyed (eg we leave fullscreen because a video frame ended)
@@ -44,17 +48,18 @@ export default Ember.Mixin.create({
         var isFS = this.checkFullscreen();
         this.set('isFullscreen', isFS);
 
+	var $button = $(`#${this.get('fsButtonID')}`);
         if (isFS) {
            // alert('went fs');
-            elementSelector.addClass('player-fullscreen');
+            $element.addClass('player-fullscreen');
             if (this.displayFullscreen && this.fsButtonID) {
-                buttonSelector.hide();
+		$button.hide();
             }
         } else {
             //alert('left fs');
-            elementSelector.removeClass('player-fullscreen');
+            $element.removeClass('player-fullscreen');
             if (this.displayFullscreen && this.fsButtonID) {
-                buttonSelector.show();
+                $button.show();
             }
         }
     },
