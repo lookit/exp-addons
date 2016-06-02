@@ -23,7 +23,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     useAlternate: false,
     doingTest: false,
     videoSources: Ember.computed('doingIntro', 'doingAttn', 'useAlternate', function() {
-        console.log("Sources: ", this.getProperties(['doingAttn', 'doingIntro', 'useAlternate']));
         if (this.get('doingAttn')) {
             return this.get('attnSources');
         } else {
@@ -44,6 +43,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     }),
 
     onFullscreen: function() {
+	if (this.get('isDestroyed')) {
+	    return;
+	}
         this._super(...arguments);
         if (!this.checkFullscreen()) {
             this.send('pause');
@@ -128,7 +130,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             if (this.get('doingIntro')) { // moving to test video
                 this.set('doingIntro', false);
             } else {
-                this.get('next')(); // moving to intro video
+                this.sendAction('next'); // moving to intro video
             }
         },
         startVideo: function() {

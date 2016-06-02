@@ -11,29 +11,23 @@
         <source src="{{stream.src}}" type="{{stream.type}}">
       {{/each}}
     </video>
-
     {{#if doingAttn}}
-
-            <p  class="pause-instructions"> Study paused </p>
-
-            {{#if updatedIsFullscreen}}
-            <p  class="pause-instructions"> Press space to resume </p>
-            <p  class="pause-instructions"> (You'll have a moment to turn around again.) </p>
-            {{/if}}
-
+      <p  class="pause-instructions"> Study paused </p>      
+      {{#if updatedIsFullscreen}}
+        <p  class="pause-instructions"> Press space to resume </p>
+        <p  class="pause-instructions"> (You'll have a moment to turn around again.) </p>
+      {{/if}}
     {{/if}}
-
-
 </div>
 
 <div class="row col-md-6 exp-video-physics">
-<button class="btn btn-success" style="display:none;" id="fsButton" {{ action 'showFullscreen'}} > please return to fullscreen </button>
+  <button class="btn btn-success" style="display:none;" id="fsButton" {{ action 'showFullscreen'}} > please return to fullscreen </button>
 </div>
 
 {{#unless autoforwardOnEnd}}
-<div class="row exp-controls">
-  <button class="btn btn-default pull-right" {{ action 'next' }}>
-    Continue
-  </button>
-</div>
+  <div class="row exp-controls">
+    <button class="btn btn-default pull-right" {{ action 'next' }}>
+      Continue
+    </button>
+  </div>
 {{/unless}}
