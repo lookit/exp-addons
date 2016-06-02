@@ -177,7 +177,7 @@ export default Ember.Service.extend({
             if (!this.get('recorder').record) {
                 return null;
             }
-            window.this.get('recorder').record();
+            this.get('recorder').record();
             window.clearInterval(id);
         }, 100);
         return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {
