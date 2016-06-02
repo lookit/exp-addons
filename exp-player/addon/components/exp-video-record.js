@@ -18,11 +18,10 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
 
     videoId: function() {
         return [
-            'video-record',
             this.get('experiment.id'),
             this.get('id'),
             this.get('session.id')
-        ].join('-');
+        ].join('_');
     }.property('session', 'id', 'experiment'),
 
     spaceHandler: null,
