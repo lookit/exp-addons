@@ -20,8 +20,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
     doingIntro: true,
     doingAttn: false,
+    doingTest: Ember.computed.not('doingIntro'),
+
     useAlternate: false,
-    doingTest: false,
+
     videoSources: Ember.computed('doingIntro', 'doingAttn', 'useAlternate', function() {
         if (this.get('doingAttn')) {
             return this.get('attnSources');
@@ -35,17 +37,17 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         }
     }),
-    shouldLoop: Ember.computed('doingIntro', 'doingAttn', 'useAlternate', function() {
-        if (this.get('doingAttn')) {
+    shouldLoop: Ember.computed('videoSources', function() {
+        if (this.get('doingAttn') || this.get('doingTest')) {
             return true;
         }
         return false;
     }),
 
     onFullscreen: function() {
-	if (this.get('isDestroyed')) {
-	    return;
-	}
+        if (this.get('isDestroyed')) {
+            return;
+        }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
             this.send('pause');
@@ -143,7 +145,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         },
         pause: function() {
-            this.propertyWillChange('videoSources');
             this.beginPropertyChanges();
 
             window.clearTimeout(this.get('timeoutID'));
@@ -154,7 +155,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             } else { // returning to the videos
                 // if doing intro, just return, no change necessary.
                 // but if we were on a test video...
-                if (!this.get('doingIntro')) {
+                if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
                         this.send('next');
@@ -168,7 +169,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
 
             this.endPropertyChanges();
-            this.propertyDidChange('videoSources');
         }
     },
 
