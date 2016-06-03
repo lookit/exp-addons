@@ -166,10 +166,12 @@ export default Ember.Service.extend({
             if (this.get('_hidden')) {
                 var divId = this.get('divId');
                 $(`#${divId}`).attr({
-                    id: null
+                    id: null,
+		    'class': 'video-recorder-bg'
                 });
                 $(`#${divId}-container`).attr({
-                    id: null
+                    id: null,
+		    'class': 'video-recorder-bg'
                 });
                 this.set('_hidden', false);
             }
@@ -214,6 +216,15 @@ export default Ember.Service.extend({
         this.set('_recording', false);
         window.swfobject.removeSWF(this.get('_SWFId'));
         return new Ember.RSVP.Promise((resolve) => {
+            window.setTimeout(function() {
+                resolve();
+            }, 0);
+        });
+    },
+    // TODO: right now this may prematurely cancel an upload if still uploading when called
+    finished() {
+	$('.video-recorder-bg').remove();
+	return new Ember.RSVP.Promise((resolve) => {
             window.setTimeout(function() {
                 resolve();
             }, 0);

@@ -6,6 +6,7 @@ import ExperimentParser from '../utils/parse-experiment';
 
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
+    videoRecorder: Ember.inject.service(),
 
     experiment: null, // Experiment model
     session: null,
@@ -75,9 +76,11 @@ export default Ember.Component.extend(FullScreen, {
         this.set('_currentFrameTemplate', null);
     },
     _exit() {
-        this.get('session').set('completed', true);
-        console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
-        this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
+	this.get('videoRecorder').finished().then(() => {
+            this.get('session').set('completed', true);
+            console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
+            this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
+	});
     },
 
     actions: {
