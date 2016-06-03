@@ -53,6 +53,7 @@ export default Ember.Service.extend({
     _recording: false,
     _flashReady: false,
     _SWFId: null,
+    _hidden: false,
 
     _recordPromise: null,
 
@@ -98,33 +99,39 @@ export default Ember.Service.extend({
         this.set('videoId', videoId);
         this.set('sscode', config ? 'asp' : 'php');
 
-        $(element).append(`<div id="${this.get('divId')}-container" style="height:100%"></div`);
+        var $element = $(element);
+        if (hidden) {
+            $element = $('body');
+        }
+
+        $element.append(`<div id="${this.get('divId')}-container" style="height:100%"></div`);
         $(`#${this.get('divId')}-container`).append(`<div id="${this.get('divId')}"></div`);
 
         if (hidden) {
-            // this.hide();
+            this.set('_hidden', true);
+            this.hide();
         }
 
-	return new RSVP.Promise((resolve, reject) => {
-	    window.swfobject.embedSWF('VideoRecorder.swf', $(`#${this.get('divId')}`)[0].id, this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {		
-		if (!vr.success) {
-		    reject(new Error('Install failed'));
-		}
-		this.set('_SWFId', vr.id);
-		this.set('recorder', window.swfobject.getObjectById(vr.id));
-		$('#' + vr.id).css('height', '100%');
+        return new RSVP.Promise((resolve, reject) => {
+            window.swfobject.embedSWF('VideoRecorder.swf', $(`#${this.get('divId')}`)[0].id, this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {
+                if (!vr.success) {
+                    reject(new Error('Install failed'));
+                }
+                this.set('_SWFId', vr.id);
+                this.set('recorder', window.swfobject.getObjectById(vr.id));
+                $('#' + vr.id).css('height', '100%');
 
-		if (record) {
-		    this.addObserver('_flashReady', function(_, __, ready) {
-			if (ready) {
-			    return this.record();
-			}
-		    });
-		    
-		    return resolve(false);
-		}
-	    });
-	});
+                if (record) {
+                    this.addObserver('_flashReady', function(_, __, ready) {
+                        if (ready) {
+                            return this.record();
+                        }
+                    });
+
+                    return resolve(false);
+                }
+            });
+        });
     },
 
     // Pause the recorder
@@ -152,6 +159,16 @@ export default Ember.Service.extend({
             }
             this.get('recorder').stopVideo();
             this.set('_recording', false);
+            if (this.get('_hidden')) {
+                var divId = this.get('divId');
+                $(`#${divId}`).attr({
+                    id: null
+                });
+                $(`#${divId}-container`).attr({
+                    id: null
+                });
+                this.set('_hidden', false);
+            }
         }
         if (!this.get('started')) {
             return;
@@ -191,15 +208,15 @@ export default Ember.Service.extend({
         // Seems that removing the swf object causes it to clean itself up
         // this.get('recorder').disconnectAndRemove();
         //TODO fix the flash error when destroying. Seems harmless for now...
-        $(`#${this.get('divId')}-container`).remove();
-        this.set('recorder', null);
-        this.set('_recording', false);
-	window.swfobject.removeSWF(this.get('_SWFId'));
-	return new Ember.RSVP.Promise((resolve) => {
-	    window.setTimeout(function() {
-		resolve();
-	    }, 0);
-	});
+        // $(`#${this.get('divId')}-container`).remove();
+        // this.set('recorder', null);
+        // this.set('_recording', false);
+        // window.swfobject.removeSWF(this.get('_SWFId'));
+        return new Ember.RSVP.Promise((resolve) => {
+            window.setTimeout(function() {
+                resolve();
+            }, 0);
+        });
     },
 
     show() {
@@ -231,13 +248,13 @@ export default Ember.Service.extend({
 
     _onRecordingStarted(recorderId) { // jshint ignore:line
         this.set('_recording', true);
-        if (this.get('_recordingPromise')) {
-            this.get('_recordPromise').resolve(true);
-        }
     },
 
     _onUploadDone() {
         this.set('_recording', false);
+        if (this.get('_recordPromise')) {
+            this.get('_recordPromise').resolve(true);
+        }
     },
 
     _onCamAccess(allowed, recorderId) { // jshint ignore:line
@@ -245,8 +262,8 @@ export default Ember.Service.extend({
     },
 
     _onFlashReady() {
-	console.log('Flash is ready');
-	this.set('flashReady', true);
+        console.log('Flash is ready');
+        this.set('flashReady', true);
     }
     // End Flash hooks
 });
