@@ -99,37 +99,41 @@ export default Ember.Service.extend({
         this.set('videoId', videoId);
         this.set('sscode', config ? 'asp' : 'php');
 
-        var $element = $(element);
-        if (hidden) {
-            $element = $('body');
-        }
+        var divId = this.get('divId');
+        // Remove any old recorders
+        return this.destroy().then(() => {
 
-        $element.append(`<div id="${this.get('divId')}-container" style="height:100%"></div`);
-        $(`#${this.get('divId')}-container`).append(`<div id="${this.get('divId')}"></div`);
+            var $element = $(element);
+            if (hidden) {
+                $element = $('body');
+            }
 
-        if (hidden) {
-            this.set('_hidden', true);
-            this.hide();
-        }
+            $element.append(`<div id="${divId}-container" style="height:100%"></div`);
+            $(`#${divId}-container`).append(`<div id="${divId}"></div`);
 
-        return new RSVP.Promise((resolve, reject) => {
-            window.swfobject.embedSWF('VideoRecorder.swf', $(`#${this.get('divId')}`)[0].id, this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {
-                if (!vr.success) {
-                    reject(new Error('Install failed'));
-                }
-                this.set('_SWFId', vr.id);
-                this.set('recorder', window.swfobject.getObjectById(vr.id));
-                $('#' + vr.id).css('height', '100%');
+            if (hidden) {
+                this.set('_hidden', true);
+                this.hide();
+            }
 
-                if (record) {
-                    this.addObserver('_flashReady', function(_, __, ready) {
-                        if (ready) {
-                            return this.record();
-                        }
-                    });
+            return new RSVP.Promise((resolve, reject) => {
+                window.swfobject.embedSWF('VideoRecorder.swf', $(`#${divId}`)[0].id, this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {
+                    if (!vr.success) {
+                        reject(new Error('Install failed'));
+                    }
+                    this.set('_SWFId', vr.id);
+                    this.set('recorder', window.swfobject.getObjectById(vr.id));
+                    $('#' + vr.id).css('height', '100%');
 
-                    return resolve(false);
-                }
+                    if (record) {
+                        this.addObserver('_flashReady', function(_, __, ready) {
+                            if (ready) {
+                                return this.record();
+                            }
+                        });
+                        return resolve(false);
+                    }
+                });
             });
         });
     },
@@ -205,13 +209,10 @@ export default Ember.Service.extend({
 
     // Uninstall the video recorder
     destroy() {
-        // Seems that removing the swf object causes it to clean itself up
-        // this.get('recorder').disconnectAndRemove();
-        //TODO fix the flash error when destroying. Seems harmless for now...
-        // $(`#${this.get('divId')}-container`).remove();
-        // this.set('recorder', null);
-        // this.set('_recording', false);
-        // window.swfobject.removeSWF(this.get('_SWFId'));
+        $(`#${this.get('divId')}-container`).remove();
+        this.set('recorder', null);
+        this.set('_recording', false);
+        window.swfobject.removeSWF(this.get('_SWFId'));
         return new Ember.RSVP.Promise((resolve) => {
             window.setTimeout(function() {
                 resolve();
