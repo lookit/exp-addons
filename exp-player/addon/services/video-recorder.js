@@ -108,8 +108,15 @@ export default Ember.Service.extend({
                 $element = $('body');
             }
 
-            $element.append(`<div id="${divId}-container" style="height:100%"></div`);
-            $(`#${divId}-container`).append(`<div id="${divId}"></div`);
+            $element.append(
+		$('<div>', {
+		    id: `${divId}-container`,
+		    'data-videoid': videoId,
+		    css: {
+			height: '100%'
+		    }
+		}).append(`<div id="${divId}"></div`)
+	    );
 
             if (hidden) {
                 this.set('_hidden', true);
@@ -166,12 +173,10 @@ export default Ember.Service.extend({
             if (this.get('_hidden')) {
                 var divId = this.get('divId');
                 $(`#${divId}`).attr({
-                    id: null,
-		    'class': 'video-recorder-bg'
+                    id: null
                 });
                 $(`#${divId}-container`).attr({
-                    id: null,
-		    'class': 'video-recorder-bg'
+                    id: null
                 });
                 this.set('_hidden', false);
             }
@@ -262,11 +267,12 @@ export default Ember.Service.extend({
         this.set('_recording', true);
     },
 
-    _onUploadDone() {
+    _onUploadDone(_, __, videoId) {
         this.set('_recording', false);
         if (this.get('_recordPromise')) {
             this.get('_recordPromise').resolve(true);
         }
+	$(`div[data-videoid="${videoId}"]`).remove();
     },
 
     _onCamAccess(allowed, recorderId) { // jshint ignore:line
