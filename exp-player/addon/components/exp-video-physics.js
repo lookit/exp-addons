@@ -132,7 +132,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             if (this.get('doingIntro')) { // moving to test video
                 this.set('doingIntro', false);
             } else {
-                this.sendAction('next'); // moving to intro video
+                this.send('next'); // moving to intro video
             }
         },
         startVideo: function() {
