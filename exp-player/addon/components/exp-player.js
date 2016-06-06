@@ -4,6 +4,10 @@ import layout from '../templates/components/exp-player';
 import FullScreen from '../mixins/full-screen';
 import ExperimentParser from '../utils/parse-experiment';
 
+let {
+    $
+} = Ember;
+
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
 
@@ -19,8 +23,51 @@ export default Ember.Component.extend(FullScreen, {
     videoRecorder: Ember.inject.service(),
     fullScreenElementId: 'experiment-player',
 
+    allowExit: false,
+
+    _registerHandlers() {
+	$(window).on('beforeunload', () => {
+	    if (!this.get('allowExit')) {
+		return `
+If you're sure you'd like to leave this study early
+you can press 'Leave this Page' to do so.
+
+We'd appreciate it if before you do so you fill out a
+very breif exit survey letting us know how we can use
+any video captured during this session. Press 'Stay on
+this Page' and press F1 to be taken immediately to the
+exit survey.
+
+If this was an accident, just press 'Stay on this Page'
+to continue with the study.
+`;
+	    }
+	    return null;
+        });
+
+	$(document).on('keypress', (e) => {
+	    // TODO changeme
+	    if (e.which === 33) { // !
+		var max = this.get('frames.length') - 1;
+		this.set('frameIndex', max);
+		this._removeHandlers();
+	    }
+	});
+
+    },
+    _removeHandlers() {
+	$(window).off('keypress');
+	$(window).off('beforeunload');
+    },
+    willDestroy() {
+	this._super(...arguments);
+	this._removeHandlers();
+    },
+
     init: function() {
         this._super(...arguments);
+	this._registerHandlers();
+
 	var parser = new ExperimentParser({
 	    structure: this.get('experiment.structure'),
 	    pastSessions: this.get('pastSessions').toArray()
@@ -61,12 +108,6 @@ export default Ember.Component.extend(FullScreen, {
             pastSessions: this.get('pastSessions')
         };
     }),
-
-
-    willDestroyElement() {
-        this.get('videoRecorder').stop({destroy: true});
-        return this._super(...arguments);
-    },
 
     _transition() {
         Ember.run(() => {

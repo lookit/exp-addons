@@ -7,8 +7,9 @@ import layout from '../templates/components/exp-exit-survey';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 
-
-
+let {
+    $
+} = Ember;
 
 const defaultSchema = {
     schema: {
@@ -54,9 +55,7 @@ const defaultSchema = {
                 type: "radio",
                 hideNone: true,
                 events: {
-                    change: function(e) {
-                    console.log(this);
-                        console.log('postrender');
+                    change: function() {
                         switch (this.data) {
                             case "Yes":
                                 $('#scientistDescription').html('authorized scientists (researchers working on the Lookit project and authorized Databrary users).');
