@@ -1,37 +1,47 @@
 import Ember from 'ember';
 
+let {
+    $
+} = Ember;
+
 export default Ember.Mixin.create({
-    _onDirtyExit(controller, transition) {
-        this.controller.showExitWarning().then(([confirmed, data, closeModal]) => {
-            if(confirmed) {
-                controller.set('forceExit', true);
-                var session = this.get('controller.session');
-                session.set('complete', false);
-                session.set('earlyExit', data);
-                session.save();
-                transition.retry();
-            }
-            closeModal();
-            return true;
-        });
-    },
-    setupController(controller, model) {
-        this._super(controller, model);
-        if (!controller.get('session')) {
-            console.log('WarnOnExitRouteMixin expects the corresponding controller to have a session property');
-        }
-    },
+    forceExit: false,
     actions: {
         willTransition(transition) {
-            // FIXME: This won't prevent back button or manual URL change. See https://guides.emberjs.com/v2.3.0/routing/preventing-and-1retrying-transitions/#toc_preventing-transitions-via-code-willtransition-code
-            if (!this.controller.get('forceExit')) {
+            if (!this.get('forceExit')) {
                 transition.abort();
-                this._onDirtyExit(this.controller, transition);
-                return false;
-            } else {
-                // Bubble this action to parent routes
-                return true;
+                window.location = this.get('router').generate(transition.intent.name);
             }
+        },
+        willDestroy() {
+            this._super(...arguments);
+            $(window).off('beforeunload');
+        },
+        allowExit() {
+            this.set('forceExit', true);
+            $(window).off('beforeunload');
         }
+    },
+    enter() {
+        this._super(...arguments);
+        $(window).on('beforeunload', () => {
+            return `
+If you're sure you'd like to leave this study early
+you can press 'Leave this Page' to do so.
+
+We'd appreciate it if before you do so you fill out a
+very breif exit survey letting us know how we can use
+any video captured during this session. Press 'Stay on
+this Page' and press F1 to be taken immediately to the
+exit survey.
+
+If this was an accident, just press 'Stay on this Page'
+to continue with the study.
+`;
+        });
+    },
+    exit() {
+        this._super(...arguments);
+        $(window).off('beforeunload');
     }
 });

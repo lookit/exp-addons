@@ -4,6 +4,10 @@ import layout from '../templates/components/exp-player';
 import FullScreen from '../mixins/full-screen';
 import ExperimentParser from '../utils/parse-experiment';
 
+let {
+    $
+} = Ember;
+
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
 
@@ -21,6 +25,15 @@ export default Ember.Component.extend(FullScreen, {
 
     init: function() {
         this._super(...arguments);
+
+	$(document).on('keypress', (e) => {
+	    // TODO changeme
+	    if (e.which === 33) { // !
+		var max = this.get('frames.length') - 1;
+		this.set('frameIndex', max);
+	    }
+	});
+
 	var parser = new ExperimentParser({
 	    structure: this.get('experiment.structure'),
 	    pastSessions: this.get('pastSessions').toArray()
