@@ -19,13 +19,15 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     fsButtonID: 'fsButton',
 
     doingIntro: true,
+    playingAnnouncement: true,
     doingAttn: false,
     doingTest: Ember.computed.not('doingIntro'),
-
+    timeoutId: 0,
+    hasBeenPaused: false,
     useAlternate: false,
 
-    videoSources: Ember.computed('doingIntro', 'doingAttn', 'useAlternate', function() {
-        if (this.get('doingAttn')) {
+    videoSources: Ember.computed('doingIntro', 'playingAnnouncement', 'doingAttn', 'useAlternate', function() {
+        if (this.get('doingAttn') || this.get('playingAnnouncement')) {
             return this.get('attnSources');
         } else {
             if (this.get('doingIntro')) {
@@ -37,8 +39,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         }
     }),
+
     shouldLoop: Ember.computed('videoSources', function() {
-        if (this.get('doingAttn') || this.get('doingTest')) {
+        if (this.get('doingAttn') || this.get('playingAnnouncement') || this.get('doingTest')) {
             return true;
         }
         return false;
@@ -95,10 +98,25 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                     description: 'List of objects specifying attention-grabber video src and type',
                     default: []
                 },
+                audioSources: {
+                    type: 'string',
+                    description: 'List of objects specifying intro announcement audio src and type',
+                    default: []
+                },
+                musicSources: {
+                    type: 'string',
+                    description: 'List of objects specifying music audio src and type',
+                    default: []
+                },
                 testLength: {
                     type: 'number',
                     description: 'Length of test videos in seconds',
                     default: 20
+                },
+                isLast:  {
+                    type: 'boolean',
+                    description: 'Whether this is the last exp-physics-video frame in the group',
+                    default: false
                 }
             }
         },
@@ -106,24 +124,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             // This video does not explicitly capture any parameters from the userdata:
             type: 'object',
             properties: { // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
-                doingIntro: {
-                    type: 'boolean',
-                    default: true
-                },
-                doingAttn: {
-                    type: 'boolean',
-                    default: false
-                },
-                useAlternate: {
-                    type: 'boolean',
-                    default: false
-                },
-                timeoutID: {
-                    type: 'number',
-                    default: 0
-                }
+
             },
-            required: ['doingIntro', 'doingAttn', 'useAlternate']
+            required: []
         }
     },
     actions: {
@@ -139,32 +142,49 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             if (!this.get('doingIntro') && !this.get('doingAttn')) {
                 var emberObj = this;
                 var t = window.setTimeout(function(emb) {
+                    $("audio#exp-music")[0].pause();
                     emb.send('playNext');
                 }, emberObj.get('testLength') * 1000, emberObj);
                 this.set('timeoutID', t);
+                $("audio#exp-music")[0].play();
             }
         },
+        startIntro: function() {
+            if (this.isLast) {
+                window.clearTimeout(this.get('timeoutID'));
+                this.sendAction('next');
+            }
+            this.set('playingAnnouncement', false);
+        },
         pause: function() {
+
             this.beginPropertyChanges();
 
             window.clearTimeout(this.get('timeoutID'));
+            this.set('hasBeenPaused', true);
 
-            if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the videos
+            if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the intro or test videos, or not in FS
                 // show the attentiongrabber
                 this.set('doingAttn', true);
+                this.set('playingAnnouncement', false);
             } else { // returning to the videos
                 // if doing intro, just return, no change necessary.
                 // but if we were on a test video...
                 if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
-                        this.send('next');
+                        this.send('next'); // TODO: double check this is right, instead of sendAction
                     } else {
                         // if we still have the alternate to use, start at intro
                         this.set('useAlternate', true);
+                        this.set('playingAnnouncement', true);
                         this.set('doingIntro', true);
                     }
+                } else { // if we were previously on the intro
+                    this.set('playingAnnouncement', true);
                 }
+
+
                 this.set('doingAttn', false);
             }
 
