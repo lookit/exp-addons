@@ -29,22 +29,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
     didInsertElement() {
         this._super(...arguments);
 
-        this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy().then(() => {
-		this.get('videoRecorder').on('onCamAccess', null);
-		this.get('videoRecorder').on('onUploadDone', null);
-
-		if (this.get('mayProgress')) {
-		    if(this.get('autoforwardOnEnd')) {
-			this.send('next');
-		    }
-		}
-		else {
-                    this.set('mayProgress', true);
-		}
-	    });
-        });
-
         this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
 
         this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'), {
@@ -64,11 +48,10 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
             this.send('setTimeEvent', 'videoFinished');
             if (!this.get('mayProgress')) {
                 this.set('mayProgress', true);
-            }
-            else {
-		if(this.get('autoforwardOnEnd')) {
+            } else {
+                if (this.get('autoforwardOnEnd')) {
                     this.send('next');
-		}
+                }
             }
         },
         camAccess(hasAccess) {
@@ -101,6 +84,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
 
             if (this.get('videoRecorder.recording') && stopStamp <= currentTime) {
                 this.get('videoRecorder').stop();
+                if (this.get('mayProgress')) {
+                    if (this.get('autoforwardOnEnd')) {
+                        this.send('next');
+                    }
+                } else {
+                    this.set('mayProgress', true);
+                }
             }
         }
     },
@@ -111,7 +101,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
         parameters: {
             type: 'object',
             properties: {
-                autoforwardOnEnd: {  // Generally leave this true, since controls will be hidden for fullscreen videos
+                autoforwardOnEnd: { // Generally leave this true, since controls will be hidden for fullscreen videos
                     type: 'boolean',
                     description: 'Whether to automatically advance to the next frame when the video is complete',
                     default: true

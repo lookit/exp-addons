@@ -17,7 +17,7 @@ export default Ember.Component.extend(FullScreen, {
     frames: null,
     conditions: null,
 
-    frameIndex: 0,  // Index of the currently active frame
+    frameIndex: 0, // Index of the currently active frame
 
     displayFullscreen: false,
     videoRecorder: Ember.inject.service(),
@@ -26,9 +26,9 @@ export default Ember.Component.extend(FullScreen, {
     allowExit: false,
 
     _registerHandlers() {
-	$(window).on('beforeunload', () => {
-	    if (!this.get('allowExit')) {
-		return `
+        $(window).on('beforeunload', () => {
+            if (!this.get('allowExit')) {
+                return `
 If you're sure you'd like to leave this study early
 you can press 'Leave this Page' to do so.
 
@@ -41,40 +41,40 @@ exit survey.
 If this was an accident, just press 'Stay on this Page'
 to continue with the study.
 `;
-	    }
-	    return null;
+            }
+            return null;
         });
 
-	$(document).on('keypress', (e) => {
-	    // TODO changeme
-	    if (e.which === 33) { // !
-		var max = this.get('frames.length') - 1;
-		this.set('frameIndex', max);
-		this._removeHandlers();
-	    }
-	});
+        $(document).on('keypress', (e) => {
+            // TODO changeme
+            if (e.which === 33) { // !
+                var max = this.get('frames.length') - 1;
+                this.set('frameIndex', max);
+                this._removeHandlers();
+            }
+        });
 
     },
     _removeHandlers() {
-	$(window).off('keypress');
-	$(window).off('beforeunload');
+        $(window).off('keypress');
+        $(window).off('beforeunload');
     },
     willDestroy() {
-	this._super(...arguments);
-	this._removeHandlers();
+        this._super(...arguments);
+        this._removeHandlers();
     },
 
     init: function() {
         this._super(...arguments);
-	this._registerHandlers();
+        this._registerHandlers();
 
-	var parser = new ExperimentParser({
-	    structure: this.get('experiment.structure'),
-	    pastSessions: this.get('pastSessions').toArray()
-	});
+        var parser = new ExperimentParser({
+            structure: this.get('experiment.structure'),
+            pastSessions: this.get('pastSessions').toArray()
+        });
         var [frameConfigs, conditions] = parser.parse();
-        this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
-        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
+        this.set('frames', frameConfigs); // When player loads, convert structure to list of frames
+        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false); // Choose whether to display this experiment fullscreen (default false)
 
         var session = this.get('session');
         session.set('conditions', conditions);
@@ -109,6 +109,14 @@ to continue with the study.
         };
     }),
 
+
+    willDestroyElement() {
+        this.get('videoRecorder').stop({
+            destroy: true
+        });
+        return this._super(...arguments);
+    },
+
     _transition() {
         Ember.run(() => {
             this.set('_currentFrameTemplate', 'exp-blank');
@@ -116,9 +124,11 @@ to continue with the study.
         this.set('_currentFrameTemplate', null);
     },
     _exit() {
-        this.get('session').set('completed', true);
-        console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
-        this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
+        this.get('videoRecorder').finished().then(() => {
+            this.get('session').set('completed', true);
+            console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
+            this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
+        });
     },
 
     actions: {
@@ -139,7 +149,7 @@ to continue with the study.
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
-	    this._exit();
+            this._exit();
         },
         skipone() {
             console.log('skip one frame');
@@ -151,7 +161,7 @@ to continue with the study.
                 this.set('frameIndex', frameIndex + 2);
                 return;
             }
-	    this._exit();
+            this._exit();
         },
         previous() {
             console.log('previous');
