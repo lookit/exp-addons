@@ -4,6 +4,7 @@ Manage data about one or more documents in the experiments collection
 import Ember from 'ember';
 import config from 'ember-get-config';
 import DS from 'ember-data';
+import moment from 'moment';
 
 import JamModel from '../mixins/jam-model';
 
@@ -11,7 +12,6 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-import compile from '../utils/eligibility';
 import {permissionCreateForAccounts} from '../utils/constants';
 
 
@@ -107,17 +107,27 @@ export default DS.Model.extend(JamModel, {
         }
     }.observes('state'),
 
-    eligibilityCriteria: DS.attr('string'),
-    eligibilityString: Ember.computed('eligibilityCriteria', function() {
-        var eligibility = this.get('eligibilityCriteria');
-        // TODO
-        return eligibility || "None";
-    }),
-    _isEligible: Ember.computed('eligibilityCriteria', function() {
-        return compile(this.get('eligibilityCriteria'));
-    }),
+    eligibilityMaxAge: DS.attr('string'),
+    eligibilityMinAge: DS.attr('string'),
+    eligibilityString: DS.attr('string'),
+    _parseAge: function(age) {
+	var inflector = new Ember.Inflector();
+	var [amount, unit] = age.split(' ');
+	return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
+    },
     isEligible(participant) {
-        return this.get('_isEligible')(participant);
+	var age = participant.get('age');
+
+	var minAge = this.get('eligiblityMinAge');
+	var maxAge = this.get('eligiblityMaxAge');
+	var eligible = true;
+	if (minAge) {
+	    eligible = eligible && (age > minAge);
+	}
+	if (maxAge) {
+	    eligible = eligible && (age < maxAge);
+	}
+	return eligible;
     },
 
     history: DS.hasMany('history'),
