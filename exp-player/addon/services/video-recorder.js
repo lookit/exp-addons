@@ -182,7 +182,7 @@ export default Ember.Service.extend({
             }
         }
         if (!this.get('started')) {
-            return;
+            return null;
         }
         this.set('_started', false);
         if (destroy) {
@@ -200,13 +200,13 @@ export default Ember.Service.extend({
         let count = 0;
         let id = window.setInterval(() => {
             if (++count > 20) {
-                return clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
+                return window.clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
             }
             if (!this.get('recorder').record) {
-                return;
+                return null;
             }
             this.get('recorder').record();
-            clearInterval(id);
+            window.clearInterval(id);
         }, 100);
         return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {
             resolve,
