@@ -6,7 +6,6 @@ import ExperimentParser from '../utils/parse-experiment';
 
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
-    videoRecorder: Ember.inject.service(),
 
     experiment: null, // Experiment model
     session: null,
@@ -14,7 +13,7 @@ export default Ember.Component.extend(FullScreen, {
     frames: null,
     conditions: null,
 
-    frameIndex: 0,  // Index of the currently active frame
+    frameIndex: 0, // Index of the currently active frame
 
     displayFullscreen: false,
     videoRecorder: Ember.inject.service(),
@@ -22,13 +21,13 @@ export default Ember.Component.extend(FullScreen, {
 
     init: function() {
         this._super(...arguments);
-	var parser = new ExperimentParser({
-	    structure: this.get('experiment.structure'),
-	    pastSessions: this.get('pastSessions').toArray()
-	});
+        var parser = new ExperimentParser({
+            structure: this.get('experiment.structure'),
+            pastSessions: this.get('pastSessions').toArray()
+        });
         var [frameConfigs, conditions] = parser.parse();
-        this.set('frames', frameConfigs);  // When player loads, convert structure to list of frames
-        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false);  // Choose whether to display this experiment fullscreen (default false)
+        this.set('frames', frameConfigs); // When player loads, convert structure to list of frames
+        this.set('displayFullscreen', this.get('experiment.displayFullscreen') || false); // Choose whether to display this experiment fullscreen (default false)
 
         var session = this.get('session');
         session.set('conditions', conditions);
@@ -65,7 +64,9 @@ export default Ember.Component.extend(FullScreen, {
 
 
     willDestroyElement() {
-        this.get('videoRecorder').stop({destroy: true});
+        this.get('videoRecorder').stop({
+            destroy: true
+        });
         return this._super(...arguments);
     },
 
@@ -76,11 +77,11 @@ export default Ember.Component.extend(FullScreen, {
         this.set('_currentFrameTemplate', null);
     },
     _exit() {
-	this.get('videoRecorder').finished().then(() => {
+        this.get('videoRecorder').finished().then(() => {
             this.get('session').set('completed', true);
             console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
-	});
+        });
     },
 
     actions: {
@@ -101,7 +102,7 @@ export default Ember.Component.extend(FullScreen, {
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
-	    this._exit();
+            this._exit();
         },
         skipone() {
             console.log('skip one frame');
@@ -113,7 +114,7 @@ export default Ember.Component.extend(FullScreen, {
                 this.set('frameIndex', frameIndex + 2);
                 return;
             }
-	    this._exit();
+            this._exit();
         },
         previous() {
             console.log('previous');

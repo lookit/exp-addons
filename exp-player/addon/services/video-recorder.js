@@ -109,14 +109,14 @@ export default Ember.Service.extend({
             }
 
             $element.append(
-		$('<div>', {
-		    id: `${divId}-container`,
-		    'data-videoid': videoId,
-		    css: {
-			height: '100%'
-		    }
-		}).append(`<div id="${divId}"></div`)
-	    );
+                $('<div>', {
+                    id: `${divId}-container`,
+                    'data-videoid': videoId,
+                    css: {
+                        height: '100%'
+                    }
+                }).append(`<div id="${divId}"></div`)
+            );
 
             if (hidden) {
                 this.set('_hidden', true);
@@ -228,8 +228,8 @@ export default Ember.Service.extend({
     },
     // TODO: right now this may prematurely cancel an upload if still uploading when called
     finished() {
-	$('.video-recorder-bg').remove();
-	return new Ember.RSVP.Promise((resolve) => {
+        $('.video-recorder-bg').remove();
+        return new Ember.RSVP.Promise((resolve) => {
             window.setTimeout(function() {
                 resolve();
             }, 0);
@@ -272,7 +272,7 @@ export default Ember.Service.extend({
         if (this.get('_recordPromise')) {
             this.get('_recordPromise').resolve(true);
         }
-	$(`div[data-videoid="${videoId}"]`).remove();
+        $(`div[data-videoid="${videoId}"]`).remove();
     },
 
     _onCamAccess(allowed, recorderId) { // jshint ignore:line
