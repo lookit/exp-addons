@@ -113,7 +113,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     var cameraAngles = {};
     cameraAngles['table'] = ["c1", "c2"];
     cameraAngles['ramp'] = ["c1", "c2"];
-    cameraAngles['toss'] = ["c1"];
+    cameraAngles['toss'] = ["c1", "c2"];
     cameraAngles['stop'] = ["c1", "c2"];
     cameraAngles['reverse'] = ["c1", "c2"];
     cameraAngles['fall'] = ["c1"];
@@ -124,23 +124,23 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     var backgrounds = {};
     backgrounds['table'] = ["b1", "b2"];
     backgrounds['ramp'] = ["b1", "b2"];
-    backgrounds['toss'] = ["b1", "b2"];
+    backgrounds['toss'] = ["b1"];
     backgrounds['stop'] = ["b1"];
     backgrounds['reverse'] = ["b1"];
-    backgrounds['fall'] = ["b1", "b2"];
-    backgrounds['stay'] = ["b1", "b2"];
+    backgrounds['fall'] = ["b1"];
+    backgrounds['stay'] = ["b1"];
     backgrounds['same'] = ["b1"];
     backgrounds['salience'] = ["b1"];
 
     var flips = {};
-    flips['table'] = ["NN"];
-    flips['ramp'] = ["NN"];
+    flips['table'] = ["NR"];
+    flips['ramp'] = ["NN", "RR", "NR", "RN"];
     flips['toss'] = ["NN", "RR"];
-    flips['stop'] = ["RR"];
-    flips['reverse'] = ["NN", "RR"];
+    flips['stop'] = ["NR"];
+    flips['reverse'] = ["RN"];
     flips['fall'] = ["NN", "NR", "RN", "RR"];
     flips['stay'] = ["NN", "NR", "RN", "RR"];
-    flips['same'] = ["NN", "RR"];
+    flips['same'] = ["NN", "RR", "NR", "RN"];
     flips['salience'] = ["NN", "NR", "RN", "RR"];
 
     // Create list of TYPES (e.g. gravity, inertia, ...)
@@ -353,21 +353,21 @@ function toFrames(frameId, eventVideos) {
             ],
             sources: [
                     {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.fname}.webm`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `webm/${e.fname}.webm`,
                         "type": "video/webm"
                     },
                     {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.fname}.mp4`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `mp4/${e.fname}.mp4`,
                         "type": "video/mp4"
                     }
             ],
             altSources: [
                     {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.altName}.webm`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `webm/${e.altName}.webm`,
                         "type": "video/webm"
                     },
                     {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${e.altName}.mp4`,
+                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `mp4/${e.altName}.mp4`,
                         "type": "video/mp4"
                     }
             ]
