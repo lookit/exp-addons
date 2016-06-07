@@ -204,6 +204,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Put list together
     var allEvents = [];
     var filenames = [];
+    var eventNum = 1;
     for (var nEvents = 0; nEvents < NPERTYPE; nEvents++) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
@@ -213,7 +214,9 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
             var altName = `sbs_${e.compType}_${e.outcomeR}_${e.outcomeL}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
             e.fname = fname;
             e.altName = altName;
+            e.index = eventNum;
             allEvents.push(e);
+            eventNum++;
         }
     }
 
@@ -268,13 +271,66 @@ function parse_name(fname) {
 }
 
 function toFrames(frameId, eventVideos) {
+    var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
+        if (e.index == nVideos) {
+            return {
+                kind: 'exp-video-physics',
+                id: `${frameId}`,
+                autoplay: true,
+                isLast: true,
+                audioSources: [
+                        {
+                            "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/all_done.ogg',
+                            "type": "audio/ogg"
+                        },
+                        {
+                            "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/all_done.mp3',
+                            "type": "audio/mp3"
+                        }
+                ],
+                attnSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.webm',
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.mp4',
+                        "type": "video/mp4"
+                    }
+                ]
+            }
+        }
         var features = parse_name(e.fname);
+        var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_05', 'music_06', 'music_07', 'music_08', 'music_09', 'music_10']
+        var musicName = allMusic[Math.floor(Math.random() * allMusic.length)]
+
         return {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
             testLength: 5, // TODO: change to 20s for actual testing.
+            isLast: false,
+            audioSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/video_' + ("00" + (e.index)).slice(-2)  + '.ogg',
+                        "type": "audio/ogg"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/video_' + ("00" + (e.index)).slice(-2)  + '.mp3',
+                        "type": "audio/mp3"
+                    }
+            ],
+            musicSources: [
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/' + musicName + '.ogg',
+                        "type": "audio/ogg"
+                    },
+                    {
+                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/' + musicName + '.mp3',
+                        "type": "audio/mp3"
+                    }
+            ],
             introSources: [
                     {
                         "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_${features.object}.webm`,
@@ -320,6 +376,8 @@ function toFrames(frameId, eventVideos) {
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
+    var MAX_VIDEOS = 2; // for testing only - limit number of videos. Change to 24 for prod.
+
     pastSessions = pastSessions.filter(function(session) {
         return session.get('conditions');
     });
@@ -337,8 +395,8 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 
     var [eventVideos, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
 
-    // TODO: remove (for testing only--limit number of videos)
-    eventVideos = eventVideos.slice(0,2);
+    eventVideos = eventVideos.slice(0,MAX_VIDEOS);
+    eventVideos.push({index: MAX_VIDEOS+1})
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
