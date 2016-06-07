@@ -1,4 +1,40 @@
 <div class="input-group exp-video-physics row col-md-6 ">
+
+    {{#if playingAnnouncement}}
+
+        <audio id="announcement-audio"
+               onended={{action 'startIntro'}}
+               autoplay="autoplay"
+               >
+
+        {{#if hasBeenPaused}}
+            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.ogg" type="audio/ogg">
+            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.mp3" type="audio/mp3">
+            {{else}}
+              {{#each audioSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+              {{/each}}
+        {{/if}}
+
+        </audio>
+
+    {{/if}}
+
+
+    {{#if doingAttn}}
+        <audio id="pause-audio" autoplay="autoplay">
+            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.ogg" type="audio/ogg">
+            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.mp3" type="audio/mp3">
+        </audio>
+    {{/if}}
+
+    <audio id="exp-music" loop="loop">
+      {{#each musicSources as |stream|}}
+        <source src="{{stream.src}}" type="{{stream.type}}">
+      {{/each}}
+    </audio>
+
+
     <video id="player-video"
            class="{{if doingAttn 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
            autoplay={{autoplay}}

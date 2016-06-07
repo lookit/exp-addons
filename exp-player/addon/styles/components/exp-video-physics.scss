@@ -6,7 +6,7 @@
     max-height: 50%;
 }
 
-.exp-video-physics video.test {
+.exp-video-physics video.test:not(.attn) {
     max-height:80%;
     width:100%;
 }
@@ -14,8 +14,6 @@
 .exp-video-physics video.attn {
     max-height: 30%;
 }
-
-
 
 #experiment-player.player-fullscreen div {
     height: 100%;
