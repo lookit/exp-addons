@@ -17,12 +17,21 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
+    videoRecorder: Ember.inject.service(),
 
     doingIntro: true,
     doingAttn: false,
     doingTest: Ember.computed.not('doingIntro'),
 
     useAlternate: false,
+
+    videoId: Ember.computed('session', 'id', 'experiment', function() {
+        return [
+            this.get('experiment.id'),
+            this.get('id'),
+            this.get('session.id')
+        ].join('_');
+    }).volatile(),
 
     videoSources: Ember.computed('doingIntro', 'doingAttn', 'useAlternate', function() {
         if (this.get('doingAttn')) {
@@ -130,8 +139,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get('doingIntro')) { // moving to test video
-                this.set('doingIntro', false);
+		this.getRecorder().then(() => {
+		    this.get('videoRecorder').resume().then(() => {
+			this.set('doingIntro', false);
+		    });
+		});
             } else {
+		this.get('videoRecorder').stop();
                 this.send('next'); // moving to intro video
             }
         },
@@ -145,6 +159,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         },
         pause: function() {
+	    try {
+		this.get('videoRecorder').pause();
+	    } catch (e) {
+		console.log(e);
+	    }
+
             this.beginPropertyChanges();
 
             window.clearTimeout(this.get('timeoutID'));
@@ -158,6 +178,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
+			this.get('videoRecorder').stop();
                         this.send('next');
                     } else {
                         // if we still have the alternate to use, start at intro
@@ -172,6 +193,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         }
     },
 
+    _recorder: null,
+    getRecorder () {
+	return this.get('_recorder');
+    },
+
     init() { // set up event handler for pausing
         this._super(...arguments);
         $(document).on("keypress", (e) => {
@@ -183,7 +209,21 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         });
         this.send('showFullscreen');
     },
+    didReceiveAttrs() {
+	this._super(...arguments);
+	if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
+	    this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
+		hidden: true,
+		record: true
+	    }).then(() => {
+		this.get('videoRecorder').pause();
+	    }).catch(() => {
+		// TODO handle no flashReady
+	    }));
+	}
+    },
     willDestroyElement() { // remove event handler
+	this.get('videoRecorder').stop();
         this._super(...arguments);
         $(document).off("keypress");
     }

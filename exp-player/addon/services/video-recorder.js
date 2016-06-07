@@ -46,6 +46,7 @@ export default Ember.Service.extend({
     started: Ember.computed.alias('_started').readOnly(),
     camAccess: Ember.computed.alias('_camAccess').readOnly(),
     recording: Ember.computed.alias('_recording').readOnly(),
+    flashReady: Ember.computed.alias('_flashReady').readOnly(),
 
     debug: true,
     _started: false,
@@ -59,6 +60,8 @@ export default Ember.Service.extend({
 
     //Initial setup, installs flash hooks into the page
     init() {
+	this.set('_started', false);
+
         let self = this;
         HOOKS.forEach(hookName => {
             window[hookName] = function() {
@@ -95,7 +98,6 @@ export default Ember.Service.extend({
             throw new Error('videoId must be a string');
         }
 
-        this.set('_started', true);
         this.set('videoId', videoId);
         this.set('sscode', config ? 'asp' : 'php');
 
@@ -107,7 +109,6 @@ export default Ember.Service.extend({
             if (hidden) {
                 $element = $('body');
             }
-
             $element.append(
                 $('<div>', {
                     id: `${divId}-container`,
@@ -124,34 +125,48 @@ export default Ember.Service.extend({
             }
 
             return new RSVP.Promise((resolve, reject) => {
-                window.swfobject.embedSWF('VideoRecorder.swf', $(`#${divId}`)[0].id, this.get('width'), this.get('height'), '10.3.0', '', this.get('flashVars'), this.get('params'), this.get('attributes'), vr => {
-                    if (!vr.success) {
-                        reject(new Error('Install failed'));
-                    }
-                    this.set('_SWFId', vr.id);
-                    this.set('recorder', window.swfobject.getObjectById(vr.id));
-                    $('#' + vr.id).css('height', '100%');
-
-                    if (record) {
-                        this.addObserver('_flashReady', function(_, __, ready) {
-                            if (ready) {
-                                return this.record();
-                            }
-                        });
-                        return resolve(false);
-                    }
-                });
+                window.swfobject.embedSWF(
+		    'VideoRecorder.swf',
+		    document.getElementById(divId),
+		    this.get('width'),
+		    this.get('height'),
+		    '10.3.0',
+		    '',
+		    this.get('flashVars'),
+		    this.get('params'),
+		    this.get('attributes'),
+		    vr => {
+			if (!vr.success) {
+                            reject(new Error('Install failed'));
+			}
+			this.set('_started', true);
+			this.set('_SWFId', vr.id);
+			this.set('recorder', window.swfobject.getObjectById(vr.id));
+			$('#' + vr.id).css('height', '100%');
+			
+			if (record) {
+                            return resolve(this.record());
+			}
+			return resolve();
+                    });
             });
         });
     },
 
     // Pause the recorder
     pause() {
-        if (this.get('recording')) {
-            throw new Error('Never started recording');
-        }
-        this.get('recorder').pause();
-        return true;
+	console.log('Recording paused');
+        this.get('recorder').pauseRecording();
+	this.set('_recording', false);
+	return new Ember.RSVP.Promise((resolve) => resolve());
+    },
+    resume() {
+	console.log('Recording resumed');
+	this.get('recorder').resumeRecording();
+	this.set('_recording', true);
+	return new Ember.RSVP.Promise((resolve) => {
+	    window.setTimeout(() => resolve(), 0);
+	});
     },
 
     // Stop recording and save the video to the server
@@ -199,7 +214,7 @@ export default Ember.Service.extend({
         }
         let count = 0;
         let id = window.setInterval(() => {
-            if (++count > 20) {
+            if (++count > 1000) {
                 return window.clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
             }
             if (!this.get('recorder').record) {
@@ -207,6 +222,7 @@ export default Ember.Service.extend({
             }
             this.get('recorder').record();
             window.clearInterval(id);
+	    return null;
         }, 100);
         return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {
             resolve,
@@ -254,24 +270,16 @@ export default Ember.Service.extend({
         return true;
     },
 
-    on(eName, func) {
-        if (HOOKS.indexOf(eName) === -1) {
-            throw `Invalid event ${eName}`;
-        }
-        this.set(eName, func);
-    },
-
     // Begin Flash hooks
-
     _onRecordingStarted(recorderId) { // jshint ignore:line
         this.set('_recording', true);
+	if (this.get('_recordPromise')) {
+            this.get('_recordPromise').resolve(true);
+        }
     },
 
     _onUploadDone(_, __, videoId) {
         this.set('_recording', false);
-        if (this.get('_recordPromise')) {
-            this.get('_recordPromise').resolve(true);
-        }
         $(`div[data-videoid="${videoId}"]`).remove();
     },
 
@@ -281,7 +289,7 @@ export default Ember.Service.extend({
 
     _onFlashReady() {
         console.log('Flash is ready');
-        this.set('flashReady', true);
+        this.set('_flashReady', true);
     }
     // End Flash hooks
 });
