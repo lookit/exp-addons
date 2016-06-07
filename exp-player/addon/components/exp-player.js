@@ -50,7 +50,6 @@ to continue with the study.
             if (e.which === 33) { // !
                 var max = this.get('frames.length') - 1;
                 this.set('frameIndex', max);
-                this._removeHandlers();
             }
         });
 
@@ -59,6 +58,13 @@ to continue with the study.
         $(window).off('keypress');
         $(window).off('beforeunload');
     },
+    onFrameIndexChange: Ember.observer('frameIndex', function() {
+        var max = this.get('frames.length') - 1;
+	var frameIndex = this.get('frameIndex');
+	if (frameIndex === max) {
+	    this._removeHandlers();
+	}
+    }),
     willDestroy() {
         this._super(...arguments);
         this._removeHandlers();

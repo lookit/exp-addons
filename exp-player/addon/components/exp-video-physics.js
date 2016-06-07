@@ -17,6 +17,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
+    videoRecorder: Ember.inject.service(),
 
     doingIntro: true,
     playingAnnouncement: true,
@@ -25,6 +26,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     timeoutId: 0,
     hasBeenPaused: false,
     useAlternate: false,
+
+    videoId: Ember.computed('session', 'id', 'experiment', function() {
+        return [
+            this.get('experiment.id'),
+            this.get('id'),
+            this.get('session.id')
+        ].join('_');
+    }).volatile(),
 
     videoSources: Ember.computed('doingIntro', 'playingAnnouncement', 'doingAttn', 'useAlternate', function() {
         if (this.get('doingAttn') || this.get('playingAnnouncement')) {
@@ -133,9 +142,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get('doingIntro')) { // moving to test video
-                this.set('doingIntro', false);
+                this.getRecorder().then(() => {
+                    this.get('videoRecorder').resume().then(() => {
+                        this.set('doingIntro', false);
+                    });
+                });
             } else {
-                this.sendAction('next'); // moving to intro video
+                this.get('videoRecorder').stop();
+                this.send('next'); // moving to intro video
             }
         },
         startVideo: function() {
@@ -165,6 +179,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the intro or test videos, or not in FS
                 // show the attentiongrabber
+                this.get('videoRecorder').pause();
                 this.set('doingAttn', true);
                 this.set('playingAnnouncement', false);
             } else { // returning to the videos
@@ -173,7 +188,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
-                        this.send('next'); // TODO: double check this is right, instead of sendAction
+                        this.get('videoRecorder').stop();
+                        this.send('next');
                     } else {
                         // if we still have the alternate to use, start at intro
                         this.set('useAlternate', true);
@@ -183,13 +199,16 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 } else { // if we were previously on the intro
                     this.set('playingAnnouncement', true);
                 }
-
-
                 this.set('doingAttn', false);
             }
 
             this.endPropertyChanges();
         }
+    },
+
+    _recorder: null,
+    getRecorder() {
+        return this.get('_recorder');
     },
 
     init() { // set up event handler for pausing
@@ -203,7 +222,21 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         });
         this.send('showFullscreen');
     },
+    didReceiveAttrs() {
+        this._super(...arguments);
+        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
+            this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
+                hidden: true,
+                record: true
+            }).then(() => {
+                this.get('videoRecorder').pause();
+            }).catch(() => {
+                // TODO handle no flashReady
+            }));
+        }
+    },
     willDestroyElement() { // remove event handler
+        this.get('videoRecorder').stop();
         this._super(...arguments);
         $(document).off("keypress");
     }
