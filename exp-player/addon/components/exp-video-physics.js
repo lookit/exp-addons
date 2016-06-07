@@ -139,13 +139,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get('doingIntro')) { // moving to test video
-		this.getRecorder().then(() => {
-		    this.get('videoRecorder').resume().then(() => {
-			this.set('doingIntro', false);
-		    });
-		});
+                this.getRecorder().then(() => {
+                    this.get('videoRecorder').resume().then(() => {
+                        this.set('doingIntro', false);
+                    });
+                });
             } else {
-		this.get('videoRecorder').stop();
+                this.get('videoRecorder').stop();
                 this.send('next'); // moving to intro video
             }
         },
@@ -159,11 +159,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         },
         pause: function() {
-	    try {
-		this.get('videoRecorder').pause();
-	    } catch (e) {
-		console.log(e);
-	    }
+            try {
+                this.get('videoRecorder').pause();
+            } catch (e) {
+                console.log(e);
+            }
 
             this.beginPropertyChanges();
 
@@ -171,6 +171,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the videos
                 // show the attentiongrabber
+                this.get('videoRecorder').pause();
                 this.set('doingAttn', true);
             } else { // returning to the videos
                 // if doing intro, just return, no change necessary.
@@ -178,7 +179,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
-			this.get('videoRecorder').stop();
+                        this.get('videoRecorder').stop();
                         this.send('next');
                     } else {
                         // if we still have the alternate to use, start at intro
@@ -194,8 +195,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     },
 
     _recorder: null,
-    getRecorder () {
-	return this.get('_recorder');
+    getRecorder() {
+        return this.get('_recorder');
     },
 
     init() { // set up event handler for pausing
@@ -210,20 +211,20 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         this.send('showFullscreen');
     },
     didReceiveAttrs() {
-	this._super(...arguments);
-	if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
-	    this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
-		hidden: true,
-		record: true
-	    }).then(() => {
-		this.get('videoRecorder').pause();
-	    }).catch(() => {
-		// TODO handle no flashReady
-	    }));
-	}
+        this._super(...arguments);
+        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
+            this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
+                hidden: true,
+                record: true
+            }).then(() => {
+                this.get('videoRecorder').pause();
+            }).catch(() => {
+                // TODO handle no flashReady
+            }));
+        }
     },
     willDestroyElement() { // remove event handler
-	this.get('videoRecorder').stop();
+        this.get('videoRecorder').stop();
         this._super(...arguments);
         $(document).off("keypress");
     }

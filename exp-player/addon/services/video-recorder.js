@@ -60,7 +60,7 @@ export default Ember.Service.extend({
 
     //Initial setup, installs flash hooks into the page
     init() {
-	this.set('_started', false);
+        this.set('_started', false);
 
         let self = this;
         HOOKS.forEach(hookName => {
@@ -126,28 +126,28 @@ export default Ember.Service.extend({
 
             return new RSVP.Promise((resolve, reject) => {
                 window.swfobject.embedSWF(
-		    'VideoRecorder.swf',
-		    document.getElementById(divId),
-		    this.get('width'),
-		    this.get('height'),
-		    '10.3.0',
-		    '',
-		    this.get('flashVars'),
-		    this.get('params'),
-		    this.get('attributes'),
-		    vr => {
-			if (!vr.success) {
+                    'VideoRecorder.swf',
+                    document.getElementById(divId),
+                    this.get('width'),
+                    this.get('height'),
+                    '10.3.0',
+                    '',
+                    this.get('flashVars'),
+                    this.get('params'),
+                    this.get('attributes'),
+                    vr => {
+                        if (!vr.success) {
                             reject(new Error('Install failed'));
-			}
-			this.set('_started', true);
-			this.set('_SWFId', vr.id);
-			this.set('recorder', window.swfobject.getObjectById(vr.id));
-			$('#' + vr.id).css('height', '100%');
-			
-			if (record) {
+                        }
+                        this.set('_started', true);
+                        this.set('_SWFId', vr.id);
+                        this.set('recorder', window.swfobject.getObjectById(vr.id));
+                        $('#' + vr.id).css('height', '100%');
+
+                        if (record) {
                             return resolve(this.record());
-			}
-			return resolve();
+                        }
+                        return resolve();
                     });
             });
         });
@@ -155,18 +155,19 @@ export default Ember.Service.extend({
 
     // Pause the recorder
     pause() {
-	console.log('Recording paused');
-        this.get('recorder').pauseRecording();
-	this.set('_recording', false);
-	return new Ember.RSVP.Promise((resolve) => resolve());
+        console.log('Recording paused');
+        var recorder = this.get('recorder');
+        recorder.pauseRecording();
+        this.set('_recording', false);
+        return new Ember.RSVP.Promise((resolve) => resolve());
     },
     resume() {
-	console.log('Recording resumed');
-	this.get('recorder').resumeRecording();
-	this.set('_recording', true);
-	return new Ember.RSVP.Promise((resolve) => {
-	    window.setTimeout(() => resolve(), 0);
-	});
+        console.log('Recording resumed');
+        this.get('recorder').resumeRecording();
+        this.set('_recording', true);
+        return new Ember.RSVP.Promise((resolve) => {
+            window.setTimeout(() => resolve(), 0);
+        });
     },
 
     // Stop recording and save the video to the server
@@ -222,7 +223,7 @@ export default Ember.Service.extend({
             }
             this.get('recorder').record();
             window.clearInterval(id);
-	    return null;
+            return null;
         }, 100);
         return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {
             resolve,
@@ -273,7 +274,7 @@ export default Ember.Service.extend({
     // Begin Flash hooks
     _onRecordingStarted(recorderId) { // jshint ignore:line
         this.set('_recording', true);
-	if (this.get('_recordPromise')) {
+        if (this.get('_recordPromise')) {
             this.get('_recordPromise').resolve(true);
         }
     },
