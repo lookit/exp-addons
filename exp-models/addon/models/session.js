@@ -30,13 +30,10 @@ export default DS.Model.extend(AnonJamModel, {
 
     history: DS.hasMany('history'),
 
-    profile: Ember.computed('profileId', function() {
-        // Get the profile record from within the specified account
-        var model = this.store.findRecord('account', this.get('accountId'));  // TODO: Add a query by account version?
-        model.profileById(this.get('profileId'));
-
-    }),
-
+    getProfile() {
+	let [accountId, ] = this.get('profileId').split('.');
+	return this.store.findRecord('account', accountId).then((account) => account.profileById(this.get('profileId')));
+    },
     anonProfileId: Ember.computed('profileId', function() {
         // For a profile id of format `<acctShortId>.random`, strip off the identifying account ID
         var profileId = this.get('profileId');
