@@ -273,7 +273,7 @@ function parse_name(fname) {
 function toFrames(frameId, eventVideos) {
     var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
-        if (e.index == nVideos) {
+        if (e.index === nVideos) {
             return {
                 kind: 'exp-video-physics',
                 id: `${frameId}`,
@@ -299,11 +299,11 @@ function toFrames(frameId, eventVideos) {
                         "type": "video/mp4"
                     }
                 ]
-            }
+            };
         }
         var features = parse_name(e.fname);
-        var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_05', 'music_06', 'music_07', 'music_08', 'music_09', 'music_10']
-        var musicName = allMusic[Math.floor(Math.random() * allMusic.length)]
+        var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_05', 'music_06', 'music_07', 'music_08', 'music_09', 'music_10'];
+        var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
         return {
             kind: 'exp-video-physics',
@@ -393,10 +393,10 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 	NPERTYPE
     } = conditions;
 
-    var [eventVideos, filenames] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
+    var [eventVideos, ] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
 
     eventVideos = eventVideos.slice(0,MAX_VIDEOS);
-    eventVideos.push({index: MAX_VIDEOS+1})
+    eventVideos.push({index: MAX_VIDEOS+1});
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];

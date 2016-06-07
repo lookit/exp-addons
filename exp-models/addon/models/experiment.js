@@ -129,6 +129,22 @@ export default DS.Model.extend(JamModel, {
 	}
 	return eligible;
     },
+    ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function() {
+	let {
+	    eligibilityMinAge,
+	    eligibilityMaxAge
+	} = this.getProperties('eligibilityMinAge', 'eligibilityMaxAge');
+
+	if (eligibilityMinAge && eligibilityMaxAge) {
+	    return `between ${eligibilityMinAge} and ${eligibilityMaxAge}`;
+	} else if (eligibilityMinAge) {
+	    return `${eligibilityMinAge} and up`;
+	} else if (eligibilityMaxAge) {
+	    return `not older than ${eligibilityMaxAge}`;
+	} else {
+	    return 'any';
+	}
+    }),
 
     history: DS.hasMany('history'),
     getCurrentVersion: function() {
