@@ -24,32 +24,32 @@ export default Ember.Component.extend(FullScreen, {
     fullScreenElementId: 'experiment-player',
 
     allowExit: false,
-
+    hasAttemptedExit: false,
     _registerHandlers() {
         $(window).on('beforeunload', () => {
             if (!this.get('allowExit')) {
+                this.set('hasAttemptedExit', true);
                 return `
 If you're sure you'd like to leave this study early
-you can press 'Leave this Page' to do so.
+you can do so now.
 
-We'd appreciate it if before you do so you fill out a
+We'd appreciate it if before you leave you fill out a
 very breif exit survey letting us know how we can use
 any video captured during this session. Press 'Stay on
-this Page' and press F1 to be taken immediately to the
+this Page' and you will be prompted to go to this
 exit survey.
 
-If this was an accident, just press 'Stay on this Page'
-to continue with the study.
+If leaving this page was an accident you will be 
+able to continue the study.
 `;
             }
             return null;
         });
 
         $(document).on('keypress', (e) => {
-            // TODO changeme
-            if (e.which === 33) { // !
-                var max = this.get('frames.length') - 1;
-                this.set('frameIndex', max);
+            console.log(e.which);
+            if (e.which === 112 || e.which === 126) { // F1 or ~
+                this.send('exitEarly');
             }
         });
 
@@ -60,10 +60,10 @@ to continue with the study.
     },
     onFrameIndexChange: Ember.observer('frameIndex', function() {
         var max = this.get('frames.length') - 1;
-	var frameIndex = this.get('frameIndex');
-	if (frameIndex === max) {
-	    this._removeHandlers();
-	}
+        var frameIndex = this.get('frameIndex');
+        if (frameIndex === max) {
+            this._removeHandlers();
+        }
     }),
     willDestroy() {
         this._super(...arguments);
@@ -180,6 +180,14 @@ to continue with the study.
             } else {
                 console.log('Previous: At frame 0');
             }
+        },
+        exitEarly() {
+            this.set('hasAttemptedExit', false);
+            var max = this.get('frames.length') - 1;
+            this.set('frameIndex', max);
+        },
+        closeExitWarning() {
+            this.set('hasAttemptedExit', false);
         }
     }
 });

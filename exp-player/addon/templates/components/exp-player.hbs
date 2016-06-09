@@ -22,3 +22,22 @@
     }}
   </div>
 </div>
+{{#bs-modal open=hasAttemptedExit header=false footer=false}}
+  {{#bs-modal-body}}
+    <p>
+      Press "Leave now" to leave the study, or "Close" to continue.
+    </p>
+    <div class="button-group">
+      <div class="pull-right">
+      {{#bs-button action=(action 'exitEarly') type="warning"}}
+	Leave now
+      {{/bs-button}}
+      </div>
+      <div class=>
+      {{#bs-button action=(action 'closeExitWarning') type="default"}}
+	Close
+      {{/bs-button}}
+      </div>
+    </div>
+  {{/bs-modal-body}}
+{{/bs-modal}}
