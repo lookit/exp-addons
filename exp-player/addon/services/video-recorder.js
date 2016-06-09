@@ -225,10 +225,17 @@ export default Ember.Service.extend({
             window.clearInterval(id);
             return null;
         }, 100);
-        return new Ember.RSVP.Promise((resolve, reject) => this.set('_recordPromise', {
-            resolve,
-            reject
-        }));
+
+        return new Ember.RSVP.Promise((resolve, reject) => {
+            if (!this.get('camAccess')) {
+                reject();
+            }
+
+            this.set('_recordPromise', {
+                resolve,
+                reject
+            });
+        });
     },
 
     // Uninstall the video recorder
@@ -269,6 +276,13 @@ export default Ember.Service.extend({
             'position': 'absolute'
         });
         return true;
+    },
+
+    on(eName, func) {
+        if (HOOKS.indexOf(eName) === -1) {
+            throw `Invalid event ${eName}`;
+        }
+        this.set(eName, func);
     },
 
     // Begin Flash hooks
