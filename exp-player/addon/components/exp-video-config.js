@@ -5,12 +5,13 @@ import layout from 'exp-player/templates/components/exp-video-config';
 export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Ember.inject.service(),
+    hasCamAccess: Ember.computed.alias('videoRecorder.camAccess'),
 
     didInsertElement() {
         this.get('videoRecorder').start('', this.$('#recorder'), {
             config: true,
             record: false
-      });
+	});
     },
 
     actions: {
