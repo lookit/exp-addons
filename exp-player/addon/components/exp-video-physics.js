@@ -148,7 +148,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                     });
                 });
             } else {
-                this.get('videoRecorder').stop();
                 this.send('next'); // moving to intro video
             }
         },
@@ -188,7 +187,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 if (this.get('doingTest')) {
                     // if it was already the alternate, just move on.
                     if (this.get('useAlternate')) {
-                        this.get('videoRecorder').stop();
                         this.send('next');
                     } else {
                         // if we still have the alternate to use, start at intro
@@ -203,7 +201,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
 
             this.endPropertyChanges();
-        }
+        },
+	next() {
+	    this.get('videoRecorder').stop();
+	    this._super(...arguments);
+	}
     },
 
     _recorder: null,
