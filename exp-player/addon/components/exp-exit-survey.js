@@ -36,8 +36,8 @@ const defaultSchema = {
                 title: "Withdrawal of video data"
             },
             feedback: {
-                type:"string",
-                title:"Your feedback:"
+                type: "string",
+                title: "Your feedback:"
             }
         }
     },
@@ -77,8 +77,8 @@ const defaultSchema = {
                 message: "Please select a privacy level for your video.",
                 optionLabels: ['<strong>Private:</strong> Video may only be viewed by <span id="scientistDescription">authorized scientists.</span>', '<strong>Scientific and educational:</strong> Video may be shared for scientific or educational purposes. For example, we might show a video clip in a talk at a scientific conference or an undergraduate class about cognitive development, or include an image or video in a scientific paper. In some circumstances, video or images may be available online, for instance as supplemental material in a scientific paper.', "<strong>Publicity:</strong> Please select this option if you'd be excited about seeing your child featured on the Lookit website or in a news article about this study! Your video may be shared for publicity as well as scientific and educational purposes; it will never be used for commercial purposes. Video clips shared may be available online to the general public."],
                 sort: function(a, b) { // This is an absurd hack because
-                        // I can't get false to work...
-                            var vals = ['Private', 'Scientific', 'Publicity']
+                    // I can't get false to work...
+                    var vals = ['Private', 'Scientific', 'Publicity'];
                     if (vals.indexOf(a.value) > vals.indexOf(b.value)) {
                         return 1;
                     } else if (vals.indexOf(a.value) < vals.indexOf(b.value)) {
@@ -215,6 +215,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, {
                 if (this.isValid(true)) {
                     root.set('formData', this.getValue());
                     root.set('section1', false);
+                    root.sendAction.call(root, 'sessionCompleted');
+                    root.send.call(root, 'save');
                 }
             },
             finish: function() {
@@ -222,7 +224,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, {
                 Ember.merge(formData, this.getValue());
                 root.set('formData', formData);
                 console.log('Post-study survey complete.');
-                root.actions.next.apply(root);
+                root.sendAction.call(root, 'next');
             }
         };
     }),
@@ -234,7 +236,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, {
         return 1;
     }),
     currentDaysSessionsCompleted: Ember.computed('frameContext', function() {
-        // Warning, this implementation may be inaccurate1
+        // Warning, this implementation may be inaccurate
         // TODO, figure out what the client's expected behavior is here and resolve
         // https://openscience.atlassian.net/browse/LEI-111
         var pastSessionDates = this.get('frameContext.pastSessions').map((session) => {
