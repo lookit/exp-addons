@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-physics-pre-video';
 
@@ -20,7 +22,6 @@ export default ExpFrameBaseComponent.extend({
                     description: 'Should the user be forced to play the clip before leaving the page?',
                     default: true
                 }
-                // define additional parameters here
             },
             required: ['id']
         },
@@ -50,7 +51,7 @@ export default ExpFrameBaseComponent.extend({
             if (this.preventNext) {
                 this.set('showWarning', true);
             } else {
-                this.get('next')();
+                this.send('next');
             }
         }
     },
