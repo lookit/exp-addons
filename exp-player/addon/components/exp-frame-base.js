@@ -106,12 +106,16 @@ export default Ember.Component.extend({
             timings.push(eventData);
             this.set('eventTimings', timings);
         },
+        save() {
+            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+            // When exiting frame, save the data to the base player using the provided saveHandler
+            this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
+        },
         next() {
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Next: Leaving frame ID ${frameId}`);
             this.send('setTimeEvent', 'nextFrame');
-            // When exiting frame, save the data to the base player using the provided saveHandler
-            this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
+            this.send('save');
             this.sendAction('next');
         },
         last() {

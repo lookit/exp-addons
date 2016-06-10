@@ -122,7 +122,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                     description: 'Length of test videos in seconds',
                     default: 20
                 },
-                isLast:  {
+                isLast: {
                     type: 'boolean',
                     description: 'Whether this is the last exp-physics-video frame in the group',
                     default: false
@@ -133,9 +133,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             // This video does not explicitly capture any parameters from the userdata:
             type: 'object',
             properties: {
-		videoId: {
-		    type: 'string'
-		}
+                videoId: {
+                    type: 'string'
+                }
             },
             required: []
         }
@@ -169,8 +169,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 window.clearTimeout(this.get('timeoutID'));
                 this.send('next');
             } else {
-		this.set('playingAnnouncement', false);
-	    }
+                this.set('playingAnnouncement', false);
+            }
         },
         pause: function() {
 
@@ -205,10 +205,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             this.endPropertyChanges();
         },
-	next() {
-	    this.get('videoRecorder').stop();
-	    this._super(...arguments);
-	}
+        next() {
+            this.get('videoRecorder').stop();
+            this._super(...arguments);
+        }
     },
 
     _recorder: null,
