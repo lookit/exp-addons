@@ -132,8 +132,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         data: {
             // This video does not explicitly capture any parameters from the userdata:
             type: 'object',
-            properties: { // We don't *need* to tell the server about this, but it might be nice to track usage of the setup page
-
+            properties: {
+		videoId: {
+		    type: 'string'
+		}
             },
             required: []
         }
@@ -165,9 +167,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         startIntro: function() {
             if (this.isLast) {
                 window.clearTimeout(this.get('timeoutID'));
-                this.sendAction('next');
-            }
-            this.set('playingAnnouncement', false);
+                this.send('next');
+            } else {
+		this.set('playingAnnouncement', false);
+	    }
         },
         pause: function() {
 
