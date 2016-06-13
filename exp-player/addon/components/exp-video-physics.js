@@ -130,9 +130,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
         },
         data: {
-            // This video does not explicitly capture any parameters from the userdata:
+            // Capture
             type: 'object',
             properties: {
+                videosShown: {
+                    type: 'string',
+                    default: []
+                },
                 videoId: {
                     type: 'string'
                 }
@@ -143,7 +147,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     actions: {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
-            if (this.get('doingIntro')) { // moving to test video
+            if (this.get('doingIntro') && !this.get('isLast')) { // moving to test video
                 this.getRecorder().then(() => {
                     this.get('videoRecorder').resume().then(() => {
                         this.set('doingIntro', false);
@@ -162,13 +166,21 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 }, emberObj.get('testLength') * 1000, emberObj);
                 this.set('timeoutID', t);
                 $("audio#exp-music")[0].play();
+                if (this.get('useAlternate')) {
+                    this.sendAction('setTimeEvent', 'startAlternateVideo');
+                } else {
+                    this.sendAction('setTimeEvent', 'startTestVideo');
+                }
             }
         },
         startIntro: function() {
+            this.sendAction('setTimeEvent', 'finishAnnouncement');
             if (this.isLast) {
                 window.clearTimeout(this.get('timeoutID'));
                 this.send('next');
             } else {
+                this.sendAction('setTimeEvent', 'startIntro');
+                this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
                 this.set('playingAnnouncement', false);
             }
         },
@@ -178,6 +190,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             window.clearTimeout(this.get('timeoutID'));
             this.set('hasBeenPaused', true);
+            this.sendAction('action', 'setTimeEvent', 'pauseVideo');
 
             if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the intro or test videos, or not in FS
                 // show the attentiongrabber
@@ -234,6 +247,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 hidden: true,
                 record: true
             }).then(() => {
+                this.send('setTimeEvent', 'recorderReady');
                 this.get('videoRecorder').pause();
             }).catch(() => {
                 // TODO handle no flashReady

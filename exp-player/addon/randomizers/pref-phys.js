@@ -376,7 +376,7 @@ function toFrames(frameId, eventVideos) {
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
-    var MAX_VIDEOS = 2; // for testing only - limit number of videos. Change to 24 for prod.
+    var MAX_VIDEOS = 1; // for testing only - limit number of videos. Change to 24 for prod.
 
     pastSessions = pastSessions.filter(function(session) {
         return session.get('conditions');
