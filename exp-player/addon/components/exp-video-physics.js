@@ -147,12 +147,16 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     actions: {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
-            if (this.get('doingIntro') && !this.get('isLast')) { // moving to test video
-                this.getRecorder().then(() => {
-                    this.get('videoRecorder').resume().then(() => {
-                        this.set('doingIntro', false);
+            if (this.get('doingIntro')) { // moving to test video
+                if (!this.get('isLast')) {
+                    this.getRecorder().then(() => {
+                        this.get('videoRecorder').resume().then(() => {
+                            this.set('doingIntro', false);
+                        });
                     });
-                });
+                } else {
+                    this.set('doingIntro', false);
+                }
             } else {
                 this.send('next'); // moving to intro video
             }
@@ -167,30 +171,35 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 this.set('timeoutID', t);
                 $("audio#exp-music")[0].play();
                 if (this.get('useAlternate')) {
-                    this.sendAction('setTimeEvent', 'startAlternateVideo');
+                    this.send('setTimeEvent', 'startAlternateVideo');
                 } else {
-                    this.sendAction('setTimeEvent', 'startTestVideo');
+                    this.send('setTimeEvent', 'startTestVideo');
                 }
             }
         },
         startIntro: function() {
-            this.sendAction('setTimeEvent', 'finishAnnouncement');
             if (this.isLast) {
                 window.clearTimeout(this.get('timeoutID'));
                 this.send('next');
             } else {
-                this.sendAction('setTimeEvent', 'startIntro');
+                this.send('setTimeEvent', 'startIntro');
                 this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
                 this.set('playingAnnouncement', false);
             }
         },
+
         pause: function() {
 
             this.beginPropertyChanges();
 
             window.clearTimeout(this.get('timeoutID'));
             this.set('hasBeenPaused', true);
-            this.sendAction('action', 'setTimeEvent', 'pauseVideo');
+
+            // only if we're actually pausing something, record the event
+            if (!this.get('doingAttn') || this.get('playingAnnouncement')) {
+                this.send('setTimeEvent', 'pauseVideo');
+            }
+
 
             if (!this.get('doingAttn') || !this.checkFullscreen()) { // pausing one of the intro or test videos, or not in FS
                 // show the attentiongrabber
@@ -218,6 +227,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             this.endPropertyChanges();
         },
+
         next() {
             this.get('videoRecorder').stop();
             this._super(...arguments);

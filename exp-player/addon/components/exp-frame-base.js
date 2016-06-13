@@ -102,7 +102,7 @@ export default Ember.Component.extend({
             };
             Ember.merge(eventData, extra || {});
             // Copy timing event into parent dict; TODO is there a more elegant way?
-            var timings = this.get('eventTimings');
+            var timings = this.get('eventTimings') || [];
             timings.push(eventData);
             this.set('eventTimings', timings);
         },
