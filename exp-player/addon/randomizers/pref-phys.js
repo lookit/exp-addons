@@ -103,7 +103,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
 
     // Objects to use: elements correspond to videotypes
     var objects = [
-        ["apple", "cup", "orangeball", "soap", "spraybottle", "whiteball"],
+        ["apple", "cup", "orangeball", "lotion", "spray", "whiteball"],
         ["train", "marker", "toycar", "sunglasses", "flashlight", "block"],
         ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
         ["A", "B", "C", "D", "E", "F"]
@@ -258,19 +258,54 @@ function parse_name(fname) {
         case "F":
             features.object = "wrench";
             break;
-        case "soap":
-            features.object = "lotion";
-            break;
-        case "spraybottle":
-            features.object = "spray";
-            break;
     }
 
     return features;
 
 }
 
-function toFrames(frameId, eventVideos) {
+function audioSourceObjs(path, shortname) {
+    return  [
+                {
+                    "src": path + shortname + '.ogg',
+                    "type": "audio/ogg"
+                },
+                {
+                    "src": path + shortname + '.mp3',
+                    "type": "audio/mp3"
+                }
+            ]
+}
+
+function videoSourceObjs(path, shortname, organizedByType) {
+    if (!organizedByType) {
+        return  [
+                    {
+                        "src": path + shortname + '.webm',
+                        "type": "video/webm"
+                    },
+                    {
+                        "src": path + shortname + '.mp4',
+                        "type": "video/mp4"
+                    }
+                ]
+    } else {
+        return  [
+                {
+                    "src": path + 'webm/' + shortname + '.webm',
+                    "type": "video/webm"
+                },
+                {
+                    "src": path + 'mp4/' + shortname + '.mp4',
+                    "type": "video/mp4"
+                }
+            ]
+    }
+}
+
+function toFrames(frameId, eventVideos, BASE_DIR) {
+
+
     var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
         if (e.index === nVideos) {
@@ -279,26 +314,12 @@ function toFrames(frameId, eventVideos) {
                 id: `${frameId}`,
                 autoplay: true,
                 isLast: true,
-                audioSources: [
-                        {
-                            "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/all_done.ogg',
-                            "type": "audio/ogg"
-                        },
-                        {
-                            "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/all_done.mp3',
-                            "type": "audio/mp3"
-                        }
-                ],
-                attnSources: [
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.webm',
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.mp4',
-                        "type": "video/mp4"
-                    }
-                ]
+                audioSources: audioSourceObjs(
+                    BASE_DIR + 'audio/',
+                    'all_done'),
+                attnSources: videoSourceObjs(
+                    BASE_DIR + 'stimuli/attention/',
+                    'attentiongrabber'),
             };
         }
         var features = parse_name(e.fname);
@@ -311,72 +332,31 @@ function toFrames(frameId, eventVideos) {
             autoplay: true,
             testLength: 5, // TODO: change to 20s for actual testing.
             isLast: false,
-            audioSources: [
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/video_' + ("00" + (e.index)).slice(-2)  + '.ogg',
-                        "type": "audio/ogg"
-                    },
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/video_' + ("00" + (e.index)).slice(-2)  + '.mp3',
-                        "type": "audio/mp3"
-                    }
-            ],
-            musicSources: [
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/' + musicName + '.ogg',
-                        "type": "audio/ogg"
-                    },
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/audio/' + musicName + '.mp3',
-                        "type": "audio/mp3"
-                    }
-            ],
-            introSources: [
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_${features.object}.webm`,
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/intro/cropped_${features.object}.mp4`,
-                        "type": "video/mp4"
-                    }
-            ],
-            attnSources: [
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.webm',
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": 'https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/attention/attentiongrabber.mp4',
-                        "type": "video/mp4"
-                    }
-            ],
-            sources: [
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `webm/${e.fname}.webm`,
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `mp4/${e.fname}.mp4`,
-                        "type": "video/mp4"
-                    }
-            ],
-            altSources: [
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `webm/${e.altName}.webm`,
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": `https://s3.amazonaws.com/lookitcontents/exp-physics/stimuli/${features.eventType}/` + `mp4/${e.altName}.mp4`,
-                        "type": "video/mp4"
-                    }
-            ]
+            audioSources: audioSourceObjs(
+                BASE_DIR + 'audio/',
+                'video_' + ("00" + (e.index)).slice(-2)),
+            musicSources: audioSourceObjs(
+                BASE_DIR + 'audio/',
+                musicName),
+            introSources: videoSourceObjs(
+                BASE_DIR + 'stimuli/intro/',
+                `cropped_${features.object}`),
+            attnSources: videoSourceObjs(
+                BASE_DIR + 'stimuli/attention/',
+                'attentiongrabber'),
+            sources: videoSourceObjs(
+                BASE_DIR + 'stimuli/' + features.eventType + '/',
+                e.fname, true),
+            altSources: videoSourceObjs(
+                BASE_DIR + 'stimuli/' + features.eventType + '/',
+                e.altName, true)
         };
     });
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 1; // for testing only - limit number of videos. Change to 24 for prod.
+    var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
     pastSessions = pastSessions.filter(function(session) {
         return session.get('conditions');
@@ -400,7 +380,7 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
-    toFrames(frameId, eventVideos).forEach((frame) => {
+    toFrames(frameId, eventVideos, BASE_DIR).forEach((frame) => {
 	return resolved.push(...resolveFrame(null, frame)[0]);
     });
     return [resolved, conditions];
