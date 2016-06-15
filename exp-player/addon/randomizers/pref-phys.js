@@ -323,7 +323,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             };
         }
         var features = parse_name(e.fname);
-        var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_05', 'music_06', 'music_07', 'music_08', 'music_09', 'music_10'];
+        var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_06', 'music_07', 'music_09', 'music_10'];
         var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
         return {
