@@ -31,9 +31,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     timeoutId: 0,
     hasBeenPaused: false,
     useAlternate: false,
-    currentTask: 'announce', // announce, intro, or test. trying brining
-    // this back up here in case it was getting set late-ish and contradicting
-    // startIntro
+    currentTask: 'announce', // announce, intro, or test.
     isPaused: false,
 
     videoId: Ember.computed('session', 'id', 'experiment', function() {
@@ -196,8 +194,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         },
         startIntro: function() {
 
-            console.log('StartIntro call from: ');
-            console.log(this);
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
@@ -209,7 +205,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
             }
 
-            console.log('Completed StartIntro call');
 
         },
 
@@ -266,10 +261,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
 
             this.endPropertyChanges();
-
-            console.log(this.get('currentTask')); // going to see whether it knows it's on 'intro' when it's stuck showing attn for intro
-            console.log(this.get('videoSources'));
-            console.log(this.get('doingIntro'));
         //}
         }
         },
@@ -297,7 +288,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
     didReceiveAttrs() {
         this._super(...arguments);
-        //this.set('currentTask', 'announce');
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
             this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
                 hidden: true,
