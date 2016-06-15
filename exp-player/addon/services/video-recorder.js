@@ -153,11 +153,14 @@ export default Ember.Service.extend({
         });
     },
 
-    // Pause the recorder
-    pause() {
-        console.log('Recording paused');
+    // Pause the recorder. If optional skipIfMissing argument is provided (and
+    // true), don't raise an error if recording isn't ready yet.
+    pause(skipIfMissing) {
         var recorder = this.get('recorder');
-        recorder.pauseRecording();
+        if (!skipIfMissing || recorder.pauseRecording) {
+            recorder.pauseRecording();
+            console.log('Recording paused');
+        }
         this.set('_recording', false);
         return new Ember.RSVP.Promise((resolve) => resolve());
     },
