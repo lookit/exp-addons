@@ -355,7 +355,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
-    var MAX_VIDEOS = 1; // for testing only - limit number of videos. Change to 24 for prod.
+    var MAX_VIDEOS = 4; // for testing only - limit number of videos. Change to 24 for prod.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
     pastSessions = pastSessions.filter(function(session) {

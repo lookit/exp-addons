@@ -20,19 +20,20 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     videoRecorder: Ember.inject.service(),
     recordingIsReady: false,
 
-    doingIntro: Ember.computed('currentTask', function() {
+    doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
     }),
-    doingAnnouncement: Ember.computed('currentTask', function() {
-        return (this.get('currentTask') === 'announce');
-    }),
-    doingTest: Ember.computed('currentTask', function() {
+    playAnnouncementNow: true,
+
+    doingTest: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'test');
     }),
     timeoutId: 0,
     hasBeenPaused: false,
     useAlternate: false,
-    currentTask: null, // announce, intro, or test
+    currentTask: 'announce', // announce, intro, or test. trying brining
+    // this back up here in case it was getting set late-ish and contradicting
+    // startIntro
     isPaused: false,
 
     videoId: Ember.computed('session', 'id', 'experiment', function() {
@@ -71,8 +72,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             return;
         }
         this._super(...arguments);
-        if (!this.checkFullscreen() && !this.get('isPaused')) {
-            this.pauseStudy();
+        if (!this.checkFullscreen()) {
+            this.send('setTimeEvent', 'leftFullscreen');
+            if (!this.get('isPaused')) {
+                this.pauseStudy();
+            }
+        } else {
+            this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
 
@@ -190,9 +196,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         },
         startIntro: function() {
 
+            console.log('StartIntro call from: ');
+            console.log(this);
             this.set('currentTask', 'intro');
-
-            if (~this.get('isPaused')) {
+            this.set('playAnnouncementNow', false);
 
             if (this.isLast) {
                 window.clearTimeout(this.get('timeoutID'));
@@ -201,7 +208,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 this.send('setTimeEvent', 'startIntro');
                 this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
             }
-            }
+
+            console.log('Completed StartIntro call');
 
         },
 
@@ -215,6 +223,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
         //care of in videoRecorder.pause(), skip the check.
         //if (this.get('recordingIsReady')) {
+        if (!this.get('isLast')) {
             this.beginPropertyChanges();
 
             this.set('hasBeenPaused', true);
@@ -225,8 +234,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             if (wasPaused) {
                 this.set('doingAttn', false);
                 this.set('isPaused', false);
-
-                //this.set('doingIntro', true);
                 if (currentState === "test") {
                     if (this.get('useAlternate')) {
                         // Necessary to reset hasBeenPaused
@@ -234,27 +241,37 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                         // work just to put this in init, or rely on the
                         // default values, or do endPropertyChanges before next.
                         this.send('next');
-                        this.set('hasBeenPaused', false);
+                        this.set('hasBeenPaused', true);
+                        this.set('currentTask', 'announce');
+                        this.set('playAnnouncementNow', true);
                         this.endPropertyChanges();
                         return;
                     } else {
                         this.set('useAlternate', true);
                         this.set('currentTask', 'announce');
+                        this.set('playAnnouncementNow', true);
                     }
                 } else {
                     this.set('currentTask', 'announce');
+                    this.set('playAnnouncementNow', true);
                 }
 
             // Not currently paused: pause
             } else if (!wasPaused) {
                 window.clearTimeout(this.get('timeoutID'));
-                this.send('setTimeEvent', 'pauseVideo');
+                this.send('setTimeEvent', 'pauseVideo', {'currentTask': this.get('currentTask')});
                 this.get('videoRecorder').pause(true);
+                this.set('playAnnouncementNow', false);
                 this.set('isPaused', true);
             }
 
             this.endPropertyChanges();
+
+            console.log(this.get('currentTask')); // going to see whether it knows it's on 'intro' when it's stuck showing attn for intro
+            console.log(this.get('videoSources'));
+            console.log(this.get('doingIntro'));
         //}
+        }
         },
 
     _recorder: null,
@@ -280,7 +297,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
     didReceiveAttrs() {
         this._super(...arguments);
-        this.set('currentTask', 'announce');
+        //this.set('currentTask', 'announce');
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
             this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
                 hidden: true,

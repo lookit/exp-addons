@@ -1,19 +1,26 @@
 <div class="input-group exp-video-physics row col-md-6 ">
 
-    {{#if doingAnnouncement}}
+    {{#if playAnnouncementNow}}
 
         <audio id="announcement-audio"
                onended={{action 'startIntro'}}
                autoplay="autoplay"
                >
 
-        {{#if hasBeenPaused}}
-            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.ogg" type="audio/ogg">
-            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.mp3" type="audio/mp3">
-        {{else}}
-              {{#each audioSources as |stream|}}
+        {{#if isLast}}
+            {{#each audioSources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
               {{/each}}
+        {{else}}
+
+            {{#if hasBeenPaused}}
+                <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.ogg" type="audio/ogg">
+                <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.mp3" type="audio/mp3">
+            {{else}}
+                  {{#each audioSources as |stream|}}
+                    <source src="{{stream.src}}" type="{{stream.type}}">
+                  {{/each}}
+            {{/if}}
         {{/if}}
 
         </audio>
@@ -36,7 +43,7 @@
 
 
     <video id="player-video"
-           class="{{if doingAnnouncement 'attn'}} {{if isPaused 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
+           class="{{if playAnnouncementNow 'attn'}} {{if isPaused 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
            autoplay={{autoplay}}
            poster="{{poster}}"
            onended={{ if autoforwardOnEnd (action 'playNext') }}
