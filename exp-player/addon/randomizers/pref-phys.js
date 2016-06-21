@@ -106,7 +106,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["apple", "cup", "orangeball", "lotion", "spray", "whiteball"],
         ["train", "marker", "toycar", "sunglasses", "flashlight", "block"],
         ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
-        ["A", "B", "C", "D", "E", "F"]
+        ["box", "funnel", "eraser", "scissors", "spoon", "wrench"]
     ];
 
     // Options for videos, organized by event
