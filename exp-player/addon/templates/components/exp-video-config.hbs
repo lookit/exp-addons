@@ -1,15 +1,15 @@
 <div class="row exp-physics-config" id="exp-video-config">
-  <div class="col-xs-12 col-md-8">
+  <div class="col-md-12">
     <p>{{instructions}}</p>
     <span id="not-recording-note"><em>* Please note: we are <strong>not</strong> recording any video during setup.</em></span>
   </div>
 </div>
 <div class="row exp-physics-config" style="height: 65vh">
-  <div id="recorder" class="col-xs-12 col-md-8 col-md-offset-1" style="height:100%"></div>
+  <div id="recorder" class="col-md-10 col-md-offset-1" style="height:100%"></div>
 </div>
 <br>
 <div class="row exp-controls exp-physics-config">
-  <div class="col-xs-offset-1 col-xs-10 col-md-8 col-md-offset-1">
+  <div class="col-md-12">
     <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'next' }} > Next </button>
   </div>
 </div>
