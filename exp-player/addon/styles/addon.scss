@@ -10,7 +10,6 @@
 @import "components/exp-exit-survey";
 @import "components/exp-video-physics";
 @import "components/radio-group";
-@import "exp-physics";
 
 .exp-text-large {
     font-size: 2em;
@@ -36,4 +35,10 @@ div.col-md-8 {
 
 .exp-controls {
     margin: 5px;
+}
+
+#expContainer {
+    border: medium solid red;
+    max-width: 1200px;
+    margin: 2% auto;
 }
