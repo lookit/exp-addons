@@ -274,7 +274,7 @@ function audioSourceObjs(path, shortname) {
                     "src": path + shortname + '.mp3',
                     "type": "audio/mp3"
                 }
-            ]
+            ];
 }
 
 function videoSourceObjs(path, shortname, organizedByType) {
@@ -288,7 +288,7 @@ function videoSourceObjs(path, shortname, organizedByType) {
                         "src": path + shortname + '.mp4',
                         "type": "video/mp4"
                     }
-                ]
+                ];
     } else {
         return  [
                 {
@@ -299,7 +299,7 @@ function videoSourceObjs(path, shortname, organizedByType) {
                     "src": path + 'mp4/' + shortname + '.mp4',
                     "type": "video/mp4"
                 }
-            ]
+            ];
     }
 }
 
