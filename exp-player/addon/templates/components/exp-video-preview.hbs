@@ -1,7 +1,7 @@
 <div id="exp-video-preview">
 
 <div class="row">
-    <div class="col-xs-12 col-md-8">
+    <div class="col-md-12">
         {{#unless prompt}}
             {{currentVideo.caption}}
             <br> <br>
@@ -17,7 +17,7 @@
 {{#unless prompt}}
 
 <div class="row">
-    <div class="col-xs-12 col-md-10 text-center">
+    <div class="col-md-12 text-center">
         {{#if currentVideo.imgSrc}}
 
             <img class="exp-physics-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}}>
@@ -36,7 +36,7 @@
 </div>
 
 <div class="row exp-controls">
-    <div class="col-xs-12 col-md-10 text-center">
+    <div class="col-md-12 text-center">
         <!--<button class="btn btn-default pull-left" {{action 'next'}}>End preview</button>-->
         <button disabled={{noPrev}} {{action 'previousVideo'}} class="btn btn-primary pull-left"> Previous video</button>
         {{#if noNext}}
