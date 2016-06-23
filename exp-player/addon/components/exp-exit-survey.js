@@ -6,7 +6,7 @@ import moment from 'moment';
 import layout from '../templates/components/exp-exit-survey';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import FullScreen from '../mixins/full-screen';
+
 
 let {
     $
@@ -57,10 +57,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     type: 'string'
                 },
                 withdrawal: {
-                    type: 'string'
+                    type: 'boolean'
                 },
                 feedback: {
                     type: 'string'
+                },
+                emailOptOut: {
+                    type: 'boolean',
+                    default: true
                 },
                 idealSessionsCompleted: {
                     type: 'integer',

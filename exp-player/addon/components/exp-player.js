@@ -39,7 +39,7 @@ any video captured during this session. Press 'Stay on
 this Page' and you will be prompted to go to this
 exit survey.
 
-If leaving this page was an accident you will be 
+If leaving this page was an accident you will be
 able to continue the study.
 `;
             }
