@@ -1,5 +1,6 @@
 <div class="row">
-  <div class="col-md-12 exp-physics-exit-survey">
+  <div class="vertical-pad"></div>
+  <div class="col-md-8 col-md-offset-2 exp-physics-exit-survey">
 
     {{#if section1}}
     <h4>{{title1}}</h4>
@@ -7,7 +8,8 @@
       {{dynamic-form schema=formSchema formActions=formActions}}
     {{else}}
         <h4>{{title2}}</h4>
-      <p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
+      <p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. </p>
+      <p>We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
       <div class="progress">
         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{progressValue}}
         aria-valuemin="0" aria-valuemax="100" style="width:{{progressValue}}%">

@@ -34,7 +34,15 @@
 }
 
 #expContainer {
-    border: medium solid red;
     max-width: 1200px;
-    margin: 2% auto;
+    margin: auto;
+}
+
+.exp-text {
+    margin: auto;
+    max-width: 65em;
+}
+
+.vertical-pad {
+    height: 8vh;
 }
