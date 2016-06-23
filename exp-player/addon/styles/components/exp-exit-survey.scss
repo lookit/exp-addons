@@ -2,8 +2,16 @@
     max-width: 200px;
 }
 
+.exp-physics-exit-survey .ember-view .date {
+    width: 30%;
+}
 
-.exp-physics-exit-survey .alpaca-field[data-alpaca-field-name="withdraw"] {
+.exp-physics-exit-survey .alpaca-field {
     font-size: small;
     color: rgb(95,95,95);
+}
+
+.exp-physics-exit-survey label {
+
+    vertical-align: baseline;
 }
