@@ -135,8 +135,9 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
             }));
         }
     },
-    willDestroyElement() {
+    willDestroyElement() { // remove event handler
         this.get('videoRecorder').stop();
         this._super(...arguments);
+        $(document).off("keypress");
     }
 });
