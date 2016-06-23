@@ -131,13 +131,16 @@ able to continue the study.
     },
     _exit() {
         this.get('videoRecorder').finished().then(() => {
-            this.get('session').set('completed', true);
+            this.send('sessionCompleted');
             console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
             this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
         });
     },
 
     actions: {
+        sessionCompleted() {
+            this.get('session').set('completed', true);
+        },
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
             console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
