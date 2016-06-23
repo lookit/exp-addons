@@ -9,7 +9,7 @@
  	  {{bs-datetimepicker format="MM/DD/YYYY" pickDate=false noIcon=true allowInputToggle=true updateDate=(action (mut birthDate))}}
       {{#if showValidation}}
       <p class="text text-danger">
-        {{ validations.attrs.napWakeUp.messages }}
+        {{ validations.attrs.birthDate.messages }}
       </p>
       {{/if}}
           <hr>
@@ -35,21 +35,20 @@
          <label>Use of video clips and images:</label>
         <div class="radio">
           <label>
-            {{radio-button value="private" name="useOfMedia"}}
-            <b>Private:</b> Video may only be viewed by authorized scientists.
+            {{radio-button value="private" checked=useOfMedia name="useOfMedia"}}
+            <strong>Private:</strong> Video may only be viewed by authorized scientists.
           </label>
         </div>
             <div class="radio">
              <label>
-               {{radio-button value="scientific" name="useOfMedia"}}
-               <b>Scientific and educational:</b> Video may be shared for scientific or educational purposes. For example, we might show a video clip in a talk at a scientific conference or an undergraduate class about cognitive development, or include an image or video in a scientific paper. In some circumstances, video or images may be available online, for instance as supplemental material in a scientific paper.
-
+               {{radio-button value="scientific" checked=useOfMedia name="useOfMedia"}}
+               <strong>Scientific and educational:</strong> Video may be shared for scientific or educational purposes. For example, we might show a video clip in a talk at a scientific conference or an undergraduate class about cognitive development, or include an image or video in a scientific paper. In some circumstances, video or images may be available online, for instance as supplemental material in a scientific paper.
              </label>
         </div>
            <div class="radio">
             <label>
-              {{radio-button value="public" name="useOfMedia"}}
-              <b>Publicity:</b> Please select this option if you'd be excited about seeing your child featured on the Lookit website or in a news article about this study! Your video may be shared for publicity as well as scientific and educational purposes; it will never be used for commercial purposes. Video clips shared may be available online to the general public.
+              {{radio-button value="public" checked=useOfMedia name="useOfMedia"}}
+              <strong>Publicity:</strong> Please select this option if you'd be excited about seeing your child featured on the Lookit website or in a news article about this study! Your video may be shared for publicity as well as scientific and educational purposes; it will never be used for commercial purposes. Video clips shared may be available online to the general public.
             </label>
           </div>
           {{#if showValidation}}
@@ -65,7 +64,6 @@
          {{textarea rows=3 cols=40}}
          {{bs-button class="pull-right" defaultText="Continue" type="success" action='continue'}}
       {{/bs-form}}
-      <!--{{dynamic-form schema=formSchema formActions=formActions}}-->
     {{else}}
         <h4>{{title2}}</h4>
       <p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
@@ -75,8 +73,8 @@
           {{progressValue}}% Complete
         </div>
       </div>
+      {{bs-button class="pull-right" defaultText="Continue" type="success" action='finish'}}
       <p>{{exitMessage}}</p>
-      {{dynamic-form schema=additionalForm formActions=formActions}}
     {{/if}}
   </div>
 </div>

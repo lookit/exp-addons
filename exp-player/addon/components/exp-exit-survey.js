@@ -69,10 +69,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
     actions: {
         continue() {
             if (this.get('validations.isValid')) {
-                debugger;
+                this.set('section1', false);
+                this.send('save');
             } else {
                 this.set('showValidation', true);
             }
+        },
+        finish() {
+            this.send('next');
         }
     },
     currentSessionsCompleted: Ember.computed('frameContext', function() {
