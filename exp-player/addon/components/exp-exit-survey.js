@@ -46,10 +46,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
             type: 'object',
             properties: {
-                formData: {
-                    type: 'object',
-                    default: {}
-                },
                 birthDate: {
                     type: 'string',
                     default: null
@@ -74,12 +70,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     type: 'integer',
                     default: 14
                 },
-                exitMessage: {
-                    type: 'string'
-                },
-                exitThankYou: {
-                    type: 'string'
-                }
             }
         },
 
