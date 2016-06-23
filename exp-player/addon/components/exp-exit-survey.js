@@ -59,6 +59,26 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 },
                 useOfMedia: {
                     type: 'string'
+                },
+                withdrawal: {
+                    type: 'string'
+                },
+                feedback: {
+                    type: 'string'
+                },
+                idealSessionsCompleted: {
+                    type: 'integer',
+                    default: 3
+                },
+                idealDaysSessionsCompleted: {
+                    type: 'integer',
+                    default: 14
+                },
+                exitMessage: {
+                    type: 'string'
+                },
+                exitThankYou: {
+                    type: 'string'
                 }
             }
         },
