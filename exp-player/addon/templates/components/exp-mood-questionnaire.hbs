@@ -85,11 +85,12 @@
 	  {{/if}}
 	  {{bs-datetimepicker
 	  date=napWakeUp
-	  format="h:mm"
+	  format="H:mm"
 	  pickDate=false
 	  noIcon=true
 	  allowInputToggle=true
 	  placeholder="hours:minutes"
+      useCurrent=false
 	  updateDate=(action (mut napWakeUp))}}
 	</div>
       </div>
@@ -138,11 +139,12 @@
      {{/if}}
 	  {{bs-datetimepicker
 	  date=nextNap
-	  format="h:mm"
+      format="H:mm"
 	  pickDate=false
 	  noIcon=true
 	  allowInputToggle=true
 	  placeholder="hours:minutes"
+      useCurrent=false
 	  updateDate=(action (mut nextNap))}}
 	</div>
       </div>
@@ -159,11 +161,12 @@
 	  {{/if}}
 	  {{bs-datetimepicker
 	  date=lastEat
-	  format="h:mm"
+	  format="H:mm"
 	  pickDate=false
 	  noIcon=true
 	  allowInputToggle=true
 	  placeholder="hours:minutes"
+      useCurrent=false
 	  updateDate=(action (mut lastEat))}}
 	</div>
       </div>
