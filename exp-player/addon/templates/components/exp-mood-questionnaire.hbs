@@ -5,18 +5,18 @@
     {{#bs-form}}
       <label> How is your CHILD feeling right now? </label>
       {{#if showValidation}}
-	  <p class="text text-danger">
+          <p class="text text-danger">
           {{#if validations.attrs.rested.messages}}
-	         {{ validations.attrs.rested.messages }}
+              {{ validations.attrs.rested.messages }}
           {{else if validations.attrs.healthy.messages}}
-            {{validations.attrs.healthy.messages}}
+              {{validations.attrs.healthy.messages}}
           {{else if validations.attrs.childHappy.messages}}
-            {{validations.attrs.childHappy.messages}}
+              {{validations.attrs.childHappy.messages}}
           {{else if validations.attrs.active.messages}}
-            {{validations.attrs.active.messages}}
+              {{validations.attrs.active.messages}}
           {{/if}}
-	  </p>
-	  {{/if}}
+          </p>
+          {{/if}}
       {{radio-group
         options=moodOptions
         labelLeft="Tired"
@@ -25,164 +25,164 @@
       }}
       {{radio-group
         options=moodOptions
-	labelLeft="Sick"
-	labelRight="Healthy"
+        labelLeft="Sick"
+        labelRight="Healthy"
         value=healthy
       }}
       {{radio-group
         options=moodOptions
-	labelLeft="Fussy"
-	labelRight="Happy"
+        labelLeft="Fussy"
+        labelRight="Happy"
         value=childHappy
       }}
       {{radio-group
         options=moodOptions
-	labelLeft="Calm"
-	labelRight="Active"
+        labelLeft="Calm"
+        labelRight="Active"
         value=active
       }}
       <hr>
       <label> How are YOU feeling right now? </label>
       {{#if showValidation}}
-	  <p class="text text-danger">
+          <p class="text text-danger">
           {{#if validations.attrs.energetic.messages}}
-	         {{ validations.attrs.energetic.messages }}
+                 {{ validations.attrs.energetic.messages }}
           {{else if validations.attrs.ontopofstuff.messages}}
             {{validations.attrs.ontopofstuff.messages}}
           {{else if validations.attrs.parentHappy.messages}}
             {{validations.attrs.parentHappy.messages}}
           {{/if}}
-	  </p>
-	  {{/if}}
+          </p>
+          {{/if}}
       {{radio-group
         options=moodOptions
-	labelLeft="Tired"
-	labelRight="Energetic"
+        labelLeft="Tired"
+        labelRight="Energetic"
         value=energetic
       }}
       {{radio-group
         options=moodOptions
-	labelLeft="Overwhelmed"
-	labelRight="On top of things"
+        labelLeft="Overwhelmed"
+        labelRight="On top of things"
         value=ontopofstuff
       }}
       {{radio-group
         options=moodOptions
-	labelLeft="Upset"
-	labelRight="Happy"
+        labelLeft="Upset"
+        labelRight="Happy"
         value=parentHappy
       }}
       <hr>
       <div class="form col-md-12">
-	<div class="form-group timepicker">
-	  <label>
-	    About how long ago did your child last wake up from sleep or a nap?
-	  </label>
-	  {{#if showValidation}}
-	  <p class="text text-danger">
-	    {{ validations.attrs.napWakeUp.messages }}
-	  </p>
-	  {{/if}}
-	  {{bs-datetimepicker
-	  date=napWakeUp
-	  format="H:mm"
-	  pickDate=false
-	  noIcon=true
-	  allowInputToggle=true
-	  placeholder="hours:minutes"
-      useCurrent=false
-	  updateDate=(action (mut napWakeUp))}}
-	</div>
+        <div class="form-group timepicker">
+          <label>
+            About how long ago did your child last wake up from sleep or a nap?
+          </label>
+          {{#if showValidation}}
+          <p class="text text-danger">
+            {{ validations.attrs.napWakeUp.messages }}
+          </p>
+          {{/if}}
+          {{bs-datetimepicker
+          date=napWakeUp
+          format="H:mm"
+          pickDate=false
+          noIcon=true
+          allowInputToggle=true
+          placeholder="hours:minutes"
+          useCurrent=false
+          updateDate=(action (mut napWakeUp))}}
+        </div>
       </div>
       <br />
       <div class="form col-md-12">
-	<div class="form-group">
-	  <label>
-	    Does your child have a usual nap schedule?
-	  </label>
-	  {{#if showValidation}}
-	  <p class="text text-danger">
-	    {{ validations.attrs.usualNapSchedule.messages }}
-	  </p>
-	  {{/if}}
+        <div class="form-group">
+          <label>
+            Does your child have a usual nap schedule?
+          </label>
+          {{#if showValidation}}
+          <p class="text text-danger">
+            {{ validations.attrs.usualNapSchedule.messages }}
+          </p>
+          {{/if}}
 
-	  <div class="radio">
-	    <label>
-	      {{radio-button value="no" checked=usualNapSchedule name="usualNapSchedule"}}
-	      No
-	    </label>
-	  </div>
-	  <div class="radio">
-	    <label>
-	      {{radio-button value="yes" checked=usualNapSchedule name="usualNapSchedule"}}
-	      Yes
-	    </label>
-	  </div>
-	  <div class="radio">
-	    <label>
-	      {{radio-button value="yes-overdue" checked=usualNapSchedule name="usualNapSchedule"}}
-	    Yes, and he/she is already due for a nap
-	    </label>
-	  </div>
-	</div>
+          <div class="radio">
+            <label>
+              {{radio-button value="no" checked=usualNapSchedule name="usualNapSchedule"}}
+              No
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button value="yes" checked=usualNapSchedule name="usualNapSchedule"}}
+              Yes
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button value="yes-overdue" checked=usualNapSchedule name="usualNapSchedule"}}
+            Yes, and he/she is already due for a nap
+            </label>
+          </div>
+        </div>
       </div>
       {{#if (eq usualNapSchedule 'yes') }}
-	<div class="form col-md-12">
-	  <div class="form-group timepicker">
-	  <label>
-	    About how much longer until his/her next nap (or bedtime)?
-	  </label>
+        <div class="form col-md-12">
+          <div class="form-group timepicker">
+          <label>
+            About how much longer until his/her next nap (or bedtime)?
+          </label>
       {{#if showValidation}}
          <p class="text text-danger">
            {{ validations.attrs.nextNap.messages }}
          </p>
      {{/if}}
-	  {{bs-datetimepicker
-	  date=nextNap
+          {{bs-datetimepicker
+          date=nextNap
       format="H:mm"
-	  pickDate=false
-	  noIcon=true
-	  allowInputToggle=true
-	  placeholder="hours:minutes"
-      useCurrent=false
-	  updateDate=(action (mut nextNap))}}
-	</div>
+          pickDate=false
+          noIcon=true
+          allowInputToggle=true
+          placeholder="hours:minutes"
+          useCurrent=false
+          updateDate=(action (mut nextNap))}}
+        </div>
       </div>
       {{/if}}
       <div class="form col-md-12">
-	<div class="form-group timepicker">
-	  <label>
-	    About how long ago did your child last eat or drink?
-	  </label>
-	  {{#if showValidation}}
-	  <p class="text text-danger">
-	    {{ validations.attrs.lastEat.messages }}
-	  </p>
-	  {{/if}}
-	  {{bs-datetimepicker
-	  date=lastEat
-	  format="H:mm"
-	  pickDate=false
-	  noIcon=true
-	  allowInputToggle=true
-	  placeholder="hours:minutes"
-      useCurrent=false
-	  updateDate=(action (mut lastEat))}}
-	</div>
+        <div class="form-group timepicker">
+          <label>
+            About how long ago did your child last eat or drink?
+          </label>
+          {{#if showValidation}}
+          <p class="text text-danger">
+            {{ validations.attrs.lastEat.messages }}
+          </p>
+          {{/if}}
+          {{bs-datetimepicker
+          date=lastEat
+          format="H:mm"
+          pickDate=false
+          noIcon=true
+          allowInputToggle=true
+          placeholder="hours:minutes"
+          useCurrent=false
+          updateDate=(action (mut lastEat))}}
+        </div>
       </div>
       <div class="form col-md-12">
-	<div class="form-group">
-	  <label>
-	    What was your child doing before this?
-	  </label>
-	  {{#if showValidation}}
-	  <p class="text text-danger">
-	    {{ validations.attrs.doingBefore.messages }}
-	  </p>
-	  {{/if}}
+        <div class="form-group">
+          <label>
+            What was your child doing before this?
+          </label>
+          {{#if showValidation}}
+          <p class="text text-danger">
+            {{ validations.attrs.doingBefore.messages }}
+          </p>
+          {{/if}}
 
-	  {{input value=doingBefore placeholder="examples: having lunch, playing outside, going to the store with me" class="form-control"}}
-	</div>
+          {{input value=doingBefore placeholder="examples: having lunch, playing outside, going to the store with me" class="form-control"}}
+        </div>
       </div>
       {{bs-button class="pull-right" defaultText="Continue" type="success" action='continue'}}
     {{/bs-form}}
