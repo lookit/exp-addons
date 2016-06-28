@@ -10,15 +10,51 @@ const Validations = buildValidations({
     }),
     usualNapSchedule: validator('presence', {
 	presence: true,
-        message: 'This field is required'	
+        message: 'This field is required'
     }),
     lastEat: validator('presence', {
 	presence: true,
-        message: 'This field is required'	
+        message: 'This field is required'
     }),
     doingBefore: validator('presence', {
 	presence: true,
-        message: 'This field is required'	
+        message: 'This field is required'
+    }),
+    nextNap: validator('presence', {
+        presence: true,
+        message: 'This field is required',
+        dependentKeys: ['usualNapSchedule'],
+        disabled(model, attr){
+            return model.get('usualNapSchedule') !== 'yes';
+        }
+    }),
+    rested: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    healthy: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    childHappy: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    active: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    energetic: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    ontopofstuff: validator('presence', {
+    presence: true,
+        message: 'This field is required'
+    }),
+    parentHappy: validator('presence', {
+    presence: true,
+        message: 'This field is required'
     })
 });
 
@@ -65,7 +101,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
 		napWakeUp: {
 		    type: 'string',
 		    default: null
-		},		
+		},
 		usualNapSchedule: {
 		    type: 'string'
 		},
