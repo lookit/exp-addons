@@ -3,75 +3,97 @@
     <h4>Mood Questionnaire</h4>
     <p>How are you two doing? We really want to know: we’re interested in how your child’s mood affects which sorts of surprising physical events he/she notices. You can help us find out what babies are really learning as they get older... and what they already knew, but weren’t calm and focused enough to show us!</p>
     {{#bs-form}}
-      <label> How is your CHILD feeling right now? </label>
-      {{#if showValidation}}
-          <p class="text text-danger">
-          {{#if validations.attrs.rested.messages}}
-              {{ validations.attrs.rested.messages }}
-          {{else if validations.attrs.healthy.messages}}
-              {{validations.attrs.healthy.messages}}
-          {{else if validations.attrs.childHappy.messages}}
-              {{validations.attrs.childHappy.messages}}
-          {{else if validations.attrs.active.messages}}
-              {{validations.attrs.active.messages}}
-          {{/if}}
-          </p>
-          {{/if}}
-      {{radio-group
+	<label> How is your CHILD feeling right now? </label>
+      {{#radio-group
         options=moodOptions
         labelLeft="Tired"
         labelRight="Rested"
         value=rested
       }}
-      {{radio-group
+	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.rested.messages }}
+
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
+      {{#radio-group
         options=moodOptions
         labelLeft="Sick"
         labelRight="Healthy"
         value=healthy
-      }}
-      {{radio-group
+		      }}
+      	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.healthy.messages }}
+
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
+      {{#radio-group
         options=moodOptions
         labelLeft="Fussy"
         labelRight="Happy"
         value=childHappy
-      }}
-      {{radio-group
+		      }}
+      	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.childHappy.messages }}
+
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
+      {{#radio-group
         options=moodOptions
         labelLeft="Calm"
         labelRight="Active"
         value=active
       }}
+	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.active.messages }}
+
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
       <hr>
       <label> How are YOU feeling right now? </label>
-      {{#if showValidation}}
-          <p class="text text-danger">
-          {{#if validations.attrs.energetic.messages}}
-                 {{ validations.attrs.energetic.messages }}
-          {{else if validations.attrs.ontopofstuff.messages}}
-            {{validations.attrs.ontopofstuff.messages}}
-          {{else if validations.attrs.parentHappy.messages}}
-            {{validations.attrs.parentHappy.messages}}
-          {{/if}}
-          </p>
-          {{/if}}
-      {{radio-group
+      {{#radio-group
         options=moodOptions
         labelLeft="Tired"
         labelRight="Energetic"
         value=energetic
       }}
-      {{radio-group
+	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.energetic.messages }}
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
+      {{#radio-group
         options=moodOptions
         labelLeft="Overwhelmed"
         labelRight="On top of things"
         value=ontopofstuff
       }}
-      {{radio-group
+	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.ontopofstuff.messages }}
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
+      {{#radio-group
         options=moodOptions
         labelLeft="Upset"
         labelRight="Happy"
         value=parentHappy
       }}
+	  {{#if showValidation}}
+              <p class="text text-danger">
+		  {{ validations.attrs.parentHappy.messages }}
+	      </p>
+	  {{/if}}
+      {{/radio-group}}
       <hr>
       <div class="form col-md-12">
         <div class="form-group timepicker">
