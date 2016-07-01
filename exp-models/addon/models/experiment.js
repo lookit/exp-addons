@@ -11,11 +11,6 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-import {
-    permissionCreateForAccounts
-} from '../utils/constants';
-
-
 export default DS.Model.extend(JamModel, {
     namespaceConfig: Ember.inject.service(),
 
@@ -189,11 +184,13 @@ export default DS.Model.extend(JamModel, {
         this._super(...arguments);
         this._registerSessionModels();
 
-	debugger;
         var namespace = this.get('namespaceConfig').get('namespace');
+	var permissions = {
+	    [`jam-${namespace}:accounts-*`] : 'CREATE'
+	};
         var collection = this.store.createRecord('collection', {
             id: `${namespace}.${this.get('sessionCollectionId')}`,
-            permissions: this.get('isActive') ? permissionCreateForAccounts : {} // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
+            permissions: this.get('isActive') ? permissions : {} // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
         });
         this.set('_sessionCollection', collection);
         collection.save();
