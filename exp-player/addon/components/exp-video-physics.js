@@ -10,7 +10,6 @@ let {
     $
 } = Ember;
 
-
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     layout: layout,
 
@@ -43,23 +42,24 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     }).volatile(),
 
     videoSources: Ember.computed('isPaused', 'currentTask', 'useAlternate', function() {
-            if (this.get('isPaused')) {
+        if (this.get('isPaused')) {
+            return this.get('attnSources');
+        } else {
+            switch (this.get('currentTask')) {
+            case 'announce':
                 return this.get('attnSources');
-            } else {
-                switch (this.get('currentTask')) {
-                    case 'announce':
-                        return this.get('attnSources');
-                    case 'intro':
-                        return this.get('introSources');
-                    case 'test':
-                        if (this.get('useAlternate')) {
-                            return this.get('altSources');
-                        } else {
-                            return this.get('sources');
-                        }
+            case 'intro':
+                return this.get('introSources');
+            case 'test':
+                if (this.get('useAlternate')) {
+                    return this.get('altSources');
+                } else {
+                    return this.get('sources');
                 }
             }
-        }),
+        }
+	return [];
+    }),
 
     shouldLoop: Ember.computed('videoSources', function() {
         return (this.get('isPaused') || (this.get('currentTask') === 'announce') || this.get('currentTask') === 'test');
@@ -197,15 +197,15 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
-            if (this.isLast) {
-                window.clearTimeout(this.get('timeoutID'));
-                this.send('next');
-            } else {
-                this.send('setTimeEvent', 'startIntro');
-                this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
-            }
-
-
+	    if (~this.get('isPaused')) {
+		if (this.isLast) {
+                    window.clearTimeout(this.get('timeoutID'));
+                    this.send('next');
+		} else {
+                    this.send('setTimeEvent', 'startIntro');
+                    this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
+		}
+	    }
         },
 
         next() {
@@ -216,8 +216,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
     pauseStudy: function() { // only called in FS mode
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
-        //care of in videoRecorder.pause(), skip the check.
-        //if (this.get('recordingIsReady')) {
+        // care of in videoRecorder.pause(), skip the check.
         if (!this.get('isLast')) {
             this.beginPropertyChanges();
 
@@ -261,29 +260,24 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             }
 
             this.endPropertyChanges();
-        //}
         }
-        },
+    },
 
     _recorder: null,
     getRecorder() {
         return this.get('_recorder');
     },
 
-
-    keypressHandler: function (e, emb) {
-        if (emb.checkFullscreen()) {
-                if (e.which === 32) { // space
-                    emb.pauseStudy();
-                }
-            }
-    },
-
     init() {
         this._super(...arguments);
-        var emb = this;
-        $(document).on("keypress", (e) => emb.keypressHandler(e,emb));
-        this.send('showFullscreen');
+        $(document).on("keypress", (e) => {
+            if (this.checkFullscreen()) {
+		if (e.which === 32) { // space
+                    this.pauseStudy();
+		}
+            }
+	    this.send('showFullscreen');
+	});
     },
 
     didReceiveAttrs() {
