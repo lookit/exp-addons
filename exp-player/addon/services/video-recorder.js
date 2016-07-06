@@ -173,11 +173,11 @@ export default Ember.Service.extend({
         });
     },
     getTime() {
-	let getStreamTime = (this.get('recorder') || {}).getStreamTime;
-	if (getStreamTime) {
-	    return getStreamTime();
-	}
-	return null;
+        let getStreamTime = (this.get('recorder') || {}).getStreamTime;
+        if (getStreamTime) {
+            return getStreamTime();
+        }
+        return null;
     },
 
     // Stop recording and save the video to the server

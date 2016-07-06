@@ -6,7 +6,9 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 
-let { $ } = Ember;
+let {
+    $
+} = Ember;
 
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     layout: layout,
@@ -44,19 +46,19 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             return this.get('attnSources');
         } else {
             switch (this.get('currentTask')) {
-            case 'announce':
-                return this.get('attnSources');
-            case 'intro':
-                return this.get('introSources');
-            case 'test':
-                if (this.get('useAlternate')) {
-                    return this.get('altSources');
-                } else {
-                    return this.get('sources');
-                }
+                case 'announce':
+                    return this.get('attnSources');
+                case 'intro':
+                    return this.get('introSources');
+                case 'test':
+                    if (this.get('useAlternate')) {
+                        return this.get('altSources');
+                    } else {
+                        return this.get('sources');
+                    }
             }
         }
-	return [];
+        return [];
     }),
 
     shouldLoop: Ember.computed('videoSources', function() {
@@ -79,10 +81,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     },
 
     sendTimeEvent(name) {
-	this.send('setTimeEvent', `exp-physics:${name}`, {
-	    streamTime: this.get('videoRecorder').getTime(),
-	    videoId: this.get('videoId')
-	});
+        this.send('setTimeEvent', `exp-physics:${name}`, {
+            streamTime: this.get('videoRecorder').getTime(),
+            videoId: this.get('videoId')
+        });
     },
 
     meta: {
@@ -167,7 +169,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get("currentTask") === "intro") {
-		// TODO: maybe don't record during last video?
+                // TODO: maybe don't record during last video?
                 this.set("currentTask", "test");
             } else {
                 this.send('next'); // moving to intro video
@@ -186,11 +188,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 if (this.get('useAlternate')) {
                     this.sendTimeEvent('startAlternateVideo');
                 } else {
-		    this.sendTimeEvent('startTestVideo', {
-			streamTime: this.get('videoRecorder').getTime(),
-			videoId: this.get('videoId')
-		    });
-		}
+                    this.sendTimeEvent('startTestVideo', {
+                        streamTime: this.get('videoRecorder').getTime(),
+                        videoId: this.get('videoId')
+                    });
+                }
             }
         },
         startIntro: function() {
@@ -198,15 +200,15 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
-	    if (~this.get('isPaused')) {
-		if (this.isLast) {
+            if (~this.get('isPaused')) {
+                if (this.isLast) {
                     window.clearTimeout(this.get('timeoutID'));
                     this.send('next');
-		} else {
+                } else {
                     this.sendTimeEvent('startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
-		}
-	    }
+                }
+            }
         },
 
         next() {
@@ -251,10 +253,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                     this.set('playAnnouncementNow', true);
                 }
 
-            // Not currently paused: pause
+                // Not currently paused: pause
             } else if (!wasPaused) {
                 window.clearTimeout(this.get('timeoutID'));
-                this.sendTimeEvent('pauseVideo', {'currentTask': this.get('currentTask')});
+                this.sendTimeEvent('pauseVideo', {
+                    'currentTask': this.get('currentTask')
+                });
                 this.get('videoRecorder').pause(true);
                 this.set('playAnnouncementNow', false);
                 this.set('isPaused', true);
@@ -268,12 +272,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         this._super(...arguments);
         $(document).on("keypress", (e) => {
             if (this.checkFullscreen()) {
-		if (e.which === 32) { // space
+                if (e.which === 32) { // space
                     this.pauseStudy();
-		}
+                }
             }
-	    this.send('showFullscreen');
-	});
+            this.send('showFullscreen');
+        });
     },
 
     didReceiveAttrs() {
