@@ -10,6 +10,7 @@ let ADMIN = {
 export default Ember.Service.extend({
     store: Ember.inject.service(),
     session: Ember.inject.service(),
+    namespaceConfig: Ember.inject.service(),
     getCurrentUser() {
         return new Ember.RSVP.Promise((resolve, reject) => {
             if(!this.get('session.isAuthenticated')) {
@@ -33,7 +34,7 @@ export default Ember.Service.extend({
                         })
                     ]);
                 }
-                else if(data.provider === `${config.JAMDB.namespace}:accounts`) {
+                else if(data.provider === this.get('namespaceConfig').get('namespace')) {
                     this.get('store').findRecord('account', `${data.id}`)
                         .then((account) => {
                             resolve([account, account.profileById(this.get('session.data.profile.profileId'))]);

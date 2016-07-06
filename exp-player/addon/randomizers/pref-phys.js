@@ -106,7 +106,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["apple", "cup", "orangeball", "lotion", "spray", "whiteball"],
         ["train", "marker", "toycar", "sunglasses", "flashlight", "block"],
         ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
-        ["A", "B", "C", "D", "E", "F"]
+        ["box", "funnel", "eraser", "scissors", "spoon", "wrench"]
     ];
 
     // Options for videos, organized by event
@@ -274,7 +274,7 @@ function audioSourceObjs(path, shortname) {
                     "src": path + shortname + '.mp3',
                     "type": "audio/mp3"
                 }
-            ]
+            ];
 }
 
 function videoSourceObjs(path, shortname, organizedByType) {
@@ -288,7 +288,7 @@ function videoSourceObjs(path, shortname, organizedByType) {
                         "src": path + shortname + '.mp4',
                         "type": "video/mp4"
                     }
-                ]
+                ];
     } else {
         return  [
                 {
@@ -299,7 +299,7 @@ function videoSourceObjs(path, shortname, organizedByType) {
                     "src": path + 'mp4/' + shortname + '.mp4',
                     "type": "video/mp4"
                 }
-            ]
+            ];
     }
 }
 

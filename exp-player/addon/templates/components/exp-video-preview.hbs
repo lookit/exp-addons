@@ -1,5 +1,8 @@
-<div class="row">
-    <div class="col-xs-12 col-md-8">
+<div>
+<div class="vertical-pad"></div>
+
+<div class="row exp-text" id="exp-physics-preview-container">
+    <div class="col-md-8 col-md-offset-2">
         {{#unless prompt}}
             {{currentVideo.caption}}
             <br> <br>
@@ -10,31 +13,36 @@
             <hr>
         {{/unless}}
     </div>
+
+
+    {{#unless prompt}}
+
+        <div class="row" >
+            <div class="col-md-10 col-md-offset-1 text-center">
+                {{#if currentVideo.imgSrc}}
+
+                    <img class="exp-physics-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}}>
+
+                {{else}}
+
+                <video class="exp-physics-preview-video" controls style="width: 100%;">
+                    {{#each currentVideo.sources as |source|}}
+                        <source src={{source.src}} type={{source.type}}>
+                    {{/each}}
+                    Your browser does not support the video tag.
+                </video>
+
+                {{/if}}
+            </div>
+        </div>
+
+    {{/unless}}
+
 </div>
 
 {{#unless prompt}}
-
-<div class="row">
-    <div class="col-xs-12 col-md-10 text-center">
-        {{#if currentVideo.imgSrc}}
-
-            <img class="exp-physics-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}}>
-
-        {{else}}
-
-        <video class="exp-physics-preview-video" controls style="width: 100%;">
-            {{#each currentVideo.sources as |source|}}
-                <source src={{source.src}} type={{source.type}}>
-            {{/each}}
-            Your browser does not support the video tag.
-        </video>
-
-        {{/if}}
-    </div>
-</div>
-
 <div class="row exp-controls">
-    <div class="col-xs-12 col-md-10 text-center">
+    <div class="col-md-12 text-center">
         <!--<button class="btn btn-default pull-left" {{action 'next'}}>End preview</button>-->
         <button disabled={{noPrev}} {{action 'previousVideo'}} class="btn btn-primary pull-left"> Previous video</button>
         {{#if noNext}}
@@ -46,3 +54,5 @@
 </div>
 
 {{/unless}}
+
+</div>

@@ -2,7 +2,6 @@
 Manage data about one or more documents in the experiments collection
  */
 import Ember from 'ember';
-import config from 'ember-get-config';
 import DS from 'ember-data';
 import moment from 'moment';
 
@@ -12,10 +11,9 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-import {permissionCreateForAccounts} from '../utils/constants';
-
-
 export default DS.Model.extend(JamModel, {
+    namespaceConfig: Ember.inject.service(),
+
     ACTIVE: 'Active',
     DRAFT: 'Draft',
     ARCHIVED: 'Archived',
@@ -29,7 +27,7 @@ export default DS.Model.extend(JamModel, {
     displayFullscreen: DS.attr('boolean'),
 
     duration: DS.attr('string'),
-    whatHappens: Ember.computed.alias('description'),  // TODO: Deprecate
+    whatHappens: Ember.computed.alias('description'), // TODO: Deprecate
     purpose: DS.attr('string'),
 
     // A url to direct the user to upon completion of the experiment
@@ -51,7 +49,7 @@ export default DS.Model.extend(JamModel, {
         get() {
             return this.get('_thumbnail');
         },
-        set (_, raw) {
+        set(_, raw) {
             var thumbnail = this.get('thumbnail');
             if (!thumbnail) {
                 thumbnail = this.get('store').createRecord('thumbnail', {
@@ -62,8 +60,7 @@ export default DS.Model.extend(JamModel, {
                     this.set('thumbnailId', created.get('id'));
                     this.save();
                 });
-            }
-            else {
+            } else {
                 thumbnail.set('raw', raw);
                 thumbnail.save();
             }
@@ -79,11 +76,11 @@ export default DS.Model.extend(JamModel, {
         },
         set(key, value) {
             return this.get('store')
-            .findRecord('collection', this.get('sessionCollectionId'))
-            .then((collection) => {
-                collection.schema = value;
-                return collection.save();
-            });
+                .findRecord('collection', this.get('sessionCollectionId'))
+                .then((collection) => {
+                    collection.schema = value;
+                    return collection.save();
+                });
         }
     }),
 
@@ -94,15 +91,14 @@ export default DS.Model.extend(JamModel, {
         return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
     onStateChange: function() {
-        if(this.get('isNew')) {
+        if (this.get('isNew')) {
             return;
         }
         var state = this.get('state');
         // if changed from inactive to active
-        if(state === this.ACTIVE) {
+        if (state === this.ACTIVE) {
             this.set('beginDate', new Date());
-        }
-        else if (state !== this.DELETED) {
+        } else if (state !== this.DELETED) {
             this.set('endDate', new Date());
         }
     }.observes('state'),
@@ -111,39 +107,39 @@ export default DS.Model.extend(JamModel, {
     eligibilityMinAge: DS.attr('string'),
     eligibilityString: DS.attr('string'),
     _parseAge: function(age) {
-	var inflector = new Ember.Inflector();
-	var [amount, unit] = age.split(' ');
-	return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
+        var inflector = new Ember.Inflector();
+        var [amount, unit] = age.split(' ');
+        return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
     },
     isEligible(participant) {
-	var age = participant.get('age');
+        var age = participant.get('age');
 
-	var minAge = this.get('eligiblityMinAge');
-	var maxAge = this.get('eligiblityMaxAge');
-	var eligible = true;
-	if (minAge) {
-	    eligible = eligible && (age > minAge);
-	}
-	if (maxAge) {
-	    eligible = eligible && (age < maxAge);
-	}
-	return eligible;
+        var minAge = this.get('eligiblityMinAge');
+        var maxAge = this.get('eligiblityMaxAge');
+        var eligible = true;
+        if (minAge) {
+            eligible = eligible && (age > minAge);
+        }
+        if (maxAge) {
+            eligible = eligible && (age < maxAge);
+        }
+        return eligible;
     },
     ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function() {
-	let {
-	    eligibilityMinAge,
-	    eligibilityMaxAge
-	} = this.getProperties('eligibilityMinAge', 'eligibilityMaxAge');
+        let {
+            eligibilityMinAge,
+            eligibilityMaxAge
+        } = this.getProperties('eligibilityMinAge', 'eligibilityMaxAge');
 
-	if (eligibilityMinAge && eligibilityMaxAge) {
-	    return `between ${eligibilityMinAge} and ${eligibilityMaxAge}`;
-	} else if (eligibilityMinAge) {
-	    return `${eligibilityMinAge} and up`;
-	} else if (eligibilityMaxAge) {
-	    return `not older than ${eligibilityMaxAge}`;
-	} else {
-	    return 'any';
-	}
+        if (eligibilityMinAge && eligibilityMaxAge) {
+            return `between ${eligibilityMinAge} and ${eligibilityMaxAge}`;
+        } else if (eligibilityMinAge) {
+            return `${eligibilityMinAge} and up`;
+        } else if (eligibilityMaxAge) {
+            return `not older than ${eligibilityMaxAge}`;
+        } else {
+            return 'any';
+        }
     }),
 
     history: DS.hasMany('history'),
@@ -168,8 +164,12 @@ export default DS.Model.extend(JamModel, {
         var cId = this.get('sessionCollectionId');
         var container = Ember.getOwner(this);
         container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
-        container.register(`adapter:${cId}`, SessionAdapter.extend({'sessionCollectionId': cId})); // Override part of adapter URL
-        container.register(`serializer:${cId}`, SessionSerializer.extend({'modelName': cId})); // Tell serializer what model to use
+        container.register(`adapter:${cId}`, SessionAdapter.extend({
+            'sessionCollectionId': cId
+        })); // Override part of adapter URL
+        container.register(`serializer:${cId}`, SessionSerializer.extend({
+            'modelName': cId
+        })); // Tell serializer what model to use
     },
 
     init() {
@@ -184,9 +184,13 @@ export default DS.Model.extend(JamModel, {
         this._super(...arguments);
         this._registerSessionModels();
 
+        var namespace = this.get('namespaceConfig').get('namespace');
+	var permissions = {
+	    [`jam-${namespace}:accounts-*`] : 'CREATE'
+	};
         var collection = this.store.createRecord('collection', {
-            id: `${config.JAMDB.namespace}.${this.get('sessionCollectionId')}`,
-            permissions: this.get('isActive') ? permissionCreateForAccounts : {}  // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
+            id: `${namespace}.${this.get('sessionCollectionId')}`,
+            permissions: this.get('isActive') ? permissions : {} // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
         });
         this.set('_sessionCollection', collection);
         collection.save();

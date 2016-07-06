@@ -29,7 +29,7 @@ export default ExpFrameBaseComponent.extend({
     },
     actions: {
         record() {
-	    this.get('scroller').scrollVertical(Em.$('.recorder'));
+	        //this.get('scroller').scrollVertical(Em.$('.recorder'));
             this.get('videoRecorder').record();
         },
         finish() {

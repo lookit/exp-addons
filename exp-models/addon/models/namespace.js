@@ -27,5 +27,5 @@ export default DS.Model.extend(JamModel, {
             }
         }
         return res;
-    }),
+    })
 });

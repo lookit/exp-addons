@@ -29,6 +29,8 @@ export default Ember.Component.extend(FullScreen, {
         $(window).on('beforeunload', () => {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
+                let toast = this.get('toast');
+                toast.warning('To leave the study early, please press "Stay on page" and then press F1 to select a privacy level for your videos');
                 return `
 If you're sure you'd like to leave this study early
 you can do so now.
