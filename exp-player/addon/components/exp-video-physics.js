@@ -6,9 +6,7 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 
-let {
-    $
-} = Ember;
+let { $ } = Ember;
 
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     layout: layout,
@@ -71,13 +69,20 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            this.send('setTimeEvent', 'leftFullscreen');
+            this.sendTimeEvent('leftFullscreen');
             if (!this.get('isPaused')) {
                 this.pauseStudy();
             }
         } else {
-            this.send('setTimeEvent', 'enteredFullscreen');
+            this.sendTimeEvent('enteredFullscreen');
         }
+    },
+
+    sendTimeEvent(name) {
+	this.send('setTimeEvent', `exp-physics:${name}`, {
+	    streamTime: this.get('videoRecorder').getTime(),
+	    videoId: this.get('videoId')
+	});
     },
 
     meta: {
@@ -162,15 +167,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get("currentTask") === "intro") {
-                if (!this.get('isLast')) {
-                    this.getRecorder().then(() => {
-                        this.get('videoRecorder').resume().then(() => {
-                            this.set("currentTask", "test");
-                        });
-                    });
-                } else {
-                    this.set("currentTask", "test");
-                }
+		// TODO: maybe don't record during last video?
+                this.set("currentTask", "test");
             } else {
                 this.send('next'); // moving to intro video
             }
@@ -186,10 +184,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 this.set('timeoutID', t);
                 $("audio#exp-music")[0].play();
                 if (this.get('useAlternate')) {
-                    this.send('setTimeEvent', 'startAlternateVideo');
+                    this.sendTimeEvent('startAlternateVideo');
                 } else {
-                    this.send('setTimeEvent', 'startTestVideo');
-                }
+		    this.sendTimeEvent('startTestVideo', {
+			streamTime: this.get('videoRecorder').getTime(),
+			videoId: this.get('videoId')
+		    });
+		}
             }
         },
         startIntro: function() {
@@ -202,7 +203,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                     window.clearTimeout(this.get('timeoutID'));
                     this.send('next');
 		} else {
-                    this.send('setTimeEvent', 'startIntro');
+                    this.sendTimeEvent('startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
 		}
 	    }
@@ -253,7 +254,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
             // Not currently paused: pause
             } else if (!wasPaused) {
                 window.clearTimeout(this.get('timeoutID'));
-                this.send('setTimeEvent', 'pauseVideo', {'currentTask': this.get('currentTask')});
+                this.sendTimeEvent('pauseVideo', {'currentTask': this.get('currentTask')});
                 this.get('videoRecorder').pause(true);
                 this.set('playAnnouncementNow', false);
                 this.set('isPaused', true);
@@ -261,11 +262,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
 
             this.endPropertyChanges();
         }
-    },
-
-    _recorder: null,
-    getRecorder() {
-        return this.get('_recorder');
     },
 
     init() {
@@ -287,11 +283,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
                 hidden: true,
                 record: true
             }).then(() => {
-                this.send('setTimeEvent', 'recorderReady');
+                this.sendTimeEvent('recorderReady');
                 this.set('recordingIsReady', true);
-                this.get('videoRecorder').pause();
-            }).catch(() => {
-                // TODO handle no flashReady
+            }, () => {
+                // TODO handle errors in recording
             }));
         }
     },
