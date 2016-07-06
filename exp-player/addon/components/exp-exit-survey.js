@@ -1,5 +1,8 @@
 import Ember from 'ember';
-import { validator, buildValidations } from 'ember-cp-validations';
+import {
+    validator,
+    buildValidations
+} from 'ember-cp-validations';
 
 import moment from 'moment';
 
@@ -7,10 +10,6 @@ import layout from '../templates/components/exp-exit-survey';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 
-
-let {
-    $
-} = Ember;
 
 const Validations = buildValidations({
     birthDate: validator('presence', {
@@ -28,19 +27,19 @@ const Validations = buildValidations({
 });
 
 export default ExpFrameBaseComponent.extend(Validations, {
-     layout: layout,
-     type: 'exp-exit-survey',
-     meta: {
-         name: 'ExpExitSurvey',
-         description: 'Exit survey for Lookit.',
-         parameters: {
-             type: 'object',
-             properties: {
-                 id: {
-                     type: 'string',
-                     description: 'A unique identifier for this item'
-                 },
-             required: ['id']
+    layout: layout,
+    type: 'exp-exit-survey',
+    meta: {
+        name: 'ExpExitSurvey',
+        description: 'Exit survey for Lookit.',
+        parameters: {
+            type: 'object',
+            properties: {
+                id: {
+                    type: 'string',
+                    description: 'A unique identifier for this item'
+                },
+                required: ['id']
             }
         },
         data: {
@@ -73,15 +72,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 idealDaysSessionsCompleted: {
                     type: 'integer',
                     default: 14
-                },
+                }
             }
-        },
-
+        }
     },
+    today: new Date(),
     section1: true,
     showValidation: false,
     actions: {
-        continue() {
+        continue () {
             if (this.get('validations.isValid')) {
                 this.set('section1', false);
                 this.send('save');
