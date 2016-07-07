@@ -30,7 +30,7 @@ export default Ember.Component.extend(FullScreen, {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
                 let toast = this.get('toast');
-                toast.warning('To leave the study early, please press "Stay on page" and then press F1 to select a privacy level for your videos');
+                toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
                 return `
 If you're sure you'd like to leave this study early
 you can do so now.
@@ -47,14 +47,12 @@ able to continue the study.
             }
             return null;
         });
-
-        $(document).on('keypress', (e) => {
+        $(window).on('keyup', (e) => {
             console.log(e.which);
-            if (e.which === 112 || e.which === 126) { // F1 or ~
+            if (e.which === 112) {
                 this.send('exitEarly');
             }
         });
-
     },
     _removeHandlers() {
         $(window).off('keypress');
