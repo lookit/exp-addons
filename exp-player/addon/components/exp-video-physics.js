@@ -5,13 +5,14 @@ import layout from '../templates/components/exp-video-physics';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
+import VideoId from '../mixins/video-id';
 
 let {
     $
 } = Ember;
 
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
     layout: layout,
 
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -33,14 +34,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, {
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
     isPaused: false,
-
-    videoId: Ember.computed('session', 'id', 'experiment', function() {
-        return [
-            this.get('experiment.id'),
-            this.get('id'),
-            this.get('session.id')
-        ].join('_');
-    }).volatile(),
 
     videoSources: Ember.computed('isPaused', 'currentTask', 'useAlternate', function() {
             if (this.get('isPaused')) {
