@@ -14,19 +14,19 @@
         <label><i class="fa fa-star"></i> Would you like to share your video and other data from this session with authorized users of the secure data library Databrary? </label>
         <div class="radio">
             <label>
-              {{radio-button value="no" checked=shareVideo name="shareVideo"}}
+              {{radio-button value="no" checked=databraryShare name="databraryShare"}}
               No
             </label>
         </div>
         <div class="radio">
             <label>
-             {{radio-button value="yes" checked=shareVideo name="shareVideo"}}
+             {{radio-button value="yes" checked=databraryShare name="databraryShare"}}
              Yes
            </label>
         </div>
         {{#if showValidation}}
         <p class="text text-danger">
-            {{ validations.attrs.shareVideo.messages }}
+            {{ validations.attrs.databraryShare.messages }}
         </p>
         {{/if}}
         <hr>
@@ -34,7 +34,12 @@
         <div class="radio">
             <label>
             {{radio-button value="private" checked=useOfMedia name="useOfMedia"}}
-            <strong>Private:</strong> Video may only be viewed by authorized scientists.
+            <strong>Private:</strong> Video may only be viewed by authorized scientists
+	    {{#if (eq databraryShare 'yes')}}
+		(researchers working on the Lookit project and authorized Databrary users).
+	    {{else}}
+		(researchers working on the Lookit project).
+	    {{/if}}
           </label>
         </div>
         <div class="radio">
