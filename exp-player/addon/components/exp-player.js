@@ -192,5 +192,5 @@ able to continue the study.
         closeExitWarning() {
             this.set('hasAttemptedExit', false);
         }
-    }    
+    }
 });
