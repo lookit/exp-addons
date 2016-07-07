@@ -5,25 +5,17 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 // import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 import VideoPause from '../mixins/video-pause';
+import VideoId from '../mixins/video-id';
 
 
 //TODO Fullsceen issues/functionality
-export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoId, {
     layout: layout,
     blockUI: false,
     mayProgress: false,
     // displayFullscreen: false,  // force fullscreen for all uses of this component, always
     // fullScreenElementId: 'player-video',
     videoRecorder: Ember.inject.service(),
-
-    videoId: function() {
-        return [
-            this.get('experiment.id'),
-            this.get('id'),
-            this.get('session.id')
-        ].join('_');
-    }.property('session', 'id', 'experiment'),
-
     spaceHandler: null,
     didInsertElement() {
         this._super(...arguments);
