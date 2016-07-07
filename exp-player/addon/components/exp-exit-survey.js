@@ -20,7 +20,7 @@ const Validations = buildValidations({
         presence: true,
         message: 'This field is required'
     }),
-    shareVideo: validator('presence', {
+    databraryShare: validator('presence', {
         presence: true,
         message: 'This field is required'
     })
@@ -49,7 +49,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     type: 'string',
                     default: null
                 },
-                shareVideo: {
+                databraryShare: {
                     type: 'string'
                 },
                 useOfMedia: {
