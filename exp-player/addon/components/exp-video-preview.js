@@ -5,6 +5,8 @@ import layout from 'exp-player/templates/components/exp-video-preview';
 import MediaReload from 'exp-player/mixins/media-reload';
 import VideoId from '../mixins/video-id';
 
+let { $ } = Ember;
+
 export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
     layout,
     videoIndex: 0,
