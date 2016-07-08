@@ -43,7 +43,7 @@
 
 
     <video id="player-video"
-           class="{{if playAnnouncementNow 'attn'}} {{if isPaused 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
+           class="{{if (or playAnnouncementNow isPaused) 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
            autoplay={{autoplay}}
            poster="{{poster}}"
            onended={{ if autoforwardOnEnd (action 'playNext') }}

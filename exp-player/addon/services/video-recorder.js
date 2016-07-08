@@ -172,6 +172,13 @@ export default Ember.Service.extend({
             window.setTimeout(() => resolve(), 0);
         });
     },
+    getTime() {
+        let getStreamTime = (this.get('recorder') || {}).getStreamTime;
+        if (getStreamTime) {
+            return getStreamTime();
+        }
+        return null;
+    },
 
     // Stop recording and save the video to the server
     // By default destroys the flash element
@@ -185,7 +192,7 @@ export default Ember.Service.extend({
             if (1.5 - this.get('recorder').getStreamTime() > 0) {
                 return setTimeout(this.stop.bind(this, {
                     destroy: destroy
-                }), 1.5 - this.get('recorder').getStreamTime());
+                }), 1.5 - this.getTime());
             }
             this.get('recorder').stopVideo();
             this.set('_recording', false);
@@ -230,10 +237,6 @@ export default Ember.Service.extend({
         }, 100);
 
         return new Ember.RSVP.Promise((resolve, reject) => {
-            if (!this.get('camAccess')) {
-                reject();
-            }
-
             this.set('_recordPromise', {
                 resolve,
                 reject
@@ -292,7 +295,7 @@ export default Ember.Service.extend({
     _onRecordingStarted(recorderId) { // jshint ignore:line
         this.set('_recording', true);
         if (this.get('_recordPromise')) {
-            this.get('_recordPromise').resolve(true);
+            this.get('_recordPromise').resolve(this);
         }
     },
 
