@@ -1,7 +1,5 @@
 import Ember from 'ember';
 
-import config from 'ember-get-config';
-
 let ADMIN = {
     id: 'ADMIN',
     profileId: 'ADMIN.PROFILE'

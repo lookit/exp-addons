@@ -29,6 +29,8 @@ export default Ember.Component.extend(FullScreen, {
         $(window).on('beforeunload', () => {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
+                let toast = this.get('toast');
+                toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
                 return `
 If you're sure you'd like to leave this study early
 you can do so now.
@@ -39,20 +41,18 @@ any video captured during this session. Press 'Stay on
 this Page' and you will be prompted to go to this
 exit survey.
 
-If leaving this page was an accident you will be 
+If leaving this page was an accident you will be
 able to continue the study.
 `;
             }
             return null;
         });
-
-        $(document).on('keypress', (e) => {
+        $(window).on('keyup', (e) => {
             console.log(e.which);
-            if (e.which === 112 || e.which === 126) { // F1 or ~
+            if (e.which === 112) {
                 this.send('exitEarly');
             }
         });
-
     },
     _removeHandlers() {
         $(window).off('keypress');

@@ -1,9 +1,14 @@
-.exp-physics-exit-survey .alpaca-field-date.exp-physics-time-entry > input {
-    max-width: 200px;
+.exp-physics-exit-survey .ember-view .date {
+    width: 30%;
 }
 
-
-.exp-physics-exit-survey .alpaca-field[data-alpaca-field-name="withdraw"] {
+.exp-physics-exit-survey .extra-info {
     font-size: small;
     color: rgb(95,95,95);
+}
+
+.exp-physics-exit-survey .input-text {
+    width: 100%;
+    border-radius: 5px;
+    border-color: rgb(95, 95, 95);
 }

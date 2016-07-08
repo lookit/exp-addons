@@ -1,19 +1,12 @@
 import Em from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-video-consent';
+import VideoId from '../mixins/video-id';
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(VideoId, {
     layout,
     videoRecorder: Em.inject.service(),
     scroller: Em.inject.service(),
-
-    videoId: function() {
-        return [
-            this.get('experiment.id'),
-            this.get('id'),
-            this.get('session.id')
-        ].join('_');
-    }.property('session', 'id', 'experiment'),
 
     didInsertElement() {
 	this.get('videoRecorder').on('onUploadDone', () => {

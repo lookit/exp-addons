@@ -3,21 +3,15 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-video-preview';
 import MediaReload from 'exp-player/mixins/media-reload';
+import VideoId from '../mixins/video-id';
 
-export default ExpFrameBaseComponent.extend(MediaReload, {
+let { $ } = Ember;
+
+export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
     layout,
-
     videoIndex: 0,
 
     videoRecorder: Ember.inject.service(),
-
-    videoId: Ember.computed('session', 'id', 'experiment', function() {
-        return [
-            this.get('experiment.id'),
-            this.get('id'),
-            this.get('session.id')
-        ].join('_');
-    }).volatile(),
 
     noNext: function() {
         return this.get('videoIndex') >= this.get('videos.length') - 1;
