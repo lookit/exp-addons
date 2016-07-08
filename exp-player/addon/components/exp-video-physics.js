@@ -74,11 +74,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
         }
     },
 
-    sendTimeEvent(name) {
-        this.send('setTimeEvent', `exp-physics:${name}`, {
+    sendTimeEvent(name, opts) {
+        Ember.merge(opts, {
             streamTime: this.get('videoRecorder').getTime(),
             videoId: this.get('videoId')
         });
+        this.send('setTimeEvent', `exp-physics:${name}`, opts);
     },
 
     meta: {
@@ -244,7 +245,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
                     this.set('playAnnouncementNow', true);
                 }
 
-            // Not currently paused: pause
+                // Not currently paused: pause
             } else if (!wasPaused) {
                 window.clearTimeout(this.get('timeoutID'));
                 this.sendTimeEvent('pauseVideo', {
