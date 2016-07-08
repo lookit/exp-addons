@@ -74,7 +74,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
         }
     },
 
-    sendTimeEvent(name, opts) {
+    sendTimeEvent(name, opts={}) {
         Ember.merge(opts, {
             streamTime: this.get('videoRecorder').getTime(),
             videoId: this.get('videoId')
