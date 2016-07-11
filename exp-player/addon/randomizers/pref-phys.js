@@ -344,9 +344,12 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             attnSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber'),
-            sources: videoSourceObjs(
-                BASE_DIR + 'stimuli/' + features.eventType + '/',
-                e.fname, true),
+            sources: [
+		{
+		    src: "http://www.mit.edu/~kimscott/video/testpattern.mp4",
+		    type: "video/mp4"
+		}
+	    ],
             altSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/' + features.eventType + '/',
                 e.altName, true)
