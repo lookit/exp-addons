@@ -4,6 +4,7 @@
 
 .exp-physics-exit-survey .extra-info {
     font-size: small;
+    font-weight: normal;
     color: rgb(95,95,95);
 }
 
@@ -11,4 +12,9 @@
     width: 100%;
     border-radius: 5px;
     border-color: rgb(95, 95, 95);
+}
+
+.exp-physics-exit-survey .radio-holder {
+    position:relative;
+    margin-top:-4px;
 }
