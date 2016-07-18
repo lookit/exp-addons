@@ -58,6 +58,11 @@ export default Ember.Service.extend({
 
     _recordPromise: null,
 
+    recorder: Ember.computed(function() {
+        var recorder = window.swfobject.getObjectById(this.get('_SWFId'));
+        return recorder;
+    }).volatile(),
+
     //Initial setup, installs flash hooks into the page
     init() {
         this.set('_started', false);
@@ -137,11 +142,10 @@ export default Ember.Service.extend({
                     this.get('attributes'),
                     vr => {
                         if (!vr.success) {
-                            reject(new Error('Install failed'));
+                            return reject(new Error('Install failed'));
                         }
                         this.set('_started', true);
                         this.set('_SWFId', vr.id);
-                        this.set('recorder', window.swfobject.getObjectById(vr.id));
                         $('#' + vr.id).css('height', '100%');
 
                         if (record) {
@@ -173,9 +177,9 @@ export default Ember.Service.extend({
         });
     },
     getTime() {
-        let getStreamTime = (this.get('recorder') || {}).getStreamTime;
-        if (getStreamTime) {
-            return getStreamTime();
+        let recorder = this.get('recorder');
+        if (recorder && recorder.getStreamTime) {
+            return parseFloat(recorder.getStreamTime());
         }
         return null;
     },
@@ -189,7 +193,7 @@ export default Ember.Service.extend({
     }) {
         if (this.get('recording')) {
             // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-            if (1.5 - this.get('recorder').getStreamTime() > 0) {
+            if (1.5 - this.getTime() > 0) {
                 return setTimeout(this.stop.bind(this, {
                     destroy: destroy
                 }), 1.5 - this.getTime());
@@ -246,8 +250,9 @@ export default Ember.Service.extend({
 
     // Uninstall the video recorder
     destroy() {
+        console.log('Destroying the videoRecorder');
         $(`#${this.get('divId')}-container`).remove();
-        this.set('recorder', null);
+        this.set('_SWFId', null);
         this.set('_recording', false);
         window.swfobject.removeSWF(this.get('_SWFId'));
         return new Ember.RSVP.Promise((resolve) => {

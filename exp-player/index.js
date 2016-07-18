@@ -267,7 +267,7 @@ var DEFAULT_OPTIONS = {
   //desc: This controls whether or not HDFVR can be paused/resumed during a recording. Pausing the video on Red5 1.0.2 is known to cause issues with the consistency of the final recording produced
   //values: 1 for enabled, 0 for disabled
   //default: 0 (disabled)
-  enablePauseWhileRecording: 0,
+  enablePauseWhileRecording: 1,
 
   //enableBlinkingRec:Number
   //desc: This controls whether or not HDFVR will display the Rec blinking animation while recording

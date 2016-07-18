@@ -74,7 +74,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
         }
     },
 
-    sendTimeEvent(name, opts={}) {
+    sendTimeEvent(name, opts = {}) {
         Ember.merge(opts, {
             streamTime: this.get('videoRecorder').getTime(),
             videoId: this.get('videoId')
@@ -212,57 +212,58 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
     pauseStudy: function() { // only called in FS mode
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
         // care of in videoRecorder.pause(), skip the check.
-        if (!this.get('isLast')) {
-            this.beginPropertyChanges();
+        Ember.run(() => {
+            if (!this.get('isLast')) {
 
-            this.set('hasBeenPaused', true);
-            var wasPaused = this.get('isPaused');
-            var currentState = this.get('currentTask');
+                try {
+                    this.set('hasBeenPaused', true);
+                } catch (_) {
+                    return;
+                }
+                var wasPaused = this.get('isPaused');
+                var currentState = this.get('currentTask');
 
-            // Currently paused: restart
-            if (wasPaused) {
-                this.set('doingAttn', false);
-                this.set('isPaused', false);
-                if (currentState === "test") {
-                    if (this.get('useAlternate')) {
-                        // Necessary to reset hasBeenPaused
-                        // here when restarting: doesn't
-                        // work just to put this in init, or rely on the
-                        // default values, or do endPropertyChanges before next.
-                        this.send('next');
-                        this.set('hasBeenPaused', true);
-                        this.set('currentTask', 'announce');
-                        this.set('playAnnouncementNow', true);
-                        this.endPropertyChanges();
-                        return;
+                // Currently paused: restart
+                if (wasPaused) {
+                    this.set('doingAttn', false);
+                    this.set('isPaused', false);
+                    if (currentState === "test") {
+                        if (this.get('useAlternate')) {
+                            // Necessary to reset hasBeenPaused
+                            // here when restarting: doesn't
+                            // work just to put this in init, or rely on the
+                            // default values, or do endPropertyChanges before next.
+                            this.set('hasBeenPaused', true);
+                            this.set('currentTask', 'announce');
+                            this.set('playAnnouncementNow', true);
+                            this.send('next');
+                            return;
+                        } else {
+                            this.set('useAlternate', true);
+                            this.set('currentTask', 'announce');
+                            this.set('playAnnouncementNow', true);
+                        }
                     } else {
-                        this.set('useAlternate', true);
                         this.set('currentTask', 'announce');
                         this.set('playAnnouncementNow', true);
                     }
-                } else {
-                    this.set('currentTask', 'announce');
-                    this.set('playAnnouncementNow', true);
+                    this.get('videoRecorder').resume();
+                } else if (!wasPaused) { // Not currently paused: pause
+                    window.clearTimeout(this.get('timeoutID'));
+                    this.sendTimeEvent('pauseVideo', {
+                        'currentTask': this.get('currentTask')
+                    });
+                    this.get('videoRecorder').pause(true);
+                    this.set('playAnnouncementNow', false);
+                    this.set('isPaused', true);
                 }
-
-                // Not currently paused: pause
-            } else if (!wasPaused) {
-                window.clearTimeout(this.get('timeoutID'));
-                this.sendTimeEvent('pauseVideo', {
-                    'currentTask': this.get('currentTask')
-                });
-                this.get('videoRecorder').pause(true);
-                this.set('playAnnouncementNow', false);
-                this.set('isPaused', true);
             }
-
-            this.endPropertyChanges();
-        }
+        });
     },
 
     init() {
         this._super(...arguments);
-        $(document).on("keypress", (e) => {
+        $(document).on("keyup", (e) => {
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space
                     this.pauseStudy();
