@@ -106,28 +106,28 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
     meta: {
-        name: 'ExpOverview',
+      name: 'ExpOverview',
         description: 'TODO: a description of this frame goes here.',
         parameters: {
-            type: 'object',
-            properties: {
-                // define parameters here
-            }
+          type: 'object',
+          properties: {
+            // define parameters here
+          }
         },
         data: {
-            type: 'object',
-            properties: {
-                questions: {
-                    default: questions
-                }
+          type: 'object',
+          properties: {
+            questions: {
+              default: questions
             }
+          }
         }
     },
     actions: {
-        continue() {
-            if (this.get('validations.isValid')) {
-                this.send('next');
-            }
+      continue() {
+        if (this.get('validations.isValid')) {
+          this.send('next');
         }
+      }
     }
 });
