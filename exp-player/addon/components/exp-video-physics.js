@@ -176,7 +176,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoId, {
                 var emberObj = this;
                 var t = window.setTimeout(function(emb) {
                     $("audio#exp-music")[0].pause();
-                    emb.send('playNext');
+                    // emb.send('playNext');
                 }, emberObj.get('testLength') * 1000, emberObj);
                 this.set('timeoutID', t);
                 $("audio#exp-music")[0].play();
