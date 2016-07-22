@@ -2,18 +2,18 @@
   <p class="break-line">{{t 'survey.sections.2.instructions'}}</p>
   {{#bs-form}}
     {{#bs-form-group}}
-      <label>{{t questions.q1.label}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=questions.q1.value}}{{/textarea}}
+      <label>{{t 'survey.sections.2.questions.11.label'}}</label>
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q1}}{{/textarea}}
       <p class="text-muted">{{diff1}}</p>
     {{/bs-form-group}}
     {{#bs-form-group}}
-      <label>{{t questions.q2.label}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=questions.q2.value}}{{/textarea}}
+      <label>{{t 'survey.sections.2.questions.12.label'}}</label>
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q2}}{{/textarea}}
       <p class="text-muted">{{diff2}}</p>
     {{/bs-form-group}}
     {{#bs-form-group}}
-      <label>{{t questions.q3.label}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=questions.q3.value}}{{/textarea}}
+      <label>{{t 'survey.sections.2.questions.13.label'}}</label>
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q3}}{{/textarea}}
       <p class="text-muted">{{diff3}}</p>
     {{/bs-form-group}}
     {{progress-bar pageNumber=2}}
@@ -21,7 +21,7 @@
 
 </div>
 <div class="row exp-controls">
-    <button class="btn btn-primary pull-right {{if (v-get this 'isInvalid') "disabled" "enabled"}}" {{ action 'next' }}>
+    <button class="btn btn-primary pull-right {{if (v-get this 'isInvalid') "disabled"}}" {{ action 'continue' }}>
         {{t 'global.continueLabel'}}
     </button>
 </div>
