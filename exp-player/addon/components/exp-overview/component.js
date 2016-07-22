@@ -105,7 +105,6 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
-    questions: questions,
     meta: {
         name: 'ExpOverview',
         description: 'TODO: a description of this frame goes here.',
@@ -118,7 +117,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
             type: 'object',
             properties: {
-                // define data structure here
+                questions: {
+                    default: questions
+                }
+            }
+        }
+    },
+    actions: {
+        continue() {
+            if (this.get('validations.isValid')) {
+                this.send('next');
             }
         }
     }
