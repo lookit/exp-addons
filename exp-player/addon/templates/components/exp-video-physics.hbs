@@ -48,8 +48,7 @@
            poster="{{poster}}"
            onended={{ if autoforwardOnEnd (action 'playNext') }}
            onplay={{action 'startVideo'}}
-           loop={{shouldLoop}}
-    >
+           loop={{shouldLoop}}>
       {{#each videoSources as |stream|}}
         <source src="{{stream.src}}" type="{{stream.type}}">
       {{/each}}
@@ -78,3 +77,22 @@
     </button>
   </div>
 {{/unless}}
+
+{{#bs-modal open=showVideoWarning header=false footer=false autoClose=false}}
+    <div class="row">
+	<div class="col-md-12">
+	    <h3> Please make sure your webcam is configured correctly </h3>
+	    <div class="row">
+		<div class="col-md-12">
+		    <p id="not-recording-note"><em>* Please note: we are <strong>not</strong> recording any video during setup.</em></p>
+		    <div id="videoWarningConfig"></div>
+		    <div class="row">
+			<div class="col-md-12">
+			    <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'removeWarning' }} > Next </button>
+			</div>
+		    </div>
+		</div>
+	    </div>	    
+	</div>
+    </div>
+{{/bs-modal}}

@@ -32,127 +32,125 @@ const PARAMS = {
     wmode: 'transparent'
 };
 
-export default Ember.Service.extend({
+const VideoRecorder = Ember.Object.extend({
     height: 'auto',
     width: '100%',
-    params: PARAMS,
-    flashVars: FLASHVARS,
-    attributes: ATTRIBUTES,
+    element: null,
+
+    attributes: {},
+    flashVars: {},
 
     divId: Ember.computed.alias('attributes.id'),
     sscode: Ember.computed.alias('flashVars.sscode'),
     videoId: Ember.computed.alias('flashVars.userId'),
+    recorderId: Ember.computed.alias('flashVars.recorderId'),
 
     started: Ember.computed.alias('_started').readOnly(),
-    camAccess: Ember.computed.alias('_camAccess').readOnly(),
+    hasCamAccess: false,
     recording: Ember.computed.alias('_recording').readOnly(),
     flashReady: Ember.computed.alias('_flashReady').readOnly(),
 
     debug: true,
+    hidden: false,
     _started: false,
     _camAccess: false,
     _recording: false,
     _flashReady: false,
     _SWFId: null,
-    _hidden: false,
 
     _recordPromise: null,
+    _stopPromise: null,
 
     recorder: Ember.computed(function() {
         var recorder = window.swfobject.getObjectById(this.get('_SWFId'));
         return recorder;
     }).volatile(),
 
-    //Initial setup, installs flash hooks into the page
-    init() {
-        this.set('_started', false);
+    install({
+        record: record
+    } = {
+        record: false
+    }) {
+        this.set('divId', `${this.get('divId')}-${this.get('recorderId')}`);
 
-        let self = this;
-        HOOKS.forEach(hookName => {
-            window[hookName] = function() {
-                if (self.get('debug')) {
-                    console.log(hookName, arguments);
+        var $element = $(this.get('element'));
+        let hidden = this.get('hidden');
+        if (hidden) {
+            $element = $('body');
+        }
+
+        let divId = this.get('divId');
+        let videoId = this.get('videoId');
+
+        $element.append(
+            $('<div>', {
+                id: `${divId}-container`,
+                'data-videoid': videoId,
+                css: {
+                    height: '100%'
                 }
-                if (self.get('_' + hookName)) {
-                    self.get('_' + hookName).apply(self, arguments);
-                }
-                if (self.get(hookName)) {
-                    self.get(hookName).apply(self, arguments);
-                }
-            };
+            }).append(`<div id="${divId}"></div`)
+        );
+
+        if (hidden) {
+            this.hide();
+        }
+
+        return new RSVP.Promise((resolve, reject) => {
+            window.swfobject.embedSWF(
+                'VideoRecorder.swf',
+                document.getElementById(divId),
+                this.get('width'),
+                this.get('height'),
+                '10.3.0',
+                '',
+                this.get('flashVars'),
+                this.get('params'),
+                this.get('attributes'),
+                vr => {
+                    if (!vr.success) {
+                        return reject(new Error('Install failed'));
+                    }
+                    this.set('_started', true);
+                    this.set('_SWFId', vr.id);
+                    $('#' + vr.id).css('height', '100%');
+                    console.log('Install success');
+                    if (record) {
+                        return this.record();
+                    } else {
+                        return resolve();
+                    }
+                });
         });
     },
 
-    //Insert the recorder and start recording
-    //Returns a promise that resolve to true or false to indicate
-    //whether or not recording has started.
-    //IE a user might not have granted access to their webcam
-    start(videoId, element, {
-        config: config,
-        hidden: hidden,
-        record: record
-    } = {
-        config: false,
-        hidden: false,
-        record: true
-    }) {
-        if (this.get('started')) {
-            throw new Error('Video recorder already started');
+    record() {
+        if (!this.get('started')) {
+            throw new Error('Must call start before record');
         }
-        if (typeof(videoId) !== 'string') {
-            throw new Error('videoId must be a string');
+        if (this.get('recording')) {
+            throw new Error('Already recording');
         }
-
-        this.set('videoId', videoId);
-        this.set('sscode', config ? 'asp' : 'php');
-
-        var divId = this.get('divId');
-        // Remove any old recorders
-        return this.destroy().then(() => {
-
-            var $element = $(element);
-            if (hidden) {
-                $element = $('body');
+        let count = 0;
+        let id = window.setInterval(() => {
+            if (++count > 50) {
+                if (this.get('onCamAccess')) {
+                    this.get('onCamAccess').call(this, false);
+                }
+                return window.clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
             }
-            $element.append(
-                $('<div>', {
-                    id: `${divId}-container`,
-                    'data-videoid': videoId,
-                    css: {
-                        height: '100%'
-                    }
-                }).append(`<div id="${divId}"></div`)
-            );
-
-            if (hidden) {
-                this.set('_hidden', true);
-                this.hide();
+            if (!this.get('recorder').record) {
+                return null;
             }
+            this.get('recorder').record();
+            window.clearInterval(id);
+            return null;
+        }, 100);
 
-            return new RSVP.Promise((resolve, reject) => {
-                window.swfobject.embedSWF(
-                    'VideoRecorder.swf',
-                    document.getElementById(divId),
-                    this.get('width'),
-                    this.get('height'),
-                    '10.3.0',
-                    '',
-                    this.get('flashVars'),
-                    this.get('params'),
-                    this.get('attributes'),
-                    vr => {
-                        if (!vr.success) {
-                            return reject(new Error('Install failed'));
-                        }
-                        this.set('_started', true);
-                        this.set('_SWFId', vr.id);
-                        $('#' + vr.id).css('height', '100%');
-
-                        if (record) {
-                            return resolve(this.record());
-                        }
-                        return resolve();
-                    });
+        return new Ember.RSVP.Promise((resolve, reject) => {
+            this.set('_recordPromise', {
+                resolve,
+                reject
             });
         });
     },
@@ -185,7 +183,6 @@ export default Ember.Service.extend({
     },
 
     // Stop recording and save the video to the server
-    // By default destroys the flash element
     stop({
         destroy: destroy
     } = {
@@ -194,7 +191,7 @@ export default Ember.Service.extend({
         if (this.get('recording')) {
             // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
             if (1.5 - this.getTime() > 0) {
-                return setTimeout(this.stop.bind(this, {
+                return window.setTimeout(this.stop.bind(this, {
                     destroy: destroy
                 }), 1.5 - this.getTime());
             }
@@ -209,74 +206,23 @@ export default Ember.Service.extend({
                     id: null
                 });
                 this.set('_hidden', false);
+            } else {
+                var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
+                    this.set('_stopPromise', {
+                        resolve: resolve,
+                        reject: reject
+                    });
+                });
+                return _stopPromise;
             }
-        }
-        if (!this.get('started')) {
-            return null;
-        }
-        this.set('_started', false);
-        if (destroy) {
-            this.destroy();
-        }
-    },
-
-    record() {
-        if (!this.get('started')) {
-            throw new Error('Must call start before record');
-        }
-        if (this.get('recording')) {
-            throw new Error('Already recording');
-        }
-        let count = 0;
-        let id = window.setInterval(() => {
-            if (++count > 1000) {
-                return window.clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
-            }
-            if (!this.get('recorder').record) {
+            if (!this.get('started')) {
                 return null;
             }
-            this.get('recorder').record();
-            window.clearInterval(id);
-            return null;
-        }, 100);
-
-        return new Ember.RSVP.Promise((resolve, reject) => {
-            this.set('_recordPromise', {
-                resolve,
-                reject
-            });
-        });
-    },
-
-    // Uninstall the video recorder
-    destroy() {
-        console.log('Destroying the videoRecorder');
-        $(`#${this.get('divId')}-container`).remove();
-        this.set('_SWFId', null);
-        this.set('_recording', false);
-        window.swfobject.removeSWF(this.get('_SWFId'));
-        return new Ember.RSVP.Promise((resolve) => {
-            window.setTimeout(function() {
-                resolve();
-            }, 0);
-        });
-    },
-    // TODO: right now this may prematurely cancel an upload if still uploading when called
-    finished() {
-        $('.video-recorder-bg').remove();
-        return new Ember.RSVP.Promise((resolve) => {
-            window.setTimeout(function() {
-                resolve();
-            }, 0);
-        });
-    },
-
-    show() {
-        $(`#${this.get('divId')}-container`).removeAttr('style');
-        $(`#${this.get('divId')}-container`).css({
-            height: '100%'
-        });
-        return true;
+            this.set('_started', false);
+            if (destroy) {
+                this.destroy();
+            }
+        }
     },
 
     hide() {
@@ -288,6 +234,29 @@ export default Ember.Service.extend({
         });
         return true;
     },
+    show() {
+        $(`#${this.get('divId')}-container`).removeAttr('style');
+        $(`#${this.get('divId')}-container`).css({
+            height: '100%'
+        });
+        return true;
+    },
+
+    // Uninstall the video recorder
+    destroy() {
+        console.log('Destroying the videoRecorder');
+        $(`#${this.get('divId')}-container`).remove();
+        this.set('_SWFId', null);
+        this.set('_recording', false);
+        window.swfobject.removeSWF(this.get('_SWFId'));
+    },
+
+    finish() {
+        return new Ember.RSVP.Promise((resolve) => {
+            // todo
+            resolve();
+        });
+    },
 
     on(eName, func) {
         if (HOOKS.indexOf(eName) === -1) {
@@ -295,7 +264,6 @@ export default Ember.Service.extend({
         }
         this.set(eName, func);
     },
-
     // Begin Flash hooks
     _onRecordingStarted(recorderId) { // jshint ignore:line
         this.set('_recording', true);
@@ -307,15 +275,87 @@ export default Ember.Service.extend({
     _onUploadDone(_, __, videoId) {
         this.set('_recording', false);
         $(`div[data-videoid="${videoId}"]`).remove();
+        if (this.get('_stopPromise')) {
+            this.get('_stopPromise').resolve();
+        }
     },
 
-    _onCamAccess(allowed, recorderId) { // jshint ignore:line
-        this.set('_camAccess', allowed);
+    _onCamAccess(allowed) { // jshint ignore:line
+        this.set('hasCamAccess', allowed);
     },
 
     _onFlashReady() {
-        console.log('Flash is ready');
         this.set('_flashReady', true);
     }
     // End Flash hooks
+});
+
+export default Ember.Service.extend({
+    _recorders: {},
+
+    //Initial setup, installs flash hooks into the page
+    init() {
+        var runHandler = function(recorder, hookName, args) {
+            if (recorder.get('debug')) {
+                console.log(hookName, args);
+            }
+
+            if (recorder.get('_' + hookName)) {
+                recorder.get('_' + hookName).apply(recorder, args);
+            }
+            if (recorder.get(hookName)) {
+                recorder.get(hookName).apply(recorder, args);
+            }
+        };
+
+        HOOKS.forEach(hookName => {
+            var self = this;
+            window[hookName] = function() {
+                var args = Array.prototype.slice.call(arguments);
+                var recorderId = args.pop();
+
+                var recorder = self.get(`_recorders.${recorderId}`);
+                if (!recorder) {
+                    Object.keys(self.get('_recorders')).forEach((id) => {
+                        recorder = self.get(`_recorders.${id}`);
+                        runHandler(recorder, hookName, args);
+                    });
+                } else {
+                    runHandler(recorder, hookName, args);
+                }
+            };
+        });
+    },
+
+    //Insert the recorder and start recording
+    //IE a user might not have granted access to their webcam
+    start(videoId, element, {
+        config: config,
+        hidden: hidden
+    } = {
+        config: false,
+        hidden: false
+    }) {
+        if (typeof(videoId) !== 'string') {
+            throw new Error('videoId must be a string');
+        }
+
+        var props = {
+            params: Ember.copy(PARAMS, true),
+            flashVars: Ember.copy(FLASHVARS, true),
+            attributes: Ember.copy(ATTRIBUTES, true)
+        };
+        props.flashVars.sscode = config ? 'asp' : 'php';
+        props.flashVars.userId = videoId;
+        props.flashVars.recorderId = (new Date().getTime() + '');
+        props.element = element;
+        props.hidden = hidden;
+        let handle = new VideoRecorder(props);
+        this.set(`_recorders.${props.flashVars.recorderId}`, handle);
+        return handle;
+    },
+    destroy(recorder) {
+        recorder.destroy();
+        this.get('_recorders').removeObject(recorder);
+    }
 });

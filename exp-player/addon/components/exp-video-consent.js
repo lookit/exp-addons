@@ -1,32 +1,27 @@
 import Em from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-video-consent';
-import VideoId from '../mixins/video-id';
+import VideoRecord from '../mixins/video-record';
 
-export default ExpFrameBaseComponent.extend(VideoId, {
+export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
     videoRecorder: Em.inject.service(),
-    scroller: Em.inject.service(),
+    recorder: null,
 
     didInsertElement() {
-	this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy().then(() => {
-		this.get('videoRecorder').on('onUploadDone', null);
-		this.send('next');
-	    });
-        });
-
-        this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'), {
-            record: false
-        });
+        var recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'));
+	recorder.install({record: false});
+	this.set('recorder', recorder);
     },
     actions: {
         record() {
-	        //this.get('scroller').scrollVertical(Em.$('.recorder'));
-            this.get('videoRecorder').record();
+            this.get('recorder').record();
         },
         finish() {
-            this.get('videoRecorder').stop();
+            this.get('recorder').stop().then(() => {
+		this.get('recorder').destroy();
+		this.send('next');
+	    });
         }
     },
 

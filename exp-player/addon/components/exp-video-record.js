@@ -5,33 +5,41 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 // import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 import VideoPause from '../mixins/video-pause';
-import VideoId from '../mixins/video-id';
+import VideoRecord from '../mixins/video-record';
 
 
 //TODO Fullsceen issues/functionality
-export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoId, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoRecord, {
     layout: layout,
     blockUI: false,
     mayProgress: false,
     // displayFullscreen: false,  // force fullscreen for all uses of this component, always
     // fullScreenElementId: 'player-video',
-    videoRecorder: Ember.inject.service(),
     spaceHandler: null,
+    recorder: null,
     didInsertElement() {
-        this._super(...arguments);
-
-        this.get('videoRecorder').on('onCamAccess', this.send.bind(this, 'camAccess'));
-
-        this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'), {
+        let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'));
+        recorder.install({
             hidden: true,
             record: false
         }).then(() => {
-            if (!this.get('videoRecorder.camAccess')) {
+            if (!recorder.get('camAccess')) {
                 this.set('blockUI', true);
                 this.get('videoRecorder').show();
                 Ember.$('body').addClass('modal-open');
             }
         });
+    },
+    camAccess(hasAccess) {
+        this._super(hasAccess);
+        if (hasAccess) {
+            Ember.$('body').removeClass('modal-open');
+            this.set('blockUI', false);
+            this.get('recorder').hide();
+            Ember.run.scheduleOnce('afterRender', this, () => {
+                this.$('video')[0].play();
+            });
+        }
     },
 
     actions: {
@@ -45,17 +53,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoId, {
                 }
             }
         },
-        camAccess(hasAccess) {
-            if (!hasAccess) {
-                return;
-            }
-            Ember.$('body').removeClass('modal-open');
-            this.set('blockUI', false);
-            this.get('videoRecorder').hide();
-            Ember.run.scheduleOnce('afterRender', this, () => {
-                this.$('video')[0].play();
-            });
-        },
         timeUpdate(event) {
             let currentTime = event.target.currentTime;
 
@@ -63,9 +60,9 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoId, {
                 this.get('startRecording') :
                 (this.$('video')[0].duration + this.get('startRecording'));
 
-            if (!this.get('recorded') && !this.get('videoRecorder.recording') && startStamp <= currentTime) {
+            if (!this.get('recorded') && !this.get('recorder.recording') && startStamp <= currentTime) {
                 this.set('recorded', true);
-                this.get('videoRecorder').record();
+                this.get('recorder').record();
                 return;
             }
 
@@ -73,8 +70,8 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoId, {
                 this.get('stopRecording') :
                 (this.$('video')[0].duration + this.get('stopRecording'));
 
-            if (this.get('videoRecorder.recording') && stopStamp <= currentTime) {
-                this.get('videoRecorder').stop();
+            if (this.get('recorder.recording') && stopStamp <= currentTime) {
+                this.get('recorder').stop();
                 if (this.get('mayProgress')) {
                     if (this.get('autoforwardOnEnd')) {
                         this.send('next');

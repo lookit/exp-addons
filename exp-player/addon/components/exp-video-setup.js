@@ -8,13 +8,13 @@ export default ExpFrameBaseComponent.extend({
     layout: layout,
     videoRecorder: Ember.inject.service(),
     didInsertElement() {
-        this.get('videoRecorder').on('onUploadDone', () => {
-            this.get('videoRecorder').destroy();
-            this.get('videoRecorder').on('onUploadDone', null);
-            this.send('next');
-        });
-        this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'), {
+        let recorder = this.get('videoRecorder').start(`video-consent-${this.get('session.id')}`, this.$('#recorder'));
+        recorder.install({
             record: false
+        });
+        recorder.on('onUploadDone', () => {
+            this.get('videoRecorder').destroy();
+            this.send('next');
         });
     },
 
@@ -32,7 +32,7 @@ export default ExpFrameBaseComponent.extend({
                     type: 'string'
                 },
                 heading: {
-                   type: 'string'
+                    type: 'string'
                 },
                 headingText: {
                     type: 'string'
