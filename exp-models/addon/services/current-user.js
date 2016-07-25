@@ -32,7 +32,7 @@ export default Ember.Service.extend({
                         })
                     ]);
                 }
-                else if(data.provider === this.get('namespaceConfig').get('namespace')) {
+                else if(data.provider === `${this.get('namespaceConfig').get('namespace')}:accounts`) {
                     this.get('store').findRecord('account', `${data.id}`)
                         .then((account) => {
                             resolve([account, account.profileById(this.get('session.data.profile.profileId'))]);
