@@ -137,7 +137,7 @@ const VideoRecorder = Ember.Object.extend({
                 if (this.get('onCamAccess')) {
                     this.get('onCamAccess').call(this, false);
                 }
-                return window.clearInterval(id), this.get('_recordPromise').reject(new Error('Could not start recording'));
+                return window.clearInterval(id), this.get('_recordPromise').reject();
             }
             if (!this.get('recorder').record) {
                 return null;
@@ -355,7 +355,9 @@ export default Ember.Service.extend({
         return handle;
     },
     destroy(recorder) {
+        var recorders = this.get('_recorders');
+        delete recorders[recorder.get('videoId')];
+        this.set('_recorders', recorders);
         recorder.destroy();
-        this.get('_recorders').removeObject(recorder);
     }
 });
