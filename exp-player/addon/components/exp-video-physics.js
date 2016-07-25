@@ -60,7 +60,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     }),
 
     shouldLoop: Ember.computed('videoSources', function() {
-        return (this.get('isPaused') || (this.get('currentTask') === 'announce')); //  || this.get('currentTask') === 'test');
+        return (this.get('isPaused') || (this.get('currentTask') === 'announce') || this.get('currentTask') === 'test');
     }),
 
     onFullscreen: function() {
