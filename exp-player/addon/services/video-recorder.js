@@ -193,12 +193,15 @@ const VideoRecorder = Ember.Object.extend({
         if (this.get('recording')) {
             // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
             if (1.5 - this.getTime() > 0) {
-                return window.setTimeout(this.stop.bind(this, {
+                window.setTimeout(this.stop.bind(this, {
                     destroy: destroy
                 }), 1.5 - this.getTime());
+            } else {
+                try {
+                    this.get('recorder').stopVideo();
+                } catch (e) {}
+                this.set('_recording', false);
             }
-            this.get('recorder').stopVideo();
-            this.set('_recording', false);
             var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
                 this.set('_stopPromise', {
                     resolve: resolve,
