@@ -131,7 +131,9 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     },
 
     willDestroyElement() { // remove event handler
-        this.get('videoRecorder').stop();
+        if (this.get('record')) {
+            this.get('recorder').stop();
+        }
         this._super(...arguments);
         $(document).off("keypress");
     }
