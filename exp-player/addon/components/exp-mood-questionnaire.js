@@ -6,6 +6,10 @@ import {
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from '../templates/components/exp-mood-questionnaire';
 
+let pad = function(number) {
+    return ('00' + (number || 0)).slice(-2);
+};
+
 const Validations = buildValidations({
     napWakeUp: validator('presence', {
         presence: true,
@@ -130,6 +134,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
             } else {
                 this.set('showValidation', true);
             }
+        },
+        setTime(target, value) {
+            this.set(target, `${value.hours()}:${pad(value.minutes())}`);
         }
     }
 });
