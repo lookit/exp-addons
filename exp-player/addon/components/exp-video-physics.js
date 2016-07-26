@@ -213,12 +213,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                         this.pauseStudy(true);
                         this.send('showWarning');
                     }
-                }, 200);
+                }, 400);
             }
             if (currentTask === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
                     $("audio#exp-music")[0].pause();
-                    // this.send('playNext');
+                    this.send('playNext');
                 }, this.get('testLength') * 1000));
                 $("audio#exp-music")[0].play();
                 if (this.get('useAlternate')) {

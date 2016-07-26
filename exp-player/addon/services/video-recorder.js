@@ -33,6 +33,8 @@ const PARAMS = {
 };
 
 const VideoRecorder = Ember.Object.extend({
+    manager: null,
+
     height: 'auto',
     width: '100%',
     element: null,
@@ -197,32 +199,15 @@ const VideoRecorder = Ember.Object.extend({
             }
             this.get('recorder').stopVideo();
             this.set('_recording', false);
-            if (this.get('_hidden')) {
-                var divId = this.get('divId');
-                $(`#${divId}`).attr({
-                    id: null
+            var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
+                this.set('_stopPromise', {
+                    resolve: resolve,
+                    reject: reject
                 });
-                $(`#${divId}-container`).attr({
-                    id: null
-                });
-                this.set('_hidden', false);
-            } else {
-                var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
-                    this.set('_stopPromise', {
-                        resolve: resolve,
-                        reject: reject
-                    });
-                });
-                return _stopPromise;
-            }
-            if (!this.get('started')) {
-                return null;
-            }
-            this.set('_started', false);
-            if (destroy) {
-                this.destroy();
-            }
+            });
+            return _stopPromise;
         }
+        return new Ember.RSVP.Promise((resolve) => resolve());
     },
 
     hide() {
@@ -272,9 +257,8 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onUploadDone(_, __, videoId) {
-        this.set('_recording', false);
-        $(`div[data-videoid="${videoId}"]`).remove();
+    _onUploadDone(streamName, streamDuration, userId, recorderId) { // jshint ignore:line
+        this.get('manager').destroy(this);
         if (this.get('_stopPromise')) {
             this.get('_stopPromise').resolve();
         }
@@ -312,9 +296,13 @@ export default Ember.Service.extend({
             var self = this;
             window[hookName] = function() {
                 var args = Array.prototype.slice.call(arguments);
-                var recorderId = args.pop();
-
-                var recorder = self.get(`_recorders.${recorderId}`);
+                var recorder;
+                if (hookName === 'onUploadDone') {
+                    recorder = self.get(`_recorders.${args[3]}`);
+                } else {
+                    var recorderId = args.pop();
+                    recorder = self.get(`_recorders.${recorderId}`);
+                }
                 if (!recorder) {
                     Object.keys(self.get('_recorders')).forEach((id) => {
                         recorder = self.get(`_recorders.${id}`);
@@ -343,7 +331,8 @@ export default Ember.Service.extend({
         var props = {
             params: Ember.copy(PARAMS, true),
             flashVars: Ember.copy(FLASHVARS, true),
-            attributes: Ember.copy(ATTRIBUTES, true)
+            attributes: Ember.copy(ATTRIBUTES, true),
+            manager: this
         };
         props.flashVars.sscode = config ? 'asp' : 'php';
         props.flashVars.userId = videoId;
