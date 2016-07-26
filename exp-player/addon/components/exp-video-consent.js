@@ -7,6 +7,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
     videoRecorder: Em.inject.service(),
     recorder: null,
+    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
 
     didInsertElement() {
         var recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'));
