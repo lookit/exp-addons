@@ -127,30 +127,27 @@ export default ExpFrameBaseComponent.extend({
   cards: Ember.computed(function() {
     return shuffle(formatCards(cards));
   }),
-  buckets: null,
-  buckets2: null,
   responses: Ember.computed(function() {
     return this.get('session.expData')['1-1-free-response']
   }),
   isValid: Ember.computed(
-    'buckets2.group1.extremely_uncharacteristic.cards.[]',
-    'buckets2.group1.quite_uncharacteristic.cards.[]',
-    'buckets2.group1.fairly_uncharacteristic.cards.[]',
-    'buckets2.group2.somewhat_uncharacteristic.cards.[]',
-    'buckets2.group2.relatively_neutral.cards.[]',
-    'buckets2.group2.somewhat_characteristic.cards.[]',
-    'buckets2.group3.fairly_characteristic.cards.[]',
-    'buckets2.group3.quite_characteristic.cards.[]',
-    'buckets2.group3.extremely_characteristic.cards.[]',
+    'buckets2.0.categories.0.cards.[]',
+    'buckets2.0.categories.1.cards.[]',
+    'buckets2.0.categories.2.cards.[]',
+    'buckets2.1.categories.0.cards.[]',
+    'buckets2.1.categories.1.cards.[]',
+    'buckets2.1.categories.2.cards.[]',
+    'buckets2.2.categories.0.cards.[]',
+    'buckets2.2.categories.1.cards.[]',
+    'buckets2.2.categories.2.cards.[]',
     function() {
-      var buckets = this.buckets2;
-      for (var group in buckets) {
-        for (var category in buckets[group]) {
-          var bucket = buckets[group][category];
-            if (bucket.cards.length !== bucket.max) {
-              return false;
-            }
+      for (var group = 0; group < this.buckets2.length; group++) {
+        for (var category = 0; category < this.buckets2[group].categories.length; category++) {
+          var bucket = this.buckets2[group].categories[category];
+          if (bucket['cards'].length !== bucket['max']) {
+            return false;
           }
+        }
       }
       return true;
   }),
@@ -165,16 +162,18 @@ export default ExpFrameBaseComponent.extend({
       if (cards && cards.contains(card)) {
         source = cards;
       }
-      for (var category in buckets) {
-        if (buckets[category].contains(card)) {
-          source = buckets[category];
+      for (var i = 0; i < buckets.length; i++) {
+        if (buckets[i].cards.contains(card)) {
+          source = buckets[i].cards;
         }
       }
-      for (var group in buckets2) {
-        for (var category in buckets2[group]) {
-          var bucket = buckets2[group][category];
+      if (buckets2) {
+        for (var group = 0; group < buckets2.length; group++) {
+          for (var category = 0; category < buckets2[group].categories.length; category++) {
+            var bucket = buckets2[group].categories[category];
             if (bucket['cards'].contains(card)) {
-             source = bucket['cards'];
+              source = bucket['cards'];
+            }
           }
         }
       }
@@ -193,14 +192,92 @@ export default ExpFrameBaseComponent.extend({
     name: 'ExpCardSort',
     description: 'TODO: a description of this frame goes here.',
     parameters: {
-        type: 'object',
-        properties: {}
+      type: 'object',
+      properties: {
+        buckets: {
+          default: [
+            {
+              name: 'qsort.sections.1.categories.uncharacteristic',
+              cards: []
+            },
+            {
+              name: 'qsort.sections.1.categories.neutral',
+              cards: []
+            },
+            {
+              name: 'qsort.sections.1.categories.characteristic',
+              cards: []
+            }
+          ]
+        },
+        buckets2: {
+          default: [
+           {
+             categories: [
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.extremelyUnchar',
+                 max: 3
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.quiteUnchar',
+                 max: 6
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.fairlyUnchar',
+                 max: 11
+               }
+             ]
+           },
+           {
+             categories: [
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.somewhatUnchar',
+                 max: 15
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.neutral',
+                 max: 20
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.somewhatChar',
+                 max: 15
+               }
+             ]
+           },
+           {
+             categories: [
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.fairlyChar',
+                 max: 11
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.quiteChar',
+                 max: 6
+               },
+               {
+                 cards: [],
+                 name: 'qsort.sections.2.categories.extremelyChar',
+                 max: 3
+               }
+             ]
+           }
+        ]
+      }
+    }
     },
     data: {
-        type: 'object',
-        properties: {
-            cardSortResponse: null
-        }
+      type: 'object',
+      properties: {
+        cardSortResponse: null
+      }
     }
   }
 });
