@@ -11,7 +11,7 @@
           {{radio-group options=question.scale labelTop=item.labelTop labels=item.labels value=item.value}}
         {{/each}}
       {{else if (eq question.type 'select')}}
-        {{select-input options=question.scale value=question.items.item1.value}}
+        {{select-input options=question.scale value=question.items.0.value}}
       {{else if (eq question.type 'radio-input')}}
           {{radio-group options=question.scale value=question.items.radio.value}}
           {{#if (eq question.items.radio.value 'global.yesLabel')}}
