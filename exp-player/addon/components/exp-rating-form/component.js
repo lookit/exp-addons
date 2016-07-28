@@ -691,7 +691,9 @@ var generateSchema = function(question, type, items, scale, options) {
       order: parseInt(item),
       value: null
     };
-    $.extend(true, ret, options);
+    for (var option in options) {
+      ret[option] = options[option];
+    }
     schema['items'].push(ret);
   }
   schema.items.sort(function(a, b) {
@@ -711,7 +713,7 @@ var questions = [
   generateSchema(
     translations.measures.questions['1'].label,
     'select',
-    {'item1': ''},
+    {'1': ''},
     [
       translations.measures.questions['1'].options.extremelyNeg,
       translations.measures.questions['1'].options.quiteNeg,
@@ -727,7 +729,7 @@ var questions = [
   generateSchema(
     translations.measures.questions['2'].label,
     'radio',
-    {'item1': ''},
+    {'1': ''},
     SEVEN_POINT_SCALE,
     {
       labelTop: false,
@@ -753,7 +755,7 @@ var questions = [
   generateSchema(
     translations.measures.questions['3'].label,
     'radio',
-    {'item1': ''},
+    {'1': ''},
     TEN_POINT_SCALE,
     {
       labelTop: false,
