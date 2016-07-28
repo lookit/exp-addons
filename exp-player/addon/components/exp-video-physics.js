@@ -246,7 +246,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         },
 
         next() {
-            this.get('recorder').stop();
+            this.sendTimeEvent('stoppingCapture');
+            this.get('recorder').stop().then();
             this._super(...arguments);
         }
     },
@@ -335,14 +336,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             });
             recorder.on('onCamAccess', (hasAccess) => {
                 this.set('hasCamAccess', hasAccess);
+                this.sendTimeEvent('hasCamAccess');
             });
             this.set('recorder', recorder);
         }
     },
     willDestroyElement() { // remove event handler
-        this.get('recorder').stop({
-            destroy: true
-        });
+        this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
         $(document).off("keypress");
     }
