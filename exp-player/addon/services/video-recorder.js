@@ -5,7 +5,7 @@ let {
     RSVP
 } = Ember;
 
-const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone'];
+const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone', 'userHasCamMic'];
 
 const ATTRIBUTES = {
     align: 'middle',
@@ -49,6 +49,7 @@ const VideoRecorder = Ember.Object.extend({
 
     started: Ember.computed.alias('_started').readOnly(),
     hasCamAccess: false,
+    hasWebCam: false,
     recording: Ember.computed.alias('_recording').readOnly(),
     flashReady: Ember.computed.alias('_flashReady').readOnly(),
 
@@ -273,6 +274,10 @@ const VideoRecorder = Ember.Object.extend({
 
     _onFlashReady() {
         this.set('_flashReady', true);
+    },
+
+    _userHasCamMic(hasCam) {
+	this.set('hasWebCam', Boolean(hasCam));
     }
     // End Flash hooks
 });

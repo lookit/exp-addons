@@ -7,20 +7,27 @@ export default ExpFrameBaseComponent.extend({
     videoRecorder: Ember.inject.service(),
     recorder: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
+    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
+    showWebCamWarning: Ember.computed.not('hasWebCam'),
 
-    didInsertElement() {
-        let recorder = this.get('videoRecorder').start('', this.$('#recorder'), {
-            config: true
-	});
+    _setupRecorder() {
+	var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
 	recorder.install();
 	this.set('recorder', recorder);
+    },
+    didInsertElement() {
+	this._setupRecorder();
     },
 
     actions: {
         next() {
             this.get('recorder').stop({destroy: true});
             this._super(...arguments);
-        }
+        },
+	reloadRecorder() {
+	    this.get('recorder').destroy();
+	    this._setupRecorder();
+	}
     },
 
     type: 'exp-videoconfig',

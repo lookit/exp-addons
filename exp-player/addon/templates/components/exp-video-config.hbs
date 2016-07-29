@@ -1,4 +1,8 @@
 <div class="row exp-physics-config">
+  {{#if showWebCamWarning }}
+    <h4 class="text-warning">We couldn't your webcam. Please make sure you have a webcam connected and <button class="btn btn-default" {{action 'reloadRecorder'}}>reload</button></h4>
+  {{/if}}
+
   <div class="vertical-pad"></div>
   <div class="col-md-10 col-md-offset-1">
     <p>{{instructions}}</p>
