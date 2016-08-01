@@ -20,7 +20,6 @@ export default Ember.Component.extend(FullScreen, {
     frameIndex: 0, // Index of the currently active frame
 
     displayFullscreen: false,
-    videoRecorder: Ember.inject.service(),
     fullScreenElementId: 'experiment-player',
 
     allowExit: false,
@@ -115,14 +114,6 @@ able to continue the study.
         };
     }),
 
-
-    willDestroyElement() {
-        this.get('videoRecorder').stop({
-            destroy: true
-        });
-        return this._super(...arguments);
-    },
-
     _transition() {
         Ember.run(() => {
             this.set('_currentFrameTemplate', 'exp-blank');
@@ -130,11 +121,9 @@ able to continue the study.
         this.set('_currentFrameTemplate', null);
     },
     _exit() {
-        this.get('videoRecorder').finished().then(() => {
-            this.send('sessionCompleted');
-            console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
-            this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
-        });
+        this.send('sessionCompleted');
+        console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
+        this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
     },
 
     actions: {

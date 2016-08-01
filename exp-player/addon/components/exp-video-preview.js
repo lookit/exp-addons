@@ -3,11 +3,13 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from 'exp-player/templates/components/exp-video-preview';
 import MediaReload from 'exp-player/mixins/media-reload';
-import VideoId from '../mixins/video-id';
+import VideoRecord from '../mixins/video-record';
 
-let { $ } = Ember;
+let {
+    $
+} = Ember;
 
-export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
     videoIndex: 0,
 
@@ -22,26 +24,32 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
     }.property('videoIndex'),
 
     currentVideo: Ember.computed('videoIndex', function() {
-	console.log(this.get('videoIndex'));
+        console.log(this.get('videoIndex'));
         return this.get('videos')[this.get('videoIndex')];
     }),
 
     didInsertElement() {
-        if (!this.get('record')) {return;}
-        this.get('videoRecorder').start(`video-preview-${this.get('session.id')}`, this.$('#recorder'), {
+        if (!this.get('record')) {
+            return;
+        }
+        let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'));
+        recorder.install({
             record: true,
             hidden: this.get('hideRecorder')
+        }).then(() => {
+            recorder.pause();
         });
+        this.set('recorder', recorder);
     },
 
-    actions:{
+    actions: {
         accept() {
             this.set('prompt', false);
             this.getRecorder().then(() => { // start recording when videos are shown
-                    this.get('videoRecorder').resume().then(() => {
-                        this.set('doingIntro', false);
-                    });
+                this.get('recorder').resume().then(() => {
+                    this.set('doingIntro', false);
                 });
+            });
         },
         nextVideo() {
             this.set('videoIndex', this.get('videoIndex') + 1);
@@ -67,20 +75,29 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
                     items: {
                         type: 'object',
                         properties: {
-                            imgSrc: {type: 'string', default: ''},
+                            imgSrc: {
+                                type: 'string',
+                                default: ''
+                            },
                             sources: {
                                 type: 'array',
                                 default: [],
                                 items: {
                                     type: 'object',
                                     properties: {
-                                        src: {type: 'string'},
-                                        type: {type: 'string'}
+                                        src: {
+                                            type: 'string'
+                                        },
+                                        type: {
+                                            type: 'string'
+                                        }
                                     },
                                     required: ['src', 'type']
                                 }
                             },
-                            caption: {type: 'string'}
+                            caption: {
+                                type: 'string'
+                            }
                         },
                         required: ['sources', 'caption']
                     },
@@ -107,30 +124,16 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoId, {
             },
             required: ['videos']
         },
-        data: {type: 'object', properties: {}}
-    },
-
-
-    _recorder: null,
-    getRecorder() {
-        return this.get('_recorder');
-    },
-
-    didReceiveAttrs() { // establish video connection right away, then wait for 'accept'
-        this._super(...arguments);
-        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('videoRecorder.started')) {
-            this.set('_recorder', this.get('videoRecorder').start(this.get('videoId'), null, {
-                hidden: true,
-                record: true
-            }).then(() => {
-                this.get('videoRecorder').pause();
-            }).catch(() => {
-                // TODO handle no flashReady
-            }));
+        data: {
+            type: 'object',
+            properties: {}
         }
     },
+
     willDestroyElement() { // remove event handler
-        this.get('videoRecorder').stop();
+        if (this.get('record')) {
+            this.get('recorder').stop();
+        }
         this._super(...arguments);
         $(document).off("keypress");
     }

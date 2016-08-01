@@ -7,7 +7,7 @@ export default Ember.Mixin.create({
 	    // allows for easier capture of onbeforeunload events without disrupting
 	    // intra-app navigation.
             transition.abort();
-            window.location = this.get('router').generate(transition.intent.name);
+            window.location = transition.intent.url || this.get('router').generate(transition.intent.name);
         }
     }
 });

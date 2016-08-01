@@ -116,7 +116,7 @@
                                 allowInputToggle=true
                                 placeholder="hours:minutes"
                                 useCurrent=false
-                                updateDate=(action (mut napWakeUp))}}
+                                updateDate=(action 'setTime' 'napWakeUp')}}
                     </div>
                     <br />
                     <div class="form-group">
@@ -165,7 +165,7 @@
                                     allowInputToggle=true
                                     placeholder="hours:minutes"
                                     useCurrent=false
-                                    updateDate=(action (mut nextNap))}}
+                                    updateDate=(action 'setTime' 'nextNap')}}
                         </div>
                     {{/if}}
                     <div class="form-group timepicker">
@@ -185,7 +185,7 @@
                                 allowInputToggle=true
                                 placeholder="hours:minutes"
                                 useCurrent=false
-                                updateDate=(action (mut lastEat))}}
+                                updateDate=(action 'setTime' 'lastEat')}}
                     </div>
                     <div class="form-group">
                         <label>

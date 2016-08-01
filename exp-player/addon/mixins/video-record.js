@@ -7,5 +7,6 @@ export default Ember.Mixin.create({
             this.get('id'),
             this.get('session.id')
         ].join('_');
-    }).volatile()
+    }).volatile(),
+    videoRecorder: Ember.inject.service()
 });

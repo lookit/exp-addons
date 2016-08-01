@@ -5,20 +5,29 @@ import layout from 'exp-player/templates/components/exp-video-config';
 export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Ember.inject.service(),
-    hasCamAccess: Ember.computed.alias('videoRecorder.camAccess'),
+    recorder: null,
+    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
+    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
+    showWebCamWarning: Ember.computed.not('hasWebCam'),
 
+    _setupRecorder() {
+	var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
+	recorder.install();
+	this.set('recorder', recorder);
+    },
     didInsertElement() {
-        this.get('videoRecorder').start('', this.$('#recorder'), {
-            config: true,
-            record: false
-	});
+	this._setupRecorder();
     },
 
     actions: {
         next() {
-            this.get('videoRecorder').stop({destroy: true});
+            this.get('recorder').stop({destroy: true});
             this._super(...arguments);
-        }
+        },
+	reloadRecorder() {
+	    this.get('recorder').destroy();
+	    this._setupRecorder();
+	}
     },
 
     type: 'exp-videoconfig',
