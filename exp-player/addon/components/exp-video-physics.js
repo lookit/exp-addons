@@ -211,9 +211,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 window.setTimeout(() => {
                     if (!this.get('hasCamAccess')) {
                         this.pauseStudy(true);
+                        this.send('exitFullscreen');
                         this.send('showWarning');
                     }
-                }, 400);
+                }, 1000);
             }
             if (currentTask === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
@@ -253,6 +254,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     },
 
     pauseStudy: function(pause) { // only called in FS mode
+        if (this.get('showVideoWarning')) {
+            return;
+        }
+
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
         // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
