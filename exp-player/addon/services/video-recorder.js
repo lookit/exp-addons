@@ -65,8 +65,7 @@ const VideoRecorder = Ember.Object.extend({
     _stopPromise: null,
 
     recorder: Ember.computed(function() {
-        var recorder = window.swfobject.getObjectById(this.get('_SWFId'));
-        return recorder;
+        return window.swfobject.getObjectById(this.get('_SWFId'));
     }).volatile(),
 
     install({
@@ -85,17 +84,44 @@ const VideoRecorder = Ember.Object.extend({
         let divId = this.get('divId');
         let videoId = this.get('videoId');
 
-        $element.append(
-            $('<div>', {
-                id: `${divId}-container`,
-                'data-videoid': videoId,
-                css: {
-                    height: '100%'
-                }
-            }).append(`<div id="${divId}"></div`)
-        );
-
+        var $container = $('<div>', {
+            id: `${divId}-container`,
+            'data-videoid': videoId,
+            css: {
+                height: '100%'
+            }
+        });
+        this.set('$container', $container);
         if (hidden) {
+            $container.append(
+                `
+<div class="col-md-12">
+    <h3> Please make sure your webcam is configured correctly </h3>
+    <div class="row">
+	<div class="col-md-12">
+	    <p>There was a problem connecting to your webcam! Please try selecting your webcam again below and clicking "allow" and "remember", like you did at the start of the study. If that doesn't work, you can end the study early by pressing F1. </p>
+	    <p class="pull-right"><em>* Please note: we are <strong>not</strong> recording any video during setup.</em></p>
+	</div>
+    </div>
+</div>
+`
+            );
+        }
+
+        $container.append(`<div id="${divId}"></div`);
+        $element.append($container);
+        if (hidden) {
+            $container.append(
+                $('<div>').addClass('row').append(
+                    $('<div>').addClass('col-md-12').append(
+                        ['<br>',
+                            $('<button>', {
+                                text: 'Continue'
+                            }).addClass('btn btn-success pull-right disabled')
+                        ]
+                    )
+                )
+            );
             this.hide();
         }
 
@@ -130,9 +156,6 @@ const VideoRecorder = Ember.Object.extend({
     record() {
         if (!this.get('started')) {
             throw new Error('Must call start before record');
-        }
-        if (this.get('recording')) {
-            throw new Error('Already recording');
         }
         let count = 0;
         let id = window.setInterval(() => {
@@ -215,19 +238,12 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     hide() {
-        $(`#${this.get('divId')}-container`).css({
-            'top': '-10000px',
-            'left': '-10000px',
-            'z-index': -1,
-            'position': 'absolute'
-        });
-        return true;
+        this.get('$container').removeClass('video-recorder-visible');
+        this.get('$container').addClass('video-recorder-hidden');
     },
     show() {
-        $(`#${this.get('divId')}-container`).removeAttr('style');
-        $(`#${this.get('divId')}-container`).css({
-            height: '100%'
-        });
+        this.get('$container').removeClass('video-recorder-hidden');
+        this.get('$container').addClass('video-recorder-visible');
         return true;
     },
 
@@ -248,7 +264,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     on(eName, func) {
-        if (HOOKS.indexOf(eName) === -1) {
+        if (HOOKS.indexOf(eName) === -1 && eName !== 'onCamAccessConfirm') {
             throw `Invalid event ${eName}`;
         }
         this.set(eName, func);
@@ -270,6 +286,16 @@ const VideoRecorder = Ember.Object.extend({
 
     _onCamAccess(allowed) { // jshint ignore:line
         this.set('hasCamAccess', allowed);
+        if (this.get('hidden')) {
+            this.get('$container').find('button').removeClass('disabled').on(
+                'click',
+                () => {
+                    if (this.get('onCamAccessConfirm')) {
+                        this.get('onCamAccessConfirm').call(this);
+                    }
+                }
+            );
+        }
     },
 
     _onFlashReady() {
@@ -277,7 +303,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     _userHasCamMic(hasCam) {
-	this.set('hasWebCam', Boolean(hasCam));
+        this.set('hasWebCam', Boolean(hasCam));
     }
     // End Flash hooks
 });
@@ -325,16 +351,15 @@ export default Ember.Service.extend({
 
     //Insert the recorder and start recording
     //IE a user might not have granted access to their webcam
-    start(videoId, element, {
-        config: config,
-        hidden: hidden
-    } = {
-        config: false,
-        hidden: false
-    }) {
+    start(videoId, element, settings = {}) {
         if (typeof(videoId) !== 'string') {
             throw new Error('videoId must be a string');
         }
+        var defaults = {
+            config: false,
+            hidden: false
+        };
+        Ember.merge(defaults, settings);
 
         var props = {
             params: Ember.copy(PARAMS, true),
@@ -342,11 +367,11 @@ export default Ember.Service.extend({
             attributes: Ember.copy(ATTRIBUTES, true),
             manager: this
         };
-        props.flashVars.sscode = config ? 'asp' : 'php';
+        props.flashVars.sscode = defaults.config ? 'asp' : 'php';
         props.flashVars.userId = videoId;
         props.flashVars.recorderId = (new Date().getTime() + '');
         props.element = element;
-        props.hidden = hidden;
+        props.hidden = defaults.hidden;
         let handle = new VideoRecorder(props);
         this.set(`_recorders.${props.flashVars.recorderId}`, handle);
         return handle;

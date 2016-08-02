@@ -50,3 +50,20 @@
 .modal-dialog {
     width: 80%;
 }
+
+
+.video-recorder-visible {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 150px;
+    background: white;
+}
+.video-recorder-hidden {
+    top: -10000px;
+    left: -10000px;
+    z-index: -1;
+    position: absolute;
+}
