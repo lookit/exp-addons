@@ -312,7 +312,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     this.pauseStudy();
                 }
             }
-            this.send('showFullscreen');
         });
     },
 
@@ -334,6 +333,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             });
             this.set('recorder', recorder);
         }
+        this.send('showFullscreen');
     },
     willDestroyElement() { // remove event handler
         this.sendTimeEvent('destroyingElement');
