@@ -25,6 +25,10 @@ export default ExpFrameBaseComponent.extend({
                 consentLabel: {
                     type: 'string',
                     default: 'I agree'
+                },
+                buttonLabel: {
+                    type: 'string',
+                    default: 'Continue'
                 }
             }
         },
