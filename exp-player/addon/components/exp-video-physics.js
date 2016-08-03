@@ -182,6 +182,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         removeWarning: function() {
             this.set('showVideoWarning', false);
             this.get('recorder').hide();
+            this.send('showFullscreen');
             this.pauseStudy();
         },
 
