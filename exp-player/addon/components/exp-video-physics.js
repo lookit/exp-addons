@@ -21,7 +21,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     recorder: null,
     recordingIsReady: false,
     warning: null,
-    hasCamAccess: false,
+    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
 
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
@@ -198,12 +198,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         startVideo: function() {
             let currentTask = this.get('currentTask');
             if (currentTask === 'intro') {
-                if (!this.get('hasCamAccess')) {
-                    this.pauseStudy(true);
-                    this.send('exitFullscreen');
-                    this.send('showWarning');
-                    $('#videoWarningAudio')[0].play();
-                }
+                window.setTimeout(() => {
+                    if (!this.get('hasCamAccess')) {
+                        this.pauseStudy(true);
+                        this.send('exitFullscreen');
+                        this.send('showWarning');
+                        $('#videoWarningAudio')[0].play();
+                    }
+                }, 300);
             }
             if (currentTask === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
@@ -328,8 +330,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 this.set('recordingIsReady', true);
             });
             recorder.on('onCamAccess', (hasAccess) => {
-                this.set('hasCamAccess', hasAccess);
-                this.sendTimeEvent('hasCamAccess');
+                this.sendTimeEvent('hasCamAccess', {
+                    hasCamAccess: hasAccess
+                });
             });
             this.set('recorder', recorder);
         }
