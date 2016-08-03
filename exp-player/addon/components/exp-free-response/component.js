@@ -15,7 +15,7 @@ function getRemaining(value) {
 }
 
 var presence = validator('presence', {
-    presence:true,
+    presence: true,
     message: 'This field is required'
 });
 

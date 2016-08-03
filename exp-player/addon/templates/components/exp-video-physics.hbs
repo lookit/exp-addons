@@ -28,7 +28,7 @@
     {{/if}}
 
 
-    {{#if isPaused}}
+    {{#if (and isPaused (not showVideoWarning)) }}
         <audio id="pause-audio" autoplay="autoplay">
             <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.ogg" type="audio/ogg">
             <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.mp3" type="audio/mp3">
@@ -55,7 +55,7 @@
     </video>
 
 
-    {{#if isPaused}}
+    {{#if (and isPaused (not showVideoWarning))}}
       <p  class="pause-instructions"> Study paused </p>
       {{#if updatedIsFullscreen}}
         <p  class="pause-instructions"> Press space to resume </p>
@@ -78,26 +78,7 @@
   </div>
 {{/unless}}
 
-{{#bs-modal open=showVideoWarning header=false footer=false autoClose=false}}
-    <div class="row">
-	<div class="col-md-12">
-	    <h3> Please make sure your webcam is configured correctly </h3>
-	    <div class="row">
-		<div class="col-md-12">
-		    <p>There was a problem connecting to your webcam! Please try selecting your webcam again below and clicking "allow" and "remember", like you did at the start of the study. If that doesn't work, you can end the study early by pressing F1. </p>
-		    <p id="not-recording-note"><em>* Please note: we are <strong>not</strong> recording any video during setup.</em></p>
-		    <div id="videoWarningConfig"></div>
-		    <div class="row">
-			<div class="col-md-12">
-			    <button class="btn btn-success pull-right" {{ action 'removeWarning' }} > Next </button>
-			</div>
-		    </div>
-		</div>
-	    </div>	    
-	</div>
-	<audio id="videoWarningAudio">
-	    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.mp3" type="audio/mpeg">
-            <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.ogg" type="audio/ogg">
-	</audio>
-    </div>
-{{/bs-modal}}
+<audio id="videoWarningAudio">
+    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.mp3" type="audio/mpeg">
+    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.ogg" type="audio/ogg">
+</audio>

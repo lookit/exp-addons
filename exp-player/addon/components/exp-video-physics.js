@@ -169,29 +169,19 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     actions: {
         showWarning: function() {
             if (!this.get('showVideoWarning')) {
-                $('#videoWarningAudio')[0].play();
-                this.sendTimeEvent('webcamNotConfigured');
                 this.set('showVideoWarning', true);
-                if (!this.get('warning')) {
-                    var warning = this.get('videoRecorder').start('', '#videoWarningConfig');
-                    warning.install({
-                        record: false,
-                        hidden: false
-                    });
-                    this.set('warning', warning);
-                    warning.on('onCamAccess', (access) => {
-                        this.set('hasCamAccess', access);
-                        this.get('recorder').install({
-                            record: true
-                        });
-                    });
-                }
+                this.sendTimeEvent('webcamNotConfigured');
+                var recorder = this.get('recorder');
+                recorder.show();
+                recorder.on('onCamAccessConfirm', () => {
+                    this.send('removeWarning');
+                    this.get('recorder').record();
+                });
             }
         },
         removeWarning: function() {
             this.set('showVideoWarning', false);
-            this.get('videoRecorder').destroy(this.get('warning'));
-            this.set('warning', null);
+            this.get('recorder').hide();
             this.pauseStudy();
         },
 
@@ -207,13 +197,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         startVideo: function() {
             let currentTask = this.get('currentTask');
-            if (currentTask !== 'announce') {
-                window.setTimeout(() => {
-                    if (!this.get('hasCamAccess')) {
-                        this.pauseStudy(true);
-                        this.send('showWarning');
-                    }
-                }, 400);
+            if (currentTask === 'intro') {
+                if (!this.get('hasCamAccess')) {
+                    this.pauseStudy(true);
+                    this.send('exitFullscreen');
+                    this.send('showWarning');
+                    $('#videoWarningAudio')[0].play();
+                }
             }
             if (currentTask === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
@@ -253,6 +243,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     },
 
     pauseStudy: function(pause) { // only called in FS mode
+        if (this.get('showVideoWarning')) {
+            return;
+        }
+
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
         // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
@@ -318,14 +312,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     this.pauseStudy();
                 }
             }
-            this.send('showFullscreen');
         });
     },
 
     didInsertElement() {
         this._super(...arguments);
         if (this.get('experiment') && this.get('id') && this.get('session')) {
-            let recorder = this.get('videoRecorder').start(this.get('videoId'), null, {
+            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
                 hidden: true
             });
             recorder.install({
@@ -340,6 +333,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             });
             this.set('recorder', recorder);
         }
+        this.send('showFullscreen');
     },
     willDestroyElement() { // remove event handler
         this.sendTimeEvent('destroyingElement');
