@@ -29,6 +29,24 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-free-response',
     layout: layout,
     i18n: Ember.inject.service(),
+    displayTime: Ember.computed(function() {
+        var profileId = this.get('session').profileId;
+        if (profileId % 2 === 0) {
+            return this.get('i18n').t('survey.sections.2.times.7pm').string;
+        } else {
+            return this.get('i18n').t('survey.sections.2.times.10am').string;
+        }
+    }),
+    instructions: Ember.computed(function() {
+      var instructions = this.get('i18n').t('survey.sections.2.instructions').string;
+      instructions = instructions.replace('##', this.get('displayTime'));
+      return instructions;
+    }),
+    label1: Ember.computed(function() {
+      var label = this.get('i18n').t('survey.sections.2.questions.11.label').string;
+      label = label.replace('##', this.get('displayTime'));
+      return label;
+    }),
     diff1: Ember.computed('q1', function() {
         var remaining = getRemaining(this.get('q1'));
         var translationKey = 'number' + remaining;
