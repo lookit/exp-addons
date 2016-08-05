@@ -1,0 +1,35 @@
+.bucket {
+    height: 300px;
+    overflow: auto;
+}
+
+.item {
+    cursor: move;
+}
+
+.card-container {
+    height: 75px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.center {
+    text-align:center;
+}
+
+.small-card {
+    font-size: 10px;
+}
+
+.small-bucket .well {
+    padding:12px;
+}
+
+.small-bucket .alert {
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.bucket-label {
+    margin-top: 40px;
+}
