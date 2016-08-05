@@ -114,16 +114,24 @@ export default DS.Model.extend(JamModel, {
     isEligible(participant) {
         var age = participant.get('age');
 
-        var minAge = this.get('eligiblityMinAge');
-        var maxAge = this.get('eligiblityMaxAge');
-        var eligible = true;
-        if (minAge) {
-            eligible = eligible && (age > minAge);
+        let {
+            eligibilityMinAge,
+            eligibilityMaxAge
+        } = this.getProperties('eligibilityMinAge', 'eligibilityMaxAge');
+
+        var minDays;
+        var maxDays;
+        if (eligibilityMinAge) {
+            let [minNumber, minUnit] = eligibilityMinAge.split(' ');
+            minDays = moment.duration(parseFloat(minNumber), minUnit).asDays();
         }
-        if (maxAge) {
-            eligible = eligible && (age < maxAge);
+        if (eligibilityMaxAge) {
+            let [maxNumber, maxUnit] = eligibilityMaxAge.split(' ');
+            maxDays = moment.duration(parseFloat(maxNumber), maxUnit).asDays();
         }
-        return eligible;
+        minDays = minDays || -1;
+        maxDays = maxDays || Number.MAX_SAFE_INTEGER;
+        return minDays <= age && age <= maxDays;
     },
     ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function() {
         let {
@@ -185,9 +193,9 @@ export default DS.Model.extend(JamModel, {
         this._registerSessionModels();
 
         var namespace = this.get('namespaceConfig').get('namespace');
-	var permissions = {
-	    [`jam-${namespace}:accounts-*`] : 'CREATE'
-	};
+        var permissions = {
+            [`jam-${namespace}:accounts-*`]: 'CREATE'
+        };
         var collection = this.store.createRecord('collection', {
             id: `${namespace}.${this.get('sessionCollectionId')}`,
             permissions: this.get('isActive') ? permissions : {} // Allow participants to create new session records on active experiments. (Admins should get permission from namespace)
