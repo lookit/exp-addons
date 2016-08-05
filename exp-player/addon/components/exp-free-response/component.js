@@ -51,7 +51,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var remaining = getRemaining(this.get('q1'));
         var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
-        message = message.replace("75", this.get('i18n').t('number75').string);
+        message = message.replace("##", this.get('i18n').t('number75').string);
         message = message.replace("0", this.get('i18n').t(translationKey).string);
         return message;
     }),
