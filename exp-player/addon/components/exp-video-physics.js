@@ -197,18 +197,15 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         },
 
         startVideo: function() {
-            let currentTask = this.get('currentTask');
-            if (currentTask === 'intro') {
-                window.setTimeout(() => {
-                    if (!this.get('hasCamAccess')) {
-                        this.pauseStudy(true);
-                        this.send('exitFullscreen');
-                        this.send('showWarning');
-                        $('#videoWarningAudio')[0].play();
-                    }
-                }, 300);
+            if (this.get('doingTest')) {
+                if (!this.get('hasCamAccess')) {
+                    this.pauseStudy(true);
+                    this.send('exitFullscreen');
+                    this.send('showWarning');
+                    $('#videoWarningAudio')[0].play();
+                }
             }
-            if (currentTask === 'test' && !this.get('isPaused')) {
+            if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
                     $("audio#exp-music")[0].pause();
                     // this.send('playNext');
