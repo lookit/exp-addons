@@ -9,6 +9,7 @@ import moment from 'moment';
 import layout from '../templates/components/exp-exit-survey';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import FullScreen from 'exp-player/mixins/full-screen';
 
 
 const Validations = buildValidations({
@@ -26,7 +27,7 @@ const Validations = buildValidations({
     })
 });
 
-export default ExpFrameBaseComponent.extend(Validations, {
+export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     layout: layout,
     type: 'exp-exit-survey',
     meta: {
@@ -114,6 +115,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
     }),
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
         return Math.ceil((this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100);
-    })
-
+    }),
+    willRender() {
+	this.send('exitFullscreen');
+    }
 });
