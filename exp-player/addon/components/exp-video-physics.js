@@ -22,6 +22,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
+    videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
@@ -198,7 +199,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         startVideo: function() {
             if (this.get('doingTest')) {
-                if (!this.get('hasCamAccess')) {
+                if (!this.get('hasCamAccess') || !this.get('videoUploadConnected')) {
                     this.pauseStudy(true);
                     this.send('exitFullscreen');
                     this.send('showWarning');
@@ -331,7 +332,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 this.sendTimeEvent('hasCamAccess', {
                     hasCamAccess: hasAccess
                 });
-            });
+           });
+	    recorder.on('onConnectionStatus', (status) => {
+		this.sendTimeEvent('videoStreamConnection', {
+		    status: status
+                });
+	    });
             this.set('recorder', recorder);
         }
         this.send('showFullscreen');
