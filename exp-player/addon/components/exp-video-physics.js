@@ -60,7 +60,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     }),
 
     shouldLoop: Ember.computed('videoSources', function() {
-        return (this.get('isPaused') || (this.get('currentTask') === 'announce')); // || this.get('currentTask') === 'test');
+        return (this.get('isPaused') || (this.get('currentTask') === 'announce' || this.get('currentTask') === 'test'));
     }),
 
     onFullscreen: function() {
@@ -208,7 +208,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
                 this.set('timeoutID', window.setTimeout(() => {
                     $("audio#exp-music")[0].pause();
-                    // this.send('playNext');
+                    this.send('playNext');
                 }, this.get('testLength') * 1000));
                 $("audio#exp-music")[0].play();
                 if (this.get('useAlternate')) {
