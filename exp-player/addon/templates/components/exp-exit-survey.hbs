@@ -1,7 +1,4 @@
 <div class="row exp-physics-exit-survey">
-    {{#if (not isFullscreen) }}
-	<div class="vertical-pad"></div>
-    {{/if}}
     <div class="col-md-8 col-md-offset-2">
         {{#if section1}} {{#bs-form}}
         <label><i class="fa fa-star"></i> Please confirm your child's birthdate:</label> {{bs-datetimepicker format="MM/DD/YYYY" pickDate=false noIcon=true allowInputToggle=true updateDate=(action (mut birthDate)) maxDate=today}}
