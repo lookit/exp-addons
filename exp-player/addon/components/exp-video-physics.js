@@ -199,7 +199,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         startVideo: function() {
             if (this.get('doingTest')) {
-                if (!this.get('hasCamAccess') || !this.get('videoUploadConnected')) {
+                if (!this.get('hasCamAccess')) {
                     this.pauseStudy(true);
                     this.send('exitFullscreen');
                     this.send('showWarning');
