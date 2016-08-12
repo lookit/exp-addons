@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
-import { translationMacro as t } from "ember-i18n";
 import {validator, buildValidations} from 'ember-cp-validations';
 
 const MAX_LENGTH = 75;
