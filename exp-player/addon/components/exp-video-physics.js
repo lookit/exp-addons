@@ -190,7 +190,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         playNext: function() {
             window.clearTimeout(this.get('timeoutID'));
             if (this.get("currentTask") === "intro") {
-                // TODO: maybe don't record during last video?
                 this.set("currentTask", "test");
             } else {
                 this.send('next'); // moving to intro video
@@ -226,9 +225,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             if (~this.get('isPaused')) {
                 if (this.isLast) {
                     window.clearTimeout(this.get('timeoutID'));
-                    this.get('recorder').finish().then(() => {
-                        this.send('next');
-                    });
+                    this.send('next');
                 } else {
                     this.sendTimeEvent('startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
@@ -238,7 +235,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         next() {
             this.sendTimeEvent('stoppingCapture');
-            this.get('recorder').stop().then();
+	    if (this.get('recorder')) {
+		this.get('recorder').stop();
+	    }
             this._super(...arguments);
         }
     },
@@ -318,7 +317,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     didInsertElement() {
         this._super(...arguments);
-        if (this.get('experiment') && this.get('id') && this.get('session')) {
+        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
                 hidden: true
             });
