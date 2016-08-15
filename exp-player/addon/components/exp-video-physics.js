@@ -310,7 +310,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space
                     this.pauseStudy();
-                }
+                } else if (e.which ===  112) { // F1
+		    if (this.get('recorder')) {
+			this.get('recorder').stop();
+		    }
+		}
             }
         });
     },
@@ -344,6 +348,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     willDestroyElement() { // remove event handler
         this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
-        $(document).off("keypress");
+        $(document).off("keyup");
     }
 });
