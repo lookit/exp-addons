@@ -235,9 +235,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         next() {
             this.sendTimeEvent('stoppingCapture');
-	    if (this.get('recorder')) {
-		this.get('recorder').stop();
-	    }
+            if (this.get('recorder')) {
+                this.get('recorder').stop();
+            }
             this._super(...arguments);
         }
     },
@@ -251,7 +251,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
             if (!this.get('isLast')) {
-
                 try {
                     this.set('hasBeenPaused', true);
                 } catch (_) {
@@ -273,10 +272,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                             this.set('hasBeenPaused', true);
                             this.set('currentTask', 'announce');
                             this.set('playAnnouncementNow', true);
-			    Ember.run.next(this, () => {
-				this.send('next');
-				this.get('videoRecorder').destroy(this.get('recorder'));
-			    });
+                            Ember.run.next(this, () => {
+                                this.send('next');
+                                this.get('videoRecorder').destroy(this.get('recorder'));
+                            });
                             return;
                         } else {
                             this.set('useAlternate', true);
@@ -307,23 +306,20 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         });
     },
 
-    init() {
+    didInsertElement() {
         this._super(...arguments);
         $(document).on("keyup", (e) => {
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space
                     this.pauseStudy();
-                } else if (e.which ===  112) { // F1
-		    if (this.get('recorder')) {
-			this.get('recorder').stop();
-		    }
-		}
+                } else if (e.which === 112) { // F1
+                    if (this.get('recorder')) {
+                        this.get('recorder').stop();
+                    }
+                }
             }
         });
-    },
 
-    didInsertElement() {
-        this._super(...arguments);
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
                 hidden: true
@@ -338,12 +334,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 this.sendTimeEvent('hasCamAccess', {
                     hasCamAccess: hasAccess
                 });
-           });
-	    recorder.on('onConnectionStatus', (status) => {
-		this.sendTimeEvent('videoStreamConnection', {
-		    status: status
+            });
+            recorder.on('onConnectionStatus', (status) => {
+                this.sendTimeEvent('videoStreamConnection', {
+                    status: status
                 });
-	    });
+            });
             this.set('recorder', recorder);
         }
         this.send('showFullscreen');
