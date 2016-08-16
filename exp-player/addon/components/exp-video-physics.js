@@ -273,7 +273,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                             this.set('hasBeenPaused', true);
                             this.set('currentTask', 'announce');
                             this.set('playAnnouncementNow', true);
-                            this.send('next');
+			    Ember.run.next(this, () => {
+				this.send('next');
+				this.get('videoRecorder').destroy(this.get('recorder'));
+			    });
                             return;
                         } else {
                             this.set('useAlternate', true);
