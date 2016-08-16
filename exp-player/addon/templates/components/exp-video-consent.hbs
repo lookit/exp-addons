@@ -1,0 +1,40 @@
+<div class="row video-consent-main">
+  <div class="col-md-8 center">
+    <div class="well video-consent-doc">
+      <center>
+        <span class="exp-text-medium">
+          {{{title}}}
+        </span>
+      </center>
+      <br>
+      {{#each blocks as |prompt|}}
+        {{exp-text-block block=prompt}}
+      {{/each}}
+    </div>
+  </div>
+
+
+  <div class="col-md-4">
+    <blockquote>
+      <p>
+        If you're ready to participate, please make a consent recording to get started! Press "record" and then read the statement below (in green) out loud.
+      </p>
+    </blockquote>
+    <div class="well video-consent-prompt">
+      <span class="breaklines exp-video-consent-prompt">{{prompt}}</span>
+    </div>
+
+    <div class="row recorder-container" style="height: 30vh; margin: 5px; ">
+      <div class="recorder col-xs-12 col-md-12" style="height:100%"></div>
+    </div>
+
+      <div class="row video-consent-controls">
+	  {{#if recordingStarted }}
+	      <button class="btn btn-success pull-right" {{ action 'finish' }}>Finish</button>
+	  {{else}}
+	      <button disabled={{disableRecord}} class="btn btn-primary pull-left" {{ action 'record' }}>Record</button>
+	  {{/if}}
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,71 @@
+.exp-video-physics video {
+    margin:auto;
+}
+
+.exp-video-physics video.intro {
+    max-height: 50%;
+}
+
+.exp-video-physics video.test:not(.attn) {
+    max-height:80%;
+    width:100%;
+}
+
+.exp-video-physics video.attn {
+    max-height: 30%;
+}
+
+#experiment-player.player-fullscreen div {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+#experiment-player.player-fullscreen > div > div {
+    display: table;
+}
+
+#experiment-player.player-fullscreen > div > div > div  {
+    display: table-cell;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+video.player-fullscreen::-webkit-media-controls {
+  display:none !important;
+}
+
+.exp-video-physics .pause-instructions {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right:auto;
+    text-align: center;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.exp-video-physics button {
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 75px;
+    min-width: 300px;
+    position: relative;
+    display: block;
+    font-size: 2em;
+}
+
+#experiment-player:not(.player-fullscreen) video {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    position: relative;
+    display: block;
+}
+
+#videoWarningConfig {
+    height: 500px;
+    width: 80%;
+    margin-left: 10%;
+}

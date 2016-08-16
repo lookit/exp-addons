@@ -1,55 +1,60 @@
-# Exp-player
+# Experimenter Addons
 
-An Ember addon for the Experimenter player. This repo will eventually include:
+A shared home for all of our shared addons
 
-- the core exp-player component
-- exp- components to be used with the player
+# Installation
 
-## Installation
+## Install the submodule:
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
-
-Locally link the module:
-* `npm link`
-
-And in the app you want to install the addon:
-* `npm link exp-player`
-
-And in your package.json add:
-```json
-{
-  ...
-  "dependencies": {
-    "exp-player": "latest"
-  }
-}
+This repo module should included as a submodule in the Ember project where you want to use these addons.
+An example setup might be:
+```
+/<ember-project>
+  /ext
+    /exp-addons
+  /app
+    ...    
 ```
 
-Use the exp-player like: `{{exp-player frames=[...]}}`
-      
-## Frame development
+And the corresponding package.json entries are:
 
-This addon includes blueprints for creating frames:
-`ember g exp-frame exp-<name>`
+```json
+{
+  ...,
+  "dependencies": {
+    "exp-player": "file:./ext/exp-addons/exp-player",
+    "exp-models": "file:./ext/exp-addons/exp-models"
+  }
+}
 
-which will create a new component and corresponding template for the new frame.
+```
 
+For example:
 
-## Running
+```bash
+cd lib
+git submodule init
+git submodule update
+cd exp-models
+npm install
+```
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+## Development
 
-## Running Tests
+If your work requires that you make changes to one of the exp-addon modules you can use `npm link` for
+local development. This allows you to make changes to the code without having to push to github. To do
+this:
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+```bash
+cd ext/exp-addons/exp-player
+npm link
+cd ../../..
+npm link exp-player
+```
 
-## Building
+Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
+now be automagically reflected in the consuming project.
 
-* `ember build`
+### COS is Hiring!
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+Want to help save science? Want to get paid to develop free, open source software? [Check out our openings!](http://cos.io/jobs)

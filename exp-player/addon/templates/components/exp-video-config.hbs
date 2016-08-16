@@ -1,0 +1,24 @@
+<div class="row exp-physics-config">
+
+  <div class="vertical-pad"></div>
+  <div class="col-md-10 col-md-offset-1">
+
+  {{#if showWebCamWarning }}
+    <h4 class="text-warning">We couldn't connect to your webcam. Please make sure you have a webcam connected and <button class="btn btn-default" {{action 'reloadRecorder'}}>reload</button></h4>
+  {{/if}}
+
+  {{#unless showWebCamWarning }}
+    <p>{{instructions}}</p>
+    <p id="not-recording-note"><em>Please note: we are <strong>not</strong> recording any video during setup.</em></p>
+{{/unless}}
+  </div>
+</div>
+<div class="row exp-physics-config" style="height: 65vh">
+  <div id="recorder" class="col-md-10 col-md-offset-1" style="height:100%"></div>
+</div>
+<br>
+<div class="row exp-controls exp-physics-config">
+  <div class="col-md-12">
+    <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'next' }} > Next </button>
+  </div>
+</div>

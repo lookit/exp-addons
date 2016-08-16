@@ -1,0 +1,71 @@
+@import "components/exp-player";
+@import "components/exp-video-setup";
+@import "components/exp-video-consent";
+@import "components/exp-physics-info";
+@import "components/exp-mood-questionnaire";
+@import "components/exit-warning";
+@import "components/exp-physics-preview-exp";
+@import "components/exp-physics-preview";
+@import "components/exp-physics-pre-video";
+@import "components/exp-exit-survey";
+@import "components/exp-video-physics";
+@import "components/radio-group";
+@import "components/exp-card-sort";
+
+.exp-text-large {
+    font-size: 2em;
+}
+.exp-text-medium {
+    font-size: 1.5em;
+}
+.exp-text-heavy {
+    font-weight: 750;
+}
+
+.breaklines {
+    white-space: pre-wrap
+}
+
+.btn {
+    margin-bottom: 15px;
+}
+
+.exp-controls {
+    margin: 5px;
+}
+
+#expContainer {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.exp-text {
+    margin: auto;
+    max-width: 65em;
+}
+
+.vertical-pad {
+    height: 8vh;
+}
+
+.modal-dialog {
+    width: 80%;
+}
+
+
+.video-recorder-visible {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 150px;
+    background: white;
+    height: 80% !important;
+}
+.video-recorder-hidden {
+    top: -10000px;
+    left: -10000px;
+    z-index: -1;
+    position: absolute;
+}
