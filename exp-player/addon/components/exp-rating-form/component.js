@@ -167,6 +167,14 @@ var items = {
       'measures.questions.16.items.3.label',
       'measures.questions.16.items.4.label',
       'measures.questions.16.items.5.label'
+  ],
+  '17': [
+      'measures.questions.17.items.1.label',
+      'measures.questions.17.items.2.label',
+      'measures.questions.17.items.3.label',
+      'measures.questions.17.items.4.label',
+      'measures.questions.17.items.5.label',
+      'measures.questions.17.items.6.label'
   ]
 };
 
@@ -511,15 +519,20 @@ var questions = [
     ],
     {labelTop: true}
   ),
-  {
-    question: 'measures.questions.17.label',
-    type: 'textarea',
-    items: {
-      input: {
-        value:null
-      }
-    }
-  }];
+  generateSchema(
+    'measures.questions.17.label',
+    'radio',
+    items['17'],
+    [
+      'measures.questions.17.options.disagreeStrongly',
+      'measures.questions.17.options.disagree',
+      'measures.questions.17.options.neutral',
+      'measures.questions.17.options.agree',
+      'measures.questions.17.options.agreeStrongly'
+    ],
+    {labelTop: true}
+  )
+];
 
 const Validations = buildValidations(generateValidators(questions));
 
