@@ -28,10 +28,10 @@
 				speex1 : 5.75kbits/s
 				speex0 : Speex, lowest quality, not really usable,  uses 3.95kbits/s
 			-->
-	<snd>22</snd>
+	<snd>11</snd>
 	<sndSilencelevel>0</sndSilencelevel>
 	
-	<vcodec>sorenson</vcodec>
+	<vcodec>h264_w</vcodec>
 		<!--
 		Flash Player 6  (released in 2002) and above supports encoding video with the Sorenson Spark codec.
 		Flash Player 11 (released in 2011) and above supports encoding video with both Sorenson Spark and H.264 .

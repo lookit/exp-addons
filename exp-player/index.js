@@ -76,7 +76,7 @@ var DEFAULT_OPTIONS = {
   //values: URL paths to the audio/video quality profile files
   //default: '' (in which case the qualityurl flash var is being used, it's found in the .html files embedding videorecorder.swf)
   // qualityurl: '',
-  qualityurl: 'audio_video_quality_profiles/640x480x30x90.xml',
+  qualityurl: 'audio_video_quality_profiles/320x240x30x90.xml',
 
   //maxRecordingTime: Number
   //desc: the maximum recording time in seconds. If set to -1, the 'mrt' flash var parameter will be used, this way the maximum recording time can be set through this flash param specifically if needed.
