@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
@@ -539,6 +540,19 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
+    questions: questions,
+    responses: Ember.computed('questions', function() {
+        var questions = this.get('questions');
+        var responses = {};
+        for (var i=0; i < questions.length; i++) {
+            var question = questions[i];
+            responses[i] = {};
+            for (var j=0; j < question.items.length; j++) {
+                responses[i][j] = question.items[j].value;
+            }
+        }
+        return responses;
+    }),
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -551,9 +565,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
             type: 'object',
             properties: {
-                questions: {
-                    default: questions
-                }
+              responses: {
+                type: 'string'
+              }
             }
         }
     }
