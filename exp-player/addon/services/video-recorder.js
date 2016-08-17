@@ -224,7 +224,9 @@ const VideoRecorder = Ember.Object.extend({
 	    var recorder = this.get('recorder');
             try {
 		if (recorder) {
-		    recorder.stopVideo();
+		    Ember.run.next(this, () => {
+			recorder.stopVideo();
+		    });
 		}
             } catch (e) {}
 	    this.set('_recording', false);
@@ -250,7 +252,7 @@ const VideoRecorder = Ember.Object.extend({
 
     // Uninstall the video recorder
     destroy() {
-        console.log('Destroying the videoRecorder');
+        console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
         $(`#${this.get('divId')}-container`).remove();
         this.set('_SWFId', null);
         this.set('_recording', false);
