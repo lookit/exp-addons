@@ -191,7 +191,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
 	stopVideo: function() {
 	    var currentTask = this.get('currentTask');
-	    if (this.get('shouldLoop')) {
+	    if (this.$('#player-video')[0].currentTime >= this.get('testLength')) {
+		this.send('_afterTest');
+	    } else if (this.get('shouldLoop')) {
 		this.set('_lastTime', 0);
 		this.$('#player-video')[0].play();
 	    } else {
@@ -212,6 +214,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         },
 
+	_afterTest() {
+	    window.clearInterval(this.get('testTimer'));
+	    $("audio#exp-music")[0].pause();
+            this.send('playNext');
+	},
+
 	setTestTimer: function() {
 	    window.clearInterval(this.get('testTimer'));
 	    this.set('testTime', 0);
@@ -227,9 +235,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
 		var testTime = this.get('testTime');
 		if ((testTime + diff) >= (testLength - 0.02)) {
-		    $("audio#exp-music")[0].pause();
-                    this.send('playNext');
-		    window.clearInterval(this.get('testTimer'));
+		    this.send('_afterTest');
 		} else {
 		    this.set('testTime', testTime + diff);
 		}
