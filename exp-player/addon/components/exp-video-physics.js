@@ -32,7 +32,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     doingTest: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'test');
     }),
-    timeoutId: 0,
+    testTimer: null,
+    testTime: 0,
+
     hasBeenPaused: false,
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
@@ -187,14 +189,52 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             this.pauseStudy();
         },
 
+	stopVideo: function() {
+	    var currentTask = this.get('currentTask');
+	    if (this.get('shouldLoop')) {
+		this.set('_lastTime', 0);
+		this.$('#player-video')[0].play();
+	    } else {
+		this.sendTimeEvent('videoStopped', {
+		    currentTask
+		});
+		if (this.get('autoforwardOnEnd')) {
+		    this.send('playNext');
+		}
+	    }
+	},
+
         playNext: function() {
-            window.clearTimeout(this.get('timeoutID'));
             if (this.get("currentTask") === "intro") {
                 this.set("currentTask", "test");
             } else {
                 this.send('next'); // moving to intro video
             }
         },
+
+	setTestTimer: function() {
+	    window.clearInterval(this.get('testTimer'));
+	    this.set('testTime', 0);
+	    this.set('_lastTime', 0);
+
+	    var testLength = this.get('testLength');
+
+	    this.set('testTimer', window.setInterval(() => {
+		var videoTime = this.$('#player-video')[0].currentTime;
+		var lastTime = this.get('_lastTime');
+		var diff = videoTime - lastTime;
+		this.set('_lastTime', videoTime);
+
+		var testTime = this.get('testTime');
+		if ((testTime + diff) >= (testLength - 0.02)) {
+		    $("audio#exp-music")[0].pause();
+                    this.send('playNext');
+		    window.clearInterval(this.get('testTimer'));
+		} else {
+		    this.set('testTime', testTime + diff);
+		}
+	    }, 100));
+	},
 
         startVideo: function() {
             if (this.get('doingTest')) {
@@ -206,10 +246,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 }
             }
             if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
-                this.set('timeoutID', window.setTimeout(() => {
-                    $("audio#exp-music")[0].pause();
-                    this.send('playNext');
-                }, this.get('testLength') * 1000));
+		if (this.get('testTime') === 0) {
+		    this.send('setTestTimer');
+		}
                 $("audio#exp-music")[0].play();
                 if (this.get('useAlternate')) {
                     this.sendTimeEvent('startAlternateVideo');
@@ -224,7 +263,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
             if (~this.get('isPaused')) {
                 if (this.isLast) {
-                    window.clearTimeout(this.get('timeoutID'));
                     this.send('next');
                 } else {
                     this.sendTimeEvent('startIntro');
@@ -234,6 +272,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         },
 
         next() {
+	    window.clearInterval(this.get('testTimer'));
             this.sendTimeEvent('stoppingCapture');
             if (this.get('recorder')) {
                 this.get('recorder').stop();
@@ -292,7 +331,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                         return;
                     }
                 } else if (pause || !wasPaused) { // Not currently paused: pause
-                    window.clearTimeout(this.get('timeoutID'));
+                    window.clearInterval(this.get('testTimer'));
                     this.sendTimeEvent('pauseVideo', {
                         'currentTask': this.get('currentTask')
                     });
