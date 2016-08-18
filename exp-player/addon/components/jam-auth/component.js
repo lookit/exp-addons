@@ -1,11 +1,11 @@
 import Ember from 'ember';
-import ENV from 'isp/config/environment';
+import config from 'ember-get-config';
 import layout from './template';
 
 export default Ember.Component.extend({
   layout: layout,
-  namespace: ENV.JAMDB.namespace,
-  collection: ENV.JAMDB.collection,
+  namespace: config.JAMDB.namespace,
+  collection: config.JAMDB.collection,
 
   studyId: null,
   participantId: null,
