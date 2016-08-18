@@ -99,7 +99,7 @@ export default Ember.Component.extend({
 
     actions: {
         setTimeEvent(eventName, extra) {
-            console.log(`Timing event captured for ${eventName}`);
+            console.log(`Timing event captured for ${eventName}`, extra);
             // Track a particular timing event
             var curTime = new Date();
             var eventData = {

@@ -28,6 +28,7 @@ export default Ember.Component.extend(FullScreen, {
         $(window).on('beforeunload', () => {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
+                this.send('exitFullscreen');
                 let toast = this.get('toast');
                 toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
                 return `

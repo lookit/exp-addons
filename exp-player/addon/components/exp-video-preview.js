@@ -45,11 +45,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     actions: {
         accept() {
             this.set('prompt', false);
-            this.getRecorder().then(() => { // start recording when videos are shown
+            if (this.get('record')) {
                 this.get('recorder').resume().then(() => {
                     this.set('doingIntro', false);
                 });
-            });
+            }
         },
         nextVideo() {
             this.set('videoIndex', this.get('videoIndex') + 1);

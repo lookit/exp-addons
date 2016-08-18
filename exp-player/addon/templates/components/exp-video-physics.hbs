@@ -46,9 +46,8 @@
            class="{{if (or playAnnouncementNow isPaused) 'attn'}} {{if doingIntro 'intro'}} {{if doingTest 'test'}}"
            autoplay={{autoplay}}
            poster="{{poster}}"
-           onended={{ if autoforwardOnEnd (action 'playNext') }}
-           onplay={{action 'startVideo'}}
-           loop={{shouldLoop}}>
+           onended={{ action 'stopVideo'}}
+           onplay={{action 'startVideo'}}>
       {{#each videoSources as |stream|}}
         <source src="{{stream.src}}" type="{{stream.type}}">
       {{/each}}

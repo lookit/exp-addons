@@ -304,8 +304,6 @@ function videoSourceObjs(path, shortname, organizedByType) {
 }
 
 function toFrames(frameId, eventVideos, BASE_DIR) {
-
-
     var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
         if (e.index === nVideos) {
@@ -316,10 +314,12 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                 isLast: true,
                 audioSources: audioSourceObjs(
                     BASE_DIR + 'audio/',
-                    'all_done'),
+                    'all_done'
+		),
                 attnSources: videoSourceObjs(
                     BASE_DIR + 'stimuli/attention/',
-                    'attentiongrabber'),
+                    'attentiongrabber'
+		)
             };
         }
         var features = parse_name(e.fname);
@@ -330,7 +330,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
-            testLength: 5, // TODO: change to 20s for actual testing.
+            testLength: 20,
             isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
@@ -344,12 +344,14 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             attnSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber'),
-            sources: videoSourceObjs(
-		BASE_DIR + 'stimuli/' + features.eventType + '/',
-		e.fname, true),
-            altSources: videoSourceObjs(
-                BASE_DIR + 'stimuli/' + features.eventType + '/',
-                e.altName, true)
+            sources: [{
+                src: 'http://www.mit.edu/~kimscott/video/testpattern.mp4',
+                type: 'video/mp4'
+            }],
+            altSources: [{
+                src: 'http://www.mit.edu/~kimscott/video/testpattern.mp4',
+                type: 'video/mp4'
+            }]
         };
     });
 }

@@ -29,13 +29,12 @@
     </div>
 
       <div class="row video-consent-controls">
-    {{#if recorder.recording}}
-      <button class="btn btn-success pull-right" {{ action 'finish' }}>Finish</button>
-    {{else}}
-      <button disabled={{if (not hasCamAccess) true false}} class="btn btn-primary pull-left" {{ action 'record' }}>Record</button>
-    {{/if}}
+	  {{#if recordingStarted }}
+	      <button class="btn btn-success pull-right" {{ action 'finish' }}>Finish</button>
+	  {{else}}
+	      <button disabled={{disableRecord}} class="btn btn-primary pull-left" {{ action 'record' }}>Record</button>
+	  {{/if}}
     </div>
-
   </div>
 </div>
 

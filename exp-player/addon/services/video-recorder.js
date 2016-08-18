@@ -5,7 +5,7 @@ let {
     RSVP
 } = Ember;
 
-const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone', 'userHasCamMic'];
+const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone', 'userHasCamMic', 'onConnectionStatus'];
 
 const ATTRIBUTES = {
     align: 'middle',
@@ -52,6 +52,7 @@ const VideoRecorder = Ember.Object.extend({
     hasWebCam: false,
     recording: Ember.computed.alias('_recording').readOnly(),
     flashReady: Ember.computed.alias('_flashReady').readOnly(),
+    connected: false,
 
     debug: true,
     hidden: false,
@@ -214,27 +215,29 @@ const VideoRecorder = Ember.Object.extend({
     } = {
         destroy: false
     }) {
-        if (this.get('recording')) {
-            // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-            if (1.5 - this.getTime() > 0) {
-                window.setTimeout(this.stop.bind(this, {
-                    destroy: destroy
-                }), 1.5 - this.getTime());
-            } else {
-                try {
-                    this.get('recorder').stopVideo();
-                } catch (e) {}
-                this.set('_recording', false);
-            }
-            var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
-                this.set('_stopPromise', {
-                    resolve: resolve,
-                    reject: reject
-                });
-            });
-            return _stopPromise;
+        // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
+        if (1.5 - this.getTime() > 0) {
+            window.setTimeout(this.stop.bind(this, {
+                destroy: destroy
+            }), 1.5 - this.getTime());
+        } else {
+	    var recorder = this.get('recorder');
+            try {
+		if (recorder) {
+		    Ember.run.next(this, () => {
+			recorder.stopVideo();
+		    });
+		}
+            } catch (e) {}
+	    this.set('_recording', false);
         }
-        return new Ember.RSVP.Promise((resolve) => resolve());
+        var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
+            this.set('_stopPromise', {
+                resolve: resolve,
+                reject: reject
+            });
+        });
+        return _stopPromise;
     },
 
     hide() {
@@ -249,7 +252,7 @@ const VideoRecorder = Ember.Object.extend({
 
     // Uninstall the video recorder
     destroy() {
-        console.log('Destroying the videoRecorder');
+        console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
         $(`#${this.get('divId')}-container`).remove();
         this.set('_SWFId', null);
         this.set('_recording', false);
@@ -304,6 +307,15 @@ const VideoRecorder = Ember.Object.extend({
 
     _userHasCamMic(hasCam) {
         this.set('hasWebCam', Boolean(hasCam));
+    },
+
+    _onConnectionStatus(status) {
+	if (status === 'NetConnection.Connect.Success') {
+	    this.set('connected', true);
+	}
+	else {
+	    this.set('connected', false);
+	}
     }
     // End Flash hooks
 });
