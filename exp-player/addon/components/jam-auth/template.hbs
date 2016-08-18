@@ -1,20 +1,19 @@
 <div class="well">
-    <p>Enter your <strong>Study ID</strong> and <strong>Participant ID</strong> into the fields below. Please {{link-to 'contact us' 'contact'}} if you have any questions.</p>
     <div class="form">
       <div class="form-group">
-        <label for="identifier">Study ID</label>
+        <label for="identifier">Username</label>
         <div class="form-input">
-          {{input value=studyId}}
+          {{input value=username}}
         </div>
       </div>
       <div class="form-group">
-        <label for="participant">Participant ID</label>
+        <label for="participant">Password</label>
         <div class="form-input">
-          {{input value=participantId}}
+          {{input value=password}}
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" onclick={{action 'authenticate'}}>Continue >></button>
+        <button class="btn btn-primary" onclick={{action 'authenticate'}}>Login</button>
       </div>
     </div>
 </div>

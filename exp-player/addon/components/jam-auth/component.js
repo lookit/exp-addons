@@ -7,16 +7,15 @@ export default Ember.Component.extend({
   namespace: config.JAMDB.namespace,
   collection: config.JAMDB.collection,
 
-  studyId: null,
-  participantId: null,
+  username: null,
+  password: null,
 
   actions: {
     authenticate() {
       this.get('login')({
         provider: 'self',
-        username: this.get('participantId'),
-        password: 'password',
-        studyId: this.get('studyId'),
+        username: this.get('username').trim(),
+        password: this.get('password').trim(),
         namespace: this.get('namespace'),
         collection: this.get('collection')
       });
