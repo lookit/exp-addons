@@ -191,7 +191,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
 	stopVideo: function() {
 	    var currentTask = this.get('currentTask');
-	    if (this.$('#player-video')[0].currentTime >= this.get('testLength')) {
+	    if (this.get('testTime') >= this.get('testLength')) {
 		this.send('_afterTest');
 	    } else if (this.get('shouldLoop')) {
 		this.set('_lastTime', 0);
