@@ -222,14 +222,14 @@ const VideoRecorder = Ember.Object.extend({
             }), 1.5 - this.getTime());
         } else {
 	    var recorder = this.get('recorder');
-            try {
-		if (recorder) {
-		    Ember.run.next(this, () => {
+	    if (recorder) {
+		Ember.run.next(this, () => {
+		    try {
 			recorder.stopVideo();
-		    });
-		}
-            } catch (e) {}
-	    this.set('_recording', false);
+		    } catch (e) {}
+		    this.set('_recording', false);
+		});
+	    }
         }
         var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
             this.set('_stopPromise', {
