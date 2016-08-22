@@ -57,7 +57,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                 useOfMedia: {
                     type: 'string'
                 },
-                withdrawal: {
+                withdrawl: {
                     type: 'boolean'
                 },
                 feedback: {
