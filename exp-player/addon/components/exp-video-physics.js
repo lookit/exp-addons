@@ -216,6 +216,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
 	_afterTest() {
 	    window.clearInterval(this.get('testTimer'));
+	    this.set('testTime', 0);
 	    $("audio#exp-music")[0].pause();
             this.send('playNext');
 	},
@@ -279,6 +280,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         next() {
 	    window.clearInterval(this.get('testTimer'));
+	    this.set('testTime', 0);
             this.sendTimeEvent('stoppingCapture');
             if (this.get('recorder')) {
                 this.get('recorder').stop();
@@ -338,6 +340,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     }
                 } else if (pause || !wasPaused) { // Not currently paused: pause
                     window.clearInterval(this.get('testTimer'));
+		    this.set('testTime', 0);
                     this.sendTimeEvent('pauseVideo', {
                         'currentTask': this.get('currentTask')
                     });
