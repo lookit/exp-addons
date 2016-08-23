@@ -276,7 +276,9 @@ export default ExpFrameBaseComponent.extend({
     data: {
       type: 'object',
       properties: {
-        cardSortResponse: null
+        cardSortResponse: {
+          type: 'array'
+        }
       }
     }
   }
