@@ -83,16 +83,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 q1: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q2: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q3: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 }
             }
         }
