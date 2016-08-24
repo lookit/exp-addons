@@ -48,26 +48,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
     }),
     diff1: Ember.computed('q1', function() {
         var remaining = getRemaining(this.get('q1'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     diff2: Ember.computed('q2', function() {
         var remaining = getRemaining(this.get('q2'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     diff3: Ember.computed('q3', function() {
         var remaining = getRemaining(this.get('q3'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     meta: {
@@ -83,16 +77,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 q1: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q2: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q3: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 }
             }
         }
