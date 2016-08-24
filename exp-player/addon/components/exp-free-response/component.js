@@ -7,7 +7,7 @@ const MAX_LENGTH = 75;
 
 function getRemaining(value) {
     var length = 0;
-    if (value !== null) {
+    if (value !== undefined) {
         length = value.length;
     }
     return (MAX_LENGTH - length).toString();
