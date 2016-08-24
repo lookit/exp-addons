@@ -127,7 +127,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
           type: 'object',
           properties: {
             responses: {
-              type: 'string'
+              type: 'object'
             }
           }
         }
