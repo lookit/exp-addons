@@ -38,7 +38,7 @@ export default Ember.Service.extend({
                             var profile = account.profileById(this.get('session.data.profile.profileId'));
                             if (profile === undefined) {
                                 profile = FakeProfile.create({
-                                    profileId: 'test.user'
+                                    profileId: account.get('username') + '.' + account.get('username')
                                 });
                             }
                             resolve([account, profile]);
