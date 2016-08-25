@@ -22,6 +22,8 @@ export default Ember.Component.extend(FullScreen, {
     displayFullscreen: false,
     fullScreenElementId: 'experiment-player',
 
+    extraContext: null,
+
     allowExit: false,
     hasAttemptedExit: false,
     _registerHandlers() {
@@ -109,13 +111,15 @@ able to continue the study.
         return componentName;
     }),
 
-    currentFrameContext: Ember.computed('pastSessions', function() {
+    currentFrameContext: Ember.computed('pastSessions', 'extraContext', function() {
         return {
-            pastSessions: this.get('pastSessions')
+            pastSessions: this.get('pastSessions'),
+            extra: this.get('extraContext')
         };
     }),
 
     _transition() {
+        this.set('extraContext', null);
         Ember.run(() => {
             this.set('_currentFrameTemplate', 'exp-blank');
         });
@@ -139,12 +143,13 @@ able to continue the study.
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
-        next() {
+        next(extra) {
             console.log('next');
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
+                this.set('extraContext', extra);
                 this.set('frameIndex', frameIndex + 1);
                 return;
             }
