@@ -35,6 +35,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     testTimer: null,
     testTime: 0,
 
+    skip: false,
     hasBeenPaused: false,
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
@@ -265,6 +266,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         },
         startIntro: function() {
+            if (this.get('skip')) {
+                this.send('next');
+                return;
+            }
+
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
@@ -278,7 +284,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         },
 
-        next(extra) { // jshint ignore:line
+        next() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             this.sendTimeEvent('stoppingCapture');
@@ -312,19 +318,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     this.set('isPaused', false);
                     if (currentState === "test") {
                         if (this.get('useAlternate')) {
-                            Ember.run.next(this, () => {
-                                this.send('next', {
-                                    hasBeenPaused: true,
-                                    playAnnouncementNow: true
-                                });
-                                this.get('videoRecorder').destroy(this.get('recorder'));
-                            });
-                            return;
-                        } else {
-                            this.set('useAlternate', true);
-                            this.set('currentTask', 'announce');
-                            this.set('playAnnouncementNow', true);
+                            this.set('skip', true);
                         }
+                        this.set('useAlternate', true);
+                        this.set('currentTask', 'announce');
+                        this.set('playAnnouncementNow', true);
                     } else {
                         this.set('currentTask', 'announce');
                         this.set('playAnnouncementNow', true);
@@ -392,15 +390,5 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
         $(document).off("keyup");
-    },
-
-    init() {
-        this._super(...arguments);
-        if (this.get('frameContext.extra.hasBeenPaused')) {
-            this.set('hasBeenPaused', true);
-        }
-        if (this.get('frameContext.extra.playAnnouncementNow')) {
-            this.set('playAnnouncementNow', true);
-        }
     }
 });
