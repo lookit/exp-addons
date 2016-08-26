@@ -127,16 +127,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
           type: 'object',
           properties: {
             responses: {
-              type: 'string'
+              type: 'object'
             }
           }
         }
     },
     actions: {
       continue() {
-        if (this.get('validations.isValid')) {
           this.send('next');
-        }
       }
     }
 });
