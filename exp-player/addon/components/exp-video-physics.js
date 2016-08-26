@@ -35,6 +35,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     testTimer: null,
     testTime: 0,
 
+    skip: false,
     hasBeenPaused: false,
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
@@ -265,6 +266,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         },
         startIntro: function() {
+            if (this.get('skip')) {
+                this.send('next');
+                return;
+            }
+
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
@@ -312,16 +318,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     this.set('isPaused', false);
                     if (currentState === "test") {
                         if (this.get('useAlternate')) {
-                            Ember.run.next(this, () => {
-                                this.send('next');
-                                this.get('videoRecorder').destroy(this.get('recorder'));
-                            });
-                            return;
-                        } else {
-                            this.set('useAlternate', true);
-                            this.set('currentTask', 'announce');
-                            this.set('playAnnouncementNow', true);
+                            this.set('skip', true);
                         }
+                        this.set('useAlternate', true);
+                        this.set('currentTask', 'announce');
+                        this.set('playAnnouncementNow', true);
                     } else {
                         this.set('currentTask', 'announce');
                         this.set('playAnnouncementNow', true);
