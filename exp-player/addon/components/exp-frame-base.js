@@ -117,12 +117,12 @@ export default Ember.Component.extend({
             // When exiting frame, save the data to the base player using the provided saveHandler
             this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
         },
-        next(extra) {
+        next() {
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Next: Leaving frame ID ${frameId}`);
             this.send('setTimeEvent', 'nextFrame');
             this.send('save');
-            this.sendAction('next', extra);
+            this.sendAction('next');
         },
         last() {
             this.sendAction('last');
