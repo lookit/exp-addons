@@ -310,7 +310,10 @@ var questions = [
       'measures.questions.4.options.quiteChar',
       'measures.questions.4.options.extremelyChar'
     ],
-    {labelTop: true}
+    {
+        labelTop: true,
+        formatLabel: true
+    }
   ),
   generateSchema(
     'measures.questions.5.label',
@@ -575,7 +578,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
               responses: {
-                type: 'string'
+                type: 'object'
               }
             }
         }

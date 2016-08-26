@@ -105,6 +105,15 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
+    questions: questions,
+    responses: Ember.computed('questions', function() {
+        var questions = this.get('questions');
+        var responses = {};
+        for (var i=0; i < questions.length; i++) {
+            responses[i] = questions[i].value;
+        }
+        return responses;
+    }),
     meta: {
       name: 'ExpOverview',
         description: 'TODO: a description of this frame goes here.',
@@ -117,17 +126,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
           type: 'object',
           properties: {
-            questions: {
-              default: questions
+            responses: {
+              type: 'object'
             }
           }
         }
     },
     actions: {
       continue() {
-        if (this.get('validations.isValid')) {
           this.send('next');
-        }
       }
     }
 });

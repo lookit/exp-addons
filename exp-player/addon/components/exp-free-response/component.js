@@ -7,7 +7,7 @@ const MAX_LENGTH = 75;
 
 function getRemaining(value) {
     var length = 0;
-    if (value !== null) {
+    if (value !== undefined) {
         length = value.length;
     }
     return (MAX_LENGTH - length).toString();
@@ -29,8 +29,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     i18n: Ember.inject.service(),
     displayTime: Ember.computed(function() {
-        var profileId = this.get('session').profileId;
-        if (profileId % 2 === 0) {
+        var profileId = this.get('session').get('profileId').split('.')[1];
+        var participantId = profileId.split('_')[1];
+        if (participantId % 2 === 0) {
             return this.get('i18n').t('survey.sections.2.times.7pm').string;
         } else {
             return this.get('i18n').t('survey.sections.2.times.10am').string;
@@ -48,26 +49,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
     }),
     diff1: Ember.computed('q1', function() {
         var remaining = getRemaining(this.get('q1'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     diff2: Ember.computed('q2', function() {
         var remaining = getRemaining(this.get('q2'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     diff3: Ember.computed('q3', function() {
         var remaining = getRemaining(this.get('q3'));
-        var translationKey = 'number' + remaining;
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
-        message = message.replace("##", this.get('i18n').t('number75').string);
-        message = message.replace("0", this.get('i18n').t(translationKey).string);
+        message = message.replace("0", remaining.toString());
         return message;
     }),
     meta: {
@@ -83,27 +78,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 q1: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q2: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 },
                 q3: {
-                    type: 'string',
-                    default: null
+                    type: 'string'
                 }
             }
         }
     },
     actions: {
         continue() {
-            if (this.get('validations.isValid')) {
-                this.send('next');
-            } else {
-                this.set('showValidation', true);
-            }
+            this.send('next');
         }
     }
 });

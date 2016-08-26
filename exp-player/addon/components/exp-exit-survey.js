@@ -19,7 +19,10 @@ const Validations = buildValidations({
     }),
     useOfMedia: validator('presence', {
         presence: true,
-        message: 'This field is required'
+        message: 'This field is required',
+        disabled(model) {
+            return model.get('withdrawal');
+        }
     }),
     databraryShare: validator('presence', {
         presence: true,
@@ -118,6 +121,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
         return Math.ceil((this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100);
     }),
     willRender() {
-	this.send('exitFullscreen');
+        this.send('exitFullscreen');
     }
 });

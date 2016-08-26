@@ -17,7 +17,7 @@
         {{/draggable-object}}
       {{/each}}
   </div>
-  <h4 class="center">{{t (concat 'number' cards.length)}} {{t 'qsort.sections.1.itemsLeft'}}</h4>
+  <h4 class="center">{{cards.length}} {{t 'qsort.sections.1.itemsLeft'}}</h4>
 {{/if}}
 <div class="row">
     {{#each buckets as |bucket|}}
@@ -78,10 +78,10 @@
 </div>
 <div class="row exp-controls">
     {{#if (eq page 'cardSort1')}}
-      <div class="btn btn-primary pull-right {{if (gt cards.length 0) 'disabled'}}" {{action "nextPage"}}>{{t 'global.continueLabel'}}</div>
+      <div class="btn btn-primary pull-right" {{action "nextPage"}}>{{t 'global.continueLabel'}}</div>
       {{progress-bar pageNumber=3}}
     {{else if (eq page 'cardSort2')}}
-      <div class="btn btn-primary pull-right {{if isValid 'enabled' 'disabled'}}" {{ action 'continue' }}>{{t 'global.continueLabel'}}</div>
+      <div class="btn btn-primary pull-right" {{ action 'continue' }}>{{t 'global.continueLabel'}}</div>
       {{progress-bar pageNumber=4}}
     {{/if}}
 </div>
