@@ -91,11 +91,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     actions: {
         continue() {
-            if (this.get('validations.isValid')) {
-                this.send('next');
-            } else {
-                this.set('showValidation', true);
-            }
+            this.send('next');
         }
     }
 });
