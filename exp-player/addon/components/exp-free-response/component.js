@@ -32,9 +32,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var profileId = this.get('session').get('profileId').split('.')[1];
         var participantId = profileId.split('_')[1];
         if (participantId % 2 === 0) {
-            return this.get('i18n').t('survey.sections.2.times.7pm').string;
+            return '19:00 (7pm)';
         } else {
-            return this.get('i18n').t('survey.sections.2.times.10am').string;
+            return '10am';
         }
     }),
     instructions: Ember.computed(function() {
