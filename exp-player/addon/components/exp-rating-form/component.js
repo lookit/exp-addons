@@ -201,11 +201,11 @@ var generateValidators = function(questions) {
       presence:true,
       message: 'This field is required'
   });
-  for (var question in questions) {
-    for (var item in questions[question]['items']) {
-      var isOptional = questions[question]['items'][item].optional;
+  for (var i=0; i < questions.length; i++) {
+    for (var item=0; item < questions[i]['items'].length; item++) {
+      var isOptional = questions[i]['items'][item].optional;
       if (!isOptional) {
-        var key = 'questions.' + question + '.items.' + item + '.value';
+        var key = 'questions.' + i + '.items.' + item + '.value';
         validators[key] = presence;
       }
     }
@@ -232,7 +232,6 @@ var generateSchema = function(question, type, items, scale, options) {
   }
   return schema;
 };
-
 
 var questions = [
   generateSchema(
@@ -296,7 +295,7 @@ var questions = [
     }
   ),
   generateSchema(
-    'measures.questions.4.label',
+    'measures.questions.4.label.10am',
     'radio',
     items['4'],
     [
@@ -552,7 +551,14 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
-    questions: questions,
+    questions: Ember.computed(function() {
+        var profileId = this.get('session').get('profileId').split('.')[1];
+        var participantId = profileId.split('_')[1];
+        if (participantId % 2 === 0) {
+            questions[3]['question'] = 'measures.questions.4.label.7pm';
+        }
+        return questions;
+    }),
     responses: Ember.computed('questions', function() {
         var questions = this.get('questions');
         var responses = {};
