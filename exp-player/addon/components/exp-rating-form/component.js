@@ -205,7 +205,7 @@ var generateValidators = function(questions) {
     for (var item=0; item < questions[i]['items'].length; item++) {
       var isOptional = questions[i]['items'][item].optional;
       if (!isOptional) {
-        var key = 'questions.' + i + '.items.' + item + '.value';
+        var key = `questions.${i}.items.${item}.value`;
         validators[key] = presence;
       }
     }
@@ -552,10 +552,11 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
     questions: Ember.computed(function() {
-        var profileId = this.get('session').get('profileId').split('.')[1];
-        var participantId = profileId.split('_')[1];
-        if (participantId % 2 === 0) {
+        var condition = this.get('session').get('experimentCondition');
+        if (condition === '7pm') {
             questions[3]['question'] = 'measures.questions.4.label.7pm';
+        } else if (condition === '10am') {
+            questions[3]['question'] = 'measures.questions.4.label.10am';
         }
         return questions;
     }),

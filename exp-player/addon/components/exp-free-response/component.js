@@ -28,11 +28,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     i18n: Ember.inject.service(),
     displayTime: Ember.computed(function() {
-        var profileId = this.get('session').get('profileId').split('.')[1];
-        var participantId = profileId.split('_')[1];
-        if (participantId % 2 === 0) {
+        var condition = this.get('session').get('experimentCondition');
+        if (condition === '7pm') {
             return '19:00 (7pm)';
-        } else {
+        } else if (condition === '10am') {
             return '10am';
         }
     }),
