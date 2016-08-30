@@ -3,14 +3,13 @@ import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
 
-const MAX_LENGTH = 75;
 
-function getRemaining(value) {
+function getLength(value) {
     var length = 0;
     if (value !== undefined) {
         length = value.length;
     }
-    return (MAX_LENGTH - length).toString();
+    return length.toString();
 }
 
 var presence = validator('presence', {
@@ -29,12 +28,11 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     i18n: Ember.inject.service(),
     displayTime: Ember.computed(function() {
-        var profileId = this.get('session').get('profileId').split('.')[1];
-        var participantId = profileId.split('_')[1];
-        if (participantId % 2 === 0) {
-            return this.get('i18n').t('survey.sections.2.times.7pm').string;
-        } else {
-            return this.get('i18n').t('survey.sections.2.times.10am').string;
+        var condition = this.get('session').get('experimentCondition');
+        if (condition === '7pm') {
+            return '19:00 (7pm)';
+        } else if (condition === '10am') {
+            return '10am';
         }
     }),
     instructions: Ember.computed(function() {
@@ -48,21 +46,21 @@ export default ExpFrameBaseComponent.extend(Validations, {
       return label;
     }),
     diff1: Ember.computed('q1', function() {
-        var remaining = getRemaining(this.get('q1'));
+        var length = getLength(this.get('q1'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
-        message = message.replace("0", remaining.toString());
+        message = message.replace("0", length.toString());
         return message;
     }),
     diff2: Ember.computed('q2', function() {
-        var remaining = getRemaining(this.get('q2'));
+        var length = getLength(this.get('q2'));
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
-        message = message.replace("0", remaining.toString());
+        message = message.replace("0", length.toString());
         return message;
     }),
     diff3: Ember.computed('q3', function() {
-        var remaining = getRemaining(this.get('q3'));
+        var length = getLength(this.get('q3'));
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
-        message = message.replace("0", remaining.toString());
+        message = message.replace("0", length.toString());
         return message;
     }),
     meta: {
