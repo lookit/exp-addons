@@ -213,34 +213,32 @@ var generateValidators = function(questions) {
   return validators;
 };
 
-var generateSchema = function(question, type, page, items, scale, options) {
-  var schema = {
-    question: question,
-    type: type,
-    page: page,
-    scale: scale,
-    items: []
-  };
-  for (var i=0; i < items.length; i++) {
+var generateSchema = function(data) {
+  var items = [];
+  var options = data.options ? data.options : {};
+  for (var i=0; i < data.items.length; i++) {
     var ret = {
-      description: items[i],
-      value: null
-    };
+          description: data.items[i],
+          value: null
+      };
     for (var option in options) {
-      ret[option] = options[option];
+      if (options.hasOwnProperty(option)) {
+        ret[option] = options[option];
+      }
     }
-    schema['items'].push(ret);
+    items.push(ret);
   }
-  return schema;
+  data['items'] = items;
+  return data;
 };
 
 var questions = [
-  generateSchema(
-    'measures.questions.1.label',
-    'select',
-     1,
-    [''],
-    [
+  generateSchema({
+    question: 'measures.questions.1.label',
+    type: 'select',
+    page: 1,
+    items: [''],
+    scale: [
       'measures.questions.1.options.extremelyNeg',
       'measures.questions.1.options.quiteNeg',
       'measures.questions.1.options.fairlyNeg',
@@ -251,14 +249,14 @@ var questions = [
       'measures.questions.1.options.quitePos',
       'measures.questions.1.options.extremelyPos'
     ]
-  ),
-  generateSchema(
-    'measures.questions.2.label',
-    'radio',
-      1,
-    [''],
-    SEVEN_POINT_SCALE,
-    {
+  }),
+  generateSchema({
+    question: 'measures.questions.2.label',
+    type: 'radio',
+    page: 1,
+    items: [''],
+    scale: SEVEN_POINT_SCALE,
+    options: {
       labelTop: false,
       labels: [{
           rating: 0,
@@ -278,13 +276,13 @@ var questions = [
         }
       ]
     }
-  ),
-  generateSchema(
-    'measures.questions.3.label.10am',
-    'radio',
-      1,
-    items['3'],
-    [
+  }),
+  generateSchema({
+    question: 'measures.questions.3.label.10am',
+    type: 'radio',
+    page: 1,
+    items: items['3'],
+    scale: [
       'measures.questions.3.options.extremelyChar',
       'measures.questions.3.options.quiteUnchar',
       'measures.questions.3.options.fairlyUnchar',
@@ -295,18 +293,18 @@ var questions = [
       'measures.questions.3.options.quiteChar',
       'measures.questions.3.options.extremelyChar'
     ],
-    {
-        labelTop: true,
-        formatLabel: true
+    options: {
+      labelTop: true,
+      formatLabel: true
     }
-  ),
-  generateSchema(
-    'measures.questions.4.label',
-    'radio',
-      2,
-    [''],
-    TEN_POINT_SCALE,
-    {
+  }),
+  generateSchema({
+    question: 'measures.questions.4.label',
+    type: 'radio',
+    page: 2,
+    items: [''],
+    scale: TEN_POINT_SCALE,
+    options: {
       labelTop: false,
       labels: [{
           rating: 0,
@@ -318,21 +316,21 @@ var questions = [
         }
       ]
     }
-  ),
-  generateSchema(
-    'measures.questions.5.label',
-    'radio',
-      2,
-    items['5'],
-    [
+  }),
+  generateSchema({
+    question: 'measures.questions.5.label',
+    type: 'radio',
+    page: 2,
+    items: items['5'],
+    scale: [
       'measures.questions.5.options.disagreeStrongly',
       'measures.questions.5.options.disagree',
       'measures.questions.5.options.neutral',
       'measures.questions.5.options.agree',
       'measures.questions.5.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
+    options: {labelTop: true}
+  }),
   {
     question: 'measures.questions.6.label',
     type: 'radio',
@@ -395,78 +393,78 @@ var questions = [
           }]
       }]
   },
-  generateSchema(
-    'measures.questions.7.label',
-    'radio',
-      3,
-    items['7'],
-    [
+  generateSchema({
+    question: 'measures.questions.7.label',
+    type: 'radio',
+    page: 3,
+    items: items['7'],
+    scale: [
       'measures.questions.7.options.disagreeStrongly',
       'measures.questions.7.options.disagree',
       'measures.questions.7.options.neutral',
       'measures.questions.7.options.agree',
       'measures.questions.7.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.8.label',
-    'radio',
-      4,
-    items['8'],
-    [
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question: 'measures.questions.8.label',
+    type: 'radio',
+    page: 4,
+    items: items['8'],
+    scale: [
       'measures.questions.8.options.disbelieveStrong',
       'measures.questions.8.options.disbelieveLittle',
       'measures.questions.8.options.neutral',
       'measures.questions.8.options.believeLittle',
       'measures.questions.8.options.believeStrong'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.9.label',
-    'radio',
-      5,
-    items['9'],
-    NINE_POINT_SCALE,
-    {
-      labelTop: false,
-      labels: [{
-          rating: 0,
-          label: 'measures.questions.9.options.notAtAll'
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question:'measures.questions.9.label',
+    type: 'radio',
+    page: 5,
+    items: items['9'],
+    scale: NINE_POINT_SCALE,
+    options: {
+        labelTop: false,
+        labels: [{
+            rating: 0,
+            label: 'measures.questions.9.options.notAtAll'
         },
-        {
-          rating: 3,
-          label: 'measures.questions.9.options.aLittle'
-        },
-        {
-          rating: 5,
-          label: 'measures.questions.9.options.moderately'
-        },
-        {
-          rating: 7,
-          label: 'measures.questions.9.options.veryWell'
-        },
-        {
-          rating: 9,
-          label: 'measures.questions.9.options.exactly'
-        }]
+            {
+                rating: 3,
+                label: 'measures.questions.9.options.aLittle'
+            },
+            {
+                rating: 5,
+                label: 'measures.questions.9.options.moderately'
+            },
+            {
+                rating: 7,
+                label: 'measures.questions.9.options.veryWell'
+            },
+            {
+                rating: 9,
+                label: 'measures.questions.9.options.exactly'
+            }]
     }
-  ),
-  generateSchema(
-    'measures.questions.10.label',
-    'radio',
-      5,
-    items['10'],
-    [
+  }),
+  generateSchema({
+    question: 'measures.questions.10.label',
+    type: 'radio',
+    page: 5,
+    items: items['10'],
+    scale: [
       'measures.questions.10.options.disagreeStrongly',
       'measures.questions.10.options.disagree',
       'measures.questions.10.options.neutral',
       'measures.questions.10.options.agree',
       'measures.questions.10.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
+    options: {labelTop: true}
+  }),
   {
     question: 'measures.questions.11.label',
     type: 'radio-input',
@@ -483,75 +481,75 @@ var questions = [
       }
     }
   },
-  generateSchema(
-    'measures.questions.13.label',
-    'radio',
-      6,
-    items['13'],
-    [
+  generateSchema({
+    question: 'measures.questions.13.label',
+    type: 'radio',
+    page: 6,
+    items: items['13'],
+    scale: [
       'measures.questions.13.options.disagreeStrongly',
       'measures.questions.13.options.disagree',
       'measures.questions.13.options.neutral',
       'measures.questions.13.options.agree',
       'measures.questions.13.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.14.label',
-    'radio',
-      6,
-    items['14'],
-    [
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question: 'measures.questions.14.label',
+    type: 'radio',
+    page: 6,
+    items: items['14'],
+    scale: [
       'measures.questions.14.options.disagreeStrongly',
       'measures.questions.14.options.disagree',
       'measures.questions.14.options.neutral',
       'measures.questions.14.options.agree',
       'measures.questions.14.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.15.label',
-    'radio',
-      6,
-    items['15'],
-    [
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question: 'measures.questions.15.label',
+    type: 'radio',
+    page: 6,
+    items: items['15'],
+    scale: [
       'measures.questions.15.options.disagreeStrongly',
       'measures.questions.15.options.disagree',
       'measures.questions.15.options.neutral',
       'measures.questions.15.options.agree',
       'measures.questions.15.options.agreeStrongly'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.16.label',
-    'radio',
-      7,
-    items['16'],
-    [
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question: 'measures.questions.16.label',
+    type: 'radio',
+    page: 7,
+    items: items['16'],
+    scale: [
       'measures.questions.16.options.notAtAll',
       'measures.questions.16.options.aLittle',
       'measures.questions.16.options.quiteaBit',
       'measures.questions.16.options.completely'
     ],
-    {labelTop: true}
-  ),
-  generateSchema(
-    'measures.questions.17.label',
-    'radio',
-     7,
-    items['17'],
-    [
+    options: {labelTop: true}
+  }),
+  generateSchema({
+    question: 'measures.questions.17.label',
+    type: 'radio',
+    page: 7,
+    items: items['17'],
+    scale: [
       'measures.questions.17.options.disagreeStrongly',
       'measures.questions.17.options.disagree',
       'measures.questions.17.options.neutral',
       'measures.questions.17.options.agree',
       'measures.questions.17.options.agreeStrongly'
     ],
-    {labelTop: true}
-  )
+    options: {labelTop: true}
+  })
 ];
 
 const Validations = buildValidations(generateValidators(questions));
