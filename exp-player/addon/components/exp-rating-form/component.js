@@ -4,23 +4,23 @@ import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
 
 var items = {
-  '4': [
-      'measures.questions.4.items.1.label',
-      'measures.questions.4.items.2.label',
-      'measures.questions.4.items.3.label',
-      'measures.questions.4.items.4.label',
-      'measures.questions.4.items.5.label',
-      'measures.questions.4.items.6.label',
-      'measures.questions.4.items.7.label',
-      'measures.questions.4.items.8.label',
-      'measures.questions.4.items.9.label',
-      'measures.questions.4.items.10.label',
-      'measures.questions.4.items.11.label',
-      'measures.questions.4.items.12.label',
-      'measures.questions.4.items.13.label',
-      'measures.questions.4.items.14.label',
-      'measures.questions.4.items.15.label',
-      'measures.questions.4.items.16.label'
+  '3': [
+      'measures.questions.3.items.1.label',
+      'measures.questions.3.items.2.label',
+      'measures.questions.3.items.3.label',
+      'measures.questions.3.items.4.label',
+      'measures.questions.3.items.5.label',
+      'measures.questions.3.items.6.label',
+      'measures.questions.3.items.7.label',
+      'measures.questions.3.items.8.label',
+      'measures.questions.3.items.9.label',
+      'measures.questions.3.items.10.label',
+      'measures.questions.3.items.11.label',
+      'measures.questions.3.items.12.label',
+      'measures.questions.3.items.13.label',
+      'measures.questions.3.items.14.label',
+      'measures.questions.3.items.15.label',
+      'measures.questions.3.items.16.label'
   ],
   '5': [
       'measures.questions.5.items.1.label',
@@ -169,13 +169,13 @@ var items = {
       'measures.questions.16.items.4.label',
       'measures.questions.16.items.5.label'
   ],
-  '18': [
-      'measures.questions.18.items.1.label',
-      'measures.questions.18.items.2.label',
-      'measures.questions.18.items.3.label',
-      'measures.questions.18.items.4.label',
-      'measures.questions.18.items.5.label',
-      'measures.questions.18.items.6.label'
+  '17': [
+      'measures.questions.17.items.1.label',
+      'measures.questions.17.items.2.label',
+      'measures.questions.17.items.3.label',
+      'measures.questions.17.items.4.label',
+      'measures.questions.17.items.5.label',
+      'measures.questions.17.items.6.label'
   ]
 };
 
@@ -213,10 +213,11 @@ var generateValidators = function(questions) {
   return validators;
 };
 
-var generateSchema = function(question, type, items, scale, options) {
+var generateSchema = function(question, type, page, items, scale, options) {
   var schema = {
     question: question,
     type: type,
+    page: page,
     scale: scale,
     items: []
   };
@@ -237,6 +238,7 @@ var questions = [
   generateSchema(
     'measures.questions.1.label',
     'select',
+     1,
     [''],
     [
       'measures.questions.1.options.extremelyNeg',
@@ -253,6 +255,7 @@ var questions = [
   generateSchema(
     'measures.questions.2.label',
     'radio',
+      1,
     [''],
     SEVEN_POINT_SCALE,
     {
@@ -263,7 +266,7 @@ var questions = [
         },
         {
           rating: 2,
-          label: 'measures.questions.2.options.hardleyEver'
+          label: 'measures.questions.2.options.hardlyEver'
         },
         {
           rating: 4,
@@ -277,37 +280,20 @@ var questions = [
     }
   ),
   generateSchema(
-    'measures.questions.3.label',
+    'measures.questions.3.label.10am',
     'radio',
-    [''],
-    TEN_POINT_SCALE,
-    {
-      labelTop: false,
-      labels: [{
-          rating: 0,
-          label: 'measures.questions.3.options.unwilling'
-        },
-        {
-          rating: 10,
-          label: 'measures.questions.3.options.fullyPrepared'
-        }
-      ]
-    }
-  ),
-  generateSchema(
-    'measures.questions.4.label.10am',
-    'radio',
-    items['4'],
+      1,
+    items['3'],
     [
-      'measures.questions.4.options.extremelyChar',
-      'measures.questions.4.options.quiteUnchar',
-      'measures.questions.4.options.fairlyUnchar',
-      'measures.questions.4.options.somewhatUnchar',
-      'measures.questions.4.options.neutral',
-      'measures.questions.4.options.somewhatChar',
-      'measures.questions.4.options.fairlyChar',
-      'measures.questions.4.options.quiteChar',
-      'measures.questions.4.options.extremelyChar'
+      'measures.questions.3.options.extremelyChar',
+      'measures.questions.3.options.quiteUnchar',
+      'measures.questions.3.options.fairlyUnchar',
+      'measures.questions.3.options.somewhatUnchar',
+      'measures.questions.3.options.neutral',
+      'measures.questions.3.options.somewhatChar',
+      'measures.questions.3.options.fairlyChar',
+      'measures.questions.3.options.quiteChar',
+      'measures.questions.3.options.extremelyChar'
     ],
     {
         labelTop: true,
@@ -315,8 +301,28 @@ var questions = [
     }
   ),
   generateSchema(
+    'measures.questions.4.label',
+    'radio',
+      2,
+    [''],
+    TEN_POINT_SCALE,
+    {
+      labelTop: false,
+      labels: [{
+          rating: 0,
+          label: 'measures.questions.4.options.unwilling'
+        },
+        {
+          rating: 10,
+          label: 'measures.questions.4.options.fullyPrepared'
+        }
+      ]
+    }
+  ),
+  generateSchema(
     'measures.questions.5.label',
     'radio',
+      2,
     items['5'],
     [
       'measures.questions.5.options.disagreeStrongly',
@@ -330,6 +336,7 @@ var questions = [
   {
     question: 'measures.questions.6.label',
     type: 'radio',
+    page: 3,
     scale: SEVEN_POINT_SCALE,
     items: [
       {
@@ -391,6 +398,7 @@ var questions = [
   generateSchema(
     'measures.questions.7.label',
     'radio',
+      3,
     items['7'],
     [
       'measures.questions.7.options.disagreeStrongly',
@@ -404,6 +412,7 @@ var questions = [
   generateSchema(
     'measures.questions.8.label',
     'radio',
+      4,
     items['8'],
     [
       'measures.questions.8.options.disbelieveStrong',
@@ -417,6 +426,7 @@ var questions = [
   generateSchema(
     'measures.questions.9.label',
     'radio',
+      5,
     items['9'],
     NINE_POINT_SCALE,
     {
@@ -446,6 +456,7 @@ var questions = [
   generateSchema(
     'measures.questions.10.label',
     'radio',
+      5,
     items['10'],
     [
       'measures.questions.10.options.disagreeStrongly',
@@ -459,6 +470,7 @@ var questions = [
   {
     question: 'measures.questions.11.label',
     type: 'radio-input',
+    page: 5,
     scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
     items: {
       radio: {
@@ -474,6 +486,7 @@ var questions = [
   generateSchema(
     'measures.questions.13.label',
     'radio',
+      6,
     items['13'],
     [
       'measures.questions.13.options.disagreeStrongly',
@@ -487,6 +500,7 @@ var questions = [
   generateSchema(
     'measures.questions.14.label',
     'radio',
+      6,
     items['14'],
     [
       'measures.questions.14.options.disagreeStrongly',
@@ -500,6 +514,7 @@ var questions = [
   generateSchema(
     'measures.questions.15.label',
     'radio',
+      6,
     items['15'],
     [
       'measures.questions.15.options.disagreeStrongly',
@@ -513,6 +528,7 @@ var questions = [
   generateSchema(
     'measures.questions.16.label',
     'radio',
+      7,
     items['16'],
     [
       'measures.questions.16.options.notAtAll',
@@ -522,25 +538,17 @@ var questions = [
     ],
     {labelTop: true}
   ),
-  {
-    question: 'measures.questions.17.label',
-    type: 'textarea',
-    items: {
-      input: {
-        value: null
-      }
-    }
-  },
   generateSchema(
-    'measures.questions.18.label',
+    'measures.questions.17.label',
     'radio',
-    items['18'],
+     7,
+    items['17'],
     [
-      'measures.questions.18.options.disagreeStrongly',
-      'measures.questions.18.options.disagree',
-      'measures.questions.18.options.neutral',
-      'measures.questions.18.options.agree',
-      'measures.questions.18.options.agreeStrongly'
+      'measures.questions.17.options.disagreeStrongly',
+      'measures.questions.17.options.disagree',
+      'measures.questions.17.options.neutral',
+      'measures.questions.17.options.agree',
+      'measures.questions.17.options.agreeStrongly'
     ],
     {labelTop: true}
   )
@@ -551,12 +559,17 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
+    currentPage: 1,
+    totalPages: 7,
+    progressBarPage: Ember.computed('currentPage', function() {
+        return this.currentPage + 4;
+    }),
     questions: Ember.computed(function() {
         var condition = this.get('session').get('experimentCondition');
         if (condition === '7pm') {
-            questions[3]['question'] = 'measures.questions.4.label.7pm';
+            questions[2]['question'] = 'measures.questions.3.label.7pm';
         } else if (condition === '10am') {
-            questions[3]['question'] = 'measures.questions.4.label.10am';
+            questions[2]['question'] = 'measures.questions.3.label.10am';
         }
         return questions;
     }),
@@ -588,6 +601,11 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 type: 'object'
               }
             }
+        }
+    },
+    actions: {
+        nextPage() {
+            this.set('currentPage', this.currentPage + 1);
         }
     }
 });
