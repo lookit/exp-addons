@@ -283,7 +283,7 @@ var questions = [
     page: 1,
     items: items['3'],
     scale: [
-      'measures.questions.3.options.extremelyChar',
+      'measures.questions.3.options.extremelyUnchar',
       'measures.questions.3.options.quiteUnchar',
       'measures.questions.3.options.fairlyUnchar',
       'measures.questions.3.options.somewhatUnchar',
@@ -470,16 +470,16 @@ var questions = [
     type: 'radio-input',
     page: 5,
     scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
-    items: {
-      radio: {
+    items: [{
+        type: 'radio',
         value: null
       },
-      input: {
+      {
+        type: 'input',
         description: 'measures.questions.12.label',
         value:null,
         optional:true
-      }
-    }
+    }]
   },
   generateSchema({
     question: 'measures.questions.13.label',
@@ -571,7 +571,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
-    responses: Ember.computed('questions', function() {
+    responses: Ember.computed('currentPage', function() {
         var questions = this.get('questions');
         var responses = {};
         for (var i=0; i < questions.length; i++) {
@@ -604,6 +604,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     actions: {
         nextPage() {
             this.set('currentPage', this.currentPage + 1);
+            this.send('save');
         }
     }
 });
