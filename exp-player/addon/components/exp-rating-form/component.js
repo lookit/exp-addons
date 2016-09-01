@@ -571,7 +571,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
-    responses: Ember.computed('currentPage', function () {
+    responses: Ember.computed(function () {
         var questions = this.get('questions');
         var responses = {};
         for (var i = 0; i < questions.length; i++) {
@@ -582,7 +582,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             }
         }
         return responses;
-    }),
+    }).volatile(),
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
