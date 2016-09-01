@@ -221,11 +221,9 @@ var generateSchema = function (data) {
             description: data.items[i],
             value: null
         };
-        for (var option in options) {
-            if (options.hasOwnProperty(option)) {
-                ret[option] = options[option];
-            }
-        }
+        Object.keys(options).forEach(function(option) {
+            ret[option] = options[option];
+        });
         items.push(ret);
     }
     data['items'] = items;
