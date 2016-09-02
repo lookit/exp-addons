@@ -1,9 +1,9 @@
 <div class="row">
   {{#bs-form}}
-  {{#each questions as |question|}}
+  {{#each questions as |question index|}}
     {{#if (eq question.page currentPage)}}
       {{#bs-form-group}}
-        <label class="break-line question-label">{{t question.question}}</label><br>
+        <label class="break-line question-label">{{add index 1}}. {{t question.question}}</label><br>
         {{#if (eq question.type 'radio')}}
           {{#each question.items as |item|}}
             {{#if item.description}}
