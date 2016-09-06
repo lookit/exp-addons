@@ -1,36 +1,39 @@
 <div class="row">
   {{#bs-form}}
-  {{#each questions as |question|}}
-    {{#bs-form-group}}
-      <label class="break-line question-label">{{t question.question}}</label><br>
-      {{#if (eq question.type 'radio')}}
-        {{#each question.items as |item|}}
-          {{#if item.description}}
-            <label>{{t item.description}}</label>
-          {{/if}}
-          {{radio-group options=question.scale labelTop=item.labelTop labels=item.labels formatLabel=item.formatLabel value=item.value}}
+  {{#each questions as |question index|}}
+    {{#if (eq question.page currentPage)}}
+      {{#bs-form-group}}
+        <label class="break-line question-label">{{add index 1}}. {{t question.question}}</label><br>
+        {{#if (eq question.type 'radio')}}
+          {{#each question.items as |item|}}
+            {{#if item.description}}
+              <label>{{t item.description}}</label>
+            {{/if}}
+            {{isp-radio-group options=question.scale labelTop=item.labelTop labels=item.labels formatLabel=item.formatLabel value=item.value}}
+            <br>
+            <br>
+          {{/each}}
+        {{else if (eq question.type 'select')}}
+          {{select-input options=question.scale value=question.items.0.value}}
+        {{else if (eq question.type 'radio-input')}}
+          {{isp-radio-group options=question.scale value=question.items.0.value}}
           <br>
-          <br>
-        {{/each}}
-      {{else if (eq question.type 'select')}}
-        {{select-input options=question.scale value=question.items.0.value}}
-      {{else if (eq question.type 'radio-input')}}
-          {{radio-group options=question.scale value=question.items.radio.value}}
-          <br>
-          {{#if (eq question.items.radio.value 'measures.questions.11.options.yes')}}
-            <label>{{t question.items.input.description}}</label>
-            {{#input value=question.input.value}}{{/input}}
+          {{#if (eq question.items.0.value 'measures.questions.11.options.yes')}}
+            <label>{{t question.items.1.description}}</label>
+            {{#input value=question.items.1.value}}{{/input}}
             <br>
           {{/if}}
-      {{else if (eq question.type 'textarea')}}
-        {{#textarea value=question.input.value cols="100" rows="6"}}{{/textarea}}
-      {{/if}}
-    {{/bs-form-group}}
-    <br>
+        {{/if}}
+      {{/bs-form-group}}
+    {{/if}}
   {{/each}}
-{{/bs-form}}
+  {{/bs-form}}
 </div>
 <div class="row exp-controls">
-  <div class='btn btn-primary pull-right' {{action 'next'}}>{{t 'global.continueLabel'}}</div>
-  {{progress-bar pageNumber=5}}
+  {{#if (eq currentPage totalPages)}}
+    <div class='btn btn-primary pull-right' {{action 'next'}}>{{t 'global.continueLabel'}}</div>
+  {{else}}
+    <div class='btn btn-primary pull-right' {{action 'nextPage'}}>{{t 'global.continueLabel'}}</div>
+  {{/if}}
+  {{progress-bar pageNumber=progressBarPage}}
 </div>
