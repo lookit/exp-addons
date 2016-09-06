@@ -1,5 +1,3 @@
-import Ember from 'ember';
-
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
