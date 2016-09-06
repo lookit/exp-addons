@@ -216,14 +216,16 @@ var generateValidators = function (questions) {
 var generateSchema = function (data) {
     var items = [];
     var options = data.options ? data.options : {};
+
+    var setOption = (option) => {
+        ret[option] = options[option];
+    };
     for (var i = 0; i < data.items.length; i++) {
         var ret = {
             description: data.items[i],
             value: null
         };
-        Object.keys(options).forEach(function(option) {
-            ret[option] = options[option];
-        });
+        Object.keys(options).forEach(setOption);
         items.push(ret);
     }
     data['items'] = items;
