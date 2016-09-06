@@ -293,7 +293,7 @@ var questions = [
         ],
         options: {
             labelTop: true,
-            formatLabel: true
+            formatLabel: 'format-label'
         }
     }),
     generateSchema({
@@ -304,6 +304,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
+            formatLabel: 'label-spacing',
             labels: [{
                 rating: 0,
                 label: 'measures.questions.4.options.unwilling'
