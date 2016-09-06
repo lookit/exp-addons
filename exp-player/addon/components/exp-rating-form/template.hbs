@@ -9,14 +9,14 @@
             {{#if item.description}}
               <label>{{t item.description}}</label>
             {{/if}}
-            {{radio-group options=question.scale labelTop=item.labelTop labels=item.labels formatLabel=item.formatLabel value=item.value}}
+            {{isp-radio-group options=question.scale labelTop=item.labelTop labels=item.labels formatLabel=item.formatLabel value=item.value}}
             <br>
             <br>
           {{/each}}
         {{else if (eq question.type 'select')}}
           {{select-input options=question.scale value=question.items.0.value}}
         {{else if (eq question.type 'radio-input')}}
-          {{radio-group options=question.scale value=question.items.0.value}}
+          {{isp-radio-group options=question.scale value=question.items.0.value}}
           <br>
           {{#if (eq question.items.0.value 'measures.questions.11.options.yes')}}
             <label>{{t question.items.1.description}}</label>
