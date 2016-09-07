@@ -16,7 +16,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 resultsUrl: {
                     type: 'string',
-                    default: 'participate.results'
+                    default: 'participate.survey.results'
                 }
             }
         },
