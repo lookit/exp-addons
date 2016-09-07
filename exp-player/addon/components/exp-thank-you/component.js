@@ -10,7 +10,14 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                // define parameters here
+                exitUrl: {
+                    type: 'string',
+                    default: 'exit'
+                },
+                resultsUrl: {
+                    type: 'string',
+                    default: 'participate.results'
+                }
             }
         },
         data: {
