@@ -173,7 +173,8 @@ export default DS.Model.extend(JamModel, {
         var container = Ember.getOwner(this);
         container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
         container.register(`adapter:${cId}`, SessionAdapter.extend({
-            'sessionCollectionId': cId
+            sessionCollectionId: cId,
+            shouldReloadAll: () => true
         })); // Override part of adapter URL
         container.register(`serializer:${cId}`, SessionSerializer.extend({
             'modelName': cId
