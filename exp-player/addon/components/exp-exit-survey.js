@@ -66,10 +66,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                 feedback: {
                     type: 'string'
                 },
-                emailOptOut: {
-                    type: 'boolean',
-                    default: true
-                },
                 idealSessionsCompleted: {
                     type: 'integer',
                     default: 3
@@ -118,7 +114,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
         return maxDate.diff(minDate, 'days') + 1;
     }),
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
-        return Math.ceil((this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100);
+        return Math.min(100, Math.ceil((this.get('currentSessionsCompleted') / this.get('idealSessionsCompleted')) * 100));
     }),
     willRender() {
         this.send('exitFullscreen');

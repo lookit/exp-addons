@@ -68,7 +68,7 @@
             <label>Your feedback:</label><br> {{textarea class="input-text" value=feedback name="feedback" rows=3 cols=40}}
         </div>
         <hr>
-        {{bs-button class="pull-right" defaultText="Continue" type="success" action='continue'}} {{/bs-form}} {{else}}
+        {{bs-button class="pull-right" defaultText="Return to Lookit" type="success" action='continue'}} {{/bs-form}} {{else}}
         <h4>{{title2}}</h4>
         <p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. </p>
         <p>We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
