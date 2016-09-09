@@ -13,7 +13,14 @@ export default DS.Transform.extend({
             }
             else {
                 profile.birthday = new Date(profile.birthday);
-                return this.get('store').createRecord('profile', profile);
+                this.get('store').push({
+                    data: {
+                        type: 'profile',
+                        id: profile.profileId,
+                        attributes: profile
+                    }
+                });
+                return this.get('store').peekRecord('profile', profile.profileId);
             }
         });
     },

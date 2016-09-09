@@ -128,7 +128,7 @@ export default ExpFrameBaseComponent.extend({
     return shuffle(formatCards(cards));
   }),
   responses: Ember.computed(function() {
-    return this.get('session.expData')['2-2-free-response'];
+    return this.get('session.expData')['1-1-free-response'];
   }),
   isValid: Ember.computed(
     'buckets2.0.categories.0.cards.[]',
