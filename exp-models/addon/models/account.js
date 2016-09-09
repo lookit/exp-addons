@@ -49,20 +49,9 @@ export default DS.Model.extend(JamModel, {
         return profiles.filter(getProfile)[0];
     },
     pastSessionsFor(experiment, profile) {
-        // A hack: jam _search doesn't support implicit read access (if user is creator), so we have
-        // to do a findAll then filter by profile.
         var profileId = Ember.get(profile, 'id') || '*';
-        if (config.modulePrefix === 'experimenter') {
-            return this.get('store').queryRecord(experiment.get('sessionCollectionId'), {
-                q: `profileId:${this.get('id')}${profileId}`
-            });
-        }
-        else {
-            return this.get('store').findAll(experiment.get('sessionCollectionId')).then((sessions) => {
-                return sessions.filter((session) => {
-                    return (profileId === '*')? true: session.get('profileId') === profileId;
-                });
-            });
-        }
+        return this.get('store').query(experiment.get('sessionCollectionId'), {
+            'filter[profileId]': profileId
+        });
     }
 });
