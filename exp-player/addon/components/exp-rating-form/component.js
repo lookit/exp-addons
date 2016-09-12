@@ -607,6 +607,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
             this.set('currentPage', this.currentPage + 1);
             this.send('save');
             window.scrollTo(0,0);
+        },
+        continue() {
+            this.sendAction('sessionCompleted');
+            this.send('next');
         }
     }
 });
