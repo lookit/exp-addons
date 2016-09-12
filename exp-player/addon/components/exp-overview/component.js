@@ -107,13 +107,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
     questions: questions,
-    responses: Ember.computed('questions', function() {
-        var questions = this.get('questions');
-        var responses = {};
-        for (var i=0; i < questions.length; i++) {
-            responses[i] = questions[i].value;
-        }
-        return responses;
+    showOptional: Ember.computed('questions.7.value', function() {
+       return this.questions[7].value === 'global.yesLabel';
+    }),
+    responses: Ember.computed(function() {
+      var questions = this.get('questions');
+      var responses = {};
+      for (var i=0; i < questions.length; i++) {
+        responses[i] = questions[i].value;
+      }
+      return responses;
     }),
     meta: {
       name: 'ExpOverview',
