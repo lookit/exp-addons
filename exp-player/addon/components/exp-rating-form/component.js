@@ -342,6 +342,7 @@ var questions = [
                 description: 'measures.questions.6.items.1.label',
                 value: null,
                 labelTop: false,
+                formatLabel: 'label-spacing',
                 labels: [{
                     rating: 0,
                     label: 'measures.questions.6.items.1.options.notHappy'
