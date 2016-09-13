@@ -4,14 +4,14 @@ import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
 
 
-var range = function(start, stop) {
+function range(start, stop) {
   var options = [];
   for (var i=start; i <= stop; i++) {
     var key = 'number' + i;
     options.push(key);
   }
   return options;
-};
+}
 
 var generateValidators = function(questions) {
   var validators = {};
@@ -107,6 +107,19 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
     questions: questions,
+
+    // Pick out individual responses, so field names are more amenable to serialization
+    q01_age: Ember.computed.alias('questions.0.value'),
+    q02_gender: Ember.computed.alias('questions.1.value'),
+    q03_ethnicity: Ember.computed.alias('questions.2.value'),
+    q04_firstLanguage: Ember.computed.alias('questions.3.value'),
+    q05_howWellOff: Ember.computed.alias('questions.4.value'),
+    q06_birthLocation: Ember.computed.alias('questions.5.value'),
+    q07_hometownType: Ember.computed.alias('questions.6.value'),
+    q08_followsReligion: Ember.computed.alias('questions.7.value'),
+    q09_whichReligion: Ember.computed.alias('questions.8.value'),
+    q10_howReligious: Ember.computed.alias('questions.9.value'),
+
     responses: Ember.computed('questions', function() {
         var questions = this.get('questions');
         var responses = {};
@@ -116,25 +129,54 @@ export default ExpFrameBaseComponent.extend(Validations, {
         return responses;
     }),
     meta: {
-      name: 'ExpOverview',
-        description: 'TODO: a description of this frame goes here.',
-        parameters: {
-          type: 'object',
-          properties: {
-            // define parameters here
-          }
-        },
+        name: 'ExpOverview',
+            description: 'TODO: a description of this frame goes here.',
+            parameters: {
+                type: 'object',
+                    properties: {
+                        // define parameters here
+                    }
+            },
         data: {
-          type: 'object',
-          properties: {
-            responses: {
-              type: 'object'
+                type: 'object',
+                properties: {
+                    q01_age: {
+                        type: 'integer'
+                    },
+                    q02_gender: {
+                        type: 'string'
+                    },
+                    q03_ethnicity: {
+                        type: 'string'
+                    },
+                    q04_firstLanguage: {
+                        type: 'string'
+                    },
+                    q05_howWellOff: {
+                        type: 'integer'
+                    },
+                    q06_birthLocation: {
+                        type: 'string',
+                    },
+                    q07_hometownType: {
+                        type: 'string'
+                    },
+                    q08_followsReligion: {
+                        type: 'string'
+                    },
+                    q09_whichReligion: {
+                        type :'string'
+                    },
+                    q10_howReligious: {
+                        type: 'string'
+                    }
+                }
             }
-          }
-        }
     },
+
     actions: {
       continue() {
+          // TODO: Why does this exist?
           this.send('next');
       }
     }
