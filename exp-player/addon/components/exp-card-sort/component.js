@@ -124,12 +124,32 @@ export default ExpFrameBaseComponent.extend({
   type: 'exp-card-sort',
   layout: layout,
   page: 'cardSort1',
+
   cards: Ember.computed(function() {
     return shuffle(formatCards(cards));
   }),
+
   responses: Ember.computed(function() {
     return this.get('session.expData')['1-1-free-response'];
   }),
+
+  // Represent the sorted cards in a human-readable format for storage in the database
+  characteristicsSorted: Ember.computed('cardSortResponse', function () {
+      let cardSortResponse = this.get('cardSortResponse');
+
+      // Final data should be returned as object {categoryName: [cardIdentifier]}
+      let responses = {};
+
+      // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
+      for (let categorySet of cardSortResponse) {
+          for (let category of categorySet.categories) {
+              let name = category.name.split('.').pop();
+              responses[name] = category.cards.map((cardItem) => cardItem.id);
+          }
+      }
+      return responses;
+  }),
+
   isValid: Ember.computed(
     'buckets2.0.categories.0.cards.[]',
     'buckets2.0.categories.1.cards.[]',
@@ -151,6 +171,7 @@ export default ExpFrameBaseComponent.extend({
       }
       return true;
   }),
+
   actions: {
     dragCard(card, ops) {
       var cards = ops.target.cards;
@@ -188,6 +209,7 @@ export default ExpFrameBaseComponent.extend({
       this.send('next');
     }
   },
+
   meta: {
     name: 'ExpCardSort',
     description: 'TODO: a description of this frame goes here.',
@@ -276,9 +298,9 @@ export default ExpFrameBaseComponent.extend({
     data: {
       type: 'object',
       properties: {
-        cardSortResponse: {
-          type: 'array'
-        }
+          characteristicsSorted: {
+              type: 'object'
+          },
       }
     }
   }
