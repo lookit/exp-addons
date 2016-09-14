@@ -47,9 +47,8 @@ export default DS.Model.extend(JamModel, {
         return profiles.filter(getProfile)[0];
     },
     pastSessionsFor(experiment, profile) {
-        var profileId = Ember.get(profile, 'id') || '*';
-        return this.get('store').query(experiment.get('sessionCollectionId'), {
-            'filter[profileId]': profileId
-        });
+        var profileId = Ember.get(profile, 'profileId');
+        var query = profileId ? { 'filter[profileId]': profileId } : {};
+        return this.get('store').query(experiment.get('sessionCollectionId'), query);
     }
 });
