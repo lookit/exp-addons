@@ -108,18 +108,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     questions: questions,
 
-    // Pick out individual responses, so field names are more amenable to serialization
-    q01_age: Ember.computed.alias('questions.0.value'),
-    q02_gender: Ember.computed.alias('questions.1.value'),
-    q03_ethnicity: Ember.computed.alias('questions.2.value'),
-    q04_firstLanguage: Ember.computed.alias('questions.3.value'),
-    q05_howWellOff: Ember.computed.alias('questions.4.value'),
-    q06_birthLocation: Ember.computed.alias('questions.5.value'),
-    q07_hometownType: Ember.computed.alias('questions.6.value'),
-    q08_followsReligion: Ember.computed.alias('questions.7.value'),
-    q09_whichReligion: Ember.computed.alias('questions.8.value'),
-    q10_howReligious: Ember.computed.alias('questions.9.value'),
-
     responses: Ember.computed('questions', function() {
         var questions = this.get('questions');
         var responses = {};
@@ -140,35 +128,42 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
                 type: 'object',
                 properties: {
-                    q01_age: {
-                        type: 'integer'
-                    },
-                    q02_gender: {
-                        type: 'string'
-                    },
-                    q03_ethnicity: {
-                        type: 'string'
-                    },
-                    q04_firstLanguage: {
-                        type: 'string'
-                    },
-                    q05_howWellOff: {
-                        type: 'integer'
-                    },
-                    q06_birthLocation: {
-                        type: 'string',
-                    },
-                    q07_hometownType: {
-                        type: 'string'
-                    },
-                    q08_followsReligion: {
-                        type: 'string'
-                    },
-                    q09_whichReligion: {
-                        type :'string'
-                    },
-                    q10_howReligious: {
-                        type: 'string'
+                    responses: {
+                        // TODO: Specify required properties in future according to Json-schema syntax
+                        //   https://spacetelescope.github.io/understanding-json-schema/reference/object.html#required-properties
+                        type: 'object',
+                        properties: {
+                            '0': { // age
+                                type: 'integer'
+                            },
+                            '1': { // gender
+                                type: 'string'
+                            },
+                            '2': { // ethhnicity
+                                type: 'string'
+                            },
+                            '3': { // firstLanguage
+                               type: 'string'
+                            },
+                            '4': { // how well off
+                                type: 'integer'
+                            },
+                            '5': { // birth location
+                                type: 'string'
+                            },
+                            '6': { // hometown type
+                               type: 'string'
+                            },
+                            '7': { // follows religion?
+                                type: 'string'
+                            },
+                            '8': { // which religion?
+                                type: 'string'
+                            },
+                            '9': {  // how religious?
+                                type: 'string'
+                            }
+                        }
                     }
                 }
             }
