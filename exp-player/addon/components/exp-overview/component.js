@@ -129,7 +129,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 type: 'object',
                 properties: {
                     responses: {
-                        // TODO: Specify required properties in future according to Json-schema syntax
+                        // TODO: Specify *required* properties in future according to Json-schema syntax
                         //   https://spacetelescope.github.io/understanding-json-schema/reference/object.html#required-properties
                         type: 'object',
                         properties: {

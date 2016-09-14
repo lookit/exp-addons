@@ -129,12 +129,12 @@ export default ExpFrameBaseComponent.extend({
     return shuffle(formatCards(cards));
   }),
 
-  responses: Ember.computed(function() {
+  freeResponses: Ember.computed(function() {
     return this.get('session.expData')['1-1-free-response'];
   }),
 
   // Represent the sorted cards in a human-readable format for storage in the database
-  characteristicsSorted: Ember.computed('cardSortResponse', function () {
+  responses: Ember.computed('cardSortResponse', function () {
       let cardSortResponse = this.get('cardSortResponse');
 
       // Final data should be returned as object {categoryName: [cardIdentifiers] }
@@ -298,8 +298,37 @@ export default ExpFrameBaseComponent.extend({
     data: {
       type: 'object',
       properties: {
-          characteristicsSorted: {
-              type: 'object'
+          responses: {
+              type: 'object',
+              properties: {
+                  extremelyUnchar: {
+                      type: 'array'
+                  },
+                  quiteUnchar: {
+                      type: 'array'
+                  },
+                  fairlyUnchar: {
+                      type: 'array'
+                  },
+                  somewhatUnchar: {
+                      type: 'array'
+                  },
+                  neutral: {
+                      type: 'array'
+                  },
+                  somewhatChar: {
+                      type: 'array'
+                  },
+                  fairlyChar: {
+                      type: 'array'
+                  },
+                  quiteChar: {
+                      type: 'array'
+                  },
+                  extremelyChar: {
+                      type: 'array'
+                  }
+              }
           },
       }
     }

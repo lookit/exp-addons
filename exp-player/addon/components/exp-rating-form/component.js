@@ -579,6 +579,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
+
     responses: Ember.computed(function () {
         var questions = this.get('questions');
         var responses = {};
@@ -591,6 +592,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
+
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -604,6 +606,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 responses: {
+                    // TODO: Add validations for types and required properties in future
                     type: 'object'
                 }
             }
