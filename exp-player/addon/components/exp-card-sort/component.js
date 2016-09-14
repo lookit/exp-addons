@@ -137,7 +137,7 @@ export default ExpFrameBaseComponent.extend({
   characteristicsSorted: Ember.computed('cardSortResponse', function () {
       let cardSortResponse = this.get('cardSortResponse');
 
-      // Final data should be returned as object {categoryName: [cardIdentifier]}
+      // Final data should be returned as object {categoryName: [cardIdentifiers] }
       let responses = {};
 
       // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
