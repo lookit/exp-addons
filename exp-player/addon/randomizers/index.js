@@ -3,6 +3,7 @@ import shuffle from './shuffle';
 import rotate from './rotate';
 import next from './next';
 import prefphys from './pref-phys';
+import prefphyspilot from './pref-phys-pilot';
 import prefPhysCalibration from './pref-phys-calibration';
 
 export default {
@@ -11,5 +12,6 @@ export default {
     rotate: rotate,
     next: next,
     prefphys: prefphys,
+    prefphyspilot: prefphyspilot,
     'prefphys-calibration': prefPhysCalibration
 };
