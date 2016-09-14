@@ -18,6 +18,7 @@ export default Ember.Component.extend(FullScreen, {
     conditions: null,
 
     frameIndex: 0, // Index of the currently active frame
+    framePage: 1, // Index of the currently visible page within a frame
 
     displayFullscreen: false,
     fullScreenElementId: 'experiment-player',
@@ -142,6 +143,7 @@ able to continue the study.
         next() {
             console.log('next');
             var frameIndex = this.get('frameIndex');
+            this.sendAction('updateFrameIndex', frameIndex);
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
@@ -181,6 +183,10 @@ able to continue the study.
         },
         closeExitWarning() {
             this.set('hasAttemptedExit', false);
+        },
+        updateFramePage(framePage) {
+            this.set('framePage', framePage);
+            this.sendAction('updateFramePage', framePage);
         }
     }
 });

@@ -26,6 +26,7 @@ export default Ember.Component.extend({
     },
 
     frameIndex: null,
+    framePage: null,
     frameConfig: null,
     frameContext: null,
     eventTimings: null,

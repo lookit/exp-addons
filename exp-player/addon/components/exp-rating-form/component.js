@@ -558,10 +558,10 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
-    currentPage: 1,
+    framePage: 1,
     totalPages: 7,
     progressBarPage: Ember.computed('currentPage', function () {
-        return this.currentPage + 4;
+        return this.framePage + 4;
     }),
     questions: Ember.computed(function () {
         var condition = this.get('session').get('experimentCondition');
@@ -604,11 +604,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     actions: {
         nextPage() {
-            this.set('currentPage', this.currentPage + 1);
+            var page = this.framePage + 1;
+            this.set('framePage', page);
+            this.sendAction('updateFramePage', page);
             this.send('save');
         },
         previousPage() {
-            this.set('currentPage', this.currentPage - 1);
+            var page = this.framePage - 1;
+            this.set('framePage', page);
+            this.sendAction('updateFramePage', page);
             window.scrollTo(0,0);
         }
     }

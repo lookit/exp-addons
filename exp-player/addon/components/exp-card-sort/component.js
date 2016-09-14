@@ -123,12 +123,7 @@ var shuffle = function(array) {
 export default ExpFrameBaseComponent.extend({
   type: 'exp-card-sort',
   layout: layout,
-  page: Ember.computed(function() {
-      if (this.get('session.expData')['2-2-card-sort']) {
-          return 'cardSort2';
-      }
-      return 'cardSort1';
-  }),
+  page: 'cardSort1',
   cards: Ember.computed(function() {
     return shuffle(formatCards(cards));
   }),
@@ -187,6 +182,7 @@ export default ExpFrameBaseComponent.extend({
     },
     nextPage() {
       this.set('page', 'cardSort2');
+      this.sendAction('updateFramePage', 2);
     },
     previousPage() {
       this.set('page', 'cardSort1');
