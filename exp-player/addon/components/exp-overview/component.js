@@ -117,7 +117,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         responses[i] = questions[i].value;
       }
       return responses;
-    }),
+    }).volatile(),
     meta: {
       name: 'ExpOverview',
         description: 'TODO: a description of this frame goes here.',
