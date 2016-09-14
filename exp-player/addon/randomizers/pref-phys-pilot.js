@@ -330,7 +330,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
-            testLength: 5, // TODO: change to 20s for actual testing.
+            testLength: 20, // TODO: change to 20s for actual testing.
             isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
@@ -355,7 +355,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
-    var MAX_VIDEOS = 4; // for testing only - limit number of videos. Change to 24 for prod.
+    var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
     pastSessions = pastSessions.filter(function(session) {
