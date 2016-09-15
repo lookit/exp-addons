@@ -124,6 +124,7 @@ export default Ember.Component.extend({
             this.send('setTimeEvent', 'nextFrame');
             this.send('save');
             this.sendAction('next');
+            window.scrollTo(0,0);
         },
         last() {
             this.sendAction('last');

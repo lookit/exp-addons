@@ -342,6 +342,7 @@ var questions = [
                 description: 'measures.questions.6.items.1.label',
                 value: null,
                 labelTop: false,
+                formatLabel: 'label-spacing',
                 labels: [{
                     rating: 0,
                     label: 'measures.questions.6.items.1.options.notHappy'
@@ -608,6 +609,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             this.set('framePage', page);
             this.sendAction('updateFramePage', page);
             this.send('save');
+            window.scrollTo(0,0);
         },
         previousPage() {
             var page = this.framePage - 1;
