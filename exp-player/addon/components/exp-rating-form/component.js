@@ -605,14 +605,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     actions: {
         nextPage() {
-            var page = this.framePage + 1;
+            var page = this.get('framePage') + 1;
             this.set('framePage', page);
             this.sendAction('updateFramePage', page);
             this.send('save');
             window.scrollTo(0,0);
         },
         previousPage() {
-            var page = this.framePage - 1;
+            var page = Math.min(0, this.get('framePage') - 1);
             this.set('framePage', page);
             this.sendAction('updateFramePage', page);
             window.scrollTo(0,0);
