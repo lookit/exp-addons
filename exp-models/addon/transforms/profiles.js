@@ -25,6 +25,9 @@ export default DS.Transform.extend({
         });
     },
     serialize(deserialized) {
-        return deserialized.toArray().map((item) => item.toJSON());
+        if (deserialized) {
+            return deserialized.toArray().map((item) => item.toJSON());
+        }
+        return null;
     }
 });

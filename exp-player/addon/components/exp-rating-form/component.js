@@ -342,6 +342,7 @@ var questions = [
                 description: 'measures.questions.6.items.1.label',
                 value: null,
                 labelTop: false,
+                formatLabel: 'label-spacing',
                 labels: [{
                     rating: 0,
                     label: 'measures.questions.6.items.1.options.notHappy'
@@ -607,6 +608,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
             this.set('currentPage', this.currentPage + 1);
             this.send('save');
             window.scrollTo(0,0);
+        },
+        continue() {
+            this.sendAction('sessionCompleted');
+            this.send('next');
         }
     }
 });

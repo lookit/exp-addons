@@ -6,8 +6,6 @@ import DS from 'ember-data';
 
 import JamModel from '../mixins/jam-model';
 
-import config from 'ember-get-config';
-
 function makeId() {
     // h/t http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
     var text = "";
@@ -49,9 +47,8 @@ export default DS.Model.extend(JamModel, {
         return profiles.filter(getProfile)[0];
     },
     pastSessionsFor(experiment, profile) {
-        var profileId = Ember.get(profile, 'id') || '*';
-        return this.get('store').query(experiment.get('sessionCollectionId'), {
-            'filter[profileId]': profileId
-        });
+        var profileId = Ember.get(profile, 'profileId');
+        var query = profileId ? { 'filter[profileId]': profileId } : {};
+        return this.get('store').query(experiment.get('sessionCollectionId'), query);
     }
 });
