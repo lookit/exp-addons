@@ -143,7 +143,6 @@ able to continue the study.
         next() {
             console.log('next');
             var frameIndex = this.get('frameIndex');
-            this.sendAction('updateFrameIndex', frameIndex);
             if (frameIndex < (this.get('frames').length - 1)) {
                 console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
