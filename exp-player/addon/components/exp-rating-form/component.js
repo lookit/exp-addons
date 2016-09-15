@@ -616,6 +616,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
             this.set('framePage', page);
             this.sendAction('updateFramePage', page);
             window.scrollTo(0,0);
+        },
+        continue() {
+            this.sendAction('sessionCompleted');
+            this.send('next');
         }
     }
 });
