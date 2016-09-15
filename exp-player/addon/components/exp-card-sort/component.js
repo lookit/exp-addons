@@ -185,11 +185,6 @@ export default ExpFrameBaseComponent.extend({
       this.sendAction('updateFramePage', 1);
       window.scrollTo(0,0);
     },
-    previousPage() {
-      this.set('page', 'cardSort1');
-      this.sendAction('updateFramePage', 0);
-      window.scrollTo(0,0);
-    },
     continue() {
       this.set('cardSortResponse', this.buckets2);
       this.send('next');
