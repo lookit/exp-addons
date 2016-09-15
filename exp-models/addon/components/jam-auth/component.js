@@ -1,11 +1,12 @@
 import Ember from 'ember';
-import config from 'ember-get-config';
 import layout from './template';
 
 export default Ember.Component.extend({
     layout: layout,
-    namespace: config.JAMDB.namespace,
-    collection: config.JAMDB.collection,
+    namespaceConfig: Ember.inject.service(),
+
+    namespace: Ember.computed.alias('namespaceConifg.namespace'),
+    collection: 'accounts',
 
     username: null,
     password: null,
