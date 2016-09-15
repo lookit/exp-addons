@@ -38,6 +38,11 @@ export default Ember.Mixin.create({
                     session.save().then(() => {
                         this.get('currentUser').getCurrentUser().then(([account, profile]) => {
                             account.pastSessionsFor(experiment, profile).then(function(pastSessions) {
+                                pastSessions = pastSessions.toArray();
+
+                                if (!pastSessions.contains(session)) {
+                                    pastSessions.pushObject(session);
+                                }
                                 resolve(pastSessions);
                             });
                         });
