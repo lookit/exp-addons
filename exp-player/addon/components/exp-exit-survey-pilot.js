@@ -61,10 +61,12 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                     type: 'string'
                 },
                 withdrawal: {
-                    type: 'boolean'
+                    type: 'boolean',
+                    default: false
                 },
                 feedback: {
-                    type: 'string'
+                    type: 'string',
+                    default: ''
                 },
                 idealSessionsCompleted: {
                     type: 'integer',
