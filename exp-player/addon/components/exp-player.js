@@ -18,7 +18,7 @@ export default Ember.Component.extend(FullScreen, {
     conditions: null,
 
     frameIndex: 0, // Index of the currently active frame
-    framePage: 1, // Index of the currently visible page within a frame
+    framePage: 0, // Index of the currently visible page within a frame
 
     displayFullscreen: false,
     fullScreenElementId: 'experiment-player',

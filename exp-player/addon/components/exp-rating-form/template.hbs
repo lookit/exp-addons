@@ -30,12 +30,12 @@
   {{/bs-form}}
 </div>
 <div class="row exp-controls">
-  {{#if (eq framePage totalPages)}}
+  {{#if (eq framePage lastPage)}}
     <div class='btn btn-primary pull-right' {{action 'continue'}}>{{t 'global.continueLabel'}}</div>
   {{else}}
     <div class='btn btn-primary pull-right' {{action 'nextPage'}}>{{t 'global.continueLabel'}}</div>
   {{/if}}
-  {{#unless (eq framePage 1)}}
+  {{#unless (eq framePage 0)}}
     <div class="btn btn-default" {{ action 'previousPage' }}>Previous Page</div>
   {{/unless}}
   {{progress-bar pageNumber=progressBarPage}}

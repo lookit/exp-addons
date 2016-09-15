@@ -182,10 +182,11 @@ export default ExpFrameBaseComponent.extend({
     },
     nextPage() {
       this.set('page', 'cardSort2');
-      this.sendAction('updateFramePage', 2);
+      this.sendAction('updateFramePage', 1);
     },
     previousPage() {
       this.set('page', 'cardSort1');
+      this.sendAction('updateFramePage', 0);
     },
     continue() {
       this.set('cardSortResponse', this.buckets2);
