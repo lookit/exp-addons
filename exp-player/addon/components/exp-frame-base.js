@@ -91,9 +91,6 @@ export default Ember.Component.extend({
 
     serializeContent() {
         // Serialize selected parameters for this frame, plus eventTiming data
-
-        debugger;
-
         var serialized = this.getProperties(Object.keys(this.get('meta.data.properties') || {}));
         serialized.eventTimings = this.get('eventTimings');
         return serialized;
