@@ -111,19 +111,19 @@ export default ExpFrameBaseComponent.extend(Validations, {
        return this.questions[7].value === 'global.yesLabel';
     }),
     responses: Ember.computed({
-      get(key) {
-        var questions = this.get('questions');
-        var responses = {};
-        for (var i=0; i < questions.length; i++) {
-          responses[i] = questions[i].value;
-        }
-        return responses;
+        get(key) {
+            var questions = this.get('questions');
+            var responses = {};
+            for (var i=0; i < questions.length; i++) {
+                responses[i] = questions[i].value;
+            }
+            return responses;
         },
         set(key, value) {
-          for (var q=0; q < this.get('questions').length; q++) {
-            this.get('questions')[q].value = value[q];
-          }
-          return value;
+            for (var q=0; q < this.get('questions').length; q++) {
+                this.get('questions')[q].value = value[q];
+            }
+            return value;
         }
     }).volatile(),
     meta: {
