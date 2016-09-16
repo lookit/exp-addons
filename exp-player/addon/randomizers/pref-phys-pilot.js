@@ -103,9 +103,9 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Objects to use: elements correspond to videotypes
     var objects = [
         ["apple", "cup", "whiteball", "lotion", "spray", "whiteball"],
-        ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
+        ["hammer", "tissues", "duck", "book", "shoe", "brush"],
         ["box", "funnel", "eraser", "scissors", "spoon", "wrench"],
-        ["hammer", "tissues", "duck", "book", "shoe", "bowl"]
+        ["hammer", "tissues", "duck", "book", "shoe", "brush"]
     ];
 
     // Options for videos, organized by event
