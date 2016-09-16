@@ -573,17 +573,28 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
-    responses: Ember.computed(function () {
-        var questions = this.get('questions');
-        var responses = {};
-        for (var i = 0; i < questions.length; i++) {
-            var question = questions[i];
-            responses[i] = {};
-            for (var j = 0; j < question.items.length; j++) {
-                responses[i][j] = question.items[j].value;
+    responses: Ember.computed({
+        get(key) {
+            var questions = this.get('questions');
+            var responses = {};
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                responses[i] = {};
+                for (var j = 0; j < question.items.length; j++) {
+                    responses[i][j] = question.items[j].value;
+                }
             }
+            return responses;
+        },
+        set(key, value) {
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                for (var j = 0; j < question.items.length; j++) {
+                    question.items[j].value = value[i][j];
+                }
+            }
+            return value;
         }
-        return responses;
     }).volatile(),
     meta: {
         name: 'ExpRatingForm',
