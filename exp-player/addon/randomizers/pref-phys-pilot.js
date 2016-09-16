@@ -49,9 +49,6 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Types of comparisons for each event type (gravity, inertia, support-fall, support-stay,
     // control). Format [event, outcomeMoreProb, outcomeLessProb]
     var comparisonsG = [
-        ["table", "down", "continue"],
-        ["table", "down", "up"],
-        ["table", "continue", "up"],
         ["ramp", "down", "up"],
         ["ramp", "down", "up"],
         ["toss", "down", "up"]
@@ -61,20 +58,20 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["reverse", "barrier", "nobarrier"]
     ];
     var comparisonsSF = [
-        ["fall", "slightly", "mostly"],
-        ["fall", "next", "mostly"],
-        ["fall", "near", "mostly"],
-        ["fall", "next", "slightly"],
-        ["fall", "near", "slightly"],
-        ["fall", "near", "next"]
+        ["fall", "slightly-on", "mostly-on"],
+        ["fall", "next-to", "mostly-on"],
+        ["fall", "near", "mostly-on"],
+        ["fall", "next-to", "slightly-on"],
+        ["fall", "near", "slightly-on"],
+        ["fall", "near", "next-to"]
     ];
     var comparisonsSS = [
-        ["stay", "slightly", "mostly"],
-        ["stay", "next", "mostly"],
-        ["stay", "near", "mostly"],
-        ["stay", "next", "slightly"],
-        ["stay", "near", "slightly"],
-        ["stay", "near", "next"]
+        ["stay", "slightly-on", "mostly-on"],
+        ["stay", "next-to", "mostly-on"],
+        ["stay", "near", "mostly-on"],
+        ["stay", "next-to", "slightly-on"],
+        ["stay", "near", "slightly-on"],
+        ["stay", "near", "next-to"]
     ];
     var comparisonsC = [
         ["same", "A", "B"],
@@ -82,19 +79,21 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     ];
 
 
-    var videotypes = ["gravity", "inertia", "support", "control"];
-    var compTypes = [comparisonsG, comparisonsI, [], comparisonsC]; // assign [2] after choosing
-    // what to show for support
-    var nReps = [1, 3, 1, 3]; // how many times does each comparison type listed need to be shown
+    //var videotypes = ["gravity", "inertia", "support", "control"];
+    // FOR PILOT ONLY:
+    var videotypes = ["gravity", "stay", "control", "fall"]
+    var compTypes = [comparisonsG, comparisonsSS, comparisonsC, comparisonsSF];
+    var nReps = [2, 1, 3, 1]; // how many times does each comparison type listed need to be shown
     // to get to NPERTYPE for that event type?
 
+    /*
     // Choose which videos to show for support
     if (showStay === 0) {
-        videotypes[2] = "fall";
-        compTypes[2] = comparisonsSF;
+        videotypes[1] = "fall";
+        compTypes[1] = comparisonsSF;
     } else if (showStay === 1) {
-        videotypes[2] = "stay";
-        compTypes[2] = comparisonsSS;
+        videotypes[1] = "stay";
+        compTypes[1] = comparisonsSS;
     } /* else {
         alert("invalid value for showStay (should be '0' or '1'), using '0'");
         videotypes[2] = "fall";
@@ -104,9 +103,9 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Objects to use: elements correspond to videotypes
     var objects = [
         ["apple", "cup", "whiteball", "lotion", "spray", "whiteball"],
-        ["train", "marker", "toycar", "sunglasses", "flashlight", "block"],
-        ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
-        ["box", "funnel", "eraser", "scissors", "spoon", "wrench"]
+        ["hammer", "tissues", "duck", "book", "shoe", "brush"],
+        ["box", "funnel", "eraser", "scissors", "spoon", "wrench"],
+        ["hammer", "tissues", "duck", "book", "shoe", "brush"]
     ];
 
     // Options for videos, organized by event
@@ -116,8 +115,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     cameraAngles['toss'] = ["c1", "c2"];
     cameraAngles['stop'] = ["c1", "c2"];
     cameraAngles['reverse'] = ["c1", "c2"];
-    cameraAngles['fall'] = ["c1"];
-    cameraAngles['stay'] = ["c1"];
+    cameraAngles['fall'] = ["c2"];
+    cameraAngles['stay'] = ["c2"];
     cameraAngles['same'] = ["c1"];
     cameraAngles['salience'] = ["c1"];
 
@@ -127,8 +126,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     backgrounds['toss'] = ["b1"];
     backgrounds['stop'] = ["b1"];
     backgrounds['reverse'] = ["b1"];
-    backgrounds['fall'] = ["b1"];
-    backgrounds['stay'] = ["b1"];
+    backgrounds['fall'] = ["green"];
+    backgrounds['stay'] = ["green"];
     backgrounds['same'] = ["b1"];
     backgrounds['salience'] = ["b1"];
 

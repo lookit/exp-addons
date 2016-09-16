@@ -27,6 +27,7 @@ export default DS.Model.extend(JamModel, {
     activeProfiles: Ember.computed.filterBy('profiles', 'deleted', false),
 
     history: DS.hasMany('history'),
+    extra: DS.attr(),
 
     generateProfileId: function() {
         var id = makeId();
@@ -46,9 +47,12 @@ export default DS.Model.extend(JamModel, {
 
         return profiles.filter(getProfile)[0];
     },
-    pastSessionsFor(experiment, profile) {
+    pastSessionsFor(experiment, profile, isCompleted) {
         var profileId = Ember.get(profile, 'profileId');
         var query = profileId ? { 'filter[profileId]': profileId } : {};
+        if (typeof isCompleted !== 'undefined') {
+            query['filter[completed]'] = isCompleted ? 1 : 0;
+        }
         return this.get('store').query(experiment.get('sessionCollectionId'), query);
     }
 });
