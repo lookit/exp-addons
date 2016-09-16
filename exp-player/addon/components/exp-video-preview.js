@@ -76,6 +76,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         previousVideo() {
             this.set('videoIndex', this.get('videoIndex') - 1);
+        },
+        next() {
+            this.sendTimeEvent('stoppingCapture');
+            if (this.get('recorder')) {
+                this.get('recorder').stop();
+            }
+            this._super(...arguments);
         }
     },
     type: 'exp-video-preview',
@@ -146,12 +153,16 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         data: {
             type: 'object',
-            properties: {}
+            properties: {
+                videoId: {
+                    type: 'string'
+                }
+            },
+            required: []
         }
     },
 
-    willDestroyElement() { // remove event handler
-        this.sendTimeEvent('stoppingCapture');
+    willDestroyElement() {
         if (this.get('recorder')) {
             this.get('recorder').stop();
         }

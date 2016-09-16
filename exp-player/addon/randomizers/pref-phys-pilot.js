@@ -81,7 +81,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
 
     //var videotypes = ["gravity", "inertia", "support", "control"];
     // FOR PILOT ONLY:
-    var videotypes = ["gravity", "stay", "control", "fall"]
+    var videotypes = ["gravity", "stay", "control", "fall"];
     var compTypes = [comparisonsG, comparisonsSS, comparisonsC, comparisonsSF];
     var nReps = [2, 1, 3, 1]; // how many times does each comparison type listed need to be shown
     // to get to NPERTYPE for that event type?
