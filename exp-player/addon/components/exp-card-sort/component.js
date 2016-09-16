@@ -130,7 +130,7 @@ export default ExpFrameBaseComponent.extend({
   }),
 
   freeResponses: Ember.computed(function() {
-    return this.get('session.expData')['1-1-free-response'];
+    return this.get('session.expData')['1-1-free-response']['responses'];
   }),
 
   // Represent the sorted cards in a human-readable format for storage in the database

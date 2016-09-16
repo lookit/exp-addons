@@ -63,6 +63,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
         message = message.replace("0", length.toString());
         return message;
     }),
+
+    responses: Ember.computed('q1', 'q2', 'q3', function() {
+        return {
+            q1: this.get('q1'),
+            q2: this.get('q2'),
+            q3: this.get('q3')
+        };
+    }),
+
     meta: {
         name: 'ExpFreeResponse',
         description: 'TODO: a description of this frame goes here.',
@@ -75,14 +84,19 @@ export default ExpFrameBaseComponent.extend(Validations, {
         data: {
             type: 'object',
             properties: {
-                q1: {
-                    type: 'string'
-                },
-                q2: {
-                    type: 'string'
-                },
-                q3: {
-                    type: 'string'
+                responses: {
+                    type: 'object',
+                    properties: {
+                        q1: {
+                            type: 'string'
+                        },
+                        q2: {
+                            type: 'string'
+                        },
+                        q3: {
+                            type: 'string'
+                        }
+                    }
                 }
             }
         }
