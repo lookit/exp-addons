@@ -27,6 +27,7 @@ export default DS.Model.extend(JamModel, {
     activeProfiles: Ember.computed.filterBy('profiles', 'deleted', false),
 
     history: DS.hasMany('history'),
+    extra: DS.attr(),
 
     generateProfileId: function() {
         var id = makeId();
