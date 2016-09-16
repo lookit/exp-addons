@@ -6,7 +6,7 @@ import {
 
 import moment from 'moment';
 
-import layout from '../templates/components/exp-exit-survey';
+import layout from '../templates/components/exp-exit-survey-pilot';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from 'exp-player/mixins/full-screen';
@@ -32,7 +32,7 @@ const Validations = buildValidations({
 
 export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     layout: layout,
-    type: 'exp-exit-survey',
+    type: 'exp-exit-survey-pilot',
     fullScreenElementId: 'experiment-player',
     meta: {
         name: 'ExpExitSurvey',
