@@ -51,7 +51,7 @@ export default Ember.Component.extend({
         var oldAttrs = options.oldAttrs || {};
 
         let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
-        var defaultParams = this.setupParams(null, clean);
+        var defaultParams = this.setupParams(clean);
         if (clean) {
             Object.keys(defaultParams).forEach((key) => {
                 this.set(key, defaultParams[key]);
@@ -64,9 +64,9 @@ export default Ember.Component.extend({
             this.set('id', `${kind}-${frameIndex}`);
         }
     },
-    setupParams(params, clean) {
+    setupParams(clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
-        params = params || this.get('frameConfig');
+       var params = this.get('frameConfig');
 
         var defaultParams = {};
         Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
@@ -74,9 +74,6 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
-            if (this[key] && this[key].isDescriptor) {
-                return;
-            }
             var value = !clean ? this.get(key) : undefined;
             if (typeof value === 'undefined') {
                 // Make deep copy of the default value (to avoid subtle reference errors from reusing mutable containers)
