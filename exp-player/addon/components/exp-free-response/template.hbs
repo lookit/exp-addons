@@ -18,9 +18,11 @@
     {{/bs-form-group}}
     {{progress-bar pageNumber=2}}
   {{/bs-form}}
-
 </div>
 <div class="row exp-controls">
+    <button class="btn btn-default" {{ action 'previous' }}>
+        Previous Page
+    </button>
     <button class="btn btn-primary pull-right {{if (v-get this 'isInvalid') "disabled"}}" {{ action 'continue' }}>
         {{t 'global.continueLabel'}}
     </button>

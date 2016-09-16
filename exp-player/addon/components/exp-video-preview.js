@@ -14,6 +14,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     videoIndex: 0,
 
     videoRecorder: Ember.inject.service(),
+    recorder: null,
+    recordingIsReady: false,
+    warning: null,
+    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
+    videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
     noNext: function() {
         return this.get('videoIndex') >= this.get('videos.length') - 1;
@@ -28,27 +33,42 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         return this.get('videos')[this.get('videoIndex')];
     }),
 
-    didInsertElement() {
-        if (!this.get('record')) {
-            return;
-        }
-        let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#recorder'));
-        recorder.install({
-            record: true,
-            hidden: this.get('hideRecorder')
-        }).then(() => {
-            recorder.pause();
+    sendTimeEvent(name, opts = {}) {
+        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
+
+        Ember.merge(opts, {
+            streamTime: streamTime,
+            videoId: this.get('videoId')
         });
-        this.set('recorder', recorder);
+        this.send('setTimeEvent', `exp-physics:${name}`, opts);
     },
+
+
 
     actions: {
         accept() {
             this.set('prompt', false);
-            if (this.get('record')) {
-                this.get('recorder').resume().then(() => {
-                    this.set('doingIntro', false);
+            if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
+                let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+                    hidden: true
                 });
+                recorder.install({
+                    record: true
+                }).then(() => {
+                    this.sendTimeEvent('recorderReady');
+                    this.set('recordingIsReady', true);
+                });
+                recorder.on('onCamAccess', (hasAccess) => {
+                    this.sendTimeEvent('hasCamAccess', {
+                        hasCamAccess: hasAccess
+                    });
+                });
+                recorder.on('onConnectionStatus', (status) => {
+                    this.sendTimeEvent('videoStreamConnection', {
+                        status: status
+                    });
+                });
+                this.set('recorder', recorder);
             }
         },
         nextVideo() {
@@ -56,6 +76,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         previousVideo() {
             this.set('videoIndex', this.get('videoIndex') - 1);
+        },
+        next() {
+            this.sendTimeEvent('stoppingCapture');
+            if (this.get('recorder')) {
+                this.get('recorder').stop();
+            }
+            this._super(...arguments);
         }
     },
     type: 'exp-video-preview',
@@ -126,12 +153,17 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         data: {
             type: 'object',
-            properties: {}
+            properties: {
+                videoId: {
+                    type: 'string'
+                }
+            },
+            required: []
         }
     },
 
-    willDestroyElement() { // remove event handler
-        if (this.get('record')) {
+    willDestroyElement() {
+        if (this.get('recorder')) {
             this.get('recorder').stop();
         }
         this._super(...arguments);
