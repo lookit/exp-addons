@@ -26,6 +26,7 @@ export default Ember.Component.extend({
     },
 
     frameIndex: null,
+    framePage: null,
     frameConfig: null,
     frameContext: null,
     eventTimings: null,
@@ -132,6 +133,7 @@ export default Ember.Component.extend({
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');
+            window.scrollTo(0,0);
         }
     }
 });

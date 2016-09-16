@@ -236,7 +236,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.1.label',
         type: 'select',
-        page: 1,
+        page: 0,
         items: [''],
         scale: [
             'measures.questions.1.options.extremelyNeg',
@@ -253,7 +253,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.2.label',
         type: 'radio',
-        page: 1,
+        page: 0,
         items: [''],
         scale: SEVEN_POINT_SCALE,
         options: {
@@ -280,7 +280,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.3.label.10am',
         type: 'radio',
-        page: 1,
+        page: 0,
         items: items['3'],
         scale: [
             'measures.questions.3.options.extremelyUnchar',
@@ -301,7 +301,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.4.label',
         type: 'radio',
-        page: 2,
+        page: 1,
         items: [''],
         scale: TEN_POINT_SCALE,
         options: {
@@ -321,7 +321,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.5.label',
         type: 'radio',
-        page: 2,
+        page: 1,
         items: items['5'],
         scale: [
             'measures.questions.5.options.disagreeStrongly',
@@ -335,7 +335,7 @@ var questions = [
     {
         question: 'measures.questions.6.label',
         type: 'radio',
-        page: 3,
+        page: 2,
         scale: SEVEN_POINT_SCALE,
         items: [
             {
@@ -398,7 +398,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.7.label',
         type: 'radio',
-        page: 3,
+        page: 2,
         items: items['7'],
         scale: [
             'measures.questions.7.options.disagreeStrongly',
@@ -412,7 +412,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.8.label',
         type: 'radio',
-        page: 4,
+        page: 3,
         items: items['8'],
         scale: [
             'measures.questions.8.options.disbelieveStrong',
@@ -426,7 +426,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.9.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['9'],
         scale: NINE_POINT_SCALE,
         options: {
@@ -456,7 +456,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.10.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['10'],
         scale: [
             'measures.questions.10.options.disagreeStrongly',
@@ -470,7 +470,7 @@ var questions = [
     {
         question: 'measures.questions.11.label',
         type: 'radio-input',
-        page: 5,
+        page: 4,
         scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
         items: [{
             type: 'radio',
@@ -486,7 +486,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.13.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['13'],
         scale: [
             'measures.questions.13.options.disagreeStrongly',
@@ -500,7 +500,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.14.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['14'],
         scale: [
             'measures.questions.14.options.disagreeStrongly',
@@ -514,7 +514,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.15.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['15'],
         scale: [
             'measures.questions.15.options.disagreeStrongly',
@@ -528,7 +528,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.16.label',
         type: 'radio',
-        page: 7,
+        page: 6,
         items: items['16'],
         scale: [
             'measures.questions.16.options.notAtAll',
@@ -541,7 +541,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.17.label',
         type: 'radio',
-        page: 7,
+        page: 6,
         items: items['17'],
         scale: [
             'measures.questions.17.options.disagreeStrongly',
@@ -559,10 +559,10 @@ const Validations = buildValidations(generateValidators(questions));
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-rating-form',
     layout: layout,
-    currentPage: 1,
-    totalPages: 7,
+    framePage: 0,
+    lastPage: 6,
     progressBarPage: Ember.computed('currentPage', function () {
-        return this.currentPage + 4;
+        return this.framePage + 5;
     }),
     questions: Ember.computed(function () {
         var condition = this.get('session').get('experimentCondition');
@@ -605,8 +605,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     actions: {
         nextPage() {
-            this.set('currentPage', this.currentPage + 1);
+            var page = this.get('framePage') + 1;
+            this.set('framePage', page);
+            this.sendAction('updateFramePage', page);
             this.send('save');
+            window.scrollTo(0,0);
+        },
+        previousPage() {
+            var page = Math.max(0, this.get('framePage') - 1);
+            this.set('framePage', page);
+            this.sendAction('updateFramePage', page);
             window.scrollTo(0,0);
         },
         continue() {
