@@ -134,20 +134,36 @@ export default ExpFrameBaseComponent.extend({
   }),
 
   // Represent the sorted cards in a human-readable format for storage in the database
-  responses: Ember.computed('cardSortResponse', function () {
-      let cardSortResponse = this.get('cardSortResponse');
-
-      // Final data should be returned as object {categoryName: [cardIdentifiers] }
-      let responses = {};
-
-      // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
-      for (let categorySet of cardSortResponse) {
-          for (let category of categorySet.categories) {
-              let name = category.name.split('.').pop();
-              responses[name] = category.cards.map((cardItem) => cardItem.id);
+  responses: Ember.computed('cardSortResponse', 'cardSortResponse2', {
+      get(key) {
+          // Final data for each card-sort should be returned as object {categoryName: [cardIdentifiers] }
+          let responses = {
+              cardSort1: {},
+              cardSort2: {}
+          };
+          let cardSortResponse;
+          if (this.get('cardSortResponse')) {
+              cardSortResponse = this.get('cardSortResponse');
+              for (let category of cardSortResponse) {
+                  let name = category.name.split('.').pop();
+                  responses['cardSort1'][name] = category.cards.map((cardItem) => cardItem.id);
+              }
           }
+          if (this.get('cardSortResponse2')) {
+              cardSortResponse = this.get('cardSortResponse2');
+              // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
+              for (let categorySet of cardSortResponse) {
+                  for (let category of categorySet.categories) {
+                      let name = category.name.split('.').pop();
+                      responses['cardSort2'][name] = category.cards.map((cardItem) => cardItem.id);
+                  }
+              }
+          }
+          return responses;
+      },
+      set(key, value) {
+          return value;
       }
-      return responses;
   }),
 
   isValid: Ember.computed(
@@ -202,12 +218,14 @@ export default ExpFrameBaseComponent.extend({
       target.unshiftObject(card);
     },
     nextPage() {
+      this.set('cardSortResponse', Ember.copy(this.buckets, true));
+      this.send('save');
       this.set('page', 'cardSort2');
       this.sendAction('updateFramePage', 1);
       window.scrollTo(0,0);
     },
     continue() {
-      this.set('cardSortResponse', this.buckets2);
+      this.set('cardSortResponse2', this.buckets2);
       this.send('next');
     }
   },
@@ -303,35 +321,49 @@ export default ExpFrameBaseComponent.extend({
           responses: {
               type: 'object',
               properties: {
-                  extremelyUnchar: {
-                      type: 'array'
+                  cardSort1: {
+                      uncharacteristic: {
+                          type: 'array'
+                      },
+                      neutral: {
+                          type: 'array'
+                      },
+                      characteristic: {
+                          type: 'array'
+                      }
+
                   },
-                  quiteUnchar: {
-                      type: 'array'
-                  },
-                  fairlyUnchar: {
-                      type: 'array'
-                  },
-                  somewhatUnchar: {
-                      type: 'array'
-                  },
-                  neutral: {
-                      type: 'array'
-                  },
-                  somewhatChar: {
-                      type: 'array'
-                  },
-                  fairlyChar: {
-                      type: 'array'
-                  },
-                  quiteChar: {
-                      type: 'array'
-                  },
-                  extremelyChar: {
-                      type: 'array'
+                  cardSort2: {
+                      extremelyUnchar: {
+                          type: 'array'
+                      },
+                      quiteUnchar: {
+                          type: 'array'
+                      },
+                      fairlyUnchar: {
+                          type: 'array'
+                      },
+                      somewhatUnchar: {
+                          type: 'array'
+                      },
+                      neutral: {
+                          type: 'array'
+                      },
+                      somewhatChar: {
+                          type: 'array'
+                      },
+                      fairlyChar: {
+                          type: 'array'
+                      },
+                      quiteChar: {
+                          type: 'array'
+                      },
+                      extremelyChar: {
+                          type: 'array'
+                      }
                   }
               }
-          },
+          }
       }
     }
   }
