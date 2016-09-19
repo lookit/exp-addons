@@ -4,14 +4,14 @@ import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
 
 
-var range = function(start, stop) {
+function range(start, stop) {
   var options = [];
   for (var i=start; i <= stop; i++) {
     var key = 'number' + i;
     options.push(key);
   }
   return options;
-};
+}
 
 var generateValidators = function(questions) {
   var validators = {};
@@ -107,6 +107,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
     questions: questions,
+
     showOptional: Ember.computed('questions.7.value', function() {
        return this.questions[7].value === 'global.yesLabel';
     }),
@@ -127,23 +128,58 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
     }).volatile(),
     meta: {
-      name: 'ExpOverview',
-        description: 'TODO: a description of this frame goes here.',
-        parameters: {
-          type: 'object',
-          properties: {
-            // define parameters here
-          }
-        },
+        name: 'ExpOverview',
+            description: 'TODO: a description of this frame goes here.',
+            parameters: {
+                type: 'object',
+                    properties: {
+                        // define parameters here
+                    }
+            },
         data: {
-          type: 'object',
-          properties: {
-            responses: {
-              type: 'object'
+                type: 'object',
+                properties: {
+                    responses: {
+                        // TODO: Specify *required* properties in future according to Json-schema syntax
+                        //   https://spacetelescope.github.io/understanding-json-schema/reference/object.html#required-properties
+                        type: 'object',
+                        properties: {
+                            '0': { // age
+                                type: 'integer'
+                            },
+                            '1': { // gender
+                                type: 'string'
+                            },
+                            '2': { // ethhnicity
+                                type: 'string'
+                            },
+                            '3': { // firstLanguage
+                               type: 'string'
+                            },
+                            '4': { // how well off
+                                type: 'integer'
+                            },
+                            '5': { // birth location
+                                type: 'string'
+                            },
+                            '6': { // hometown type
+                               type: 'string'
+                            },
+                            '7': { // follows religion?
+                                type: 'string'
+                            },
+                            '8': { // which religion?
+                                type: 'string'
+                            },
+                            '9': {  // how religious?
+                                type: 'string'
+                            }
+                        }
+                    }
+                }
             }
-          }
-        }
     },
+
     actions: {
       continue() {
           this.send('next');

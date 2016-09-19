@@ -3,7 +3,7 @@
       <label class="text-center label-text {{if formatLabel formatLabel}}">
           {{#if labelTop}}
             {{t option}}
-            {{radio-button value=option checked=value}}
+            {{radio-button value=(last-segment option) checked=value}}
             {{#each-in labels as |ratings value|}}
               {{#if (eq value.rating index)}}
                 {{t value.label}}
@@ -15,7 +15,7 @@
                 {{t value.label}}
               {{/if}}
             {{/each-in}}
-            {{radio-button value=option checked=value}}
+            {{radio-button value=(last-segment option) checked=value}}
             {{t option}}
           {{/if}}
       </label>

@@ -5,9 +5,9 @@
   <p>{{t 'qsort.sections.2.instructions'}}</p>
 {{/if}}
 <br>
-<h4 class="text-center">{{t 'qsort.sections.1.activity'}}&nbsp;<b>{{responses.q1}}</b></h4>
-<h4 class="text-center">{{t 'qsort.sections.1.location'}}&nbsp;<b>{{responses.q2}}</b></h4>
-<h4 class="text-center">{{t 'qsort.sections.1.othersPresent'}}&nbsp;<b>{{responses.q3}}</b></h4>
+<h4 class="text-center">{{t 'qsort.sections.1.activity'}}&nbsp;<b>{{freeResponses.q1}}</b></h4>
+<h4 class="text-center">{{t 'qsort.sections.1.location'}}&nbsp;<b>{{freeResponses.q2}}</b></h4>
+<h4 class="text-center">{{t 'qsort.sections.1.othersPresent'}}&nbsp;<b>{{freeResponses.q3}}</b></h4>
 <br>
 {{#if (eq page 'cardSort1')}}
   <div class="well card-container">
@@ -79,7 +79,7 @@
 <div class="row exp-controls">
     {{#if (eq page 'cardSort1')}}
       <div class="btn btn-default" {{ action 'previous' }}>
-        Previous Page
+        {{t 'global.previousLabel'}}
       </div>
       <div class="btn btn-primary pull-right" {{action "nextPage"}}>{{t 'global.continueLabel'}}</div>
       {{progress-bar pageNumber=3}}

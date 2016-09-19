@@ -36,7 +36,7 @@
     <div class='btn btn-primary pull-right' {{action 'nextPage'}}>{{t 'global.continueLabel'}}</div>
   {{/if}}
   {{#unless (eq framePage 0)}}
-    <div class="btn btn-default" {{ action 'previousPage' }}>Previous Page</div>
+    <div class="btn btn-default" {{ action 'previousPage' }}>{{t 'global.previousLabel'}}</div>
   {{/unless}}
   {{progress-bar pageNumber=progressBarPage}}
 </div>
