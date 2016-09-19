@@ -134,7 +134,7 @@ export default ExpFrameBaseComponent.extend({
   }),
 
   // Represent the sorted cards in a human-readable format for storage in the database
-  responses: Ember.computed('cardSortResponse', 'cardSortResponse2', {
+  responses: Ember.computed({
       get(key) {
           // Final data should be returned as {
           //    cardSort1: object {categoryName: [cardIdentifiers] }
@@ -167,8 +167,7 @@ export default ExpFrameBaseComponent.extend({
       set(key, value) {
           return value;
       }
-  }),
-
+  }).volatile(),
   isValid: Ember.computed(
     'buckets2.0.categories.0.cards.[]',
     'buckets2.0.categories.1.cards.[]',
@@ -221,7 +220,7 @@ export default ExpFrameBaseComponent.extend({
       target.unshiftObject(card);
     },
     nextPage() {
-      this.set('cardSortResponse', Ember.copy(this.buckets, true));
+      this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
       this.send('save');
       this.set('page', 'cardSort2');
       this.sendAction('updateFramePage', 1);
