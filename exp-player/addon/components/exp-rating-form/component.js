@@ -258,10 +258,11 @@ var questions = [
         scale: SEVEN_POINT_SCALE,
         options: {
             labelTop: false,
-            labels: [{
-                rating: 0,
-                label: 'measures.questions.2.options.never'
-            },
+            labels: [
+                {
+                    rating: 0,
+                    label: 'measures.questions.2.options.never'
+                },
                 {
                     rating: 2,
                     label: 'measures.questions.2.options.hardlyEver'
@@ -307,10 +308,11 @@ var questions = [
         options: {
             labelTop: false,
             formatLabel: 'label-spacing',
-            labels: [{
-                rating: 0,
-                label: 'measures.questions.4.options.unwilling'
-            },
+            labels: [
+                {
+                    rating: 0,
+                    label: 'measures.questions.4.options.unwilling'
+                },
                 {
                     rating: 10,
                     label: 'measures.questions.4.options.fullyPrepared'
@@ -343,10 +345,11 @@ var questions = [
                 value: null,
                 labelTop: false,
                 formatLabel: 'label-spacing',
-                labels: [{
-                    rating: 0,
-                    label: 'measures.questions.6.items.1.options.notHappy'
-                },
+                labels: [
+                    {
+                        rating: 0,
+                        label: 'measures.questions.6.items.1.options.notHappy'
+                    },
                     {
                         rating: 7,
                         label: 'measures.questions.6.items.1.options.veryHappy'
@@ -357,10 +360,11 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
-                labels: [{
-                    rating: 0,
-                    label: 'measures.questions.6.items.2.options.lessHappy'
-                },
+                labels: [
+                    {
+                        rating: 0,
+                        label: 'measures.questions.6.items.2.options.lessHappy'
+                    },
                     {
                         rating: 7,
                         label: 'measures.questions.6.items.2.options.moreHappy'
@@ -371,10 +375,11 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
-                labels: [{
-                    rating: 0,
-                    label: 'measures.questions.6.items.4.options.notAtAll'
-                },
+                labels: [
+                    {
+                        rating: 0,
+                        label: 'measures.questions.6.items.4.options.notAtAll'
+                    },
                     {
                         rating: 7,
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
@@ -385,10 +390,11 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
-                labels: [{
-                    rating: 0,
-                    label: 'measures.questions.6.items.4.options.notAtAll'
-                },
+                labels: [
+                    {
+                        rating: 0,
+                        label: 'measures.questions.6.items.4.options.notAtAll'
+                    },
                     {
                         rating: 7,
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
@@ -431,10 +437,11 @@ var questions = [
         scale: NINE_POINT_SCALE,
         options: {
             labelTop: false,
-            labels: [{
-                rating: 0,
-                label: 'measures.questions.9.options.notAtAll'
-            },
+            labels: [
+                {
+                    rating: 0,
+                    label: 'measures.questions.9.options.notAtAll'
+                },
                 {
                     rating: 3,
                     label: 'measures.questions.9.options.aLittle'
@@ -573,6 +580,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
+
     responses: Ember.computed(function () {
         var questions = this.get('questions');
         var responses = {};
@@ -585,6 +593,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
+
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -598,6 +607,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 responses: {
+                    // TODO: Add validations for types and required properties in future
                     type: 'object'
                 }
             }
