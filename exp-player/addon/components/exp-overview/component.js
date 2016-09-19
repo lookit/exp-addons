@@ -174,7 +174,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
 
     actions: {
       continue() {
-          // TODO: Why does this exist?
           this.send('next');
       }
     }
