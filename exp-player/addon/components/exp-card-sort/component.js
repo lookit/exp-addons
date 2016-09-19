@@ -152,14 +152,12 @@ export default ExpFrameBaseComponent.extend({
                   responses['cardSort1'][name] = category.cards.map((cardItem) => cardItem.id);
               }
           }
-          if (this.get('cardSortResponse2')) {
-              cardSortResponse = this.get('cardSortResponse2');
-              // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
-              for (let categorySet of cardSortResponse) {
-                  for (let category of categorySet.categories) {
-                      let name = category.name.split('.').pop();
-                      responses['cardSort2'][name] = category.cards.map((cardItem) => cardItem.id);
-                  }
+          cardSortResponse = this.get('buckets2');
+          // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
+          for (let categorySet of cardSortResponse) {
+              for (let category of categorySet.categories) {
+                  let name = category.name.split('.').pop();
+                  responses['cardSort2'][name] = category.cards.map((cardItem) => cardItem.id);
               }
           }
           return responses;
@@ -227,7 +225,6 @@ export default ExpFrameBaseComponent.extend({
       window.scrollTo(0,0);
     },
     continue() {
-      this.set('cardSortResponse2', this.buckets2);
       this.send('next');
     }
   },
