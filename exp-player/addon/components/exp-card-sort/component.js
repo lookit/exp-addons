@@ -136,7 +136,10 @@ export default ExpFrameBaseComponent.extend({
   // Represent the sorted cards in a human-readable format for storage in the database
   responses: Ember.computed('cardSortResponse', 'cardSortResponse2', {
       get(key) {
-          // Final data for each card-sort should be returned as object {categoryName: [cardIdentifiers] }
+          // Final data should be returned as {
+          //    cardSort1: object {categoryName: [cardIdentifiers] }
+          //    cardSort2: object {categoryName: [cardIdentifiers] }
+          // }
           let responses = {
               cardSort1: {},
               cardSort2: {}
