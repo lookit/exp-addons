@@ -355,7 +355,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             returnFrame.sources = videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'calibration');
-            returnFrame.sources = videoSourceObjs(
+            returnFrame.altSources = videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'calibration');
         }

@@ -6,7 +6,7 @@ import layout from 'exp-player/templates/components/exp-physics-intro';
      charSet = charSet || 'HKLMNTVWXYZbdgjpqr02468';
      var randString = '';
      for (var charPos = 0; charPos < len; charPos++) {
-         var randomInd = Math.floor(Math.random() * charSet.length)
+         var randomInd = Math.floor(Math.random() * charSet.length);
          randString += charSet.substring(randomInd, randomInd + 1);
      }
      return randString;
