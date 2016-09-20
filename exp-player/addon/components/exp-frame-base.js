@@ -40,6 +40,10 @@ export default Ember.Component.extend({
         this.set('eventTimings', []);
     }.on("init"),
 
+    loadData: function(frameData) {
+        return null;
+    },
+
     didReceiveAttrs: function(options) {
         this._super(...arguments);
 
@@ -63,6 +67,13 @@ export default Ember.Component.extend({
             var kind = this.get('kind');
             this.set('id', `${kind}-${frameIndex}`);
         }
+
+        var session = this.get('session');
+        var expData = session ? session.get('expData') : null;
+        if (session && session.get('expData')) {
+            var key = this.get('frameIndex') + '-' + this.get('id');
+            this.loadData(expData[key]);
+        }
     },
     setupParams(clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
@@ -74,6 +85,9 @@ export default Ember.Component.extend({
         });
 
         Object.keys(this.get('meta.data').properties || {}).forEach((key) => {
+            if (this[key] && this[key].isDescriptor) {
+                return;
+            }
             var value = !clean ? this.get(key) : undefined;
             if (typeof value === 'undefined') {
                 // Make deep copy of the default value (to avoid subtle reference errors from reusing mutable containers)

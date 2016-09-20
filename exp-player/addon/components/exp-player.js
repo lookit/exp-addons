@@ -91,16 +91,7 @@ able to continue the study.
     currentFrameConfig: Ember.computed('frames', 'frameIndex', function() {
         var frames = this.get('frames') || [];
         var frameIndex = this.get('frameIndex');
-        var config = frames[frameIndex];
-        var session = this.get('session');
-        if (session && session.get('expData')) {
-            var key = frameIndex + '-' + frames[frameIndex]['id'];
-            if (session.get('expData')[key]) {
-                var data = session.get('expData')[key];
-                Ember.merge(config, data);
-            }
-        }
-        return config;
+        return frames[frameIndex];
     }),
 
     _currentFrameTemplate: null,
