@@ -207,7 +207,6 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     for (var nEvents = 0; nEvents < NPERTYPE; nEvents++) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
-
             var fname = `sbs_${e.compType}_${e.outcomeL}_${e.outcomeR}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
             filenames.push(fname);
             var altName = `sbs_${e.compType}_${e.outcomeR}_${e.outcomeL}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
@@ -325,7 +324,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
         var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_06', 'music_07', 'music_09', 'music_10'];
         var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
-        return {
+        var returnFrame = {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
@@ -344,12 +343,25 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber'),
             sources: videoSourceObjs(
-		BASE_DIR + 'stimuli/' + features.eventType + '/',
-		e.fname, true),
+		        BASE_DIR + 'stimuli/' + features.eventType + '/',
+		        e.fname, true),
             altSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/' + features.eventType + '/',
                 e.altName, true)
         };
+
+        // FOR PILOT ONLY: replace fall videos with calibration
+        if (e.compType === 'fall') {
+            returnFrame.sources = videoSourceObjs(
+                BASE_DIR + 'stimuli/attention/',
+                'calibration');
+            returnFrame.altSources = videoSourceObjs(
+                BASE_DIR + 'stimuli/attention/',
+                'calibration');
+        }
+
+        return returnFrame;
+
     });
 }
 
