@@ -324,7 +324,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
         var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_06', 'music_07', 'music_09', 'music_10'];
         var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
-        returnFrame = {
+        var returnFrame = {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
@@ -351,7 +351,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
         };
 
         // FOR PILOT ONLY: replace fall videos with calibration
-        if (e.compType == 'fall') {
+        if (e.compType === 'fall') {
             returnFrame.sources = videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'calibration');
