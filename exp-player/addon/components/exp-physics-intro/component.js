@@ -28,7 +28,7 @@ export default ExpFrameBaseComponent.extend({
         data: {
             type: 'object',
             properties: {
-                confirmationcode: {
+                confirmationCode: {
                     type: 'string',
                     default: randomString(5)
                 }
