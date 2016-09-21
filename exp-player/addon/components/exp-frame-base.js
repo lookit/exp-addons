@@ -1,5 +1,6 @@
 // app/components/exp-frame-base.js
 import Ember from 'ember';
+import config from 'ember-get-config';
 
 export default Ember.Component.extend({
     /** An abstract component for defining experimenter frames
@@ -68,11 +69,13 @@ export default Ember.Component.extend({
             this.set('id', `${kind}-${frameIndex}`);
         }
 
-        var session = this.get('session');
-        var expData = session ? session.get('expData') : null;
-        if (session && session.get('expData')) {
-            var key = this.get('frameIndex') + '-' + this.get('id');
-            this.loadData(expData[key]);
+        if (config.loadData) {
+            var session = this.get('session');
+            var expData = session ? session.get('expData') : null;
+            if (session && session.get('expData')) {
+                var key = this.get('frameIndex') + '-' + this.get('id');
+                this.loadData(expData[key]);
+            }
         }
     },
     setupParams(clean) {
