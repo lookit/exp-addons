@@ -18,7 +18,7 @@
         {{else if (eq question.type 'radio-input')}}
           {{isp-radio-group options=question.scale value=question.items.0.value}}
           <br>
-          {{#if (eq question.items.0.value 'measures.questions.11.options.yes')}}
+          {{#if (eq question.items.0.value 'yes')}}
             <label>{{t question.items.1.description}}</label>
             {{#input value=question.items.1.value}}{{/input}}
             <br>
