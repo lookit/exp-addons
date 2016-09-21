@@ -109,5 +109,11 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 this.set('showValidation', true);
             }
         }
+    },
+    loadData: function(frameData) {
+        var responses = frameData.responses;
+        this.set('q1', responses.q1);
+        this.set('q2', responses.q2);
+        this.set('q3', responses.q3);
     }
 });

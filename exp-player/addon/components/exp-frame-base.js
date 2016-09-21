@@ -1,5 +1,6 @@
 // app/components/exp-frame-base.js
 import Ember from 'ember';
+import config from 'ember-get-config';
 
 export default Ember.Component.extend({
     /** An abstract component for defining experimenter frames
@@ -40,6 +41,10 @@ export default Ember.Component.extend({
         this.set('eventTimings', []);
     }.on("init"),
 
+    loadData: function(frameData) {
+        return null;
+    },
+
     didReceiveAttrs: function(options) {
         this._super(...arguments);
 
@@ -51,7 +56,7 @@ export default Ember.Component.extend({
         var oldAttrs = options.oldAttrs || {};
 
         let clean = Ember.get(newAttrs, 'frameIndex.value') !== Ember.get(oldAttrs, 'frameIndex.value');
-        var defaultParams = this.setupParams(null, clean);
+        var defaultParams = this.setupParams(clean);
         if (clean) {
             Object.keys(defaultParams).forEach((key) => {
                 this.set(key, defaultParams[key]);
@@ -63,10 +68,19 @@ export default Ember.Component.extend({
             var kind = this.get('kind');
             this.set('id', `${kind}-${frameIndex}`);
         }
+
+        if (config.loadData) {
+            var session = this.get('session');
+            var expData = session ? session.get('expData') : null;
+            if (session && session.get('expData')) {
+                var key = this.get('frameIndex') + '-' + this.get('id');
+                this.loadData(expData[key]);
+            }
+        }
     },
-    setupParams(params, clean) {
+    setupParams(clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
-        params = params || this.get('frameConfig');
+       var params = this.get('frameConfig');
 
         var defaultParams = {};
         Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {

@@ -583,8 +583,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return questions;
     }),
-
-    responses: Ember.computed(function () {
+    responses: Ember.computed(function() {
         var questions = this.get('questions');
         var responses = {};
         for (var i = 0; i < questions.length; i++) {
@@ -596,7 +595,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
-
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -636,6 +634,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
             if (this.get('validations.isValid')) {
                 this.sendAction('sessionCompleted');
                 this.send('next');
+            }
+        }
+    },
+    loadData: function(frameData) {
+        var questions = this.get('questions');
+        for (var i = 0; i < questions.length; i++) {
+            var question = questions[i];
+            for (var j = 0; j < question.items.length; j++) {
+                question.items[j].value = frameData.responses[i][j];
             }
         }
     }

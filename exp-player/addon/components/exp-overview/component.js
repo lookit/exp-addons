@@ -112,12 +112,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
        return this.questions[7].value === 'global.yesLabel';
     }),
     responses: Ember.computed(function() {
-      var questions = this.get('questions');
-      var responses = {};
-      for (var i=0; i < questions.length; i++) {
-        responses[i] = questions[i].value;
-      }
-      return responses;
+        var questions = this.get('questions');
+        var responses = {};
+        for (var i=0; i < questions.length; i++) {
+            responses[i] = questions[i].value;
+        }
+        return responses;
     }).volatile(),
     meta: {
         name: 'ExpOverview',
@@ -171,12 +171,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 }
             }
     },
-
     actions: {
       continue() {
         if (this.get('validations.isValid')) {
           this.send('next');
         }
       }
+    },
+    loadData: function(frameData) {
+        for (var q=0; q < this.get('questions').length; q++) {
+            this.get('questions')[q].value = frameData.responses[q];
+        }
     }
 });
