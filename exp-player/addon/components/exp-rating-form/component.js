@@ -197,16 +197,19 @@ const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(0, 10);
 
 var generateValidators = function (questions) {
     var validators = {};
-    var presence = validator('presence', {
-        presence: true,
-        message: 'This field is required'
-    });
     for (var i = 0; i < questions.length; i++) {
         for (var item = 0; item < questions[i]['items'].length; item++) {
             var isOptional = questions[i]['items'][item].optional;
             if (!isOptional) {
                 var key = `questions.${i}.items.${item}.value`;
-                validators[key] = presence;
+                validators[key] = validator('presence', {
+                    presence: true,
+                    message: 'This field is required',
+                    disabled(model, attribute) {
+                        var index = attribute.split('.')[1];
+                        return model.get('questions')[index].page !== model.get('framePage');
+                    }
+                });
             }
         }
     }
@@ -615,11 +618,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     actions: {
         nextPage() {
-            var page = this.get('framePage') + 1;
-            this.set('framePage', page);
-            this.sendAction('updateFramePage', page);
-            this.send('save');
-            window.scrollTo(0,0);
+            if (this.get('validations.isValid')) {
+                this.send('save');
+                var page = this.get('framePage') + 1;
+                this.set('framePage', page);
+                this.sendAction('updateFramePage', page);
+                window.scrollTo(0, 0);
+            }
         },
         previousPage() {
             var page = Math.max(0, this.get('framePage') - 1);
@@ -628,8 +633,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
             window.scrollTo(0,0);
         },
         continue() {
-            this.sendAction('sessionCompleted');
-            this.send('next');
+            if (this.get('validations.isValid')) {
+                this.sendAction('sessionCompleted');
+                this.send('next');
+            }
         }
     }
 });

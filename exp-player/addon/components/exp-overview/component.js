@@ -174,7 +174,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
 
     actions: {
       continue() {
+        if (this.get('validations.isValid')) {
           this.send('next');
+        }
       }
     }
 });

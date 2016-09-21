@@ -22,5 +22,5 @@
     {{/bs-form}}
 </div>
 <div class="row exp-controls">
-    <button class="btn btn-primary pull-right" {{ action 'continue' }}>{{t 'global.continueLabel'}}</button>
+    <button class="btn btn-primary pull-right {{if (v-get this 'isInvalid') "disabled"}}" {{ action 'continue' }}>{{t 'global.continueLabel'}}</button>
 </div>
