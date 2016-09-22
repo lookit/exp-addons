@@ -109,7 +109,7 @@ var DEFAULT_OPTIONS = {
   autoPlay: 'false',
 
   //deleteUnsavedFlv: String
-  //desc: weather the recorded videos for which the user has not pressed [SAVE] will be deleted from the media server or not
+  //desc: whether the recorded videos for which the user has not pressed [SAVE] will be deleted from the media server or not
   //values: false, true
   //default: 'false'
   deleteUnsavedFlv: 'false',
@@ -276,7 +276,7 @@ var DEFAULT_OPTIONS = {
   enableBlinkingRec: 1,
 
   //microphoneGain:Number
-  //desc: This controls the amount by which the microphone boosts the signal. Altough this value is applied and reflects the recording level, the setting does not update Flash Player's  "Record Volume" slider in Flash Player Settings > Microphone. This seems to be a bug in Flash Player.
+  //desc: This controls the amount by which the microphone boosts the signal. Although this value is applied and reflects the recording level, the setting does not update Flash Player's  "Record Volume" slider in Flash Player Settings > Microphone. This seems to be a bug in Flash Player.
   //values: 0 to 100
   //default: 50
   microphoneGain: 50,
@@ -330,7 +330,8 @@ var DEFAULT_OPTIONS = {
   skipInitialScreen: 0,
 
   //hideDeviceSettingsButtons:Number
-  //desc: If this settings is enabled HDFVR won't display the camera and microphone settings buttons when the showMenu setting is set to FALSE. This is especially helpfull if you are integrating HDFVR on a platform that will use the same hardware specifications and no changing of the devices will be needed.
+  //desc: If this settings is enabled HDFVR won't display the camera and microphone settings buttons when the showMenu
+  // setting is set to FALSE. This is especially helpful if you are integrating HDFVR on a platform that will use the same hardware specifications and no changing of the devices will be needed.
   //values: 1 for enabled, 0 for disasbled
   //default:0 (disabled)
   hideDeviceSettingsButtons: 0,
