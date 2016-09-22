@@ -148,6 +148,9 @@ able to continue the study.
                 this._transition();
                 this.set('frameIndex', frameIndex + 1);
                 this.set('framePage', 0);
+                this.get('session').set('frameIndex', frameIndex + 1);
+                this.get('session').set('framePage', 0);
+                this.get('session').save();
                 return;
             }
             this._exit();
@@ -172,6 +175,8 @@ able to continue the study.
                 console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
+                this.get('session').set('frameIndex', frameIndex - 1);
+                this.get('session').save();
             } else {
                 console.log('Previous: At frame 0');
             }
@@ -186,6 +191,8 @@ able to continue the study.
         },
         updateFramePage(framePage) {
             this.set('framePage', framePage);
+            this.get('session').set('framePage', framePage);
+            this.get('session').save();
         }
     }
 });
