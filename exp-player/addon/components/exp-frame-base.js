@@ -74,7 +74,9 @@ export default Ember.Component.extend({
             var expData = session ? session.get('expData') : null;
             if (session && session.get('expData')) {
                 var key = this.get('frameIndex') + '-' + this.get('id');
-                this.loadData(expData[key]);
+                if (expData[key]) {
+                    this.loadData(expData[key]);
+                }
             }
         }
     },
