@@ -364,39 +364,17 @@ export default ExpFrameBaseComponent.extend({
 
   loadData: function(frameData) {
       var cardSort1 = frameData.responses['cardSort1'];
-      var cardSort2 = frameData.responses['cardSort2'];
-      if (cardSort1) {
-          if (cardSort2 && this.get('framePage') === 1) {
-              // Show sorted cards
-              for (let bucket of this.get('buckets')) {
-                  Ember.set(bucket, 'cards', []);
+      if (cardSort1 && this.get('framePage') === 1) {
+          // Load cards to be sorted
+          for (let bucket of this.get('buckets')) {
+              let name = bucket.name.split('.').pop();
+              var cards = cardSort1[name].map((item) => {
+              return {
+                  id: item,
+                  content: "qsort.rsq.item." + item
               }
-              for (let categorySet of this.get('buckets2')) {
-                  for (let category of categorySet.categories) {
-                      let name = category.name.split('.').pop();
-                      if (cardSort2[name]) {
-                          var cards2 = cardSort2[name].map((item) => {
-                          return {
-                              id: item,
-                              content: "qsort.rsq.item." + item
-                          }
-                          });
-                      Ember.set(category, 'cards', cards2);
-                      }
-                  }
-              }
-          } else {
-              // Load cards to be sorted
-              for (let bucket of this.get('buckets')) {
-                  let name = bucket.name.split('.').pop();
-                  var cards = cardSort1[name].map((item) => {
-                  return {
-                      id: item,
-                      content: "qsort.rsq.item." + item
-                  }
-                  });
-                  Ember.set(bucket, 'cards', cards);
-              }
+              });
+              Ember.set(bucket, 'cards', cards);
           }
       }
   }
