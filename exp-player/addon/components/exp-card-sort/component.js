@@ -123,7 +123,7 @@ var shuffle = function(array) {
 export default ExpFrameBaseComponent.extend({
   type: 'exp-card-sort',
   layout: layout,
-  page: 'cardSort1',
+  framePage: 0,
 
   cards: Ember.computed(function() {
     return shuffle(formatCards(cards));
@@ -148,7 +148,7 @@ export default ExpFrameBaseComponent.extend({
               responses['cardSort1'][name] = category.cards.map((cardItem) => cardItem.id);
           }
       }
-      if (this.get('page') === 'cardSort2') {
+      if (this.get('framePage') === 1) {
           cardSortResponse = this.get('buckets2');
           responses['cardSort2'] = {};
           // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
@@ -215,7 +215,7 @@ export default ExpFrameBaseComponent.extend({
     nextPage() {
       this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
       this.send('save');
-      this.set('page', 'cardSort2');
+      this.set('framePage', 1);
       this.sendAction('updateFramePage', 1);
       window.scrollTo(0,0);
     },
@@ -363,13 +363,10 @@ export default ExpFrameBaseComponent.extend({
   },
 
   loadData: function(frameData) {
-      var page = this.get('page');
       var cardSort1 = frameData.responses['cardSort1'];
       var cardSort2 = frameData.responses['cardSort2'];
       if (cardSort1) {
-          // If cardSort1 is complete, go to cardSort2
-          this.set('page', 'cardSort2');
-          if (cardSort2) {
+          if (cardSort2 && this.get('framePage') === 1) {
               // Show sorted cards
               for (let bucket of this.get('buckets')) {
                   Ember.set(bucket, 'cards', []);
