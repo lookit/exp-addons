@@ -82,21 +82,21 @@ const questions = [
   {
     question: 'survey.sections.1.questions.8.label',
     type: 'radio',
-    scale: ['global.yesLabel', 'global.noLabel'],
+    scale: range(1, 10),
     labelTop: true,
     value: null
   },
   {
     question: 'survey.sections.1.questions.9.label',
-    type: 'input',
-    optional: true,
+    type: 'radio',
+    scale: ['global.yesLabel', 'global.noLabel'],
+    labelTop: true,
     value: null
   },
   {
     question: 'survey.sections.1.questions.10.label',
-    type: 'radio',
-    scale: range(1, 10),
-    labelTop: true,
+    type: 'input',
+    optional: true,
     value: null
   }];
 
@@ -108,8 +108,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     questions: questions,
 
-    showOptional: Ember.computed('questions.7.value', function() {
-       return this.questions[7].value === 'yesLabel';
+    showOptional: Ember.computed('questions.8.value', function() {
+       return this.questions[8].value === 'yesLabel';
     }),
     responses: Ember.computed(function() {
         var questions = this.get('questions');
@@ -157,13 +157,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             '6': { // hometown type
                                type: 'string'
                             },
-                            '7': { // follows religion?
+                            '7': { // how religious?
                                 type: 'string'
                             },
-                            '8': { // which religion?
+                            '8': { // follows religion?
                                 type: 'string'
                             },
-                            '9': {  // how religious?
+                            '9': {  // which religion?
                                 type: 'string'
                             }
                         }
