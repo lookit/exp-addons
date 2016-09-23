@@ -261,6 +261,7 @@ var questions = [
         scale: SEVEN_POINT_SCALE,
         options: {
             labelTop: false,
+            formatLabel: 'format-label',
             labels: [
                 {
                     rating: 0,
@@ -310,7 +311,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
-            formatLabel: 'label-spacing',
+            formatLabel: 'measure-four',
             labels: [
                 {
                     rating: 0,
@@ -347,7 +348,7 @@ var questions = [
                 description: 'measures.questions.6.items.1.label',
                 value: null,
                 labelTop: false,
-                formatLabel: 'label-spacing',
+                formatLabel: 'measure-six',
                 labels: [
                     {
                         rating: 0,
@@ -363,6 +364,7 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
                         rating: 0,
@@ -378,6 +380,7 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
                         rating: 0,
@@ -393,6 +396,7 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
                         rating: 0,
