@@ -192,8 +192,8 @@ const TEN_POINT_SCALE = [
     'number9',
     'number10'
 ];
-const SEVEN_POINT_SCALE = TEN_POINT_SCALE.slice(0, 8);
-const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(0, 10);
+const SEVEN_POINT_SCALE = TEN_POINT_SCALE.slice(1, 8);
+const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(1, 10);
 
 var generateValidators = function (questions) {
     var validators = {};
@@ -354,7 +354,7 @@ var questions = [
                         label: 'measures.questions.6.items.1.options.notHappy'
                     },
                     {
-                        rating: 7,
+                        rating: 6,
                         label: 'measures.questions.6.items.1.options.veryHappy'
                     }]
             },
@@ -369,7 +369,7 @@ var questions = [
                         label: 'measures.questions.6.items.2.options.lessHappy'
                     },
                     {
-                        rating: 7,
+                        rating: 6,
                         label: 'measures.questions.6.items.2.options.moreHappy'
                     }]
             },
@@ -384,7 +384,7 @@ var questions = [
                         label: 'measures.questions.6.items.4.options.notAtAll'
                     },
                     {
-                        rating: 7,
+                        rating: 6,
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
                     }]
             },
@@ -399,7 +399,7 @@ var questions = [
                         label: 'measures.questions.6.items.4.options.notAtAll'
                     },
                     {
-                        rating: 7,
+                        rating: 6,
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
                     }]
             }]
@@ -446,19 +446,19 @@ var questions = [
                     label: 'measures.questions.9.options.notAtAll'
                 },
                 {
-                    rating: 3,
+                    rating: 2,
                     label: 'measures.questions.9.options.aLittle'
                 },
                 {
-                    rating: 5,
+                    rating: 4,
                     label: 'measures.questions.9.options.moderately'
                 },
                 {
-                    rating: 7,
+                    rating: 6,
                     label: 'measures.questions.9.options.veryWell'
                 },
                 {
-                    rating: 9,
+                    rating: 8,
                     label: 'measures.questions.9.options.exactly'
                 }]
         }
