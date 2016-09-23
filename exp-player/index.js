@@ -283,13 +283,13 @@ var DEFAULT_OPTIONS = {
 
   //allowAudioOnlyRecording:Number
   //desc: This controls whether or not HDFVR is permitted to record audio only when a webcam is missing and only a microphone is detected.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 1 (enabled)
   allowAudioOnlyRecording: 0,
 
   //enableFFMPEGConverting:Number
   //desc: This controls whether or not HDFVR will trigger server side the execution of FFMPEG converting once the stream finished uploading.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 0 (disabled)
   enableFFMPEGConverting: 0,
 
@@ -301,7 +301,7 @@ var DEFAULT_OPTIONS = {
 
   //autoSave:Number
   //desc: This controls whether or not HDFVR will automatically call the save_video_to_db script, having the same effect as pressing the [SAVE] button in menu. To eliminate the issue of double entries in the database, enabling this setting will automatically hide the [SAVE] button.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 1 (enabled)
   autoSave: 1,
 
@@ -325,14 +325,14 @@ var DEFAULT_OPTIONS = {
 
   //skipInitialScreen:Number
   //desc: If this settings is enabled HDFVR won't show the initial pre-recording screen introduced in HDFVR 2.0
-  //values: 1 for enabled, 0 for disasbled
+  //values: 1 for enabled, 0 for disabled
   //default:0 (disabled)
   skipInitialScreen: 0,
 
   //hideDeviceSettingsButtons:Number
   //desc: If this settings is enabled HDFVR won't display the camera and microphone settings buttons when the showMenu
   // setting is set to FALSE. This is especially helpful if you are integrating HDFVR on a platform that will use the same hardware specifications and no changing of the devices will be needed.
-  //values: 1 for enabled, 0 for disasbled
+  //values: 1 for enabled, 0 for disabled
   //default:0 (disabled)
   hideDeviceSettingsButtons: 0,
 
