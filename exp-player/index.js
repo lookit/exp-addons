@@ -189,7 +189,7 @@ var DEFAULT_OPTIONS = {
   //desc: adds a prefix to the video file name on the media server like this: {prefix}{timestamp_random} or {prefix}{userId}{timestamp_random} if the useUserId option is set to true
   //values: a string
   //default: "videoStream_"
-  streamPrefix: "ignoretest_videoStream_",
+  streamPrefix: "videoStream_",
 
   //streamName:String
   //desc: By default the application generates a random name ({prefix}_{timestamp_random}) for the video file. If you want to use a certain name set this variable and it will overwrite the pattern {prefix}_{timestamp_random}. The stream extension (.flv , .mp4 or .f4v) should NOT be used in the stream name.
