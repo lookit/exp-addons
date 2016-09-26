@@ -264,19 +264,19 @@ var questions = [
             formatLabel: 'format-label',
             labels: [
                 {
-                    rating: 0,
+                    rating: 'number1',
                     label: 'measures.questions.2.options.never'
                 },
                 {
-                    rating: 2,
+                    rating: 'number3',
                     label: 'measures.questions.2.options.hardlyEver'
                 },
                 {
-                    rating: 4,
+                    rating: 'number5',
                     label: 'measures.questions.2.options.occasionally'
                 },
                 {
-                    rating: 6,
+                    rating: 'number7',
                     label: 'measures.questions.2.options.quiteOften'
                 }
             ]
@@ -314,11 +314,11 @@ var questions = [
             formatLabel: 'measure-four',
             labels: [
                 {
-                    rating: 0,
+                    rating: 'number0',
                     label: 'measures.questions.4.options.unwilling'
                 },
                 {
-                    rating: 10,
+                    rating: 'number10',
                     label: 'measures.questions.4.options.fullyPrepared'
                 }
             ]
@@ -351,11 +351,11 @@ var questions = [
                 formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 'number1',
                         label: 'measures.questions.6.items.1.options.notHappy'
                     },
                     {
-                        rating: 6,
+                        rating: 'number7',
                         label: 'measures.questions.6.items.1.options.veryHappy'
                     }]
             },
@@ -367,11 +367,11 @@ var questions = [
                 formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 'number1',
                         label: 'measures.questions.6.items.2.options.lessHappy'
                     },
                     {
-                        rating: 6,
+                        rating: 'number7',
                         label: 'measures.questions.6.items.2.options.moreHappy'
                     }]
             },
@@ -383,11 +383,11 @@ var questions = [
                 formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 'number1',
                         label: 'measures.questions.6.items.4.options.notAtAll'
                     },
                     {
-                        rating: 6,
+                        rating: 'number7',
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
                     }]
             },
@@ -399,11 +399,11 @@ var questions = [
                 formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 'number1',
                         label: 'measures.questions.6.items.4.options.notAtAll'
                     },
                     {
-                        rating: 6,
+                        rating: 'number7',
                         label: 'measures.questions.6.items.4.options.aGreatDeal'
                     }]
             }]
@@ -446,23 +446,23 @@ var questions = [
             labelTop: false,
             labels: [
                 {
-                    rating: 0,
+                    rating: 'number1',
                     label: 'measures.questions.9.options.notAtAll'
                 },
                 {
-                    rating: 2,
+                    rating: 'number3',
                     label: 'measures.questions.9.options.aLittle'
                 },
                 {
-                    rating: 4,
+                    rating: 'number5',
                     label: 'measures.questions.9.options.moderately'
                 },
                 {
-                    rating: 6,
+                    rating: 'number7',
                     label: 'measures.questions.9.options.veryWell'
                 },
                 {
-                    rating: 8,
+                    rating: 'number9',
                     label: 'measures.questions.9.options.exactly'
                 }]
         }
