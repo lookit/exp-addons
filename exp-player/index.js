@@ -189,7 +189,7 @@ var DEFAULT_OPTIONS = {
   //desc: adds a prefix to the video file name on the media server like this: {prefix}{timestamp_random} or {prefix}{userId}{timestamp_random} if the useUserId option is set to true
   //values: a string
   //default: "videoStream_"
-  streamPrefix: "videoStream_",
+  streamPrefix: "ignoretest_videoStream_",
 
   //streamName:String
   //desc: By default the application generates a random name ({prefix}_{timestamp_random}) for the video file. If you want to use a certain name set this variable and it will overwrite the pattern {prefix}_{timestamp_random}. The stream extension (.flv , .mp4 or .f4v) should NOT be used in the stream name.
@@ -216,21 +216,21 @@ var DEFAULT_OPTIONS = {
   countdownTimer: "false",
 
   //overlayPath:String
-  //desc: realtive URL path to the image to be shown as overlay
-  //values: any realtive path
-  //defaut: "" //no overlay
+  //desc: relative URL path to the image to be shown as overlay
+  //values: any relative path
+  //default: "" //no overlay
   overlayPath: "",
 
   //overlayPosition:String
   //desc: position of the overlay image mentioned above
   //values: "tr" for top right, "tl" for top left and "cen" for centered, no other positions are supported
-  //defaut: "tr"
+  //default: "tr"
   overlayPosition: "tr",
 
   //loopbackMic:String
   //desc: whether or not the sound should be also played back in the speakers/heaphones during recording
   //values: "true" for yes, "false" for no
-  //defaut: "false"
+  //default: "false"
   loopbackMic: "false",
 
   //showMenu:String
