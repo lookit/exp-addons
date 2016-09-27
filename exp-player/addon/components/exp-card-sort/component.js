@@ -136,16 +136,17 @@ export default ExpFrameBaseComponent.extend({
   // Represent the sorted cards in a human-readable format for storage in the database
   responses: Ember.computed(function() {
       // Final data should be returned as {
-      //    cardSort1: object {categoryName: [cardIdentifiers] }
-      //    cardSort2: object {categoryName: [cardIdentifiers] }
+      //    cardSort1: object {cardId: categoryId,...}
+      //    cardSort2: object {cardId: categoryId,...}
       // }
       let responses = {};
       let cardSortResponse = this.get('cardSortResponse');
       if (cardSortResponse) {
           responses['cardSort1'] = {};
-          for (let category of cardSortResponse) {
-              let name = category.name.split('.').pop();
-              responses['cardSort1'][name] = category.cards.map((cardItem) => cardItem.id);
+          for (var i=0; i < cardSortResponse.length; i++) {
+              for (let card of cardSortResponse[i].cards) {
+                  responses['cardSort1'][card.id] = i + 1;
+              }
           }
       }
       if (this.get('page') === 'cardSort2') {
@@ -153,9 +154,10 @@ export default ExpFrameBaseComponent.extend({
           responses['cardSort2'] = {};
           // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
           for (let categorySet of cardSortResponse) {
-              for (let category of categorySet.categories) {
-                  let name = category.name.split('.').pop();
-                  responses['cardSort2'][name] = category.cards.map((cardItem) => cardItem.id);
+              for (var j=0; j < categorySet.categories.length; j++) {
+                  for (let card of categorySet.categories[j].cards) {
+                    responses['cardSort2'][card.id] = categorySet.categories[j].id;
+                  }
               }
           }
       }
@@ -253,17 +255,20 @@ export default ExpFrameBaseComponent.extend({
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.extremelyUnchar',
-                 max: 3
+                 max: 3,
+                 id: 1
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.quiteUnchar',
-                 max: 6
+                 max: 6,
+                 id: 2
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.fairlyUnchar',
-                 max: 11
+                 max: 11,
+                 id: 3
                }
              ]
            },
@@ -272,17 +277,20 @@ export default ExpFrameBaseComponent.extend({
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.somewhatUnchar',
-                 max: 15
+                 max: 15,
+                 id: 4
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.neutral',
-                 max: 20
+                 max: 20,
+                 id: 5
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.somewhatChar',
-                 max: 15
+                 max: 15,
+                 id: 6
                }
              ]
            },
@@ -291,17 +299,20 @@ export default ExpFrameBaseComponent.extend({
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.fairlyChar',
-                 max: 11
+                 max: 11,
+                 id: 7
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.quiteChar',
-                 max: 6
+                 max: 6,
+                 id: 8
                },
                {
                  cards: [],
                  name: 'qsort.sections.2.categories.extremelyChar',
-                 max: 3
+                 max: 3,
+                 id: 9
                }
              ]
            }
@@ -315,46 +326,8 @@ export default ExpFrameBaseComponent.extend({
           responses: {
               type: 'object',
               properties: {
-                  cardSort1: {
-                      uncharacteristic: {
-                          type: 'array'
-                      },
-                      neutral: {
-                          type: 'array'
-                      },
-                      characteristic: {
-                          type: 'array'
-                      }
-
-                  },
-                  cardSort2: {
-                      extremelyUnchar: {
-                          type: 'array'
-                      },
-                      quiteUnchar: {
-                          type: 'array'
-                      },
-                      fairlyUnchar: {
-                          type: 'array'
-                      },
-                      somewhatUnchar: {
-                          type: 'array'
-                      },
-                      neutral: {
-                          type: 'array'
-                      },
-                      somewhatChar: {
-                          type: 'array'
-                      },
-                      fairlyChar: {
-                          type: 'array'
-                      },
-                      quiteChar: {
-                          type: 'array'
-                      },
-                      extremelyChar: {
-                          type: 'array'
-                      }
+                  responses: {
+                      type: 'object'
                   }
               }
           }
