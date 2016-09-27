@@ -11,7 +11,7 @@ function shuffleArray(array) {
 
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    var lastConditions = lastSession ? lastSession.get(`conditions.${frameId}`): null;
+    var lastConditions = lastSession ? lastSession.get(`conditions.${frameId}`) : null;
     if (!lastConditions) {
         startType = Math.floor(Math.random() * 4);
         showStay = Math.floor(Math.random() * 2);
@@ -28,7 +28,7 @@ function getConditions(lastSession, frameId) {
         }
 
         showStay = lastConditions.showStay;
-	//parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
+        //parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
         whichObjects = lastConditions.whichObjects;
         for (var i = 0; i < 4; i++) {
@@ -39,9 +39,9 @@ function getConditions(lastSession, frameId) {
         }
     }
     return {
-	startType: startType,
-	showStay: showStay,
-	whichObjects: whichObjects
+        startType: startType,
+        showStay: showStay,
+        whichObjects: whichObjects
     };
 }
 
@@ -166,7 +166,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         // pair objects and comparison types
         var events = [];
         for (var iEvent = 0; iEvent < eventTypeList.length; iEvent++) {
-	    var outcomeL, outcomeR;
+            var outcomeL, outcomeR;
             if (onLeft[iEvent] === "moreProb") {
                 outcomeL = eventTypeList[iEvent][1];
                 outcomeR = eventTypeList[iEvent][2];
@@ -190,7 +190,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
                 object: objList[iEvent],
                 camera: cameraAngles[eventTypeList[iEvent][0]][iCamera],
 
-		background: backgrounds[eventTypeList[iEvent][0]][iBackground],
+                background: backgrounds[eventTypeList[iEvent][0]][iBackground],
                 flip: flips[eventTypeList[iEvent][0]][iFlip]
             });
         }
@@ -263,41 +263,41 @@ function parse_name(fname) {
 }
 
 function audioSourceObjs(path, shortname) {
-    return  [
-                {
-                    "src": path + shortname + '.ogg',
-                    "type": "audio/ogg"
-                },
-                {
-                    "src": path + shortname + '.mp3',
-                    "type": "audio/mp3"
-                }
-            ];
+    return [
+        {
+            "src": path + shortname + '.ogg',
+            "type": "audio/ogg"
+        },
+        {
+            "src": path + shortname + '.mp3',
+            "type": "audio/mp3"
+        }
+    ];
 }
 
 function videoSourceObjs(path, shortname, organizedByType) {
     if (!organizedByType) {
-        return  [
-                    {
-                        "src": path + shortname + '.webm',
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": path + shortname + '.mp4',
-                        "type": "video/mp4"
-                    }
-                ];
+        return [
+            {
+                "src": path + shortname + '.webm',
+                "type": "video/webm"
+            },
+            {
+                "src": path + shortname + '.mp4',
+                "type": "video/mp4"
+            }
+        ];
     } else {
-        return  [
-                {
-                    "src": path + 'webm/' + shortname + '.webm',
-                    "type": "video/webm"
-                },
-                {
-                    "src": path + 'mp4/' + shortname + '.mp4',
-                    "type": "video/mp4"
-                }
-            ];
+        return [
+            {
+                "src": path + 'webm/' + shortname + '.webm',
+                "type": "video/webm"
+            },
+            {
+                "src": path + 'mp4/' + shortname + '.mp4',
+                "type": "video/mp4"
+            }
+        ];
     }
 }
 
@@ -343,8 +343,8 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber'),
             sources: videoSourceObjs(
-		        BASE_DIR + 'stimuli/' + features.eventType + '/',
-		        e.fname, true),
+                BASE_DIR + 'stimuli/' + features.eventType + '/',
+                e.fname, true),
             altSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/' + features.eventType + '/',
                 e.altName, true)
@@ -365,34 +365,34 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
     });
 }
 
-var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
+var randomizer = function (frameId, frame, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
-    pastSessions = pastSessions.filter(function(session) {
+    pastSessions = pastSessions.filter(function (session) {
         return session.get('conditions');
     });
-    pastSessions.sort(function(a, b) {
-        return a.get('createdOn') > b.get('createdOn') ? -1: 1;
+    pastSessions.sort(function (a, b) {
+        return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
     var conditions = getConditions(pastSessions[0], frame.id);
     conditions.NPERTYPE = 6;
     var {
-	startType,
-	showStay,
-	whichObjects,
-	NPERTYPE
+        startType,
+        showStay,
+        whichObjects,
+        NPERTYPE
     } = conditions;
 
     var [eventVideos, ] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
 
-    eventVideos = eventVideos.slice(0,MAX_VIDEOS);
-    eventVideos.push({index: MAX_VIDEOS+1});
+    eventVideos = eventVideos.slice(0, MAX_VIDEOS);
+    eventVideos.push({index: MAX_VIDEOS + 1});
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
     toFrames(frameId, eventVideos, BASE_DIR).forEach((frame) => {
-	return resolved.push(...resolveFrame(null, frame)[0]);
+        return resolved.push(...resolveFrame(null, frame)[0]);
     });
     return [resolved, conditions];
 };

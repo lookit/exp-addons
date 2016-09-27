@@ -210,11 +210,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     // Stop recording and save the video to the server
-    stop({
-        destroy: destroy
-    } = {
-        destroy: false
-    }) {
+    stop({ destroy: destroy } = { destroy: false }) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
         if (1.5 - this.getTime() > 0) {
             window.setTimeout(this.stop.bind(this, {
