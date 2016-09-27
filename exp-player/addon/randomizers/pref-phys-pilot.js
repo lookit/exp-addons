@@ -11,8 +11,21 @@ function shuffleArray(array) {
 
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    var lastConditions = lastSession ? lastSession.get(`conditions.${frameId}`) : null;
-    if (!lastConditions) {
+    // The last session payload refers to the frame we want by number, but frames aren't numbered until the sequence
+    //   has been resolved (eg until we expand pref-phys-videos into a series of video frames, we won't know the number of this frame)
+    //   To find the last conditions, we take the last (and presumably only) key of session.conditions that matches the name (without a number)
+
+    // This works insofar as this function only targets one sort of frame that we know to occur only once in
+    // the pref-phys experiment
+    let lastConditions = lastSession ? lastSession.get('conditions') : null;
+    let lastFrameConditions;
+    Object.keys(lastConditions || {}).forEach((keyName) => {
+        if (keyName.indexOf(frameId) !== -1) {
+            lastFrameConditions = lastConditions[keyName];
+        }
+    });
+
+    if (!lastFrameConditions) {
         startType = Math.floor(Math.random() * 4);
         showStay = Math.floor(Math.random() * 2);
         var whichObjectG = Math.floor(Math.random() * 6);
@@ -21,16 +34,16 @@ function getConditions(lastSession, frameId) {
         var whichObjectC = Math.floor(Math.random() * 6);
         whichObjects = [whichObjectG, whichObjectI, whichObjectS, whichObjectC];
     } else {
-        startType = lastConditions.startType;
+        startType = lastFrameConditions.startType;
         startType++;
         if (startType > 3) {
             startType = 0;
         }
 
-        showStay = lastConditions.showStay;
+        showStay = lastFrameConditions.showStay;
         //parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
-        whichObjects = lastConditions.whichObjects;
+        whichObjects = lastFrameConditions.whichObjects;
         for (var i = 0; i < 4; i++) {
             whichObjects[i]++;
             if (whichObjects[i] > 5) {
@@ -363,17 +376,22 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
     });
 }
 
-var randomizer = function (frameId, frame, pastSessions, resolveFrame) {
+var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
+    // Base randomization on the newest (last completed) session for which the participant got at
+    // least as far as defining the experimental conditions (even if they hadn't seen videos yet)
     pastSessions = pastSessions.filter(function (session) {
         return session.get('conditions');
     });
     pastSessions.sort(function (a, b) {
         return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
-    var conditions = getConditions(pastSessions[0], frame.id);
+
+    // TODO: In the future, we may want to identify the specific frame conditions to fetch instead of generic frame ID
+    var conditions = getConditions(pastSessions[0], frameId);
+
     conditions.NPERTYPE = 6;
     var {
         startType,
@@ -395,3 +413,6 @@ var randomizer = function (frameId, frame, pastSessions, resolveFrame) {
     return [resolved, conditions];
 };
 export default randomizer;
+
+// Export helper functions to support unit testing
+export { getConditions };
