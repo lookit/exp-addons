@@ -66,6 +66,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["ramp", "down", "up"],
         ["toss", "down", "up"]
     ];
+    // TODO: Is this one still used?
     const comparisonsI = [ // jshint ignore:line
         ["stop", "hand", "nohand"],
         ["reverse", "barrier", "nobarrier"]

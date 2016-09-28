@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import FullScreenMixin from '../../../mixins/full-screen';
+import FullScreenMixin from 'exp-player/mixins/full-screen';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | full screen');

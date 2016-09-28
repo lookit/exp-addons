@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import MediaReloadMixin from '../../../mixins/media-reload';
+import MediaReloadMixin from 'exp-player/mixins/media-reload';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | media reload');

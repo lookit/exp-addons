@@ -96,311 +96,292 @@ var cards = {
     "youFocus": "qsort.rsq.item.youFocus"
 };
 
-var formatCards = function(items) {
-  var cards = [];
-  for (var item in items) {
-    cards.push({
-      id: item,
-      content: items[item]
-    });
-  }
-  return cards;
+var formatCards = function (items) {
+    var cards = [];
+    for (var item in items) {
+        cards.push({
+            id: item,
+            content: items[item]
+        });
+    }
+    return cards;
 };
 
 // h/t: http://stackoverflow.com/a/6274398
-var shuffle = function(array) {
-  let n = array.length;
-  while (n > 0) {
-    let index = Math.floor(Math.random() * n);
-    n--;  //1
-    let temp = array[n];
-    array[n] = array[index];
-    array[index] = temp;
-  }
-  return array;
+var shuffle = function (array) {
+    let n = array.length;
+    while (n > 0) {
+        let index = Math.floor(Math.random() * n);
+        n--;  //1
+        let temp = array[n];
+        array[n] = array[index];
+        array[index] = temp;
+    }
+    return array;
 };
 
 export default ExpFrameBaseComponent.extend({
-  type: 'exp-card-sort',
-  layout: layout,
-  page: 'cardSort1',
+    type: 'exp-card-sort',
+    layout: layout,
+    page: 'cardSort1',
 
-  cards: Ember.computed(function() {
-    return shuffle(formatCards(cards));
-  }),
+    cards: Ember.computed(function () {
+        return shuffle(formatCards(cards));
+    }),
 
-  freeResponses: Ember.computed(function() {
-    return this.get('session.expData')['1-1-free-response']['responses'];
-  }),
+    freeResponses: Ember.computed(function () {
+        return this.get('session.expData')['1-1-free-response']['responses'];
+    }),
 
-  // Represent the sorted cards in a human-readable format for storage in the database
-  responses: Ember.computed(function() {
-      // Final data should be returned as {
-      //    cardSort1: object {categoryName: [cardIdentifiers] }
-      //    cardSort2: object {categoryName: [cardIdentifiers] }
-      // }
-      let responses = {};
-      let cardSortResponse = this.get('cardSortResponse');
-      if (cardSortResponse) {
-          responses['cardSort1'] = {};
-          for (let category of cardSortResponse) {
-              let name = category.name.split('.').pop();
-              responses['cardSort1'][name] = category.cards.map((cardItem) => cardItem.id);
-          }
-      }
-      if (this.get('page') === 'cardSort2') {
-          cardSortResponse = this.get('buckets2');
-          responses['cardSort2'] = {};
-          // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
-          for (let categorySet of cardSortResponse) {
-              for (let category of categorySet.categories) {
-                  let name = category.name.split('.').pop();
-                  responses['cardSort2'][name] = category.cards.map((cardItem) => cardItem.id);
-              }
-          }
-      }
-      return responses;
-  }).volatile(),
-  isValid: Ember.computed(
-    'buckets2.0.categories.0.cards.[]',
-    'buckets2.0.categories.1.cards.[]',
-    'buckets2.0.categories.2.cards.[]',
-    'buckets2.1.categories.0.cards.[]',
-    'buckets2.1.categories.1.cards.[]',
-    'buckets2.1.categories.2.cards.[]',
-    'buckets2.2.categories.0.cards.[]',
-    'buckets2.2.categories.1.cards.[]',
-    'buckets2.2.categories.2.cards.[]',
-    function() {
-      for (var group = 0; group < this.buckets2.length; group++) {
-        for (var category = 0; category < this.buckets2[group].categories.length; category++) {
-          var bucket = this.buckets2[group].categories[category];
-          if (bucket['cards'].length !== bucket['max']) {
-            return false;
-          }
-        }
-      }
-      return true;
-  }),
-
-  actions: {
-    dragCard(card, ops) {
-      var cards = ops.target.cards;
-      var buckets = ops.target.buckets;
-      var buckets2 = ops.target.buckets2;
-      var source;
-      var target = ops.target.bucket;
-
-      if (cards && cards.contains(card)) {
-        source = cards;
-      }
-      for (var i = 0; i < buckets.length; i++) {
-        if (buckets[i].cards.contains(card)) {
-          source = buckets[i].cards;
-        }
-      }
-      if (buckets2) {
-        for (var group = 0; group < buckets2.length; group++) {
-          for (var category = 0; category < buckets2[group].categories.length; category++) {
-            var bucket = buckets2[group].categories[category];
-            if (bucket['cards'].contains(card)) {
-              source = bucket['cards'];
+    // Represent the sorted cards in a human-readable format for storage in the database
+    responses: Ember.computed(function () {
+        // Final data should be returned as {
+        //    cardSort1: object {cardId: categoryId,...}
+        //    cardSort2: object {cardId: categoryId,...}
+        // }
+        // E.g. {
+        //    cardSort1: object {SomoneCountedon: 3,...}
+        //    cardSort2: object {SomoneCountedon: 8,...}
+        // }
+        let responses = {};
+        let cardSortResponse = this.get('cardSortResponse');
+        if (cardSortResponse) {
+            responses['cardSort1'] = {};
+            for (var i = 0; i < cardSortResponse.length; i++) {
+                for (let card of cardSortResponse[i].cards) {
+                    responses['cardSort1'][card.id] = i + 1;
+                }
             }
-          }
         }
-      }
-      source.removeObject(card);
-      target.unshiftObject(card);
-    },
-    nextPage() {
-      this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
-      this.send('save');
-      this.set('page', 'cardSort2');
-      this.sendAction('updateFramePage', 1);
-      window.scrollTo(0,0);
-    },
-    continue() {
-      this.send('next');
-    }
-  },
-
-  meta: {
-    name: 'ExpCardSort',
-    description: 'TODO: a description of this frame goes here.',
-    parameters: {
-      type: 'object',
-      properties: {
-        buckets: {
-          default: [
-            {
-              name: 'qsort.sections.1.categories.uncharacteristic',
-              cards: []
-            },
-            {
-              name: 'qsort.sections.1.categories.neutral',
-              cards: []
-            },
-            {
-              name: 'qsort.sections.1.categories.characteristic',
-              cards: []
+        if (this.get('page') === 'cardSort2') {
+            cardSortResponse = this.get('buckets2');
+            responses['cardSort2'] = {};
+            // Assumption: this unpacks a list of category objects:
+            // { categories: [ {id: id, cards: [cards]},...] }
+            for (let categorySet of cardSortResponse) {
+                for (var j = 0; j < categorySet.categories.length; j++) {
+                    for (let card of categorySet.categories[j].cards) {
+                        responses['cardSort2'][card.id] = categorySet.categories[j].id;
+                    }
+                }
             }
-          ]
+        }
+        return responses;
+    }).volatile(),
+    isValid: Ember.computed(
+        'buckets2.0.categories.0.cards.[]',
+        'buckets2.0.categories.1.cards.[]',
+        'buckets2.0.categories.2.cards.[]',
+        'buckets2.1.categories.0.cards.[]',
+        'buckets2.1.categories.1.cards.[]',
+        'buckets2.1.categories.2.cards.[]',
+        'buckets2.2.categories.0.cards.[]',
+        'buckets2.2.categories.1.cards.[]',
+        'buckets2.2.categories.2.cards.[]',
+        function () {
+            for (var group = 0; group < this.buckets2.length; group++) {
+                for (var category = 0; category < this.buckets2[group].categories.length; category++) {
+                    var bucket = this.buckets2[group].categories[category];
+                    if (bucket['cards'].length !== bucket['max']) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }),
+
+    actions: {
+        dragCard(card, ops) {
+            var cards = ops.target.cards;
+            var buckets = ops.target.buckets;
+            var buckets2 = ops.target.buckets2;
+            var source;
+            var target = ops.target.bucket;
+
+            if (cards && cards.contains(card)) {
+                source = cards;
+            }
+            for (var i = 0; i < buckets.length; i++) {
+                if (buckets[i].cards.contains(card)) {
+                    source = buckets[i].cards;
+                }
+            }
+            if (buckets2) {
+                for (var group = 0; group < buckets2.length; group++) {
+                    for (var category = 0; category < buckets2[group].categories.length; category++) {
+                        var bucket = buckets2[group].categories[category];
+                        if (bucket['cards'].contains(card)) {
+                            source = bucket['cards'];
+                        }
+                    }
+                }
+            }
+            source.removeObject(card);
+            target.unshiftObject(card);
         },
-        buckets2: {
-          default: [
-           {
-             categories: [
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.extremelyUnchar',
-                 max: 3
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.quiteUnchar',
-                 max: 6
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.fairlyUnchar',
-                 max: 11
-               }
-             ]
-           },
-           {
-             categories: [
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.somewhatUnchar',
-                 max: 15
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.neutral',
-                 max: 20
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.somewhatChar',
-                 max: 15
-               }
-             ]
-           },
-           {
-             categories: [
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.fairlyChar',
-                 max: 11
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.quiteChar',
-                 max: 6
-               },
-               {
-                 cards: [],
-                 name: 'qsort.sections.2.categories.extremelyChar',
-                 max: 3
-               }
-             ]
-           }
-        ]
-      }
-    }
+        nextPage() {
+            if (this.get('cards').length === 0) {
+                this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
+                this.send('save');
+                this.set('page', 'cardSort2');
+                this.sendAction('updateFramePage', 1);
+                window.scrollTo(0, 0);
+            }
+        },
+        continue() {
+            if (this.get('isValid')) {
+                this.send('next');
+            }
+        }
     },
-    data: {
-      type: 'object',
-      properties: {
-          responses: {
-              type: 'object',
-              properties: {
-                  cardSort1: {
-                      uncharacteristic: {
-                          type: 'array'
-                      },
-                      neutral: {
-                          type: 'array'
-                      },
-                      characteristic: {
-                          type: 'array'
-                      }
 
-                  },
-                  cardSort2: {
-                      extremelyUnchar: {
-                          type: 'array'
-                      },
-                      quiteUnchar: {
-                          type: 'array'
-                      },
-                      fairlyUnchar: {
-                          type: 'array'
-                      },
-                      somewhatUnchar: {
-                          type: 'array'
-                      },
-                      neutral: {
-                          type: 'array'
-                      },
-                      somewhatChar: {
-                          type: 'array'
-                      },
-                      fairlyChar: {
-                          type: 'array'
-                      },
-                      quiteChar: {
-                          type: 'array'
-                      },
-                      extremelyChar: {
-                          type: 'array'
-                      }
-                  }
-              }
-          }
-      }
+    meta: {
+        name: 'ExpCardSort',
+        description: 'TODO: a description of this frame goes here.',
+        parameters: {
+            type: 'object',
+            properties: {
+                buckets: {
+                    default: [
+                        {
+                            name: 'qsort.sections.1.categories.uncharacteristic',
+                            cards: []
+                        },
+                        {
+                            name: 'qsort.sections.1.categories.neutral',
+                            cards: []
+                        },
+                        {
+                            name: 'qsort.sections.1.categories.characteristic',
+                            cards: []
+                        }
+                    ]
+                },
+                buckets2: {
+                    default: [
+                        {
+                            categories: [
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.extremelyUnchar',
+                                    max: 3,
+                                    id: 1
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.quiteUnchar',
+                                    max: 6,
+                                    id: 2
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.fairlyUnchar',
+                                    max: 11,
+                                    id: 3
+                                }
+                            ]
+                        },
+                        {
+                            categories: [
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.somewhatUnchar',
+                                    max: 15,
+                                    id: 4
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.neutral',
+                                    max: 20,
+                                    id: 5
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.somewhatChar',
+                                    max: 15,
+                                    id: 6
+                                }
+                            ]
+                        },
+                        {
+                            categories: [
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.fairlyChar',
+                                    max: 11,
+                                    id: 7
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.quiteChar',
+                                    max: 6,
+                                    id: 8
+                                },
+                                {
+                                    cards: [],
+                                    name: 'qsort.sections.2.categories.extremelyChar',
+                                    max: 3,
+                                    id: 9
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        data: {
+            type: 'object',
+            properties: {
+                responses: {
+                    type: 'object',
+                    properties: {
+                        responses: {
+                            type: 'object'
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    loadData: function (frameData) {
+        var cardSort1 = frameData.responses['cardSort1'];
+        var cardSort2 = frameData.responses['cardSort2'];
+        if (cardSort1) {
+            // If cardSort1 is complete, go to cardSort2
+            this.set('page', 'cardSort2');
+            if (cardSort2) {
+                // Show sorted cards
+                for (let bucket of this.get('buckets')) {
+                    Ember.set(bucket, 'cards', []);
+                }
+                for (let categorySet of this.get('buckets2')) {
+                    for (let category of categorySet.categories) {
+                        let name = category.name.split('.').pop();
+                        if (cardSort2[name]) {
+                            var cards2 = cardSort2[name].map((item) => {
+                                return {
+                                    id: item,
+                                    content: "qsort.rsq.item." + item
+                                };
+                            });
+                            Ember.set(category, 'cards', cards2);
+                        }
+                    }
+                }
+            } else {
+                // Load cards to be sorted
+                for (let bucket of this.get('buckets')) {
+                    let name = bucket.name.split('.').pop();
+                    var cards = cardSort1[name].map((item) => {
+                        return {
+                            id: item,
+                            content: "qsort.rsq.item." + item
+                        };
+                    });
+                    Ember.set(bucket, 'cards', cards);
+                }
+            }
+        }
     }
-  },
-
-  loadData: function(frameData) {
-      var page = this.get('page');
-      var cardSort1 = frameData.responses['cardSort1'];
-      var cardSort2 = frameData.responses['cardSort2'];
-      if (cardSort1) {
-          // If cardSort1 is complete, go to cardSort2
-          this.set('page', 'cardSort2');
-          if (cardSort2) {
-              // Show sorted cards
-              for (let bucket of this.get('buckets')) {
-                  Ember.set(bucket, 'cards', []);
-              }
-              for (let categorySet of this.get('buckets2')) {
-                  for (let category of categorySet.categories) {
-                      let name = category.name.split('.').pop();
-                      if (cardSort2[name]) {
-                          var cards2 = cardSort2[name].map((item) => {
-                          return {
-                              id: item,
-                              content: "qsort.rsq.item." + item
-                          }
-                          });
-                      Ember.set(category, 'cards', cards2);
-                      }
-                  }
-              }
-          } else {
-              // Load cards to be sorted
-              for (let bucket of this.get('buckets')) {
-                  let name = bucket.name.split('.').pop();
-                  var cards = cardSort1[name].map((item) => {
-                  return {
-                      id: item,
-                      content: "qsort.rsq.item." + item
-                  }
-                  });
-                  Ember.set(bucket, 'cards', cards);
-              }
-          }
-      }
-  }
 });

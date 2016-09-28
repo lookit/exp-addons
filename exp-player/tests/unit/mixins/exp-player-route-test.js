@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ExpPlayerRouteMixin from '../../../mixins/exp-player-route';
+import ExpPlayerRouteMixin from 'exp-player/mixins/exp-player-route';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | exp player route');

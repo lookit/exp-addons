@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import VideoRecordMixin from '../../../mixins/video-record';
+import VideoRecordMixin from 'exp-player/mixins/video-record';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | video record');
