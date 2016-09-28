@@ -389,7 +389,7 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
         return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
 
-    // TODO: In the future, we may want to identify the specific frame conditions to fetch instead of generic frame ID
+    // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
     var conditions = getConditions(pastSessions[0], frameId);
 
     conditions.NPERTYPE = 6;
