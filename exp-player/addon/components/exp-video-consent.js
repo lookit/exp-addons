@@ -8,27 +8,27 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     videoRecorder: Em.inject.service(),
     recorder: null,
     hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
-    disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function() {
-	return !this.get('hasCamAccess') || this.get('recorder.recording');
+    disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function () {
+        return !this.get('hasCamAccess') || this.get('recorder.recording');
     }),
     recordingStarted: false,
 
     didInsertElement() {
         var recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('.recorder'));
-	recorder.install({record: false});
-	this.set('recorder', recorder);
+        recorder.install({record: false});
+        this.set('recorder', recorder);
     },
     actions: {
         record() {
             this.get('recorder').record();
-	    window.setTimeout(() => {
-		this.set('recordingStarted', true);
-	    }, 2000);
+            window.setTimeout(() => {
+                this.set('recordingStarted', true);
+            }, 2000);
         },
         finish() {
             this.get('recorder').stop().then(() => {
-		this.send('next');
-	    });
+                this.send('next');
+            });
         }
     },
 
