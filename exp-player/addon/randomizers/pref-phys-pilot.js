@@ -53,7 +53,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["ramp", "down", "up"],
         ["toss", "down", "up"]
     ];
-    var comparisonsI = [
+    // TODO: Is this one still used?
+    var comparisonsI = [  // jshint ignore:line
         ["stop", "hand", "nohand"],
         ["reverse", "barrier", "nobarrier"]
     ];

@@ -41,7 +41,7 @@ export default Ember.Component.extend({
         this.set('eventTimings', []);
     }.on("init"),
 
-    loadData: function(frameData) {
+    loadData: function(frameData) { // jshint ignore:line
         return null;
     },
 
