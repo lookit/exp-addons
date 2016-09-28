@@ -1,5 +1,7 @@
-import { getConditions } from '../../../randomizers/pref-phys-pilot';
+import Ember from 'ember';
+
 import { module, test } from 'qunit';
+import { getConditions } from 'exp-player/randomizers/pref-phys-pilot';
 
 module('Unit | Randomizer | pref phys pilot');
 
@@ -10,13 +12,11 @@ test('New conditions correctly depend on previous conditions: increment', functi
         whichObjects: [2,1,3,4]
     };
 
-    const fakeSession = {
+    const fakeSession = Ember.Object.create({
         conditions: {
-            '1_frameName': {
-                prevConditions
-            }
+            '1_frameName': prevConditions
         }
-    };
+    });
 
     let actualResult = getConditions(fakeSession, 'frameName');
     const expectedResult = {
@@ -38,13 +38,11 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
         whichObjects: [1,2,5,2]
     };
 
-    const fakeSession = {
+    const fakeSession = Ember.Object.create({
         conditions: {
-            '1_frameName': {
-                prevConditions
-            }
+            '1_frameName': prevConditions
         }
-    };
+    });
 
     let actualResult = getConditions(fakeSession, 'frameName');
     const expectedResult = {
