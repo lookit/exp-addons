@@ -220,14 +220,18 @@ export default ExpFrameBaseComponent.extend({
       target.unshiftObject(card);
     },
     nextPage() {
-      this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
-      this.send('save');
-      this.set('page', 'cardSort2');
-      this.sendAction('updateFramePage', 1);
-      window.scrollTo(0,0);
+      if (this.get('cards').length === 0) {
+        this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
+        this.send('save');
+        this.set('page', 'cardSort2');
+        this.sendAction('updateFramePage', 1);
+        window.scrollTo(0, 0);
+      }
     },
     continue() {
-      this.send('next');
+      if (this.get('isValid')) {
+        this.send('next');
+      }
     }
   },
 
