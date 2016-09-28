@@ -7,8 +7,7 @@ import {validator, buildValidations} from 'ember-cp-validations';
 function range(start, stop) {
   var options = [];
   for (var i=start; i <= stop; i++) {
-    var key = 'number' + i;
-    options.push(key);
+    options.push(i);
   }
   return options;
 }
@@ -158,7 +157,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                                type: 'string'
                             },
                             '7': { // how religious?
-                                type: 'string'
+                                type: 'integer'
                             },
                             '8': { // follows religion?
                                 type: 'string'
