@@ -11,7 +11,7 @@ test('New conditions correctly depend on previous conditions: increment', functi
     const prevConditions = {
         startType: 1,
         showStay: 0,
-        whichObjects: [2,1,3,4]
+        whichObjects: [2, 1, 3, 4]
     };
 
     const fakeSession = Ember.Object.create({
@@ -24,7 +24,7 @@ test('New conditions correctly depend on previous conditions: increment', functi
     const expectedResult = {
         startType: 2,
         showStay: 1,
-        whichObjects: [3,2,4,5]
+        whichObjects: [3, 2, 4, 5]
     };
 
     assert.deepEqual(actualResult, expectedResult,
@@ -37,7 +37,7 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
     const prevConditions = {
         startType: 3,
         showStay: 1,
-        whichObjects: [1,2,5,2]
+        whichObjects: [1, 2, 5, 2]
     };
 
     const fakeSession = Ember.Object.create({
@@ -50,7 +50,7 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
     const expectedResult = {
         startType: 0,
         showStay: 0,
-        whichObjects: [2,3,0,3]
+        whichObjects: [2, 3, 0, 3]
     };
 
     assert.deepEqual(actualResult, expectedResult,
@@ -60,9 +60,7 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
 
 
 test('If no prev conditions are specified, a random frame is returned', function (assert) {
-    // TODO: Add Sinon so we control the output of the randomizer!!
-
-    // Stub out RNG so it always returns 0
+    // Stub out RNG so it always returns 0, and results are predictable
     this.stub(Math, 'random', () => 0);
 
     let actualResult = getConditions(null, 'frameName');

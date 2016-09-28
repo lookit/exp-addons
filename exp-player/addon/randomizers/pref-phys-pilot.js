@@ -11,12 +11,14 @@ function shuffleArray(array) {
 
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    // The last session payload refers to the frame we want by number, but frames aren't numbered until the sequence
-    //   has been resolved (eg until we expand pref-phys-videos into a series of video frames, we won't know the number of this frame)
-    //   To find the last conditions, we take the last (and presumably only) key of session.conditions that matches the name (without a number)
+    // The last session payload refers to the frame we want by number (#-frameName), but frames aren't numbered until the sequence
+    //   has been resolved (eg until we expand pref-phys-videos into a series of video frames, we won't know how many
+    //   frames there are or in what order)
+    // To find the last conditions, we take the last (and presumably only) key of session.conditions that looks like
+    //  the name (without the leading number part)
 
-    // This works insofar as this function only targets one sort of frame that we know to occur only once in
-    // the pref-phys experiment
+    // This works insofar as this function only targets one sort of frame that we expect to occur only once in
+    // the pref-phys experiment. Otherwise this function would get confused.
     let lastConditions = lastSession ? lastSession.get('conditions') : null;
     let lastFrameConditions;
     Object.keys(lastConditions || {}).forEach((keyName) => {
