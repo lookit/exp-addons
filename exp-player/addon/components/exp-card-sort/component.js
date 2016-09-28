@@ -139,6 +139,10 @@ export default ExpFrameBaseComponent.extend({
       //    cardSort1: object {cardId: categoryId,...}
       //    cardSort2: object {cardId: categoryId,...}
       // }
+      // E.g. {
+      //    cardSort1: object {SomoneCountedon: 3,...}
+      //    cardSort2: object {SomoneCountedon: 8,...}
+      // }
       let responses = {};
       let cardSortResponse = this.get('cardSortResponse');
       if (cardSortResponse) {
@@ -152,7 +156,8 @@ export default ExpFrameBaseComponent.extend({
       if (this.get('page') === 'cardSort2') {
           cardSortResponse = this.get('buckets2');
           responses['cardSort2'] = {};
-          // Assumption: this unpacks a list of { categories: {name: name, cards: [cards]} } objects
+          // Assumption: this unpacks a list of category objects:
+          // { categories: [ {id: id, cards: [cards]},...] }
           for (let categorySet of cardSortResponse) {
               for (var j=0; j < categorySet.categories.length; j++) {
                   for (let card of categorySet.categories[j].cards) {
