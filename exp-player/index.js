@@ -14,6 +14,7 @@ module.exports = {
   },
 
   included: function(app) {
+    this._super.included(app);
     this.app.import(path.join(this.app.bowerDirectory, 'swfobject/swfobject/src/swfobject.js'));
   },
 
@@ -51,7 +52,7 @@ module.exports = {
             }).join('&')
           }
       }),
-      new Funnel(path.join(this.project.root, 'lib/exp-player/public'), {
+      new Funnel(path.join(path.resolve(this.root, ''),  'public/'), {
         srcDir: '/',
         destDir: '/',
         include: ['**/*.swf', '**/*.gif', '**/*.png', '**/*.xml', '**/*.php']

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import VideoPauseMixin from '../../../mixins/video-pause';
+import VideoPauseMixin from 'exp-player/mixins/video-pause';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | video pause');

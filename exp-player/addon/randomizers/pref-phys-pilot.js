@@ -11,8 +11,23 @@ function shuffleArray(array) {
 
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    var lastConditions = lastSession ? lastSession.get(`conditions.${frameId}`): null;
-    if (!lastConditions) {
+    // The last session payload refers to the frame we want by number (#-frameName), but frames aren't numbered until the sequence
+    //   has been resolved (eg until we expand pref-phys-videos into a series of video frames, we won't know how many
+    //   frames there are or in what order)
+    // To find the last conditions, we take the last (and presumably only) key of session.conditions that looks like
+    //  the name (without the leading number part)
+
+    // This works insofar as this function only targets one sort of frame that we expect to occur only once in
+    // the pref-phys experiment. Otherwise this function would get confused.
+    let lastConditions = lastSession ? lastSession.get('conditions') : null;
+    let lastFrameConditions;
+    Object.keys(lastConditions || {}).forEach((keyName) => {
+        if (keyName.indexOf(frameId) !== -1) {
+            lastFrameConditions = lastConditions[keyName];
+        }
+    });
+
+    if (!lastFrameConditions) {
         startType = Math.floor(Math.random() * 4);
         showStay = Math.floor(Math.random() * 2);
         var whichObjectG = Math.floor(Math.random() * 6);
@@ -21,16 +36,16 @@ function getConditions(lastSession, frameId) {
         var whichObjectC = Math.floor(Math.random() * 6);
         whichObjects = [whichObjectG, whichObjectI, whichObjectS, whichObjectC];
     } else {
-        startType = lastConditions.startType;
+        startType = lastFrameConditions.startType;
         startType++;
         if (startType > 3) {
             startType = 0;
         }
 
-        showStay = lastConditions.showStay;
-	//parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
+        showStay = lastFrameConditions.showStay;
+        //parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
-        whichObjects = lastConditions.whichObjects;
+        whichObjects = lastFrameConditions.whichObjects;
         for (var i = 0; i < 4; i++) {
             whichObjects[i]++;
             if (whichObjects[i] > 5) {
@@ -39,25 +54,26 @@ function getConditions(lastSession, frameId) {
         }
     }
     return {
-	startType: startType,
-	showStay: showStay,
-	whichObjects: whichObjects
+        startType: startType,
+        showStay: showStay,
+        whichObjects: whichObjects
     };
 }
 
 function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Types of comparisons for each event type (gravity, inertia, support-fall, support-stay,
     // control). Format [event, outcomeMoreProb, outcomeLessProb]
-    var comparisonsG = [
+    const comparisonsG = [
         ["ramp", "down", "up"],
         ["ramp", "down", "up"],
         ["toss", "down", "up"]
     ];
-    var comparisonsI = [
+    // TODO: Is this one still used?
+    const comparisonsI = [ // jshint ignore:line
         ["stop", "hand", "nohand"],
         ["reverse", "barrier", "nobarrier"]
     ];
-    var comparisonsSF = [
+    const comparisonsSF = [
         ["fall", "slightly-on", "mostly-on"],
         ["fall", "next-to", "mostly-on"],
         ["fall", "near", "mostly-on"],
@@ -65,7 +81,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["fall", "near", "slightly-on"],
         ["fall", "near", "next-to"]
     ];
-    var comparisonsSS = [
+    const comparisonsSS = [
         ["stay", "slightly-on", "mostly-on"],
         ["stay", "next-to", "mostly-on"],
         ["stay", "near", "mostly-on"],
@@ -73,18 +89,17 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ["stay", "near", "slightly-on"],
         ["stay", "near", "next-to"]
     ];
-    var comparisonsC = [
+    const comparisonsC = [
         ["same", "A", "B"],
         ["salience", "interesting", "boring"]
     ];
 
-
-    //var videotypes = ["gravity", "inertia", "support", "control"];
+    // const videotypes = ["gravity", "inertia", "support", "control"];
     // FOR PILOT ONLY:
-    var videotypes = ["gravity", "stay", "control", "fall"];
+    const videotypes = ["gravity", "stay", "control", "fall"];
     var compTypes = [comparisonsG, comparisonsSS, comparisonsC, comparisonsSF];
-    var nReps = [2, 1, 3, 1]; // how many times does each comparison type listed need to be shown
-    // to get to NPERTYPE for that event type?
+    // how many times does each comparison type listed need to be shown to get to NPERTYPE for that event type?
+    var nReps = [2, 1, 3, 1];
 
     /*
     // Choose which videos to show for support
@@ -101,7 +116,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     } */
 
     // Objects to use: elements correspond to videotypes
-    var objects = [
+    const physicalObjects = [
         ["apple", "cup", "whiteball", "lotion", "spray", "whiteball"],
         ["hammer", "tissues", "duck", "book", "shoe", "brush"],
         ["box", "funnel", "eraser", "scissors", "spoon", "wrench"],
@@ -109,39 +124,40 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     ];
 
     // Options for videos, organized by event
-    var cameraAngles = {};
-    cameraAngles['table'] = ["c1", "c2"];
-    cameraAngles['ramp'] = ["c1", "c2"];
-    cameraAngles['toss'] = ["c1", "c2"];
-    cameraAngles['stop'] = ["c1", "c2"];
-    cameraAngles['reverse'] = ["c1", "c2"];
-    cameraAngles['fall'] = ["c2"];
-    cameraAngles['stay'] = ["c2"];
-    cameraAngles['same'] = ["c1"];
-    cameraAngles['salience'] = ["c1"];
+    const cameraAngles = {
+        table: ["c1", "c2"],
+        ramp: ["c1", "c2"],
+        toss: ["c1", "c2"],
+        stop: ["c1", "c2"],
+        reverse: ["c1", "c2"],
+        fall: ["c2"],
+        stay: ["c2"],
+        same: ["c1"],
+        salience: ["c1"],
+    };
+    const backgrounds = {
+        table: ["b1", "b2"],
+        ramp: ["b1", "b2"],
+        toss: ["b1"],
+        stop: ["b1"],
+        reverse: ["b1"],
+        fall: ["green"],
+        stay: ["green"],
+        same: ["b1"],
+        salience: ["b1"]
+    };
 
-    var backgrounds = {};
-    backgrounds['table'] = ["b1", "b2"];
-    backgrounds['ramp'] = ["b1", "b2"];
-    backgrounds['toss'] = ["b1"];
-    backgrounds['stop'] = ["b1"];
-    backgrounds['reverse'] = ["b1"];
-    backgrounds['fall'] = ["green"];
-    backgrounds['stay'] = ["green"];
-    backgrounds['same'] = ["b1"];
-    backgrounds['salience'] = ["b1"];
-
-    var flips = {};
-    flips['table'] = ["NR"];
-    flips['ramp'] = ["NN", "RR", "NR", "RN"];
-    flips['toss'] = ["NN", "RR"];
-    flips['stop'] = ["NR"];
-    flips['reverse'] = ["RN"];
-    flips['fall'] = ["NN", "NR", "RN", "RR"];
-    flips['stay'] = ["NN", "NR", "RN", "RR"];
-    flips['same'] = ["NN", "RR", "NR", "RN"];
-    flips['salience'] = ["NN", "NR", "RN", "RR"];
-
+    const flips = {
+        table: ["NR"],
+        ramp: ["NN", "RR", "NR", "RN"],
+        toss: ["NN", "RR"],
+        stop: ["NR"],
+        reverse: ["RN"],
+        fall: ["NN", "NR", "RN", "RR"],
+        stay: ["NN", "NR", "RN", "RR"],
+        same: ["NN", "RR", "NR", "RN"],
+        salience: ["NN", "NR", "RN", "RR"],
+    };
     // Create list of TYPES (e.g. gravity, inertia, ...)
     var typeOrder = videotypes.slice(startType, videotypes.length);
     typeOrder = typeOrder.concat(videotypes.slice(0, startType));
@@ -150,8 +166,8 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     for (var iType = 0; iType < videotypes.length; iType++) { // for each video type
 
         // make list of objects to use with canonically-ordered comparison types
-        var objList = objects[iType].slice(whichObjects[iType], objects[iType].length);
-        objList = objList.concat(objects[iType].slice(0, whichObjects[iType]));
+        var objList = physicalObjects[iType].slice(whichObjects[iType], physicalObjects[iType].length);
+        objList = objList.concat(physicalObjects[iType].slice(0, whichObjects[iType]));
 
         // make canonical comparison type list
         var eventTypeList = compTypes[iType];
@@ -166,7 +182,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         // pair objects and comparison types
         var events = [];
         for (var iEvent = 0; iEvent < eventTypeList.length; iEvent++) {
-	    var outcomeL, outcomeR;
+            var outcomeL, outcomeR;
             if (onLeft[iEvent] === "moreProb") {
                 outcomeL = eventTypeList[iEvent][1];
                 outcomeR = eventTypeList[iEvent][2];
@@ -190,7 +206,7 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
                 object: objList[iEvent],
                 camera: cameraAngles[eventTypeList[iEvent][0]][iCamera],
 
-		background: backgrounds[eventTypeList[iEvent][0]][iBackground],
+                background: backgrounds[eventTypeList[iEvent][0]][iBackground],
                 flip: flips[eventTypeList[iEvent][0]][iFlip]
             });
         }
@@ -263,47 +279,45 @@ function parse_name(fname) {
 }
 
 function audioSourceObjs(path, shortname) {
-    return  [
-                {
-                    "src": path + shortname + '.ogg',
-                    "type": "audio/ogg"
-                },
-                {
-                    "src": path + shortname + '.mp3',
-                    "type": "audio/mp3"
-                }
-            ];
+    return [
+        {
+            "src": path + shortname + '.ogg',
+            "type": "audio/ogg"
+        },
+        {
+            "src": path + shortname + '.mp3',
+            "type": "audio/mp3"
+        }
+    ];
 }
 
 function videoSourceObjs(path, shortname, organizedByType) {
     if (!organizedByType) {
-        return  [
-                    {
-                        "src": path + shortname + '.webm',
-                        "type": "video/webm"
-                    },
-                    {
-                        "src": path + shortname + '.mp4',
-                        "type": "video/mp4"
-                    }
-                ];
+        return [
+            {
+                "src": path + shortname + '.webm',
+                "type": "video/webm"
+            },
+            {
+                "src": path + shortname + '.mp4',
+                "type": "video/mp4"
+            }
+        ];
     } else {
-        return  [
-                {
-                    "src": path + 'webm/' + shortname + '.webm',
-                    "type": "video/webm"
-                },
-                {
-                    "src": path + 'mp4/' + shortname + '.mp4',
-                    "type": "video/mp4"
-                }
-            ];
+        return [
+            {
+                "src": path + 'webm/' + shortname + '.webm',
+                "type": "video/webm"
+            },
+            {
+                "src": path + 'mp4/' + shortname + '.mp4',
+                "type": "video/mp4"
+            }
+        ];
     }
 }
 
 function toFrames(frameId, eventVideos, BASE_DIR) {
-
-
     var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
         if (e.index === nVideos) {
@@ -343,8 +357,8 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber'),
             sources: videoSourceObjs(
-		        BASE_DIR + 'stimuli/' + features.eventType + '/',
-		        e.fname, true),
+                BASE_DIR + 'stimuli/' + features.eventType + '/',
+                e.fname, true),
             altSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/' + features.eventType + '/',
                 e.altName, true)
@@ -365,35 +379,43 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
     });
 }
 
-var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
+var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
-    pastSessions = pastSessions.filter(function(session) {
+    // Base randomization on the newest (last completed) session for which the participant got at
+    // least as far as defining the experimental conditions (even if they hadn't seen videos yet)
+    pastSessions = pastSessions.filter(function (session) {
         return session.get('conditions');
     });
-    pastSessions.sort(function(a, b) {
-        return a.get('createdOn') > b.get('createdOn') ? -1: 1;
+    pastSessions.sort(function (a, b) {
+        return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
-    var conditions = getConditions(pastSessions[0], frame.id);
+
+    // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
+    var conditions = getConditions(pastSessions[0], frameId);
+
     conditions.NPERTYPE = 6;
     var {
-	startType,
-	showStay,
-	whichObjects,
-	NPERTYPE
+        startType,
+        showStay,
+        whichObjects,
+        NPERTYPE
     } = conditions;
 
     var [eventVideos, ] = assignVideos(startType, showStay, whichObjects, NPERTYPE);
 
-    eventVideos = eventVideos.slice(0,MAX_VIDEOS);
-    eventVideos.push({index: MAX_VIDEOS+1});
+    eventVideos = eventVideos.slice(0, MAX_VIDEOS);
+    eventVideos.push({index: MAX_VIDEOS + 1});
 
     // allEvents and filenames are a function of conditions (no need to store)
     var resolved = [];
     toFrames(frameId, eventVideos, BASE_DIR).forEach((frame) => {
-	return resolved.push(...resolveFrame(null, frame)[0]);
+        return resolved.push(...resolveFrame(null, frame)[0]);
     });
     return [resolved, conditions];
 };
 export default randomizer;
+
+// Export helper functions to support unit testing
+export { getConditions };
