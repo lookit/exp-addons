@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
-import { module, test } from 'qunit';
+import { module } from 'qunit';
+import test from 'dummy/tests/ember-sinon-qunit/test';
+
 import { getConditions } from 'exp-player/randomizers/pref-phys-pilot';
 
 module('Unit | Randomizer | pref phys pilot');
@@ -53,10 +55,23 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
 
     assert.deepEqual(actualResult, expectedResult,
         'New conditions did not correctly increment based on previous session'
-    );});
+    );
+});
 
 
 test('If no prev conditions are specified, a random frame is returned', function (assert) {
     // TODO: Add Sinon so we control the output of the randomizer!!
-    assert.ok(42);
+
+    // Stub out RNG so it always returns 0
+    this.stub(Math, 'random', () => 0);
+
+    let actualResult = getConditions(null, 'frameName');
+    const expectedResult = {
+        startType: 0,
+        showStay: 0,
+        whichObjects: [0, 0, 0, 0]
+    };
+    assert.deepEqual(actualResult, expectedResult,
+        'Randomizer should act randomly when no session is provided'
+    );
 });
