@@ -619,15 +619,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
     },
     actions: {
-        nextPage() {
-            if (this.get('validations.isValid')) {
-                this.send('save');
-                var page = this.get('framePage') + 1;
-                this.set('framePage', page);
-                this.sendAction('updateFramePage', page);
-                window.scrollTo(0, 0);
-            }
-        },
         previousPage() {
             var page = Math.max(0, this.get('framePage') - 1);
             this.set('framePage', page);
@@ -636,8 +627,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
         },
         continue() {
             if (this.get('validations.isValid')) {
-                this.sendAction('sessionCompleted');
-                this.send('next');
+                if (this.get('framePage') !== this.get('lastPage')) {
+                    this.send('save');
+                    var page = this.get('framePage') + 1;
+                    this.set('framePage', page);
+                    this.sendAction('updateFramePage', page);
+                    window.scrollTo(0, 0);
+                } else {
+                    this.sendAction('sessionCompleted');
+                    this.send('next');
+                }
             }
         }
     },
