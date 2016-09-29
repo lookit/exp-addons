@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
+import config from 'ember-get-config';
 
 
 var cards = {
@@ -168,6 +169,11 @@ export default ExpFrameBaseComponent.extend({
         }
         return responses;
     }).volatile(),
+
+    allowNext: Ember.computed('cards', function() {
+      return this.get('cards').length === 0 || !config.validate;
+    }),
+
     isValid: Ember.computed(
         'buckets2.0.categories.0.cards.[]',
         'buckets2.0.categories.1.cards.[]',
@@ -179,11 +185,13 @@ export default ExpFrameBaseComponent.extend({
         'buckets2.2.categories.1.cards.[]',
         'buckets2.2.categories.2.cards.[]',
         function () {
-            for (var group = 0; group < this.buckets2.length; group++) {
-                for (var category = 0; category < this.buckets2[group].categories.length; category++) {
-                    var bucket = this.buckets2[group].categories[category];
-                    if (bucket['cards'].length !== bucket['max']) {
-                        return false;
+            if (config.validate) {
+                for (var group = 0; group < this.buckets2.length; group++) {
+                    for (var category = 0; category < this.buckets2[group].categories.length; category++) {
+                        var bucket = this.buckets2[group].categories[category];
+                        if (bucket['cards'].length !== bucket['max']) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -220,7 +228,7 @@ export default ExpFrameBaseComponent.extend({
             target.unshiftObject(card);
         },
         nextPage() {
-            if (this.get('cards').length === 0) {
+            if (this.get('allowNext')) {
                 this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
                 this.send('save');
                 this.set('page', 'cardSort2');
