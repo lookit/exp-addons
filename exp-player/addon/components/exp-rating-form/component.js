@@ -2,6 +2,8 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
+import config from 'ember-get-config';
+
 
 var items = {
     '3': [
@@ -599,6 +601,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
+    allowNext: Ember.computed('validations.isValid', function() {
+        return this.get('validations.isValid') || !config.validate;
+    }),
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -626,7 +631,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             window.scrollTo(0,0);
         },
         continue() {
-            if (this.get('validations.isValid')) {
+            if (this.get('allowNext')) {
                 if (this.get('framePage') !== this.get('lastPage')) {
                     this.send('save');
                     var page = this.get('framePage') + 1;
