@@ -22,7 +22,7 @@
     <button class="btn btn-default" {{ action 'previous' }}>
         {{t 'global.previousLabel'}}
     </button>
-    <button class="btn btn-primary pull-right {{if (v-get this 'isInvalid') "disabled"}}" {{ action 'continue' }}>
+    <button class="btn btn-primary pull-right {{if allowNext "" "disabled"}}" {{ action 'continue' }}>
         {{t 'global.continueLabel'}}
     </button>
     {{progress-bar pageNumber=2}}
