@@ -171,8 +171,10 @@ export default ExpFrameBaseComponent.extend({
     }).volatile(),
 
     allowNext: Ember.computed('cards.[]', function() {
-        console.log(this.get('cards').length);
-      return this.get('cards').length === 0 || !config.validate;
+        if (config.validate) {
+            return this.get('cards').length === 0;
+        }
+        return true;
     }),
 
     isValid: Ember.computed(
