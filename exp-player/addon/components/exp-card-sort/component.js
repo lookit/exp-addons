@@ -170,7 +170,8 @@ export default ExpFrameBaseComponent.extend({
         return responses;
     }).volatile(),
 
-    allowNext: Ember.computed('cards', function() {
+    allowNext: Ember.computed('cards.[]', function() {
+        console.log(this.get('cards').length);
       return this.get('cards').length === 0 || !config.validate;
     }),
 
