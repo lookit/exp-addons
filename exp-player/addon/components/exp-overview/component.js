@@ -114,7 +114,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var questions = this.get('questions');
         var responses = {};
         for (var i=0; i < questions.length; i++) {
-            responses[i] = questions[i].value;
+            if (i === 0) {
+                // Convert value to int bc select-input returns a string (e.g. "16" --> 16)
+                responses[i] = parseInt(questions[i].value);
+            } else {
+                responses[i] = questions[i].value;
+            }
         }
         return responses;
     }).volatile(),
