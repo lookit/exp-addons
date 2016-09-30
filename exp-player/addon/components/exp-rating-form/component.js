@@ -423,23 +423,9 @@ var questions = [
         options: {labelTop: true}
     }),
     generateSchema({
-        question: 'measures.questions.8.label',
-        type: 'radio',
-        page: 3,
-        items: items['8'],
-        scale: [
-            'measures.questions.8.options.disbelieveStrong',
-            'measures.questions.8.options.disbelieveLittle',
-            'measures.questions.8.options.neutral',
-            'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong'
-        ],
-        options: {labelTop: true}
-    }),
-    generateSchema({
         question: 'measures.questions.9.label',
         type: 'radio',
-        page: 4,
+        page: 3,
         items: items['9'],
         scale: NINE_POINT_SCALE,
         options: {
@@ -500,7 +486,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.13.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['13'],
         scale: [
             'measures.questions.13.options.disagreeStrongly',
@@ -514,7 +500,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.14.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['14'],
         scale: [
             'measures.questions.14.options.disagreeStrongly',
@@ -542,7 +528,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.16.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['16'],
         scale: [
             'measures.questions.16.options.notAtAll',
@@ -555,7 +541,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.17.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['17'],
         scale: [
             'measures.questions.17.options.disagreeStrongly',
@@ -563,6 +549,20 @@ var questions = [
             'measures.questions.17.options.neutral',
             'measures.questions.17.options.agree',
             'measures.questions.17.options.agreeStrongly'
+        ],
+        options: {labelTop: true}
+    }),
+    generateSchema({
+        question: 'measures.questions.8.label',
+        type: 'radio',
+        page: 6,
+        items: items['8'],
+        scale: [
+            'measures.questions.8.options.disbelieveStrong',
+            'measures.questions.8.options.disbelieveLittle',
+            'measures.questions.8.options.neutral',
+            'measures.questions.8.options.believeLittle',
+            'measures.questions.8.options.believeStrong'
         ],
         options: {labelTop: true}
     })
