@@ -1,5 +1,5 @@
 /*
-Manage data about one or more documents in the accounts collection
+ Manage data about one or more documents in the accounts collection
  */
 import Ember from 'ember';
 import DS from 'ember-data';
@@ -11,14 +11,13 @@ function makeId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 5; i++ ) {
+    for (var i = 0; i < 5; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
 }
 
 export default DS.Model.extend(JamModel, {
-    username: DS.attr('string'),
     name: DS.attr('string'),
     password: DS.attr('string'),
     profiles: DS.attr('profiles'),
@@ -29,7 +28,13 @@ export default DS.Model.extend(JamModel, {
     history: DS.hasMany('history'),
     extra: DS.attr(),
 
-    generateProfileId: function() {
+    // Username should be immutable, and calculated from the last portion of the record ID
+    username: Ember.computed('id', function () {
+        return this.get('id').split('.').pop();
+    }),
+
+    // Helper methods
+    generateProfileId: function () {
         var id = makeId();
         var profileIds = this.get('profiles').map((profile) => profile.get('profileId').split('.')[0]);
         while (profileIds.indexOf(id) !== -1) {
@@ -38,10 +43,10 @@ export default DS.Model.extend(JamModel, {
         return `${this.get('id')}.${id}`;
     },
 
-    profileById: function(profileId) {
+    profileById: function (profileId) {
         // Scan the list of profiles and gets first one with matching ID (else undefined). Assumes profileIds are unique.
         var profiles = this.get('profiles') || [];
-        var getProfile = function(item) {
+        var getProfile = function (item) {
             return item.get('profileId') === profileId;
         };
 
