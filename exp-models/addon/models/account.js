@@ -28,10 +28,8 @@ export default DS.Model.extend(JamModel, {
     history: DS.hasMany('history'),
     extra: DS.attr(),
 
-    // Username should be immutable, and calculated from the last portion of the record ID
-    username: Ember.computed('id', function () {
-        return this.get('id').split('.').pop();
-    }),
+    // Username should be immutable. We will use the id, which is already truncated from <namespace>.<collection>.(<recordId>) in jam-document-serializer
+    username: Ember.computed.alias('id'),
 
     // Helper methods
     generateProfileId: function () {
