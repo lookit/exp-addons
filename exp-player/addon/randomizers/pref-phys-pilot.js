@@ -13,16 +13,19 @@ function shuffleArray(array) {
  * Select the first matching session from an array of options, according to the specified rules
  *
  * @method getLastSession
- * @param {Session[]} An array of session records. This returns the first match, eg assumes newest-first sort order
+ * @param {Session[]} pastSessions An array of session records. This returns the first match, eg assumes newest-first sort order
  * @returns {Session} The model representing the last session in which the user participated
  */
 function getLastSession (pastSessions) {
     // Base randomization on the newest (last completed) session for which the participant got at
     // least as far as recording data for a single video ID.
-    for (let session of pastSessions) {
+    for (let i=0; i < pastSessions.length; i++) {
+        let session = pastSessions[i];
         // Frames might be numbered differently in different experiments... rather than check for a frame ID, check that at least one frame referencing the videos exists at all.
         let expData = session.get('expData') || {};
-        for (let frameKeyName of Object.keys(expData)) {
+        let keys = Object.keys(expData);
+        for (let i=0; i < keys.length; i++) {
+            let frameKeyName = keys[i];
             let frameData = expData[frameKeyName];
             if (frameKeyName.indexOf('pref-phys-videos') !== -1 && frameData && frameData.videoId) {
                 return session;

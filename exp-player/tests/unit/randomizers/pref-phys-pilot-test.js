@@ -81,7 +81,7 @@ test('getLastSession returns null if existing session has no data for relevant f
         }
     });
     let actualResult = getLastSession([fakeSession]);
-    assert.equal(actualResult, null);
+    assert.equal(actualResult, null, `Expected null, got ${actualResult}`);
 });
 
 test('getLastSession returns null given a session that has expData, but not videoId', function(assert) {
@@ -91,7 +91,7 @@ test('getLastSession returns null given a session that has expData, but not vide
         }
     });
     let actualResult = getLastSession([fakeSession]);
-    assert.equal(actualResult, null);
+    assert.equal(actualResult, null, `Expected null, got ${actualResult}`);
 });
 
 test('getLastSession returns older or newer session as appropriate', function(assert) {
