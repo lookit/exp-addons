@@ -9,6 +9,17 @@ function shuffleArray(array) {
     return array;
 }
 
+/**
+ * Select the most recently completed session from an array of options, according to the specified rules
+ *
+ * @method getLastSession
+ * @param {Session[]} An array of session records
+ * @returns {Session} The model representing the last session in which the user participated
+ */
+function getLastSession (pastSessions) {
+    return pastSessions[0];
+}
+
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
     // The last session payload refers to the frame we want by number (#-frameName), but frames aren't numbered until the sequence
@@ -393,7 +404,8 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
     });
 
     // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
-    var conditions = getConditions(pastSessions[0], frameId);
+    let lastSession = getLastSession(pastSessions);
+    var conditions = getConditions(lastSession, frameId);
 
     conditions.NPERTYPE = 6;
     var {
@@ -418,4 +430,4 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
 export default randomizer;
 
 // Export helper functions to support unit testing
-export { getConditions };
+export { getConditions, getLastSession };
