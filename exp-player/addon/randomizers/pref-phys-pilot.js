@@ -10,14 +10,27 @@ function shuffleArray(array) {
 }
 
 /**
- * Select the most recently completed session from an array of options, according to the specified rules
+ * Select the first matching session from an array of options, according to the specified rules
  *
  * @method getLastSession
- * @param {Session[]} An array of session records
+ * @param {Session[]} An array of session records. This returns the first match, eg assumes newest-first sort order
  * @returns {Session} The model representing the last session in which the user participated
  */
 function getLastSession (pastSessions) {
-    return pastSessions[0];
+    // Base randomization on the newest (last completed) session for which the participant got at
+    // least as far as recording data for a single video ID.
+    for (let session of pastSessions) {
+        // Frames might be numbered differently in different experiments... rather than check for a frame ID, check that at least one frame referencing the videos exists at all.
+        let expData = session.get('expData') || {};
+        for (let frameKeyName of Object.keys(expData)) {
+            let frameData = expData[frameKeyName];
+            if (frameKeyName.indexOf('pref-phys-videos') !== -1 && frameData && frameData.videoId) {
+                return session;
+            }
+        }
+    }
+    // If no match found, explicitly return null
+    return null;
 }
 
 function getConditions(lastSession, frameId) {
@@ -394,16 +407,14 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
-    // Base randomization on the newest (last completed) session for which the participant got at
-    // least as far as defining the experimental conditions (even if they hadn't seen videos yet)
-    pastSessions = pastSessions.filter(function (session) {
-        return session.get('conditions');
-    });
     pastSessions.sort(function (a, b) {
         return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
 
     // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
+    pastSessions = pastSessions.filter(function (session) {
+        return session.get('conditions');
+    });
     let lastSession = getLastSession(pastSessions);
     var conditions = getConditions(lastSession, frameId);
 
