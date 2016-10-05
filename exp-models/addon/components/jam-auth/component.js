@@ -11,6 +11,11 @@ export default Ember.Component.extend({
     password: null,
 
     authenticating: false,
+    invalidAuth: false,
+
+    disableLogin: Ember.computed('username', 'password', 'authenticating', 'invalidAuth', function() {
+        return this.get('authenticating') || this.get('invalidAuth') || !(this.get('username') && this.get('password'));
+    }),
 
     actions: {
         authenticate() {
