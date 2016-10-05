@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 // http://stackoverflow.com/a/12646864
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -72,7 +74,7 @@ function getConditions(lastSession, frameId) {
         showStay = lastFrameConditions.showStay;
         //parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
-        whichObjects = lastFrameConditions.whichObjects;
+        whichObjects = Ember.copy(lastFrameConditions.whichObjects);
         for (var i = 0; i < 4; i++) {
             whichObjects[i]++;
             if (whichObjects[i] > 5) {
