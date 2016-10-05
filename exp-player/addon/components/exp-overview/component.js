@@ -69,6 +69,11 @@ const questions = [
     value: null
   },
   {
+    question: 'survey.sections.1.questions.11.label',
+    type: 'input',
+    value: null
+  },
+  {
     question: 'survey.sections.1.questions.7.label',
     type: 'select',
     scale: [
@@ -108,8 +113,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     questions: questions,
 
-    showOptional: Ember.computed('questions.8.value', function() {
-       return this.questions[8].value === 'yesLabel';
+    showOptional: Ember.computed('questions.9.value', function() {
+       return this.questions[9].value === 'yesLabel';
     }),
     responses: Ember.computed(function() {
         var questions = this.get('questions');
@@ -162,19 +167,22 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             '4': { // how well off
                                 type: 'integer'
                             },
-                            '5': { // birth location
+                            '5': { // birth city
                                 type: 'string'
                             },
-                            '6': { // hometown type
+                            '6': { // birth country
+                                type: 'string'
+                            },
+                            '7': { // hometown type
                                type: 'string'
                             },
-                            '7': { // how religious?
+                            '8': { // how religious?
                                 type: 'integer'
                             },
-                            '8': { // follows religion?
+                            '9': { // follows religion?
                                 type: 'string'
                             },
-                            '9': {  // which religion?
+                            '10': {  // which religion?
                                 type: 'string'
                             }
                         }
