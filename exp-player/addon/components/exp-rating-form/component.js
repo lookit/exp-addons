@@ -187,21 +187,27 @@ const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(1, 10);
 
 var generateValidators = function (questions) {
     var validators = {};
+    var pages = {};
     for (var i = 0; i < questions.length; i++) {
+        var page = questions[i].page;
         for (var item = 0; item < questions[i]['items'].length; item++) {
             var isOptional = questions[i]['items'][item].optional;
             if (!isOptional) {
                 var key = `questions.${i}.items.${item}.value`;
+                if (!pages[page]) {
+                    pages[page] = [];
+                }
+                pages[page].push(key);
                 validators[key] = validator('presence', {
-                    presence: true,
-                    message: 'This field is required',
-                    disabled(model, attribute) {
-                        var index = attribute.split('.')[1];
-                        return model.get('questions')[index].page !== model.get('framePage');
-                    }
+                    presence: true
                 });
             }
         }
+    }
+    for (page in Object.keys(pages)) {
+        validators['page' + page] = validator('dependent', {
+            on: pages[page]
+        });
     }
     return validators;
 };
@@ -589,8 +595,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
-    allowNext: Ember.computed('validations.isValid', function() {
-        return this.get('validations.isValid') || !config.validate;
+    allowNext: Ember.computed(
+        'framePage',
+        'validations.attrs.page0.isValid',
+        'validations.attrs.page1.isValid',
+        'validations.attrs.page2.isValid',
+        'validations.attrs.page3.isValid',
+        'validations.attrs.page4.isValid',
+        'validations.attrs.page5.isValid',
+        'validations.attrs.page6.isValid',
+        function() {
+            // Check validation for questions on the current page
+            var page = this.get('framePage');
+            var attr = 'validations.attrs.page' + page + '.isValid';
+            return this.get(attr) || !config.validate;
     }),
     meta: {
         name: 'ExpRatingForm',
