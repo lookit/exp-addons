@@ -55,7 +55,7 @@ module.exports = {
       new Funnel(path.join(path.resolve(this.root, ''),  'public/'), {
         srcDir: '/',
         destDir: '/',
-        include: ['**/*.swf', '**/*.gif', '**/*.png', '**/*.xml', '**/*.php']
+        include: ['**/*.swf', '**/*.gif', '**/*.png', '**/*.jpg', '**/*.xml', '**/*.php']
       })
     ]);
   }
