@@ -301,7 +301,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
-            formatLabel: 'measure-four',
+            formatLabel: 'measure-four negative-margin-top',
             labels: [
                 {
                     rating: 0,
