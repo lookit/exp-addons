@@ -109,7 +109,7 @@ const VideoRecorder = Ember.Object.extend({
             );
         }
 
-        $container.append(`<div id="${divId}"></div`);
+        $container.append(`<div id="${divId}"></div>`);
         $element.append($container);
         if (hidden) {
             $container.append(
