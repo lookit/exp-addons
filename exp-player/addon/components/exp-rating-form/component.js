@@ -307,7 +307,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
-            formatLabel: 'measure-four',
+            formatLabel: 'measure-four negative-margin-top',
             labels: [
                 {
                     rating: 0,
@@ -470,14 +470,45 @@ var questions = [
         scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
         items: [{
             type: 'radio',
-            value: null
+            value: null,
+            formatLabel: 'negative-margin-top'
         },
-            {
-                type: 'input',
-                description: 'measures.questions.12.label',
-                value: null,
-                optional: true
-            }]
+        {
+            type: 'textarea',
+            description: 'measures.questions.12.label',
+            value: null,
+            optional: true
+        },
+        {
+            type: 'radio',
+            description: 'measures.questions.18.label',
+            value: null,
+            optional: true,
+            labelTop: false,
+            scale: NINE_POINT_SCALE,
+            labels: [
+                {
+                    rating: 1,
+                    label: 'measures.questions.18.options.notatallSuccessful'
+                },
+                {
+                    rating: 3,
+                    label: 'measures.questions.18.options.alittleSuccessful'
+                },
+                {
+                    rating: 5,
+                    label: 'measures.questions.18.options.moderatelySuccessful'
+                },
+                {
+                    rating: 7,
+                    label: 'measures.questions.18.options.verySuccessful'
+                },
+                {
+                    rating: 9,
+                    label: 'measures.questions.18.options.completelySuccessful'
+                }
+            ]
+        }]
     },
     generateSchema({
         question: 'measures.questions.13.label',
