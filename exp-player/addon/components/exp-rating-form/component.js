@@ -204,9 +204,9 @@ var generateValidators = function (questions) {
             }
         }
     }
-    for (page in Object.keys(pages)) {
-        validators['page' + page] = validator('dependent', {
-            on: pages[page]
+    for (var number in Object.keys(pages)) {
+        validators['page' + number] = validator('dependent', {
+            on: pages[number]
         });
     }
     return validators;
