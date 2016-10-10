@@ -602,7 +602,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     framePage: 0,
     lastPage: 6,
-    progressBarPage: Ember.computed('currentPage', function () {
+    progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),
     questions: Ember.computed(function () {
