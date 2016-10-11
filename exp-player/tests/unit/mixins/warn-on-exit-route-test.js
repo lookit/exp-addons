@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import WarnOnExitRouteMixin from '../../../mixins/warn-on-exit-route';
+import WarnOnExitRouteMixin from 'exp-player/mixins/warn-on-exit-route';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | warn on exit route');

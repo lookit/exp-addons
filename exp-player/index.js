@@ -14,6 +14,7 @@ module.exports = {
   },
 
   included: function(app) {
+    this._super.included(app);
     this.app.import(path.join(this.app.bowerDirectory, 'swfobject/swfobject/src/swfobject.js'));
   },
 
@@ -51,10 +52,10 @@ module.exports = {
             }).join('&')
           }
       }),
-      new Funnel(path.join(this.project.root, 'lib/exp-player/public'), {
+      new Funnel(path.join(path.resolve(this.root, ''),  'public/'), {
         srcDir: '/',
         destDir: '/',
-        include: ['**/*.swf', '**/*.gif', '**/*.png', '**/*.xml', '**/*.php']
+        include: ['**/*.swf', '**/*.gif', '**/*.png', '**/*.jpg', '**/*.xml', '**/*.php']
       })
     ]);
   }
@@ -109,7 +110,7 @@ var DEFAULT_OPTIONS = {
   autoPlay: 'false',
 
   //deleteUnsavedFlv: String
-  //desc: weather the recorded videos for which the user has not pressed [SAVE] will be deleted from the media server or not
+  //desc: whether the recorded videos for which the user has not pressed [SAVE] will be deleted from the media server or not
   //values: false, true
   //default: 'false'
   deleteUnsavedFlv: 'false',
@@ -216,21 +217,21 @@ var DEFAULT_OPTIONS = {
   countdownTimer: "false",
 
   //overlayPath:String
-  //desc: realtive URL path to the image to be shown as overlay
-  //values: any realtive path
-  //defaut: "" //no overlay
+  //desc: relative URL path to the image to be shown as overlay
+  //values: any relative path
+  //default: "" //no overlay
   overlayPath: "",
 
   //overlayPosition:String
   //desc: position of the overlay image mentioned above
   //values: "tr" for top right, "tl" for top left and "cen" for centered, no other positions are supported
-  //defaut: "tr"
+  //default: "tr"
   overlayPosition: "tr",
 
   //loopbackMic:String
   //desc: whether or not the sound should be also played back in the speakers/heaphones during recording
   //values: "true" for yes, "false" for no
-  //defaut: "false"
+  //default: "false"
   loopbackMic: "false",
 
   //showMenu:String
@@ -276,20 +277,20 @@ var DEFAULT_OPTIONS = {
   enableBlinkingRec: 1,
 
   //microphoneGain:Number
-  //desc: This controls the amount by which the microphone boosts the signal. Altough this value is applied and reflects the recording level, the setting does not update Flash Player's  "Record Volume" slider in Flash Player Settings > Microphone. This seems to be a bug in Flash Player.
+  //desc: This controls the amount by which the microphone boosts the signal. Although this value is applied and reflects the recording level, the setting does not update Flash Player's  "Record Volume" slider in Flash Player Settings > Microphone. This seems to be a bug in Flash Player.
   //values: 0 to 100
   //default: 50
   microphoneGain: 50,
 
   //allowAudioOnlyRecording:Number
   //desc: This controls whether or not HDFVR is permitted to record audio only when a webcam is missing and only a microphone is detected.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 1 (enabled)
   allowAudioOnlyRecording: 0,
 
   //enableFFMPEGConverting:Number
   //desc: This controls whether or not HDFVR will trigger server side the execution of FFMPEG converting once the stream finished uploading.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 0 (disabled)
   enableFFMPEGConverting: 0,
 
@@ -301,7 +302,7 @@ var DEFAULT_OPTIONS = {
 
   //autoSave:Number
   //desc: This controls whether or not HDFVR will automatically call the save_video_to_db script, having the same effect as pressing the [SAVE] button in menu. To eliminate the issue of double entries in the database, enabling this setting will automatically hide the [SAVE] button.
-  //values:1 for enabled, 0 for disasbled
+  //values:1 for enabled, 0 for disabled
   //default: 1 (enabled)
   autoSave: 1,
 
@@ -325,13 +326,14 @@ var DEFAULT_OPTIONS = {
 
   //skipInitialScreen:Number
   //desc: If this settings is enabled HDFVR won't show the initial pre-recording screen introduced in HDFVR 2.0
-  //values: 1 for enabled, 0 for disasbled
+  //values: 1 for enabled, 0 for disabled
   //default:0 (disabled)
   skipInitialScreen: 0,
 
   //hideDeviceSettingsButtons:Number
-  //desc: If this settings is enabled HDFVR won't display the camera and microphone settings buttons when the showMenu setting is set to FALSE. This is especially helpfull if you are integrating HDFVR on a platform that will use the same hardware specifications and no changing of the devices will be needed.
-  //values: 1 for enabled, 0 for disasbled
+  //desc: If this settings is enabled HDFVR won't display the camera and microphone settings buttons when the showMenu
+  // setting is set to FALSE. This is especially helpful if you are integrating HDFVR on a platform that will use the same hardware specifications and no changing of the devices will be needed.
+  //values: 1 for enabled, 0 for disabled
   //default:0 (disabled)
   hideDeviceSettingsButtons: 0,
 

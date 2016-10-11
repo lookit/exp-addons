@@ -2,6 +2,8 @@ import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
+import config from 'ember-get-config';
+
 
 var items = {
     '3': [
@@ -179,39 +181,33 @@ var items = {
     ]
 };
 
-const TEN_POINT_SCALE = [
-    'number0',
-    'number1',
-    'number2',
-    'number3',
-    'number4',
-    'number5',
-    'number6',
-    'number7',
-    'number8',
-    'number9',
-    'number10'
-];
-const SEVEN_POINT_SCALE = TEN_POINT_SCALE.slice(0, 8);
-const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(0, 10);
+const TEN_POINT_SCALE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const SEVEN_POINT_SCALE = TEN_POINT_SCALE.slice(1, 8);
+const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(1, 10);
 
 var generateValidators = function (questions) {
     var validators = {};
+    var pages = {};
     for (var i = 0; i < questions.length; i++) {
+        var page = questions[i].page;
         for (var item = 0; item < questions[i]['items'].length; item++) {
             var isOptional = questions[i]['items'][item].optional;
             if (!isOptional) {
                 var key = `questions.${i}.items.${item}.value`;
+                if (!pages[page]) {
+                    pages[page] = [];
+                }
+                pages[page].push(key);
                 validators[key] = validator('presence', {
-                    presence: true,
-                    message: 'This field is required',
-                    disabled(model, attribute) {
-                        var index = attribute.split('.')[1];
-                        return model.get('questions')[index].page !== model.get('framePage');
-                    }
+                    presence: true
                 });
             }
         }
+    }
+    for (var number in Object.keys(pages)) {
+        validators['page' + number] = validator('dependent', {
+            on: pages[number]
+        });
     }
     return validators;
 };
@@ -261,21 +257,22 @@ var questions = [
         scale: SEVEN_POINT_SCALE,
         options: {
             labelTop: false,
+            formatLabel: 'format-label',
             labels: [
                 {
-                    rating: 0,
+                    rating: 1,
                     label: 'measures.questions.2.options.never'
                 },
                 {
-                    rating: 2,
+                    rating: 3,
                     label: 'measures.questions.2.options.hardlyEver'
                 },
                 {
-                    rating: 4,
+                    rating: 5,
                     label: 'measures.questions.2.options.occasionally'
                 },
                 {
-                    rating: 6,
+                    rating: 7,
                     label: 'measures.questions.2.options.quiteOften'
                 }
             ]
@@ -310,7 +307,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
-            formatLabel: 'label-spacing',
+            formatLabel: 'measure-four negative-margin-top',
             labels: [
                 {
                     rating: 0,
@@ -347,10 +344,10 @@ var questions = [
                 description: 'measures.questions.6.items.1.label',
                 value: null,
                 labelTop: false,
-                formatLabel: 'label-spacing',
+                formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 1,
                         label: 'measures.questions.6.items.1.options.notHappy'
                     },
                     {
@@ -363,9 +360,10 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 1,
                         label: 'measures.questions.6.items.2.options.lessHappy'
                     },
                     {
@@ -378,14 +376,15 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
-                        label: 'measures.questions.6.items.4.options.notAtAll'
+                        rating: 1,
+                        label: 'measures.questions.6.items.3.options.notAtAll'
                     },
                     {
                         rating: 7,
-                        label: 'measures.questions.6.items.4.options.aGreatDeal'
+                        label: 'measures.questions.6.items.3.options.aGreatDeal'
                     }]
             },
             {
@@ -393,9 +392,10 @@ var questions = [
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
+                formatLabel: 'measure-six',
                 labels: [
                     {
-                        rating: 0,
+                        rating: 1,
                         label: 'measures.questions.6.items.4.options.notAtAll'
                     },
                     {
@@ -419,30 +419,16 @@ var questions = [
         options: {labelTop: true}
     }),
     generateSchema({
-        question: 'measures.questions.8.label',
-        type: 'radio',
-        page: 3,
-        items: items['8'],
-        scale: [
-            'measures.questions.8.options.disbelieveStrong',
-            'measures.questions.8.options.disbelieveLittle',
-            'measures.questions.8.options.neutral',
-            'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong'
-        ],
-        options: {labelTop: true}
-    }),
-    generateSchema({
         question: 'measures.questions.9.label',
         type: 'radio',
-        page: 4,
+        page: 3,
         items: items['9'],
         scale: NINE_POINT_SCALE,
         options: {
             labelTop: false,
             labels: [
                 {
-                    rating: 0,
+                    rating: 1,
                     label: 'measures.questions.9.options.notAtAll'
                 },
                 {
@@ -484,19 +470,50 @@ var questions = [
         scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
         items: [{
             type: 'radio',
-            value: null
+            value: null,
+            formatLabel: 'negative-margin-top'
         },
-            {
-                type: 'input',
-                description: 'measures.questions.12.label',
-                value: null,
-                optional: true
-            }]
+        {
+            type: 'textarea',
+            description: 'measures.questions.12.label',
+            value: null,
+            optional: true
+        },
+        {
+            type: 'radio',
+            description: 'measures.questions.18.label',
+            value: null,
+            optional: true,
+            labelTop: false,
+            scale: NINE_POINT_SCALE,
+            labels: [
+                {
+                    rating: 1,
+                    label: 'measures.questions.18.options.notatallSuccessful'
+                },
+                {
+                    rating: 3,
+                    label: 'measures.questions.18.options.alittleSuccessful'
+                },
+                {
+                    rating: 5,
+                    label: 'measures.questions.18.options.moderatelySuccessful'
+                },
+                {
+                    rating: 7,
+                    label: 'measures.questions.18.options.verySuccessful'
+                },
+                {
+                    rating: 9,
+                    label: 'measures.questions.18.options.completelySuccessful'
+                }
+            ]
+        }]
     },
     generateSchema({
         question: 'measures.questions.13.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['13'],
         scale: [
             'measures.questions.13.options.disagreeStrongly',
@@ -510,7 +527,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.14.label',
         type: 'radio',
-        page: 5,
+        page: 4,
         items: items['14'],
         scale: [
             'measures.questions.14.options.disagreeStrongly',
@@ -538,7 +555,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.16.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['16'],
         scale: [
             'measures.questions.16.options.notAtAll',
@@ -551,7 +568,7 @@ var questions = [
     generateSchema({
         question: 'measures.questions.17.label',
         type: 'radio',
-        page: 6,
+        page: 5,
         items: items['17'],
         scale: [
             'measures.questions.17.options.disagreeStrongly',
@@ -559,6 +576,20 @@ var questions = [
             'measures.questions.17.options.neutral',
             'measures.questions.17.options.agree',
             'measures.questions.17.options.agreeStrongly'
+        ],
+        options: {labelTop: true}
+    }),
+    generateSchema({
+        question: 'measures.questions.8.label',
+        type: 'radio',
+        page: 6,
+        items: items['8'],
+        scale: [
+            'measures.questions.8.options.disbelieveStrong',
+            'measures.questions.8.options.disbelieveLittle',
+            'measures.questions.8.options.neutral',
+            'measures.questions.8.options.believeLittle',
+            'measures.questions.8.options.believeStrong'
         ],
         options: {labelTop: true}
     })
@@ -571,7 +602,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     framePage: 0,
     lastPage: 6,
-    progressBarPage: Ember.computed('currentPage', function () {
+    progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),
     questions: Ember.computed(function () {
@@ -595,6 +626,21 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
+    allowNext: Ember.computed(
+        'framePage',
+        'validations.attrs.page0.isValid',
+        'validations.attrs.page1.isValid',
+        'validations.attrs.page2.isValid',
+        'validations.attrs.page3.isValid',
+        'validations.attrs.page4.isValid',
+        'validations.attrs.page5.isValid',
+        'validations.attrs.page6.isValid',
+        function() {
+            // Check validation for questions on the current page
+            var page = this.get('framePage');
+            var attr = 'validations.attrs.page' + page + '.isValid';
+            return this.get(attr) || !config.validate;
+    }),
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -615,15 +661,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
     },
     actions: {
-        nextPage() {
-            if (this.get('validations.isValid')) {
-                this.send('save');
-                var page = this.get('framePage') + 1;
-                this.set('framePage', page);
-                this.sendAction('updateFramePage', page);
-                window.scrollTo(0, 0);
-            }
-        },
         previousPage() {
             var page = Math.max(0, this.get('framePage') - 1);
             this.set('framePage', page);
@@ -631,9 +668,17 @@ export default ExpFrameBaseComponent.extend(Validations, {
             window.scrollTo(0,0);
         },
         continue() {
-            if (this.get('validations.isValid')) {
-                this.sendAction('sessionCompleted');
-                this.send('next');
+            if (this.get('allowNext')) {
+                if (this.get('framePage') !== this.get('lastPage')) {
+                    this.send('save');
+                    var page = this.get('framePage') + 1;
+                    this.set('framePage', page);
+                    this.sendAction('updateFramePage', page);
+                    window.scrollTo(0, 0);
+                } else {
+                    this.sendAction('sessionCompleted');
+                    this.send('next');
+                }
             }
         }
     },

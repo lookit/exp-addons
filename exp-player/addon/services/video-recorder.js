@@ -65,7 +65,7 @@ const VideoRecorder = Ember.Object.extend({
     _recordPromise: null,
     _stopPromise: null,
 
-    recorder: Ember.computed(function() {
+    recorder: Ember.computed(function () {
         return window.swfobject.getObjectById(this.get('_SWFId'));
     }).volatile(),
 
@@ -109,7 +109,7 @@ const VideoRecorder = Ember.Object.extend({
             );
         }
 
-        $container.append(`<div id="${divId}"></div`);
+        $container.append(`<div id="${divId}"></div>`);
         $element.append($container);
         if (hidden) {
             $container.append(
@@ -210,26 +210,23 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     // Stop recording and save the video to the server
-    stop({
-        destroy: destroy
-    } = {
-        destroy: false
-    }) {
+    stop({ destroy: destroy } = { destroy: false }) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
         if (1.5 - this.getTime() > 0) {
             window.setTimeout(this.stop.bind(this, {
                 destroy: destroy
             }), 1.5 - this.getTime());
         } else {
-	    var recorder = this.get('recorder');
-	    if (recorder) {
-		Ember.run.next(this, () => {
-		    try {
-			recorder.stopVideo();
-		    } catch (e) {}
-		    this.set('_recording', false);
-		});
-	    }
+            var recorder = this.get('recorder');
+            if (recorder) {
+                Ember.run.next(this, () => {
+                    try {
+                        recorder.stopVideo();
+                    } catch (e) {
+                    }
+                    this.set('_recording', false);
+                });
+            }
         }
         var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
             this.set('_stopPromise', {
@@ -310,12 +307,12 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     _onConnectionStatus(status) {
-	if (status === 'NetConnection.Connect.Success') {
-	    this.set('connected', true);
-	}
-	else {
-	    this.set('connected', false);
-	}
+        if (status === 'NetConnection.Connect.Success') {
+            this.set('connected', true);
+        }
+        else {
+            this.set('connected', false);
+        }
     }
     // End Flash hooks
 });
@@ -325,7 +322,7 @@ export default Ember.Service.extend({
 
     //Initial setup, installs flash hooks into the page
     init() {
-        var runHandler = function(recorder, hookName, args) {
+        var runHandler = function (recorder, hookName, args) {
             if (recorder.get('debug')) {
                 console.log(hookName, args);
             }
@@ -340,7 +337,7 @@ export default Ember.Service.extend({
 
         HOOKS.forEach(hookName => {
             var self = this;
-            window[hookName] = function() {
+            window[hookName] = function () {
                 var args = Array.prototype.slice.call(arguments);
                 var recorder;
                 if (hookName === 'onUploadDone') {

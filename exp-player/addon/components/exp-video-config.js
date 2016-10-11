@@ -11,12 +11,12 @@ export default ExpFrameBaseComponent.extend({
     showWebCamWarning: Ember.computed.not('hasWebCam'),
 
     _setupRecorder() {
-	var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
-	recorder.install();
-	this.set('recorder', recorder);
+        var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
+        recorder.install();
+        this.set('recorder', recorder);
     },
     didInsertElement() {
-	this._setupRecorder();
+        this._setupRecorder();
     },
 
     actions: {
@@ -24,10 +24,10 @@ export default ExpFrameBaseComponent.extend({
             this.get('recorder').stop({destroy: true});
             this._super(...arguments);
         },
-	reloadRecorder() {
-	    this.get('recorder').destroy();
-	    this._setupRecorder();
-	}
+        reloadRecorder() {
+            this.get('recorder').destroy();
+            this._setupRecorder();
+        }
     },
 
     type: 'exp-videoconfig',
@@ -42,9 +42,9 @@ export default ExpFrameBaseComponent.extend({
                     description: 'A unique identifier for this item'
                 },
                 instructions: {
-                  type: 'string',
-                  description: 'Instructions to display to the user',
-                  default: 'Please make sure your video camera is working and shows up below!'
+                    type: 'string',
+                    description: 'Instructions to display to the user',
+                    default: 'Please make sure your video camera is working and shows up below!'
                 }
             },
             required: ['id']

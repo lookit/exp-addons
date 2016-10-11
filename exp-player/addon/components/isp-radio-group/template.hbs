@@ -5,13 +5,13 @@
             {{t option}}
             {{radio-button value=(last-segment option) checked=value}}
             {{#each-in labels as |ratings value|}}
-              {{#if (eq value.rating index)}}
+              {{#if (eq value.rating option)}}
                 {{t value.label}}
               {{/if}}
             {{/each-in}}
           {{else}}
             {{#each-in labels as |ratings value|}}
-              {{#if (eq value.rating index)}}
+              {{#if (eq value.rating option)}}
                 {{t value.label}}
               {{/if}}
             {{/each-in}}
