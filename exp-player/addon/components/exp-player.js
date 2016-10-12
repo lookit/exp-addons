@@ -149,7 +149,7 @@ able to continue the study.
                 this.set('frameIndex', frameIndex + 1);
                 this.set('framePage', 0);
                 this.get('session').set('frameIndex', frameIndex + 1);
-                this.get('session').set('framePage', 0);
+                this.get('session').set('surveyPage', 0);
                 this.get('session').save();
                 return;
             }
@@ -191,7 +191,7 @@ able to continue the study.
         },
         updateFramePage(framePage) {
             this.set('framePage', framePage);
-            this.get('session').set('framePage', framePage);
+            this.get('session').set('surveyPage', framePage);
             this.get('session').save();
         }
     }

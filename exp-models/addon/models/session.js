@@ -19,7 +19,7 @@ export default DS.Model.extend(AnonJamModel, {
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 
     frameIndex: DS.attr(),
-    framePage: DS.attr(),
+    surveyPage: DS.attr(),
 
     completed: DS.attr('boolean'),  // Filter out sessions that were started, but never finished
     earlyExit: DS.attr(),
