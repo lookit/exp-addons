@@ -639,7 +639,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             // Check validation for questions on the current page
             var page = this.get('framePage');
             var attr = 'validations.attrs.page' + page + '.isValid';
-            return this.get(attr) || !config.validate;
+            return this.get(attr) || !config.featureFlags.validate;
     }),
     meta: {
         name: 'ExpRatingForm',
