@@ -5,8 +5,7 @@
                 {{exitThankYou}}
                 <hr>
                 <label>
-                    <i class="fa fa-star"></i> Please confirm your child's
-                    birthdate:
+                    <i class="fa fa-star"></i> Please confirm your child's birthdate:
                 </label>
                 {{bs-datetimepicker
                   format="MM/DD/YYYY"
@@ -120,20 +119,35 @@
                 <hr>
                 {{bs-button class="pull-right" defaultText="Submit" type="success" action='continue'}}
             {{/bs-form}}
+
+            {{!-- Withdrawal confirmation modal --}}
+            {{#bs-modal open=showWithdrawalConfirmation body=false footer=false submitAction=(action "advanceToProgressBar")}}
+                {{#bs-modal-body}}
+                    You have chosen to withdraw your video data from the study. Any video beyond your consent recording
+                    will be deleted without viewing. Are you sure?
+                {{/bs-modal-body}}
+                {{#bs-modal-footer as |footer|}}
+                    {{#bs-button type="default" action=(action "close" target=footer)}}Cancel{{/bs-button}}
+                    {{#bs-button type="danger" buttonType="submit"}}Withdraw{{/bs-button}}
+                {{/bs-modal-footer}}
+            {{/bs-modal}}
         {{else}}
             <h4>{{title2}}</h4>
-            <!--<p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. </p>
-        <p>We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
-        <div class="progress">
-            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{progressValue}} aria-valuemin="0" aria-valuemax="100" style="width:{{progressValue}}%">
-                {{progressValue}}% Complete
+            {{!--
+            <p>Hooray! You have completed <strong>{{currentSessionsCompleted}}</strong> session(s) in <strong>{{currentDaysSessionsCompleted}}</strong> days. </p>
+            <p>We are asking parents to try to complete <strong>{{idealSessionsCompleted}}</strong> sessions within <strong>{{idealDaysSessionsCompleted}}</strong> days. (You can do up to two sessions per day.) If you reach this goal we will be able to send you an individualized report about your child's responses!</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow={{progressValue}} aria-valuemin="0" aria-valuemax="100" style="width:{{progressValue}}%">
+                    {{progressValue}}% Complete
+                </div>
             </div>
-        </div>-->
+            --}}
             <hr>
             {{exitMessage}}
             <div class="form-group">
-
-                <!--<label>{{input type="checkbox" checked=emailOptOut name="emailOptOut"}}<span class="extra-info">&nbsp;&nbsp;&nbsp; Receive email reminders about this study.</span> </label>-->
+                {{!--
+                <label>{{input type="checkbox" checked=emailOptOut name="emailOptOut"}}<span class="extra-info">&nbsp;&nbsp;&nbsp; Receive email reminders about this study.</span> </label>
+                --}}
                 {{bs-button class="pull-right" defaultText="Return to Lookit" type="success" action='finish'}}
             </div>
         {{/if}}
