@@ -121,7 +121,8 @@
             {{!-- Withdrawal confirmation modal --}}
             {{#bs-modal open=showWithdrawalConfirmation body=false footer=false submitAction=(action "advanceToProgressBar")}}
                 {{#bs-modal-body}}
-                    You have chosen to withdraw your data from the study. Your videos will be deleted without viewing. Are you sure?
+                    You have chosen to withdraw your video data from the study. Any video beyond your consent recording
+                    will be deleted without viewing. Are you sure?
                 {{/bs-modal-body}}
                 {{#bs-modal-footer as |footer|}}
                     {{#bs-button type="default" action=(action "close" target=footer)}}Cancel{{/bs-button}}
