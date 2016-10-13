@@ -74,7 +74,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     }),
 
     allowNext: Ember.computed('validations.isValid', function() {
-        if (config.validate) {
+        if (config.featureFlags.validate) {
             return this.get('validations.isValid');
         }
         return true;
