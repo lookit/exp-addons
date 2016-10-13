@@ -124,8 +124,8 @@
                     You have chosen to withdraw your data from the study. Your videos will be deleted without viewing. Are you sure?
                 {{/bs-modal-body}}
                 {{#bs-modal-footer as |footer|}}
-                    {{#bs-button action=(action "close" target=footer)}}Cancel{{/bs-button}}
-                    {{#bs-button buttonType="submit" type="danger"}}Withdraw{{/bs-button}}
+                    {{#bs-button type="default" action=(action "close" target=footer)}}Cancel{{/bs-button}}
+                    {{#bs-button type="danger" buttonType="submit"}}Withdraw{{/bs-button}}
                 {{/bs-modal-footer}}
             {{/bs-modal}}
         {{else}}
