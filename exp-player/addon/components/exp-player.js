@@ -35,10 +35,11 @@ export default Ember.Component.extend(FullScreen, {
                 // There is no guarantee that the server request to save this event will finish before exit completed;
                 //   we are limited in our ability to prevent willful exits
                 this.send('setGlobalTimeEvent', 'exitEarly', {
-                    exitType: 'browserNavigation',
+                    exitType: 'browserNavigationAttempt', // Page navigation, closed browser, etc
                     lastPageSeen: this.get('frameIndex') + 1
                 });
-                this.get('session').save();
+                //Ensure sync - try to force save to finish before exit
+                Ember.run(() => this.get('session').save());
 
                 // Then attempt to warn the user and exit
                 let toast = this.get('toast');
