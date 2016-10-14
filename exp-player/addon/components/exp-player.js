@@ -30,6 +30,17 @@ export default Ember.Component.extend(FullScreen, {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
                 this.send('exitFullscreen');
+
+                // Log that the user attempted to leave early, via browser navigation.
+                // There is no guarantee that the server request to save this event will finish before exit completed;
+                //   we are limited in our ability to prevent willful exits
+                this.send('setGlobalTimeEvent', 'exitEarly', {
+                    exitType: 'browserNavigation',
+                    lastPageSeen: this.get('frameIndex') + 1
+                });
+                this.get('session').save();
+
+                // Then attempt to warn the user and exit
                 let toast = this.get('toast');
                 toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
                 // Newer browsers will ignore the custom message below. See https://bugs.chromium.org/p/chromium/issues/detail?id=587940
@@ -135,6 +146,19 @@ able to continue the study.
         sessionCompleted() {
             this.get('session').set('completed', true);
         },
+
+        setGlobalTimeEvent(eventName, extra) {
+            // Set a timing event not tied to any one frame
+            let curTime = new Date();
+            let eventData = {
+                eventType: eventName,
+                timestamp: curTime.toISOString()
+            };
+            Ember.merge(eventData, extra || {});
+            let session = this.get('session');
+            session.get('globalEventTimings').pushObject(eventData);
+        },
+
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
             console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
@@ -143,6 +167,7 @@ able to continue the study.
             //TODO Implement diff PATCHing
             this.get('session').save();
         },
+
         next() {
             console.log('next');
             var frameIndex = this.get('frameIndex');
@@ -155,6 +180,7 @@ able to continue the study.
             }
             this._exit();
         },
+
         skipone() {
             console.log('skip one frame');
 
@@ -167,6 +193,7 @@ able to continue the study.
             }
             this._exit();
         },
+
         previous() {
             console.log('previous');
 
@@ -179,14 +206,25 @@ able to continue the study.
                 console.log('Previous: At frame 0');
             }
         },
+
         exitEarly() {
             this.set('hasAttemptedExit', false);
+            // Save any available data immediately
+            this.send('setGlobalTimeEvent', 'exitEarly', {
+                    exitType: 'manualInterrupt',  // User consciously chose to exit, eg by pressing F1 key
+                    lastPageSeen: this.get('frameIndex') + 1
+                });
+            this.get('session').save();
+
+            // Navigate to last page in experiment (assumed to be survey frame)
             var max = this.get('frames.length') - 1;
             this.set('frameIndex', max);
         },
+
         closeExitWarning() {
             this.set('hasAttemptedExit', false);
         },
+
         updateFramePage(framePage) {
             this.set('framePage', framePage);
         }
