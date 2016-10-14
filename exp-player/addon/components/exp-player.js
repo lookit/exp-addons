@@ -26,18 +26,19 @@ export default Ember.Component.extend(FullScreen, {
     allowExit: false,
     hasAttemptedExit: false,
     _registerHandlers() {
-        $(window).on('beforeunload', () => {
+        $(window).on('beforeunload', (e) => {
             if (!this.get('allowExit')) {
                 this.set('hasAttemptedExit', true);
                 this.send('exitFullscreen');
                 let toast = this.get('toast');
                 toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
-                return `
+                // Newer browsers will ignore the custom message below. See https://bugs.chromium.org/p/chromium/issues/detail?id=587940
+                const message = `
 If you're sure you'd like to leave this study early
 you can do so now.
 
 We'd appreciate it if before you leave you fill out a
-very breif exit survey letting us know how we can use
+very brief exit survey letting us know how we can use
 any video captured during this session. Press 'Stay on
 this Page' and you will be prompted to go to this
 exit survey.
@@ -45,6 +46,8 @@ exit survey.
 If leaving this page was an accident you will be
 able to continue the study.
 `;
+                e.returnValue = message;
+                return message;
             }
             return null;
         });
