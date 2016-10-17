@@ -13,6 +13,10 @@ export default DS.Model.extend(AnonJamModel, {
     conditions: DS.attr(),
     expData: DS.attr(),  // Data is a reserved keyword in ember
 
+    // Timing information for events captured by the player but not tied to a specific frame. Eg, early exit
+    //  from experiment
+    globalEventTimings: DS.attr({ defaultValue: () => [] }),
+
     profileId: DS.attr('string'), // Store ID of related record
 
     experimentId: DS.attr('string'),
