@@ -279,7 +279,7 @@ var questions = [
         }
     }),
     generateSchema({
-        question: 'measures.questions.3.label.10am',
+        question: 'measures.questions.3.label',
         type: 'radio',
         page: 0,
         items: items['3'],
