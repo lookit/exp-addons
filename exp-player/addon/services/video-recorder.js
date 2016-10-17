@@ -223,6 +223,8 @@ const VideoRecorder = Ember.Object.extend({
                     try {
                         recorder.stopVideo();
                     } catch (e) {
+                        // TODO: Under some conditions there is no stopVideo method- can we do a better job of
+                        //  identifying genuine errors?
                     }
                     this.set('_recording', false);
                 });

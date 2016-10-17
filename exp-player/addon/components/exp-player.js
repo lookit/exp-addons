@@ -64,7 +64,6 @@ able to continue the study.
             return null;
         });
         $(window).on('keyup', (e) => {
-            console.log(e.which);
             if (e.which === 112) {
                 this.send('exitEarly');
             }

@@ -274,7 +274,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             this.set('currentTask', 'intro');
             this.set('playAnnouncementNow', false);
 
-            if (~this.get('isPaused')) {
+            if (!this.get('isPaused')) {
                 if (this.isLast) {
                     this.send('next');
                 } else {
@@ -350,11 +350,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     didInsertElement() {
         this._super(...arguments);
-        $(document).on("keyup", (e) => {
+        $(document).on('keyup', (e) => {
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space
                     this.pauseStudy();
-                } else if (e.which === 112) { // F1
+                } else if (e.which === 112) { // F1: exit the study early
+                    // FIXME: This binding does not seem to fire, likely because it is removed in willDestroy, called when exp-player advances to a new frame
                     if (this.get('recorder')) {
                         this.get('recorder').stop();
                     }
@@ -387,6 +388,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         this.send('showFullscreen');
     },
     willDestroyElement() { // remove event handler
+        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
+        if (this.get('recorder')) {
+            this.get('recorder').hide(); // Hide the webcam config screen
+            this.get('recorder').stop();
+        }
+
         this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
         $(document).off("keyup");
