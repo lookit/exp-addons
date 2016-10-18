@@ -54,8 +54,11 @@ export default Ember.Component.extend(FullScreen, {
 
     /**
      * Customize what happens when the user exits the page
+     * @method beforeUnload
+     * @parameter {event} event The event to be handled
+     * @returns {String|null} If string is provided, triggers a modal to confirm user wants to leave page
      */
-    beforeUnload(e) {
+    beforeUnload(event) {
         if (!this.get('allowExit')) {
             this.set('hasAttemptedExit', true);
             this.send('exitFullscreen');
@@ -73,7 +76,7 @@ export default Ember.Component.extend(FullScreen, {
             // Then attempt to warn the user and exit
             // Newer browsers will ignore the custom message below. See https://bugs.chromium.org/p/chromium/issues/detail?id=587940
             const message = this.get('messageEarlyExitModal');
-            e.returnValue = message;
+            event.returnValue = message;
             return message;
         }
         return null;
