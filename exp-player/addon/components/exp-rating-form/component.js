@@ -605,15 +605,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),
-    questions: Ember.computed(function () {
-        var condition = this.get('session').get('experimentCondition');
-        if (condition === '7pm') {
-            questions[2]['question'] = 'measures.questions.3.label.7pm';
-        } else if (condition === '10am') {
-            questions[2]['question'] = 'measures.questions.3.label.10am';
-        }
-        return questions;
-    }),
+    questions: questions,
     responses: Ember.computed(function() {
         var questions = this.get('questions');
         var responses = {};
