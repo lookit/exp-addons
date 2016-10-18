@@ -589,7 +589,8 @@ var questions = [
             'measures.questions.8.options.disbelieveLittle',
             'measures.questions.8.options.neutral',
             'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong'
+            'measures.questions.8.options.believeStrong',
+            'measures.questions.8.options.preferNoAnswer'
         ],
         options: {labelTop: true}
     })
