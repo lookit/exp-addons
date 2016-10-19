@@ -43,55 +43,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     showVideoWarning: false,
 
-    videoSources: Ember.computed('isPaused', 'currentTask', 'useAlternate', function() {
-        if (this.get('isPaused')) {
-            return this.get('attnSources');
-        } else {
-            switch (this.get('currentTask')) {
-                case 'announce':
-                    return this.get('attnSources');
-                case 'intro':
-                    return this.get('introSources');
-                case 'test':
-                    if (this.get('useAlternate')) {
-                        return this.get('altSources');
-                    } else {
-                        return this.get('sources');
-                    }
-            }
-        }
-        return [];
-    }),
-
-    shouldLoop: Ember.computed('videoSources', function() {
-        return (this.get('isPaused') || (this.get('currentTask') === 'announce' || this.get('currentTask') === 'test'));
-    }),
-
-    onFullscreen: function() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            this.sendTimeEvent('leftFullscreen');
-            if (!this.get('isPaused')) {
-                this.pauseStudy();
-            }
-        } else {
-            this.sendTimeEvent('enteredFullscreen');
-        }
-    },
-
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-physics:${name}`, opts);
-    },
-
     meta: {
         name: 'Video player',
         description: 'Component that plays a video',
@@ -170,8 +121,58 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             required: []
         }
     },
+
+    videoSources: Ember.computed('isPaused', 'currentTask', 'useAlternate', function() {
+        if (this.get('isPaused')) {
+            return this.get('attnSources');
+        } else {
+            switch (this.get('currentTask')) {
+                case 'announce':
+                    return this.get('attnSources');
+                case 'intro':
+                    return this.get('introSources');
+                case 'test':
+                    if (this.get('useAlternate')) {
+                        return this.get('altSources');
+                    } else {
+                        return this.get('sources');
+                    }
+            }
+        }
+        return [];
+    }),
+
+    shouldLoop: Ember.computed('videoSources', function() {
+        return (this.get('isPaused') || (this.get('currentTask') === 'announce' || this.get('currentTask') === 'test'));
+    }),
+
+    onFullscreen() {
+        if (this.get('isDestroyed')) {
+            return;
+        }
+        this._super(...arguments);
+        if (!this.checkFullscreen()) {
+            this.sendTimeEvent('leftFullscreen');
+            if (!this.get('isPaused')) {
+                this.pauseStudy();
+            }
+        } else {
+            this.sendTimeEvent('enteredFullscreen');
+        }
+    },
+
+    sendTimeEvent(name, opts = {}) {
+        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
+
+        Ember.merge(opts, {
+            streamTime: streamTime,
+            videoId: this.get('videoId')
+        });
+        this.send('setTimeEvent', `exp-physics:${name}`, opts);
+    },
+
     actions: {
-        showWarning: function() {
+        showWarning() {
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);
                 this.sendTimeEvent('webcamNotConfigured');
@@ -183,14 +184,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 });
             }
         },
-        removeWarning: function() {
+        removeWarning() {
             this.set('showVideoWarning', false);
             this.get('recorder').hide();
             this.send('showFullscreen');
             this.pauseStudy();
         },
 
-        stopVideo: function() {
+        stopVideo() {
             var currentTask = this.get('currentTask');
             if (this.get('testTime') >= this.get('testLength')) {
                 this.send('_afterTest');
@@ -207,7 +208,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         },
 
-        playNext: function() {
+        playNext() {
             if (this.get("currentTask") === "intro") {
                 this.set("currentTask", "test");
             } else {
@@ -222,7 +223,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             this.send('playNext');
         },
 
-        setTestTimer: function() {
+        setTestTimer() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             this.set('_lastTime', 0);
@@ -244,7 +245,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }, 100));
         },
 
-        startVideo: function() {
+        startVideo() {
             if (this.get('doingTest')) {
                 if (!this.get('hasCamAccess')) {
                     this.pauseStudy(true);
@@ -265,7 +266,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 }
             }
         },
-        startIntro: function() {
+        startIntro() {
             if (this.get('skip')) {
                 this.send('next');
                 return;
@@ -295,7 +296,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         }
     },
 
-    pauseStudy: function(pause) { // only called in FS mode
+    pauseStudy(pause) { // only called in FS mode
         if (this.get('showVideoWarning')) {
             return;
         }

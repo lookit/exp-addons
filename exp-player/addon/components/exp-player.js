@@ -138,7 +138,6 @@ able to continue the study.
     },
     _exit() {
         this.send('sessionCompleted');
-        console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
         this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
     },
 
@@ -161,7 +160,6 @@ able to continue the study.
 
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
-            console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
             this.get('session.sequence').push(frameId);
             this.get('session.expData')[frameId] = frameData;
             //TODO Implement diff PATCHing
@@ -169,10 +167,8 @@ able to continue the study.
         },
 
         next() {
-            console.log('next');
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
-                console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex + 1);
                 this.set('framePage', 0);
@@ -182,11 +178,8 @@ able to continue the study.
         },
 
         skipone() {
-            console.log('skip one frame');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 2)) {
-                console.log(`Next: Transitioning to frame ${frameIndex + 2}`);
                 this._transition();
                 this.set('frameIndex', frameIndex + 2);
                 return;
@@ -195,15 +188,10 @@ able to continue the study.
         },
 
         previous() {
-            console.log('previous');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex !== 0) {
-                console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
-            } else {
-                console.log('Previous: At frame 0');
             }
         },
 
