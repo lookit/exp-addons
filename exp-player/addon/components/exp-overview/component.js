@@ -62,7 +62,7 @@ const questions = [
     type: 'radio',
     scale: range(1, 10),
     labelTop: false,
-    formatLabel: 'negative-margin-top',
+    formatLabel: 'negative-margin-top narrow-width',
     value: null,
     labels: [
         {
@@ -107,7 +107,7 @@ const questions = [
     scale: range(1, 11),
     hiddenOptions: [11],
     labelTop: false,
-    formatLabel: 'negative-margin-top',
+    formatLabel: 'negative-margin-top narrow-width',
     value: null,
     labels: [
         {
