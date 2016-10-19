@@ -29,11 +29,6 @@ var generateValidators = function(questions) {
   return validators;
 };
 
-var getQuestion8Options = function() {
-    var scale = range(1, 10);
-    scale.push('survey.sections.1.questions.8.options.preferNoAnswer');
-    return scale;
-};
 
 const questions = [
   {
@@ -109,7 +104,8 @@ const questions = [
   {
     question: 'survey.sections.1.questions.8.label',
     type: 'radio',
-    scale: getQuestion8Options(),
+    scale: range(1, 11),
+    hiddenOptions: [11],
     labelTop: false,
     formatLabel: 'negative-margin-top',
     value: null,
@@ -121,6 +117,10 @@ const questions = [
         {
             rating: 10,
             label: 'survey.sections.1.questions.8.options.highlyReligious'
+        },
+        {
+            rating: 11,
+            label: 'survey.sections.1.questions.8.options.preferNoAnswer'
         }
     ]
   },
