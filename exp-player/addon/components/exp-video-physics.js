@@ -176,6 +176,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);
                 this.sendTimeEvent('webcamNotConfigured');
+
+                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+                // the user is unable to move on.
+                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
+                this.send('save');
+
                 var recorder = this.get('recorder');
                 recorder.show();
                 recorder.on('onCamAccessConfirm', () => {
