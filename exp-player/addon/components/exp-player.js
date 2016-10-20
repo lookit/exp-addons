@@ -68,7 +68,7 @@ export default Ember.Component.extend(FullScreen, {
             //   we are limited in our ability to prevent willful exits
             this.send('setGlobalTimeEvent', 'exitEarly', {
                 exitType: 'browserNavigationAttempt', // Page navigation, closed browser, etc
-                lastPageSeen: this.get('frameIndex') + 1
+                lastPageSeen: this.get('frameIndex')
             });
             //Ensure sync - try to force save to finish before exit
             Ember.run(() => this.get('session').save());
@@ -153,7 +153,6 @@ export default Ember.Component.extend(FullScreen, {
     },
     _exit() {
         this.send('sessionCompleted');
-        console.log(`Next: Saving session then redirecting to ${this.get('experiment.exitUrl') || '/'}`);
         this.get('session').save().then(() => window.location = this.get('experiment.exitUrl') || '/');
     },
 
@@ -176,7 +175,6 @@ export default Ember.Component.extend(FullScreen, {
 
         saveFrame(frameId, frameData) {
             // Save the data from a completed frame to the session data item
-            console.log(`SaveFrame: Saving frame data for ${frameId}`, frameData);
             this.get('session.sequence').push(frameId);
             this.get('session.expData')[frameId] = frameData;
             //TODO Implement diff PATCHing
@@ -184,10 +182,8 @@ export default Ember.Component.extend(FullScreen, {
         },
 
         next() {
-            console.log('next');
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 1)) {
-                console.log(`Next: Transitioning to frame ${frameIndex + 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex + 1);
                 this.set('framePage', 0);
@@ -197,11 +193,8 @@ export default Ember.Component.extend(FullScreen, {
         },
 
         skipone() {
-            console.log('skip one frame');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex < (this.get('frames').length - 2)) {
-                console.log(`Next: Transitioning to frame ${frameIndex + 2}`);
                 this._transition();
                 this.set('frameIndex', frameIndex + 2);
                 return;
@@ -210,15 +203,10 @@ export default Ember.Component.extend(FullScreen, {
         },
 
         previous() {
-            console.log('previous');
-
             var frameIndex = this.get('frameIndex');
             if (frameIndex !== 0) {
-                console.log(`Previous: Transitioning to frame ${frameIndex - 1}`);
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
-            } else {
-                console.log('Previous: At frame 0');
             }
         },
 
