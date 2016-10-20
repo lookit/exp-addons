@@ -2,6 +2,23 @@
   <p class="break-line">{{t 'survey.sections.2.instructions.firstSection'}}</p>
   {{#bs-form}}
     {{#bs-form-group}}
+      <label>{{t 'survey.sections.2.questions.14.label'}}</label><br>
+        {{#power-select
+          selected=time
+          options=times
+          placeholder=placeholder
+          searchEnabled=false
+          onchange=(action (mut time))
+          as |time|
+        }}
+        <div>
+            <span>{{time.12h}}</span>
+            <span class="pull-right">{{time.24h}}</span>
+        </div>
+        {{/power-select}}
+    {{/bs-form-group}}
+    <p class="break-line">{{t 'survey.sections.2.instructions.secondSection'}}</p>
+    {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.11.label'}}</label>
       {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q1}}{{/textarea}}
       <p class="text-muted">{{diff1}}</p>
