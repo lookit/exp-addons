@@ -279,7 +279,7 @@ var questions = [
         }
     }),
     generateSchema({
-        question: 'measures.questions.3.label.10am',
+        question: 'measures.questions.3.label',
         type: 'radio',
         page: 0,
         items: items['3'],
@@ -589,7 +589,8 @@ var questions = [
             'measures.questions.8.options.disbelieveLittle',
             'measures.questions.8.options.neutral',
             'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong'
+            'measures.questions.8.options.believeStrong',
+            'measures.questions.8.options.preferNoAnswer'
         ],
         options: {labelTop: true}
     })
@@ -605,15 +606,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),
-    questions: Ember.computed(function () {
-        var condition = this.get('session').get('experimentCondition');
-        if (condition === '7pm') {
-            questions[2]['question'] = 'measures.questions.3.label.7pm';
-        } else if (condition === '10am') {
-            questions[2]['question'] = 'measures.questions.3.label.10am';
-        }
-        return questions;
-    }),
+    questions: questions,
     responses: Ember.computed(function() {
         var questions = this.get('questions');
         var responses = {};

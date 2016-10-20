@@ -8,6 +8,26 @@ let {
     $
 } = Ember;
 
+/**
+ * @module exp-player
+ * @submodule components
+ */
+
+/**
+ * Experiment player: a component that renders a series of frames that define an experiment
+ *
+ * Sample usage:
+ * ```handlebars
+ * {{exp-player
+ *   experiment=experiment
+ *   session=session
+ *   pastSessions=pastSessions
+ *   saveHandler=(action 'saveSession')
+ *   frameIndex=0
+ *   fullScreenElementId='expContainer'}}
+ * ```
+ * @class exp-player
+ */
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
 
@@ -25,52 +45,47 @@ export default Ember.Component.extend(FullScreen, {
 
     allowExit: false,
     hasAttemptedExit: false,
+
+    /**
+     * The message to display in the early exit modal. Newer browsers may not respect this message.
+     * @property {String|null} messageEarlyExitModal
+     */
+    messageEarlyExitModal: 'Are you sure you want to leave this page? You may lose unsaved data.',
+
+    /**
+     * Customize what happens when the user exits the page
+     * @method beforeUnload
+     * @parameter {event} event The event to be handled
+     * @returns {String|null} If string is provided, triggers a modal to confirm user wants to leave page
+     */
+    beforeUnload(event) {
+        if (!this.get('allowExit')) {
+            this.set('hasAttemptedExit', true);
+            this.send('exitFullscreen');
+
+            // Log that the user attempted to leave early, via browser navigation.
+            // There is no guarantee that the server request to save this event will finish before exit completed;
+            //   we are limited in our ability to prevent willful exits
+            this.send('setGlobalTimeEvent', 'exitEarly', {
+                exitType: 'browserNavigationAttempt', // Page navigation, closed browser, etc
+                lastPageSeen: this.get('frameIndex') + 1
+            });
+            //Ensure sync - try to force save to finish before exit
+            Ember.run(() => this.get('session').save());
+
+            // Then attempt to warn the user and exit
+            // Newer browsers will ignore the custom message below. See https://bugs.chromium.org/p/chromium/issues/detail?id=587940
+            const message = this.get('messageEarlyExitModal');
+            event.returnValue = message;
+            return message;
+        }
+        return null;
+    },
+
     _registerHandlers() {
-        $(window).on('beforeunload', (e) => {
-            if (!this.get('allowExit')) {
-                this.set('hasAttemptedExit', true);
-                this.send('exitFullscreen');
-
-                // Log that the user attempted to leave early, via browser navigation.
-                // There is no guarantee that the server request to save this event will finish before exit completed;
-                //   we are limited in our ability to prevent willful exits
-                this.send('setGlobalTimeEvent', 'exitEarly', {
-                    exitType: 'browserNavigationAttempt', // Page navigation, closed browser, etc
-                    lastPageSeen: this.get('frameIndex') + 1
-                });
-                //Ensure sync - try to force save to finish before exit
-                Ember.run(() => this.get('session').save());
-
-                // Then attempt to warn the user and exit
-                let toast = this.get('toast');
-                toast.warning('To leave the study early, press F1 and then select a privacy level for your videos');
-                // Newer browsers will ignore the custom message below. See https://bugs.chromium.org/p/chromium/issues/detail?id=587940
-                const message = `
-If you're sure you'd like to leave this study early
-you can do so now.
-
-We'd appreciate it if before you leave you fill out a
-very brief exit survey letting us know how we can use
-any video captured during this session. Press 'Stay on
-this Page' and you will be prompted to go to this
-exit survey.
-
-If leaving this page was an accident you will be
-able to continue the study.
-`;
-                e.returnValue = message;
-                return message;
-            }
-            return null;
-        });
-        $(window).on('keyup', (e) => {
-            if (e.which === 112) {
-                this.send('exitEarly');
-            }
-        });
+        $(window).on('beforeunload', this.beforeUnload.bind(this));
     },
     _removeHandlers() {
-        $(window).off('keypress');
         $(window).off('beforeunload');
     },
     onFrameIndexChange: Ember.observer('frameIndex', function() {
@@ -193,20 +208,6 @@ able to continue the study.
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
             }
-        },
-
-        exitEarly() {
-            this.set('hasAttemptedExit', false);
-            // Save any available data immediately
-            this.send('setGlobalTimeEvent', 'exitEarly', {
-                    exitType: 'manualInterrupt',  // User consciously chose to exit, eg by pressing F1 key
-                    lastPageSeen: this.get('frameIndex') + 1
-                });
-            this.get('session').save();
-
-            // Navigate to last page in experiment (assumed to be survey frame)
-            var max = this.get('frames.length') - 1;
-            this.set('frameIndex', max);
         },
 
         closeExitWarning() {

@@ -28,24 +28,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-free-response',
     layout: layout,
     i18n: Ember.inject.service(),
-    displayTime: Ember.computed(function() {
-        var condition = this.get('session').get('experimentCondition');
-        if (condition === '7pm') {
-            return '19:00 (7pm)';
-        } else if (condition === '10am') {
-            return '10am';
-        }
-    }),
-    instructions: Ember.computed(function() {
-      var instructions = this.get('i18n').t('survey.sections.2.instructions').string;
-      instructions = instructions.replace('##', this.get('displayTime'));
-      return instructions;
-    }),
-    label1: Ember.computed(function() {
-      var label = this.get('i18n').t('survey.sections.2.questions.11.label').string;
-      label = label.replace('##', this.get('displayTime'));
-      return label;
-    }),
     diff1: Ember.computed('q1', function() {
         var length = getLength(this.get('q1'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
