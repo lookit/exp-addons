@@ -68,7 +68,7 @@ export default Ember.Component.extend(FullScreen, {
             //   we are limited in our ability to prevent willful exits
             this.send('setGlobalTimeEvent', 'exitEarly', {
                 exitType: 'browserNavigationAttempt', // Page navigation, closed browser, etc
-                lastPageSeen: this.get('frameIndex') + 1
+                lastPageSeen: this.get('frameIndex')
             });
             //Ensure sync - try to force save to finish before exit
             Ember.run(() => this.get('session').save());
