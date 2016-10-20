@@ -69,11 +69,7 @@ const VideoRecorder = Ember.Object.extend({
         return window.swfobject.getObjectById(this.get('_SWFId'));
     }).volatile(),
 
-    install({
-        record: record
-    } = {
-        record: false
-    }) {
+    install({ record: record } = { record: false }) {
         this.set('divId', `${this.get('divId')}-${this.get('recorderId')}`);
 
         var $element = $(this.get('element'));
@@ -212,7 +208,9 @@ const VideoRecorder = Ember.Object.extend({
     // Stop recording and save the video to the server
     stop({ destroy: destroy } = { destroy: false }) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-        if (1.5 - this.getTime() > 0) {
+        // We optimistically start the connection before checking for camera access. For now, let recorder stop
+        // immediately if recorder never had camera access- the video would be meaningless anyway
+        if (this.get('hasCamAccess') && (1.5 - this.getTime() > 0)) {
             window.setTimeout(this.stop.bind(this, {
                 destroy: destroy
             }), 1.5 - this.getTime());

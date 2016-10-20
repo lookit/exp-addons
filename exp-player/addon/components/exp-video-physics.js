@@ -397,6 +397,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
+        // Todo: make removal of event listener more specific (in case a frame comes between the video and the exit survey)
         $(document).off("keyup");
     }
 });
