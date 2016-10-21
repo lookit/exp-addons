@@ -207,8 +207,6 @@ export default Ember.Component.extend(FullScreen, {
             if (frameIndex !== 0) {
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
-            } else {
-                console.log('Previous: At frame 0');
             }
         },
 
