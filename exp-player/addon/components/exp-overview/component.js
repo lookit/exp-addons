@@ -29,6 +29,7 @@ var generateValidators = function(questions) {
   return validators;
 };
 
+
 const questions = [
   {
     question: 'survey.sections.1.questions.1.label',
@@ -60,8 +61,24 @@ const questions = [
     question: 'survey.sections.1.questions.5.label',
     type: 'radio',
     scale: range(1, 10),
-    labelTop: true,
-    value: null
+    labelTop: false,
+    formatLabel: 'negative-margin-top narrow-width',
+    value: null,
+    labels: [
+        {
+            rating: 1,
+            label: 'survey.sections.1.questions.5.options.least'
+        },
+        {
+            rating: 5,
+            label: 'survey.sections.1.questions.5.options.average',
+            formatClass: 'format-average-label'
+        },
+        {
+            rating: 10,
+            label: 'survey.sections.1.questions.5.options.most'
+        }
+    ]
   },
   {
     question: 'survey.sections.1.questions.6.label',
@@ -87,9 +104,25 @@ const questions = [
   {
     question: 'survey.sections.1.questions.8.label',
     type: 'radio',
-    scale: range(1, 10),
-    labelTop: true,
-    value: null
+    scale: range(1, 11),
+    hiddenOptions: [11],
+    labelTop: false,
+    formatLabel: 'negative-margin-top narrow-width',
+    value: null,
+    labels: [
+        {
+            rating: 1,
+            label: 'survey.sections.1.questions.8.options.notReligious'
+        },
+        {
+            rating: 10,
+            label: 'survey.sections.1.questions.8.options.highlyReligious'
+        },
+        {
+            rating: 11,
+            label: 'survey.sections.1.questions.8.options.preferNoAnswer'
+        }
+    ]
   },
   {
     question: 'survey.sections.1.questions.9.label',
@@ -130,7 +163,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         return responses;
     }).volatile(),
     allowNext: Ember.computed('validations.isValid', function() {
-        if (config.validate) {
+        if (config.featureFlags.validate) {
             return this.get('validations.isValid');
         }
         return true;
