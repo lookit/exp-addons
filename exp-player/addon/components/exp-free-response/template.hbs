@@ -3,19 +3,22 @@
   {{#bs-form}}
     {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.14.label'}}</label><br>
-        {{#power-select
-          selected=WhenResponse
-          options=times
-          placeholder=placeholder
-          searchEnabled=false
-          onchange=(action (mut WhenResponse))
-          as |time|
-        }}
-        <div>
+        <div id="timeSelect">
+          {{#power-select
+            dropdownClass='dropdownClass'
+            selected=WhenResponse
+            options=times
+            placeholder=placeholder
+            searchEnabled=false
+            onchange=(action (mut WhenResponse))
+            as |time|
+          }}
+          <div>
             <span>{{time.12h}}</span>
             <span class="pull-right">{{time.24h}}</span>
+          </div>
+          {{/power-select}}
         </div>
-        {{/power-select}}
     {{/bs-form-group}}
     <p class="break-line">{{t 'survey.sections.2.instructions.secondSection'}}</p>
     {{#bs-form-group}}
