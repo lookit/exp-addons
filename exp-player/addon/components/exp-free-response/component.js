@@ -1,4 +1,3 @@
-var $ = Ember.$;
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
@@ -20,30 +19,30 @@ var presence = validator('presence', {
 });
 
 const Validations = buildValidations({
-    q1: presence,
-    q2: presence,
-    q3: presence,
-    q4: presence
+    WhatResponse: presence,
+    WhereResponse: presence,
+    WhoResponse: presence,
+    WhenResponse: presence
 });
 
 export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-free-response',
     layout: layout,
     i18n: Ember.inject.service(),
-    diff1: Ember.computed('q1', function() {
-        var length = getLength(this.get('q1'));
+    diff1: Ember.computed('WhatResponse', function() {
+        var length = getLength(this.get('WhatResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
         message = message.replace("0", length.toString());
         return message;
     }),
-    diff2: Ember.computed('q2', function() {
-        var length = getLength(this.get('q2'));
+    diff2: Ember.computed('WhereResponse', function() {
+        var length = getLength(this.get('WhereResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
         message = message.replace("0", length.toString());
         return message;
     }),
-    diff3: Ember.computed('q3', function() {
-        var length = getLength(this.get('q3'));
+    diff3: Ember.computed('WhoResponse', function() {
+        var length = getLength(this.get('WhoResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
         message = message.replace("0", length.toString());
         return message;
@@ -78,14 +77,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
     placeholder: Ember.computed(function() {
        return this.get('i18n').t('global.selectUnselected');
     }),
-    q4: null,
+    WhenResponse: null,
 
-    responses: Ember.computed('q1', 'q2', 'q3', 'q4', function() {
+    responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'WhenResponse', function() {
+        var time = this.get('WhenResponse')['24h'];
         return {
-            q1: this.get('q1'),
-            q2: this.get('q2'),
-            q3: this.get('q3'),
-            q4: this.get('q4')
+            WhenResponse: time,
+            WhatResponse: this.get('WhatResponse'),
+            WhereResponse: this.get('WhereResponse'),
+            WhoResponse: this.get('WhoResponse')
         };
     }),
 
@@ -111,16 +111,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 responses: {
                     type: 'object',
                     properties: {
-                        q1: {
+                        WhenResponse: {
                             type: 'string'
                         },
-                        q2: {
+                        WhatResponse: {
                             type: 'string'
                         },
-                        q3: {
+                        WhereResponse: {
                             type: 'string'
                         },
-                        q4: {
+                        WhoResponse: {
                             type: 'string'
                         }
                     }
@@ -133,13 +133,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
             if (this.get('allowNext')) {
                 this.send('next');
             }
-        },
+        }
     },
     loadData: function(frameData) {
         var responses = frameData.responses;
-        this.set('q1', responses.q1);
-        this.set('q2', responses.q2);
-        this.set('q3', responses.q3);
-        this.set('q4', responses.q4);
+        this.set('WhenResponse', responses.WhenResponse);
+        this.set('WhatResponse', responses.WhatResponse);
+        this.set('WhereResponse', responses.WhereResponse);
+        this.set('WhoResponse', responses.WhoResponse);
     }
 });
