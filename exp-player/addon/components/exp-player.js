@@ -187,9 +187,6 @@ export default Ember.Component.extend(FullScreen, {
                 this._transition();
                 this.set('frameIndex', frameIndex + 1);
                 this.set('framePage', 0);
-                this.get('session').set('frameIndex', frameIndex + 1);
-                this.get('session').set('surveyPage', 0);
-                this.get('session').save();
                 return;
             }
             this._exit();
@@ -210,8 +207,6 @@ export default Ember.Component.extend(FullScreen, {
             if (frameIndex !== 0) {
                 this._transition();
                 this.set('frameIndex', frameIndex - 1);
-                this.get('session').set('frameIndex', frameIndex - 1);
-                this.get('session').save();
             } else {
                 console.log('Previous: At frame 0');
             }
@@ -223,8 +218,6 @@ export default Ember.Component.extend(FullScreen, {
 
         updateFramePage(framePage) {
             this.set('framePage', framePage);
-            this.get('session').set('surveyPage', framePage);
-            this.get('session').save();
         }
     }
 });
