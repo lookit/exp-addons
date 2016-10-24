@@ -52,7 +52,17 @@ export default DS.Model.extend(JamModel, {
     },
     pastSessionsFor(experiment, profile, isCompleted) {
         var profileId = Ember.get(profile, 'profileId');
-        var query = profileId ? { 'filter[profileId]': profileId } : {};
+
+        // For most applications, we will care about the newest past sessions first. Fetch as many of those results
+        // as possible so that any client side filtering has a chance of working as desired.
+        let query = {
+            'sort': '-created_on',
+            'page[size]': 100
+        };
+
+        if (profileId) {
+            query['filter[profileId]'] = profileId;
+        }
         if (typeof isCompleted !== 'undefined') {
             query['filter[completed]'] = isCompleted ? 1 : 0;
         }

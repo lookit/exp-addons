@@ -81,12 +81,22 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     },
     today: new Date(),
     section1: true,
+    showWithdrawalConfirmation: false,
     showValidation: false,
     actions: {
+        advanceToProgressBar() {
+            // Move from section 1 (survey) to section 2 (progress bar/ finish button)
+            this.set('section1', false);
+            this.send('save');
+        },
         continue () {
+            // Check whether exit survey is valid, and if so, advance to next screen
             if (this.get('validations.isValid')) {
-                this.set('section1', false);
-                this.send('save');
+                if (this.get('withdrawal')) {
+                    this.set('showWithdrawalConfirmation', true);
+                } else {
+                    this.send('advanceToProgressBar');
+                }
             } else {
                 this.set('showValidation', true);
             }

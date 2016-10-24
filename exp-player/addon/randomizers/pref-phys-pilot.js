@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 // http://stackoverflow.com/a/12646864
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -7,6 +9,33 @@ function shuffleArray(array) {
         array[j] = temp;
     }
     return array;
+}
+
+/**
+ * Select the first matching session from an array of options, according to the specified rules
+ *
+ * @method getLastSession
+ * @param {Session[]} pastSessions An array of session records. This returns the first match, eg assumes newest-first sort order
+ * @returns {Session} The model representing the last session in which the user participated
+ */
+function getLastSession(pastSessions) {
+    // Base randomization on the newest (last completed) session for which the participant got at
+    // least as far as recording data for a single video ID.
+    for (let i = 0; i < pastSessions.length; i++) {
+        let session = pastSessions[i];
+        // Frames might be numbered differently in different experiments... rather than check for a frame ID, check that at least one frame referencing the videos exists at all.
+        let expData = session.get('expData') || {};
+        let keys = Object.keys(expData);
+        for (let i = 0; i < keys.length; i++) {
+            let frameKeyName = keys[i];
+            let frameData = expData[frameKeyName];
+            if (frameKeyName.indexOf('pref-phys-videos') !== -1 && frameData && frameData.videoId) {
+                return session;
+            }
+        }
+    }
+    // If no match found, explicitly return null
+    return null;
 }
 
 function getConditions(lastSession, frameId) {
@@ -45,7 +74,7 @@ function getConditions(lastSession, frameId) {
         showStay = lastFrameConditions.showStay;
         //parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
         showStay = 1 - showStay;
-        whichObjects = lastFrameConditions.whichObjects;
+        whichObjects = Ember.copy(lastFrameConditions.whichObjects);
         for (var i = 0; i < 4; i++) {
             whichObjects[i]++;
             if (whichObjects[i] > 5) {
@@ -383,17 +412,16 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
     var MAX_VIDEOS = 24; // limit number of videos. Use 24 for actual study.
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics/';
 
-    // Base randomization on the newest (last completed) session for which the participant got at
-    // least as far as defining the experimental conditions (even if they hadn't seen videos yet)
-    pastSessions = pastSessions.filter(function (session) {
-        return session.get('conditions');
-    });
     pastSessions.sort(function (a, b) {
         return a.get('createdOn') > b.get('createdOn') ? -1 : 1;
     });
 
     // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
-    var conditions = getConditions(pastSessions[0], frameId);
+    pastSessions = pastSessions.filter(function (session) {
+        return session.get('conditions');
+    });
+    let lastSession = getLastSession(pastSessions);
+    var conditions = getConditions(lastSession, frameId);
 
     conditions.NPERTYPE = 6;
     var {
@@ -418,4 +446,4 @@ var randomizer = function (frameId, frameConfig, pastSessions, resolveFrame) {
 export default randomizer;
 
 // Export helper functions to support unit testing
-export { getConditions };
+export { getConditions, getLastSession };

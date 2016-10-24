@@ -29,6 +29,7 @@ var generateValidators = function(questions) {
   return validators;
 };
 
+
 const questions = [
   {
     question: 'survey.sections.1.questions.1.label',
@@ -60,11 +61,32 @@ const questions = [
     question: 'survey.sections.1.questions.5.label',
     type: 'radio',
     scale: range(1, 10),
-    labelTop: true,
-    value: null
+    labelTop: false,
+    formatLabel: 'negative-margin-top narrow-width',
+    value: null,
+    labels: [
+        {
+            rating: 1,
+            label: 'survey.sections.1.questions.5.options.least'
+        },
+        {
+            rating: 5,
+            label: 'survey.sections.1.questions.5.options.average',
+            formatClass: 'format-average-label'
+        },
+        {
+            rating: 10,
+            label: 'survey.sections.1.questions.5.options.most'
+        }
+    ]
   },
   {
     question: 'survey.sections.1.questions.6.label',
+    type: 'input',
+    value: null
+  },
+  {
+    question: 'survey.sections.1.questions.11.label',
     type: 'input',
     value: null
   },
@@ -82,9 +104,25 @@ const questions = [
   {
     question: 'survey.sections.1.questions.8.label',
     type: 'radio',
-    scale: range(1, 10),
-    labelTop: true,
-    value: null
+    scale: range(1, 11),
+    hiddenOptions: [11],
+    labelTop: false,
+    formatLabel: 'negative-margin-top narrow-width',
+    value: null,
+    labels: [
+        {
+            rating: 1,
+            label: 'survey.sections.1.questions.8.options.notReligious'
+        },
+        {
+            rating: 10,
+            label: 'survey.sections.1.questions.8.options.highlyReligious'
+        },
+        {
+            rating: 11,
+            label: 'survey.sections.1.questions.8.options.preferNoAnswer'
+        }
+    ]
   },
   {
     question: 'survey.sections.1.questions.9.label',
@@ -108,8 +146,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     questions: questions,
 
-    showOptional: Ember.computed('questions.8.value', function() {
-       return this.questions[8].value === 'yesLabel';
+    showOptional: Ember.computed('questions.9.value', function() {
+       return this.questions[9].value === 'yesLabel';
     }),
     responses: Ember.computed(function() {
         var questions = this.get('questions');
@@ -125,7 +163,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         return responses;
     }).volatile(),
     allowNext: Ember.computed('validations.isValid', function() {
-        if (config.validate) {
+        if (config.featureFlags.validate) {
             return this.get('validations.isValid');
         }
         return true;
@@ -162,19 +200,22 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             '4': { // how well off
                                 type: 'integer'
                             },
-                            '5': { // birth location
+                            '5': { // birth city
                                 type: 'string'
                             },
-                            '6': { // hometown type
+                            '6': { // birth country
+                                type: 'string'
+                            },
+                            '7': { // hometown type
                                type: 'string'
                             },
-                            '7': { // how religious?
+                            '8': { // how religious?
                                 type: 'integer'
                             },
-                            '8': { // follows religion?
+                            '9': { // follows religion?
                                 type: 'string'
                             },
-                            '9': {  // which religion?
+                            '10': {  // which religion?
                                 type: 'string'
                             }
                         }

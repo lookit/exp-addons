@@ -187,21 +187,27 @@ const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(1, 10);
 
 var generateValidators = function (questions) {
     var validators = {};
+    var pages = {};
     for (var i = 0; i < questions.length; i++) {
+        var page = questions[i].page;
         for (var item = 0; item < questions[i]['items'].length; item++) {
             var isOptional = questions[i]['items'][item].optional;
             if (!isOptional) {
                 var key = `questions.${i}.items.${item}.value`;
+                if (!pages[page]) {
+                    pages[page] = [];
+                }
+                pages[page].push(key);
                 validators[key] = validator('presence', {
-                    presence: true,
-                    message: 'This field is required',
-                    disabled(model, attribute) {
-                        var index = attribute.split('.')[1];
-                        return model.get('questions')[index].page !== model.get('framePage');
-                    }
+                    presence: true
                 });
             }
         }
+    }
+    for (var number in Object.keys(pages)) {
+        validators['page' + number] = validator('dependent', {
+            on: pages[number]
+        });
     }
     return validators;
 };
@@ -273,7 +279,7 @@ var questions = [
         }
     }),
     generateSchema({
-        question: 'measures.questions.3.label.10am',
+        question: 'measures.questions.3.label',
         type: 'radio',
         page: 0,
         items: items['3'],
@@ -301,7 +307,7 @@ var questions = [
         scale: TEN_POINT_SCALE,
         options: {
             labelTop: false,
-            formatLabel: 'measure-four',
+            formatLabel: 'measure-four negative-margin-top',
             labels: [
                 {
                     rating: 0,
@@ -464,14 +470,45 @@ var questions = [
         scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
         items: [{
             type: 'radio',
-            value: null
+            value: null,
+            formatLabel: 'negative-margin-top'
         },
-            {
-                type: 'input',
-                description: 'measures.questions.12.label',
-                value: null,
-                optional: true
-            }]
+        {
+            type: 'textarea',
+            description: 'measures.questions.12.label',
+            value: null,
+            optional: true
+        },
+        {
+            type: 'radio',
+            description: 'measures.questions.18.label',
+            value: null,
+            optional: true,
+            labelTop: false,
+            scale: NINE_POINT_SCALE,
+            labels: [
+                {
+                    rating: 1,
+                    label: 'measures.questions.18.options.notatallSuccessful'
+                },
+                {
+                    rating: 3,
+                    label: 'measures.questions.18.options.alittleSuccessful'
+                },
+                {
+                    rating: 5,
+                    label: 'measures.questions.18.options.moderatelySuccessful'
+                },
+                {
+                    rating: 7,
+                    label: 'measures.questions.18.options.verySuccessful'
+                },
+                {
+                    rating: 9,
+                    label: 'measures.questions.18.options.completelySuccessful'
+                }
+            ]
+        }]
     },
     generateSchema({
         question: 'measures.questions.13.label',
@@ -552,7 +589,8 @@ var questions = [
             'measures.questions.8.options.disbelieveLittle',
             'measures.questions.8.options.neutral',
             'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong'
+            'measures.questions.8.options.believeStrong',
+            'measures.questions.8.options.preferNoAnswer'
         ],
         options: {labelTop: true}
     })
@@ -565,18 +603,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     framePage: 0,
     lastPage: 6,
-    progressBarPage: Ember.computed('currentPage', function () {
+    progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),
-    questions: Ember.computed(function () {
-        var condition = this.get('session').get('experimentCondition');
-        if (condition === '7pm') {
-            questions[2]['question'] = 'measures.questions.3.label.7pm';
-        } else if (condition === '10am') {
-            questions[2]['question'] = 'measures.questions.3.label.10am';
-        }
-        return questions;
-    }),
+    questions: questions,
     responses: Ember.computed(function() {
         var questions = this.get('questions');
         var responses = {};
@@ -589,8 +619,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
-    allowNext: Ember.computed('validations.isValid', function() {
-        return this.get('validations.isValid') || !config.validate;
+    allowNext: Ember.computed(
+        'framePage',
+        'validations.attrs.page0.isValid',
+        'validations.attrs.page1.isValid',
+        'validations.attrs.page2.isValid',
+        'validations.attrs.page3.isValid',
+        'validations.attrs.page4.isValid',
+        'validations.attrs.page5.isValid',
+        'validations.attrs.page6.isValid',
+        function() {
+            // Check validation for questions on the current page
+            var page = this.get('framePage');
+            var attr = 'validations.attrs.page' + page + '.isValid';
+            return this.get(attr) || !config.featureFlags.validate;
     }),
     meta: {
         name: 'ExpRatingForm',

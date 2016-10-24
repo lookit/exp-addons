@@ -171,7 +171,7 @@ export default ExpFrameBaseComponent.extend({
     }).volatile(),
 
     allowNext: Ember.computed('cards.[]', function() {
-        if (config.validate) {
+        if (config.featureFlags.validate) {
             return this.get('cards').length === 0;
         }
         return true;
@@ -188,7 +188,7 @@ export default ExpFrameBaseComponent.extend({
         'buckets2.2.categories.1.cards.[]',
         'buckets2.2.categories.2.cards.[]',
         function () {
-            if (config.validate) {
+            if (config.featureFlags.validate) {
                 for (var group = 0; group < this.buckets2.length; group++) {
                     for (var category = 0; category < this.buckets2[group].categories.length; category++) {
                         var bucket = this.buckets2[group].categories[category];

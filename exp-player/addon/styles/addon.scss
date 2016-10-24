@@ -11,8 +11,10 @@
 @import "components/exp-video-physics";
 @import "components/radio-group";
 @import "components/isp-radio-group";
+@import "components/exp-overview";
 @import "components/exp-card-sort";
 @import "components/exp-rating-form";
+@import "components/exp-thank-you";
 
 
 .exp-text-large {
@@ -27,10 +29,6 @@
 
 .breaklines {
     white-space: pre-wrap
-}
-
-.btn {
-    margin-bottom: 15px;
 }
 
 .exp-controls {
