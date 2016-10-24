@@ -80,7 +80,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
     WhenResponse: null,
 
     responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'WhenResponse', function() {
-        var time = this.get('WhenResponse')['24h'];
+        var time = this.get('WhenResponse');
+        if (time !== null) {
+            time = time['24h'];
+        }
         return {
             WhenResponse: time,
             WhatResponse: this.get('WhatResponse'),
