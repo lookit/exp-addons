@@ -238,15 +238,15 @@ var questions = [
         page: 0,
         items: [''],
         scale: [
-            'measures.questions.1.options.extremelyNeg',
-            'measures.questions.1.options.quiteNeg',
-            'measures.questions.1.options.fairlyNeg',
-            'measures.questions.1.options.somewhatNeg',
-            'measures.questions.1.options.neither',
-            'measures.questions.1.options.somewhatPos',
-            'measures.questions.1.options.fairlyPos',
-            'measures.questions.1.options.quitePos',
-            'measures.questions.1.options.extremelyPos'
+            {label: 'measures.questions.1.options.extremelyNeg', value: 1},
+            {label: 'measures.questions.1.options.quiteNeg', value: 2},
+            {label: 'measures.questions.1.options.fairlyNeg', value: 3},
+            {label: 'measures.questions.1.options.somewhatNeg', value: 4},
+            {label: 'measures.questions.1.options.neither', value: 5},
+            {label: 'measures.questions.1.options.somewhatPos', value: 6},
+            {label: 'measures.questions.1.options.fairlyPos', value: 7},
+            {label: 'measures.questions.1.options.quitePos', value: 8},
+            {label: 'measures.questions.1.options.extremelyPos', value: 9}
         ]
     }),
     generateSchema({

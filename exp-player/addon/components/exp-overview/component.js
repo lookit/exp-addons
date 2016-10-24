@@ -5,10 +5,14 @@ import {validator, buildValidations} from 'ember-cp-validations';
 import config from 'ember-get-config';
 
 
-function range(start, stop) {
+function range(start, stop, isSelect) {
   var options = [];
   for (var i=start; i <= stop; i++) {
-    options.push(i);
+    var value = i;
+    if (isSelect) {
+        value = {label: i, value: i};
+    }
+    options.push(value);
   }
   return options;
 }
@@ -35,17 +39,18 @@ const questions = [
     question: 'survey.sections.1.questions.1.label',
     keyName: 'Age',
     type: 'select',
-    scale: range(16, 100),
+    scale: range(16, 100, true),
     value: null
   },
   {
     question: 'survey.sections.1.questions.2.label',
     keyName: 'Gender',
     type: 'select',
-    scale: ['survey.sections.1.questions.2.options.male',
-        'survey.sections.1.questions.2.options.female',
-        'survey.sections.1.questions.2.options.other',
-        'survey.sections.1.questions.2.options.na'
+    scale: [
+        {label: 'survey.sections.1.questions.2.options.male', value: 1},
+        {label: 'survey.sections.1.questions.2.options.female', value: 2},
+        {label: 'survey.sections.1.questions.2.options.other', value: 3},
+        {label: 'survey.sections.1.questions.2.options.na', value: 4}
     ],
     value: null
   },
@@ -102,10 +107,10 @@ const questions = [
     keyName: 'Residence',
     type: 'select',
     scale: [
-        'survey.sections.1.questions.7.options.remoteRural',
-        'survey.sections.1.questions.7.options.rural',
-        'survey.sections.1.questions.7.options.suburban',
-        'survey.sections.1.questions.7.options.urban'
+        {label: 'survey.sections.1.questions.7.options.remoteRural', value: 1},
+        {label: 'survey.sections.1.questions.7.options.rural', value: 2},
+        {label: 'survey.sections.1.questions.7.options.suburban', value: 3},
+        {label: 'survey.sections.1.questions.7.options.urban', value: 4}
     ],
     value: null
   },
