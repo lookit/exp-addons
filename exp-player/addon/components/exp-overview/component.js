@@ -33,12 +33,14 @@ var generateValidators = function(questions) {
 const questions = [
   {
     question: 'survey.sections.1.questions.1.label',
+    keyName: 'Age',
     type: 'select',
     scale: range(16, 100),
     value: null
   },
   {
     question: 'survey.sections.1.questions.2.label',
+    keyName: 'Gender',
     type: 'select',
     scale: ['survey.sections.1.questions.2.options.male',
         'survey.sections.1.questions.2.options.female',
@@ -49,16 +51,19 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.3.label',
+    keyName: 'Ethnicity',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.4.label',
+    keyName: 'Language',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.5.label',
+    keyName: 'SocialStatus',
     type: 'radio',
     scale: range(1, 10),
     labelTop: false,
@@ -82,16 +87,19 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.6.label',
+    keyName: 'BirthCity',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.11.label',
+    keyName: 'BirthCountry',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.7.label',
+    keyName: 'Residence',
     type: 'select',
     scale: [
         'survey.sections.1.questions.7.options.remoteRural',
@@ -103,6 +111,7 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.8.label',
+    keyName: 'ReligionScale',
     type: 'radio',
     scale: range(1, 11),
     hiddenOptions: [11],
@@ -126,6 +135,7 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.9.label',
+    keyName: 'ReligionYesNo',
     type: 'radio',
     scale: ['global.yesLabel', 'global.noLabel'],
     labelTop: true,
@@ -133,6 +143,7 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.10.label',
+    keyName: 'ReligionFollow',
     type: 'input',
     optional: true,
     value: null
@@ -153,11 +164,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var questions = this.get('questions');
         var responses = {};
         for (var i=0; i < questions.length; i++) {
+            var keyName = questions[i].keyName;
             if (i === 0) {
                 // Convert value to int bc select-input returns a string (e.g. "16" --> 16)
-                responses[i] = parseInt(questions[i].value);
+                responses[keyName] = parseInt(questions[i].value);
             } else {
-                responses[i] = questions[i].value;
+                responses[keyName] = questions[i].value;
             }
         }
         return responses;
@@ -185,37 +197,37 @@ export default ExpFrameBaseComponent.extend(Validations, {
                         //   https://spacetelescope.github.io/understanding-json-schema/reference/object.html#required-properties
                         type: 'object',
                         properties: {
-                            '0': { // age
+                            'Age': {
                                 type: 'integer'
                             },
-                            '1': { // gender
+                            'Gender': {
                                 type: 'string'
                             },
-                            '2': { // ethhnicity
+                            'Ethnicity': {
                                 type: 'string'
                             },
-                            '3': { // firstLanguage
+                            'Language': {
                                type: 'string'
                             },
-                            '4': { // how well off
+                            'SocialStatus': {
                                 type: 'integer'
                             },
-                            '5': { // birth city
+                            'BirthCity': {
                                 type: 'string'
                             },
-                            '6': { // birth country
+                            'BirthCountry': {
                                 type: 'string'
                             },
-                            '7': { // hometown type
+                            'Residence': {
                                type: 'string'
                             },
-                            '8': { // how religious?
+                            'ReligionScale': { // how religious?
                                 type: 'integer'
                             },
-                            '9': { // follows religion?
+                            'ReligionYesNo': { // follows religion?
                                 type: 'string'
                             },
-                            '10': {  // which religion?
+                            'ReligionFollow': {  // which religion?
                                 type: 'string'
                             }
                         }
@@ -232,7 +244,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     loadData: function(frameData) {
         for (var q=0; q < this.get('questions').length; q++) {
-            this.get('questions')[q].value = frameData.responses[q];
+            var keyName = this.get('questions')[q].keyName;
+            this.get('questions')[q].value = frameData.responses[keyName];
         }
     }
 });
