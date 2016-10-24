@@ -147,22 +147,22 @@ export default ExpFrameBaseComponent.extend({
         let responses = {};
         let cardSortResponse = this.get('cardSortResponse');
         if (cardSortResponse) {
-            responses['sort1'] = {};
+            responses['ThreeCat'] = {};
             for (var i = 0; i < cardSortResponse.length; i++) {
                 for (let card of cardSortResponse[i].cards) {
-                    responses['sort1'][card.id] = i + 1;
+                    responses['ThreeCat'][card.id] = i + 1;
                 }
             }
         }
         if (this.get('page') === 'cardSort2') {
             cardSortResponse = this.get('buckets2');
-            responses['sort2'] = {};
+            responses['NineCat'] = {};
             // Assumption: this unpacks a list of category objects:
             // { categories: [ {id: id, cards: [cards]},...] }
             for (let categorySet of cardSortResponse) {
                 for (var j = 0; j < categorySet.categories.length; j++) {
                     for (let card of categorySet.categories[j].cards) {
-                        responses['sort2'][card.id] = categorySet.categories[j].id;
+                        responses['NineCat'][card.id] = categorySet.categories[j].id;
                     }
                 }
             }
@@ -356,8 +356,8 @@ export default ExpFrameBaseComponent.extend({
     },
 
     loadData: function (frameData) {
-        var cardSort1 = frameData.responses['sort1'];
-        var cardSort2 = frameData.responses['sort2'];
+        var cardSort1 = frameData.responses['ThreeCat'];
+        var cardSort2 = frameData.responses['NineCat'];
         if (cardSort1) {
             // If cardSort1 is complete, go to cardSort2
             this.set('page', 'cardSort2');
