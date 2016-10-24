@@ -14,10 +14,8 @@
             onchange=(action (mut WhenResponse))
             as |time|
           }}
-          <div>
-            <span>{{time.12h}}</span>
-            <span class="pull-right">{{time.24h}}</span>
-          </div>
+          <span>{{time.12h}}</span>
+          <span class="pull-right">{{time.24h}}</span>
           {{/power-select}}
         </div>
     {{/bs-form-group}}
