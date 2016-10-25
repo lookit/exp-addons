@@ -170,8 +170,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var responses = {};
         for (var i=0; i < questions.length; i++) {
             var keyName = questions[i].keyName;
-            if (i === 0) {
-                // Convert value to int bc select-input returns a string (e.g. "16" --> 16)
+            // Questions with string values that should get serialized to integers (since select-input returns a string)
+            // (e.g. "16" --> 16)
+            var parseIntResponses = [0, 1, 7];
+            if (parseIntResponses.contains(i)) {
                 responses[keyName] = parseInt(questions[i].value);
             } else {
                 responses[keyName] = questions[i].value;
@@ -249,8 +251,18 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     loadData: function(frameData) {
         for (var q=0; q < this.get('questions').length; q++) {
-            var keyName = this.get('questions')[q].keyName;
-            this.get('questions')[q].value = frameData.responses[keyName];
+            var question = this.get('questions')[q];
+            var keyName = question.keyName;
+            var value = frameData.responses[keyName];
+            if (question.type === 'select') {
+                for (var option of question.scale) {
+                    if (option.value === value) {
+                        this.get('questions')[q].value = option;
+                    }
+                }
+            } else {
+                this.get('questions')[q].value = value;
+            }
         }
     }
 });
