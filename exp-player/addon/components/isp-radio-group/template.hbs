@@ -4,14 +4,14 @@
           {{#if labelTop}}
             {{#if hiddenOptions}}
               {{#each hiddenOptions as |hidden|}}
-                <span class="{{if (eq hidden option) 'hidden'}}">{{t option}}</span>
+                <span class="{{if (eq hidden option.label) 'hidden'}}">{{t option.label}}</span>
               {{/each}}
             {{else}}
-                {{t option}}
+                {{t option.label}}
             {{/if}}
-            {{radio-button value=(last-segment option) checked=value}}
+            {{radio-button value=option.value checked=value}}
             {{#each-in labels as |ratings value|}}
-              {{#if (eq value.rating option)}}
+              {{#if (eq value.rating option.label)}}
                 <span class="{{if value.formatClass value.formatClass}}">
                     {{t value.label}}
                 </span>
@@ -19,19 +19,19 @@
             {{/each-in}}
           {{else}}
             {{#each-in labels as |ratings value|}}
-              {{#if (eq value.rating option)}}
+              {{#if (eq value.rating option.label)}}
                 <span class="{{if value.formatClass value.formatClass}}">
                     {{t value.label}}
                 </span>
               {{/if}}
             {{/each-in}}
-            {{radio-button value=(last-segment option) checked=value}}
+            {{radio-button value=option.value checked=value}}
             {{#if hiddenOptions}}
               {{#each hiddenOptions as |hidden|}}
-                <span class="{{if (eq hidden option) 'hidden-label'}}">{{t option}}</span>
+                <span class="{{if (eq hidden option.label) 'hidden-label'}}">{{t option.label}}</span>
               {{/each}}
             {{else}}
-                {{t option}}
+                {{t option.label}}
             {{/if}}
           {{/if}}
       </label>

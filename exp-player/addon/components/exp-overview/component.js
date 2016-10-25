@@ -5,14 +5,10 @@ import {validator, buildValidations} from 'ember-cp-validations';
 import config from 'ember-get-config';
 
 
-function range(start, stop, isSelect) {
+function range(start, stop) {
   var options = [];
   for (var i=start; i <= stop; i++) {
-    var value = i;
-    if (isSelect) {
-        value = {label: i, value: i};
-    }
-    options.push(value);
+    options.push({label: i, value: i});
   }
   return options;
 }
@@ -39,7 +35,7 @@ const questions = [
     question: 'survey.sections.1.questions.1.label',
     keyName: 'Age',
     type: 'select',
-    scale: range(16, 100, true),
+    scale: range(16, 100),
     value: null
   },
   {
@@ -142,7 +138,10 @@ const questions = [
     question: 'survey.sections.1.questions.9.label',
     keyName: 'ReligionYesNo',
     type: 'radio',
-    scale: ['global.yesLabel', 'global.noLabel'],
+    scale: [
+        {label: 'global.yesLabel', value: 1},
+        {label: 'global.noLabel', value: 2}
+    ],
     labelTop: true,
     value: null
   },
@@ -163,7 +162,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     questions: questions,
 
     showOptional: Ember.computed('questions.9.value', function() {
-       return this.questions[9].value === 'yesLabel';
+       return this.questions[9].value === 1;
     }),
     responses: Ember.computed(function() {
         var questions = this.get('questions');
@@ -253,16 +252,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         for (var q=0; q < this.get('questions').length; q++) {
             var question = this.get('questions')[q];
             var keyName = question.keyName;
-            var value = frameData.responses[keyName];
-            if (question.type === 'select') {
-                for (var option of question.scale) {
-                    if (option.value === value) {
-                        this.get('questions')[q].value = option;
-                    }
-                }
-            } else {
-                this.get('questions')[q].value = value;
-            }
+            this.get('questions')[q].value = frameData.responses[keyName];
         }
     }
 });

@@ -181,7 +181,19 @@ var items = {
     ]
 };
 
-const TEN_POINT_SCALE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const TEN_POINT_SCALE = [
+    {label: 0, value: 0},
+    {label: 1, value: 1},
+    {label: 2, value: 2},
+    {label: 3, value: 3},
+    {label: 4, value: 4},
+    {label: 5, value: 5},
+    {label: 6, value: 6},
+    {label: 7, value: 7},
+    {label: 8, value: 8},
+    {label: 9, value: 9},
+    {label: 10, value: 10}
+];
 const SEVEN_POINT_SCALE = TEN_POINT_SCALE.slice(1, 8);
 const NINE_POINT_SCALE = TEN_POINT_SCALE.slice(1, 10);
 
@@ -284,15 +296,15 @@ var questions = [
         page: 0,
         items: items['3'],
         scale: [
-            'measures.questions.3.options.extremelyUnchar',
-            'measures.questions.3.options.quiteUnchar',
-            'measures.questions.3.options.fairlyUnchar',
-            'measures.questions.3.options.somewhatUnchar',
-            'measures.questions.3.options.neutral',
-            'measures.questions.3.options.somewhatChar',
-            'measures.questions.3.options.fairlyChar',
-            'measures.questions.3.options.quiteChar',
-            'measures.questions.3.options.extremelyChar'
+            {label: 'measures.questions.3.options.extremelyUnchar', value: 1},
+            {label: 'measures.questions.3.options.quiteUnchar', value: 2},
+            {label: 'measures.questions.3.options.fairlyUnchar', value: 3},
+            {label: 'measures.questions.3.options.somewhatUnchar', value: 4},
+            {label: 'measures.questions.3.options.neutral', value: 5},
+            {label: 'measures.questions.3.options.somewhatChar', value: 6},
+            {label: 'measures.questions.3.options.fairlyChar', value: 7},
+            {label: 'measures.questions.3.options.quiteChar', value: 8},
+            {label: 'measures.questions.3.options.extremelyChar', value: 9}
         ],
         options: {
             labelTop: true,
@@ -326,11 +338,11 @@ var questions = [
         page: 1,
         items: items['5'],
         scale: [
-            'measures.questions.5.options.disagreeStrongly',
-            'measures.questions.5.options.disagree',
-            'measures.questions.5.options.neutral',
-            'measures.questions.5.options.agree',
-            'measures.questions.5.options.agreeStrongly'
+            {label: 'measures.questions.5.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.5.options.disagree', value: 2},
+            {label: 'measures.questions.5.options.neutral', value: 3},
+            {label: 'measures.questions.5.options.agree', value: 4},
+            {label: 'measures.questions.5.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -410,11 +422,11 @@ var questions = [
         page: 2,
         items: items['7'],
         scale: [
-            'measures.questions.7.options.disagreeStrongly',
-            'measures.questions.7.options.disagree',
-            'measures.questions.7.options.neutral',
-            'measures.questions.7.options.agree',
-            'measures.questions.7.options.agreeStrongly'
+            {label: 'measures.questions.7.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.7.options.disagree', value: 2},
+            {label: 'measures.questions.7.options.neutral', value: 3},
+            {label: 'measures.questions.7.options.agree', value: 4},
+            {label: 'measures.questions.7.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -455,11 +467,11 @@ var questions = [
         page: 4,
         items: items['10'],
         scale: [
-            'measures.questions.10.options.disagreeStrongly',
-            'measures.questions.10.options.disagree',
-            'measures.questions.10.options.neutral',
-            'measures.questions.10.options.agree',
-            'measures.questions.10.options.agreeStrongly'
+            {label: 'measures.questions.10.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.10.options.disagree', value: 2},
+            {label: 'measures.questions.10.options.neutral', value: 3},
+            {label: 'measures.questions.10.options.agree', value: 4},
+            {label: 'measures.questions.10.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -467,7 +479,10 @@ var questions = [
         question: 'measures.questions.11.label',
         type: 'radio-input',
         page: 4,
-        scale: ['measures.questions.11.options.yes', 'measures.questions.11.options.no'],
+        scale: [
+            {label: 'measures.questions.11.options.yes', value: 1},
+            {label: 'measures.questions.11.options.no', value: 2}
+        ],
         items: [{
             type: 'radio',
             value: null,
@@ -516,11 +531,11 @@ var questions = [
         page: 4,
         items: items['13'],
         scale: [
-            'measures.questions.13.options.disagreeStrongly',
-            'measures.questions.13.options.disagree',
-            'measures.questions.13.options.neutral',
-            'measures.questions.13.options.agree',
-            'measures.questions.13.options.agreeStrongly'
+            {label: 'measures.questions.13.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.13.options.disagree',  value: 2},
+            {label: 'measures.questions.13.options.neutral',  value: 3},
+            {label: 'measures.questions.13.options.agree',  value: 4},
+            {label: 'measures.questions.13.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -530,11 +545,11 @@ var questions = [
         page: 4,
         items: items['14'],
         scale: [
-            'measures.questions.14.options.disagreeStrongly',
-            'measures.questions.14.options.disagree',
-            'measures.questions.14.options.neutral',
-            'measures.questions.14.options.agree',
-            'measures.questions.14.options.agreeStrongly'
+            {label: 'measures.questions.14.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.14.options.disagree',  value: 2},
+            {label: 'measures.questions.14.options.neutral',  value: 3},
+            {label: 'measures.questions.14.options.agree',  value: 4},
+            {label: 'measures.questions.14.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -544,11 +559,11 @@ var questions = [
         page: 5,
         items: items['15'],
         scale: [
-            'measures.questions.15.options.disagreeStrongly',
-            'measures.questions.15.options.disagree',
-            'measures.questions.15.options.neutral',
-            'measures.questions.15.options.agree',
-            'measures.questions.15.options.agreeStrongly'
+            {label: 'measures.questions.15.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.15.options.disagree',  value: 2},
+            {label: 'measures.questions.15.options.neutral',  value: 3},
+            {label: 'measures.questions.15.options.agree',  value: 4},
+            {label: 'measures.questions.15.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -558,10 +573,10 @@ var questions = [
         page: 5,
         items: items['16'],
         scale: [
-            'measures.questions.16.options.notAtAll',
-            'measures.questions.16.options.aLittle',
-            'measures.questions.16.options.quiteaBit',
-            'measures.questions.16.options.completely'
+            {label: 'measures.questions.16.options.notAtAll', value: 1},
+            {label: 'measures.questions.16.options.aLittle', value: 2},
+            {label: 'measures.questions.16.options.quiteaBit', value: 3},
+            {label: 'measures.questions.16.options.completely', value: 4}
         ],
         options: {labelTop: true}
     }),
@@ -571,11 +586,11 @@ var questions = [
         page: 5,
         items: items['17'],
         scale: [
-            'measures.questions.17.options.disagreeStrongly',
-            'measures.questions.17.options.disagree',
-            'measures.questions.17.options.neutral',
-            'measures.questions.17.options.agree',
-            'measures.questions.17.options.agreeStrongly'
+            {label: 'measures.questions.17.options.disagreeStrongly', value: 1},
+            {label: 'measures.questions.17.options.disagree',  value: 2},
+            {label: 'measures.questions.17.options.neutral',  value: 3},
+            {label: 'measures.questions.17.options.agree',  value: 4},
+            {label: 'measures.questions.17.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
     }),
@@ -585,12 +600,12 @@ var questions = [
         page: 6,
         items: items['8'],
         scale: [
-            'measures.questions.8.options.disbelieveStrong',
-            'measures.questions.8.options.disbelieveLittle',
-            'measures.questions.8.options.neutral',
-            'measures.questions.8.options.believeLittle',
-            'measures.questions.8.options.believeStrong',
-            'measures.questions.8.options.preferNoAnswer'
+            {label: 'measures.questions.8.options.disbelieveStrong', value: 1},
+            {label: 'measures.questions.8.options.disbelieveLittle', value: 2},
+            {label: 'measures.questions.8.options.neutral', value: 3},
+            {label: 'measures.questions.8.options.believeLittle', value: 4},
+            {label: 'measures.questions.8.options.believeStrong', value: 5},
+            {label: 'measures.questions.8.options.preferNoAnswer', value: 6}
         ],
         options: {labelTop: true}
     })
@@ -613,8 +628,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         for (var i = 0; i < questions.length; i++) {
             var question = questions[i];
             responses[i] = {};
-            for (var j = 0; j < question.items.length; j++) {
-                responses[i][j] = question.items[j].value;
+            if (i === 0) {
+                responses[i][0] = parseInt(question.items[0].value);
+            } else {
+                for (var j = 0; j < question.items.length; j++) {
+                    responses[i][j] = question.items[j].value;
+                }
             }
         }
         return responses;
@@ -680,7 +699,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         for (var i = 0; i < questions.length; i++) {
             var question = questions[i];
             for (var j = 0; j < question.items.length; j++) {
-                question.items[j].value = frameData.responses[i][j];
+                Ember.set(question.items[j], 'value', frameData.responses[i][j]);
             }
         }
     }
