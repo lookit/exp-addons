@@ -358,16 +358,30 @@ export default ExpFrameBaseComponent.extend({
     loadData: function(frameData) {
         var cardSort1 = frameData.responses['ThreeCat'];
         if (cardSort1 && this.get('framePage') === 1) {
+            var buckets = {
+                uncharacteristic: [],
+                neutral: [],
+                characteristic: []
+            };
             // Load cards to be sorted
+            for (let cardId of Object.keys(cardSort1)) {
+                var bucketNumber = cardSort1[cardId];
+                var cardIndex = parseInt(cardId.split('rsq').pop()) - 1;
+                var card = {
+                    id: cardId,
+                    content: cards[cardIndex]
+                };
+                if (bucketNumber === 1) {
+                    buckets.uncharacteristic.push(card);
+                } else if (bucketNumber === 2) {
+                    buckets.neutral.push(card);
+                } else if (bucketNumber === 3) {
+                    buckets.characteristic.push(card);
+                }
+            }
             for (let bucket of this.get('buckets')) {
                 let name = bucket.name.split('.').pop();
-                var cards = cardSort1[name].map((item) => {
-                    return {
-                        id: item,
-                        content: "qsort.rsq.item." + item
-                    };
-                });
-                Ember.set(bucket, 'cards', cards);
+                Ember.set(bucket, 'cards', buckets[name]);
             }
         }
     }
