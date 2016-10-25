@@ -124,7 +124,7 @@ var shuffle = function (array) {
 export default ExpFrameBaseComponent.extend({
     type: 'exp-card-sort',
     layout: layout,
-    page: 'cardSort1',
+    framePage: 0,
 
     cards: Ember.computed(function () {
         return shuffle(formatCards(cards));
@@ -154,7 +154,7 @@ export default ExpFrameBaseComponent.extend({
                 }
             }
         }
-        if (this.get('page') === 'cardSort2') {
+        if (this.get('framePage') === 1) {
             cardSortResponse = this.get('buckets2');
             responses['NineCat'] = {};
             // Assumption: this unpacks a list of category objects:
@@ -234,7 +234,7 @@ export default ExpFrameBaseComponent.extend({
             if (this.get('allowNext')) {
                 this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
                 this.send('save');
-                this.set('page', 'cardSort2');
+                this.set('framePage', 1);
                 this.sendAction('updateFramePage', 1);
                 window.scrollTo(0, 0);
             }
@@ -355,43 +355,33 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    loadData: function (frameData) {
+    loadData: function(frameData) {
         var cardSort1 = frameData.responses['ThreeCat'];
-        var cardSort2 = frameData.responses['NineCat'];
-        if (cardSort1) {
-            // If cardSort1 is complete, go to cardSort2
-            this.set('page', 'cardSort2');
-            if (cardSort2) {
-                // Show sorted cards
-                for (let bucket of this.get('buckets')) {
-                    Ember.set(bucket, 'cards', []);
+        if (cardSort1 && this.get('framePage') === 1) {
+            var buckets = {
+                uncharacteristic: [],
+                neutral: [],
+                characteristic: []
+            };
+            // Load cards to be sorted
+            for (let cardId of Object.keys(cardSort1)) {
+                var bucketNumber = cardSort1[cardId];
+                var cardIndex = parseInt(cardId.split('rsq').pop()) - 1;
+                var card = {
+                    id: cardId,
+                    content: cards[cardIndex]
+                };
+                if (bucketNumber === 1) {
+                    buckets.uncharacteristic.push(card);
+                } else if (bucketNumber === 2) {
+                    buckets.neutral.push(card);
+                } else if (bucketNumber === 3) {
+                    buckets.characteristic.push(card);
                 }
-                for (let categorySet of this.get('buckets2')) {
-                    for (let category of categorySet.categories) {
-                        let name = category.name.split('.').pop();
-                        if (cardSort2[name]) {
-                            var cards2 = cardSort2[name].map((item) => {
-                                return {
-                                    id: item,
-                                    content: "qsort.rsq.item." + item
-                                };
-                            });
-                            Ember.set(category, 'cards', cards2);
-                        }
-                    }
-                }
-            } else {
-                // Load cards to be sorted
-                for (let bucket of this.get('buckets')) {
-                    let name = bucket.name.split('.').pop();
-                    var cards = cardSort1[name].map((item) => {
-                        return {
-                            id: item,
-                            content: "qsort.rsq.item." + item
-                        };
-                    });
-                    Ember.set(bucket, 'cards', cards);
-                }
+            }
+            for (let bucket of this.get('buckets')) {
+                let name = bucket.name.split('.').pop();
+                Ember.set(bucket, 'cards', buckets[name]);
             }
         }
     }

@@ -1,7 +1,7 @@
 <div class="row">
-  {{#if (eq page 'cardSort1')}}
+  {{#if (eq framePage 0)}}
     <p>{{t 'qsort.sections.1.instructions'}}</p>
-{{else if (eq page 'cardSort2')}}
+{{else if (eq framePage 1)}}
   <p>{{t 'qsort.sections.2.instructions'}}</p>
 {{/if}}
 <br>
@@ -9,7 +9,7 @@
 <h4 class="text-center">{{t 'qsort.sections.1.location'}}&nbsp;<b>{{freeResponses.WhereResponse}}</b></h4>
 <h4 class="text-center">{{t 'qsort.sections.1.othersPresent'}}&nbsp;<b>{{freeResponses.WhoResponse}}</b></h4>
 <br>
-{{#if (eq page 'cardSort1')}}
+{{#if (eq framePage 0)}}
   <div class="well card-container">
       {{#each cards as |card|}}
         {{#draggable-object content=card}}
@@ -23,7 +23,7 @@
     {{#each buckets as |bucket|}}
       <div class="col-sm-4">
           <h3 class="text-center">{{t bucket.name}}</h3>
-          {{#if (eq page 'cardSort1')}}
+          {{#if (eq framePage 0)}}
             {{#draggable-object-target bucket=bucket.cards cards=cards buckets=buckets action='dragCard'}}
               <div class="well bucket">
                 {{#each bucket.cards as |card|}}
@@ -33,7 +33,7 @@
                 {{/each}}
               </div>
             {{/draggable-object-target}}
-          {{else if (eq page 'cardSort2')}}
+          {{else if (eq framePage 1)}}
               <div class="well bucket">
                 {{#each bucket.cards as |card|}}
                   {{#draggable-object content=card}}
@@ -45,7 +45,7 @@
       </div>
     {{/each}}
 </div>
-{{#if (eq page 'cardSort2')}}
+{{#if (eq framePage 1)}}
   <div class="row">
     {{#each buckets2 as |group|}}
       <div class="col-sm-4">
@@ -77,13 +77,13 @@
 
 </div>
 <div class="row exp-controls">
-    {{#if (eq page 'cardSort1')}}
+    {{#if (eq framePage 0)}}
       <div class="btn btn-default" {{ action 'previous' }}>
         {{t 'global.previousLabel'}}
       </div>
       <div class="btn btn-primary pull-right {{if allowNext '' 'disabled'}}" {{action "nextPage"}}>{{t 'global.continueLabel'}}</div>
       {{progress-bar pageNumber=3}}
-    {{else if (eq page 'cardSort2')}}
+    {{else if (eq framePage 1)}}
       <div class="btn btn-primary pull-right {{if isValid '' 'disabled'}}" {{ action 'continue' }}>{{t 'global.continueLabel'}}</div>
       {{progress-bar pageNumber=4}}
     {{/if}}
