@@ -2,18 +2,37 @@
   <p class="break-line">{{t 'survey.sections.2.instructions.firstSection'}}</p>
   {{#bs-form}}
     {{#bs-form-group}}
+      <label>{{t 'survey.sections.2.questions.14.label'}}</label><br>
+        <div id="timeSelect">
+          {{#power-select
+            dropdownClass='dropdownClass'
+            selected=WhenResponse
+            options=times
+            placeholder=placeholder
+            renderInPlace=true
+            searchEnabled=false
+            onchange=(action (mut WhenResponse))
+            as |time|
+          }}
+          <span>{{time.12h}}</span>
+          <span class="pull-right">{{time.24h}}</span>
+          {{/power-select}}
+        </div>
+    {{/bs-form-group}}
+    <p class="break-line">{{t 'survey.sections.2.instructions.secondSection'}}</p>
+    {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.11.label'}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q1}}{{/textarea}}
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=WhatResponse}}{{/textarea}}
       <p class="text-muted">{{diff1}}</p>
     {{/bs-form-group}}
     {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.12.label'}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q2}}{{/textarea}}
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=WhereResponse}}{{/textarea}}
       <p class="text-muted">{{diff2}}</p>
     {{/bs-form-group}}
     {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.13.label'}}</label>
-      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=q3}}{{/textarea}}
+      {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=WhoResponse}}{{/textarea}}
       <p class="text-muted">{{diff3}}</p>
     {{/bs-form-group}}
   {{/bs-form}}
