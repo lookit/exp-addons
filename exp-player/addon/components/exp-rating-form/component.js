@@ -232,8 +232,13 @@ var generateSchema = function (data) {
         ret[option] = options[option];
     };
     for (var i = 0; i < data.items.length; i++) {
+        var keyName = data.keyName;
+        if (data.items.length > 1) {
+            keyName = keyName + (i + 1);
+        }
         var ret = {
             description: data.items[i],
+            keyName:keyName,
             value: null
         };
         Object.keys(options).forEach(setOption);
@@ -246,6 +251,7 @@ var generateSchema = function (data) {
 var questions = [
     generateSchema({
         question: 'measures.questions.1.label',
+        keyName: 'PosNeg',
         type: 'select',
         page: 0,
         items: [''],
@@ -263,6 +269,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.2.label',
+        keyName: 'SitSimilarity',
         type: 'radio',
         page: 0,
         items: [''],
@@ -292,6 +299,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.3.label',
+        keyName: 'BBI',
         type: 'radio',
         page: 0,
         items: items['3'],
@@ -313,6 +321,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.4.label',
+        keyName: 'Risk',
         type: 'radio',
         page: 1,
         items: [''],
@@ -334,6 +343,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.5.label',
+        keyName: 'BFI',
         type: 'radio',
         page: 1,
         items: items['5'],
@@ -354,6 +364,7 @@ var questions = [
         items: [
             {
                 description: 'measures.questions.6.items.1.label',
+                keyName: 'SWB1',
                 value: null,
                 labelTop: false,
                 formatLabel: 'measure-six',
@@ -369,6 +380,7 @@ var questions = [
             },
             {
                 description: 'measures.questions.6.items.2.label',
+                keyName: 'SWB2',
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
@@ -385,6 +397,7 @@ var questions = [
             },
             {
                 description: 'measures.questions.6.items.3.label',
+                keyName: 'SWB3',
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
@@ -401,6 +414,7 @@ var questions = [
             },
             {
                 description: 'measures.questions.6.items.4.label',
+                keyName: 'SWB4',
                 scale: SEVEN_POINT_SCALE,
                 value: null,
                 labelTop: false,
@@ -418,6 +432,7 @@ var questions = [
     },
     generateSchema({
         question: 'measures.questions.7.label',
+        keyName: 'IntHapp',
         type: 'radio',
         page: 2,
         items: items['7'],
@@ -432,6 +447,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.9.label',
+        keyName: 'Constru',
         type: 'radio',
         page: 3,
         items: items['9'],
@@ -463,6 +479,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.10.label',
+        keyName: 'Tight',
         type: 'radio',
         page: 4,
         items: items['10'],
@@ -485,18 +502,21 @@ var questions = [
         ],
         items: [{
             type: 'radio',
+            keyName: 'ChangeYesNo',
             value: null,
             formatLabel: 'negative-margin-top'
         },
         {
             type: 'textarea',
             description: 'measures.questions.12.label',
+            keyName: 'ChangeDescribe',
             value: null,
             optional: true
         },
         {
             type: 'radio',
             description: 'measures.questions.18.label',
+            keyName: 'ChangeSuccess',
             value: null,
             optional: true,
             labelTop: false,
@@ -527,6 +547,7 @@ var questions = [
     },
     generateSchema({
         question: 'measures.questions.13.label',
+        keyName: 'Trust',
         type: 'radio',
         page: 4,
         items: items['13'],
@@ -541,6 +562,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.14.label',
+        keyName: 'LOT',
         type: 'radio',
         page: 4,
         items: items['14'],
@@ -555,6 +577,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.15.label',
+        keyName: 'Honest',
         type: 'radio',
         page: 5,
         items: items['15'],
@@ -569,6 +592,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.16.label',
+        keyName: 'Micro',
         type: 'radio',
         page: 5,
         items: items['16'],
@@ -582,6 +606,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.17.label',
+        keyName: 'Narq',
         type: 'radio',
         page: 5,
         items: items['17'],
@@ -596,6 +621,7 @@ var questions = [
     }),
     generateSchema({
         question: 'measures.questions.8.label',
+        keyName: 'ReligionScale',
         type: 'radio',
         page: 6,
         items: items['8'],
@@ -627,12 +653,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var responses = {};
         for (var i = 0; i < questions.length; i++) {
             var question = questions[i];
-            responses[i] = {};
             if (i === 0) {
-                responses[i][0] = parseInt(question.items[0].value);
+                responses[question.keyName] = parseInt(question.items[0].value);
             } else {
                 for (var j = 0; j < question.items.length; j++) {
-                    responses[i][j] = question.items[j].value;
+                    var keyName = question.items[j].keyName;
+                    responses[keyName] = question.items[j].value;
                 }
             }
         }
@@ -699,7 +725,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
         for (var i = 0; i < questions.length; i++) {
             var question = questions[i];
             for (var j = 0; j < question.items.length; j++) {
-                Ember.set(question.items[j], 'value', frameData.responses[i][j]);
+                var keyName = question.items[j].keyName;
+                Ember.set(question.items[j], 'value', frameData.responses[keyName]);
             }
         }
     }
