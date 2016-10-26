@@ -664,6 +664,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
         return responses;
     }).volatile(),
+    dataLoaded: false,
     allowNext: Ember.computed(
         'framePage',
         'validations.attrs.page0.isValid',
@@ -721,7 +722,8 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
     },
     loadData: function(frameData) {
-        if (this.get('framePage') === 0) {
+        // Only load data once when the component loads, not with each page
+        if (!this.get('dataLoaded')) {
             var questions = this.get('questions');
             for (var i = 0; i < questions.length; i++) {
                 var question = questions[i];
@@ -730,6 +732,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     Ember.set(question.items[j], 'value', frameData.responses[keyName]);
                 }
             }
+            this.set('dataLoaded', true);
         }
     }
 });
