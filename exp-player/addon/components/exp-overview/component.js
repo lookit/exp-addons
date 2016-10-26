@@ -112,7 +112,7 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.8.label',
-    keyName: 'ReligionScale',
+    keyName: 'Religion1to10',
     type: 'radio',
     scale: range(1, 11),
     hiddenOptions: [11],
@@ -227,7 +227,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             'Residence': {
                                type: 'string'
                             },
-                            'ReligionScale': { // how religious?
+                            'Religion1to10': { // how religious?
                                 type: 'integer'
                             },
                             'ReligionYesNo': { // follows religion?
