@@ -8,12 +8,15 @@
   {{/if}}
 
         {{#unless showWebCamWarning }}
-            <p>{{instructions}}</p>
+            <!--<p>{{instructions}}</p>-->
+
+            <p>Make sure your camera is working and you can see yourself below! Important: you'll need to check 'Remember' when you allow access, so that it'll still work on the next screen.</p>
+
             <p id="not-recording-note">
                 <em>Please note: we are <strong>not</strong> recording any video during setup.</em>
             </p>
             <p>
-                If the microphone icon in your video screen shows red bars (looks like this <img src="assets/noSound.png">) you may not be recording sound. Please check your microphone settings before continuing.
+                If the microphone icon in your video screen shows red bars (like this <img src="assets/noSound.png">) you may not be recording sound. Please check your microphone settings before continuing.
             </p>
 
         {{/unless}}
