@@ -4,105 +4,105 @@ import layout from './template';
 import config from 'ember-get-config';
 
 
-var cards = {
-    "SomoneCountedon": "qsort.rsq.item.SomoneCountedon",
-    "abusedVictimized": "qsort.rsq.item.abusedVictimized",
-    "adviceYou": "qsort.rsq.item.adviceYou",
-    "ambition": "qsort.rsq.item.ambition",
-    "anxietyInducing": "qsort.rsq.item.anxietyInducing",
-    "art": "qsort.rsq.item.art",
-    "askingYou": "qsort.rsq.item.askingYou",
-    "assertivenessGoal": "qsort.rsq.item.assertivenessGoal",
-    "athleticsSports": "qsort.rsq.item.athleticsSports",
-    "blaming": "qsort.rsq.item.blaming",
-    "breakingRules": "qsort.rsq.item.breakingRules",
-    "clearRules": "qsort.rsq.item.clearRules",
-    "closeRelationships": "qsort.rsq.item.closeRelationships",
-    "comparingThemselves": "qsort.rsq.item.comparingThemselves",
-    "competing": "qsort.rsq.item.competing",
-    "complex": "qsort.rsq.item.complex",
-    "complimentingYou": "qsort.rsq.item.complimentingYou",
-    "conformToOthers": "qsort.rsq.item.conformToOthers",
-    "convinceYou": "qsort.rsq.item.convinceYou",
-    "countingOnYou": "qsort.rsq.item.countingOnYou",
-    "criticizing": "qsort.rsq.item.criticizing",
-    "decision": "qsort.rsq.item.decision",
-    "desiresGratified": "qsort.rsq.item.desiresGratified",
-    "differentRoles": "qsort.rsq.item.differentRoles",
-    "disagreeing": "qsort.rsq.item.disagreeing",
-    "dominate": "qsort.rsq.item.dominate",
-    "emotionalThreats": "qsort.rsq.item.emotionalThreats",
-    "emotionsExpressed": "qsort.rsq.item.emotionsExpressed",
-    "entertainment": "qsort.rsq.item.entertainment",
-    "family": "qsort.rsq.item.family",
-    "feelInadequate": "qsort.rsq.item.feelInadequate",
-    "femininity": "qsort.rsq.item.femininity",
-    "food": "qsort.rsq.item.food",
-    "frustrating": "qsort.rsq.item.frustrating",
-    "goodImpression": "qsort.rsq.item.goodImpression",
-    "happeningOnce": "qsort.rsq.item.happeningOnce",
-    "honor": "qsort.rsq.item.honor",
-    "hostile": "qsort.rsq.item.hostile",
-    "humorous": "qsort.rsq.item.humorous",
-    "intellectuallyStimulating": "qsort.rsq.item.intellectuallyStimulating",
-    "intelligence": "qsort.rsq.item.intelligence",
-    "jobDone": "qsort.rsq.item.jobDone",
-    "masculinity": "qsort.rsq.item.masculinity",
-    "minorDetails": "qsort.rsq.item.minorDetails",
-    "money": "qsort.rsq.item.money",
-    "moralIssues": "qsort.rsq.item.moralIssues",
-    "music": "qsort.rsq.item.music",
-    "needsHelp": "qsort.rsq.item.needsHelp",
-    "negativeEmotions": "qsort.rsq.item.negativeEmotions",
-    "newRelationships": "qsort.rsq.item.newRelationships",
-    "noisy": "qsort.rsq.item.noisy",
-    "notClear": "qsort.rsq.item.notClear",
-    "oppositeSex": "qsort.rsq.item.oppositeSex",
-    "peopleGetAlong": "qsort.rsq.item.peopleGetAlong",
-    "physicalAttractiveness": "qsort.rsq.item.physicalAttractiveness",
-    "physicalThreats": "qsort.rsq.item.physicalThreats",
-    "physicallyActive": "qsort.rsq.item.physicallyActive",
-    "physicallyUncomfortable": "qsort.rsq.item.physicallyUncomfortable",
-    "playful": "qsort.rsq.item.playful",
-    "politics": "qsort.rsq.item.politics",
-    "positiveEmotions": "qsort.rsq.item.positiveEmotions",
-    "potentiallyEnjoy": "qsort.rsq.item.potentiallyEnjoy",
-    "power": "qsort.rsq.item.power",
-    "quickAction": "qsort.rsq.item.quickAction",
-    "rapidlyChanging": "qsort.rsq.item.rapidlyChanging",
-    "reassurance": "qsort.rsq.item.reassurance",
-    "reassuringPresent": "qsort.rsq.item.reassuringPresent",
-    "relevantHealth": "qsort.rsq.item.relevantHealth",
-    "religion": "qsort.rsq.item.religion",
-    "romanticPartners": "qsort.rsq.item.romanticPartners",
-    "ruminateDaydream": "qsort.rsq.item.ruminateDaydream",
-    "selfControl": "qsort.rsq.item.selfControl",
-    "sensations": "qsort.rsq.item.sensations",
-    "sexuality": "qsort.rsq.item.sexuality",
-    "shame": "qsort.rsq.item.shame",
-    "simpleClearcut": "qsort.rsq.item.simpleClearcut",
-    "smallAnnoyances": "qsort.rsq.item.smallAnnoyances",
-    "socialInteraction": "qsort.rsq.item.socialInteraction",
-    "successCooperation": "qsort.rsq.item.successCooperation",
-    "takenCareOf": "qsort.rsq.item.takenCareOf",
-    "talkingExpected": "qsort.rsq.item.talkingExpected",
-    "talkingPermitted": "qsort.rsq.item.talkingPermitted",
-    "tenseUpset": "qsort.rsq.item.tenseUpset",
-    "tryingImpress": "qsort.rsq.item.tryingImpress",
-    "underThreat": "qsort.rsq.item.underThreat",
-    "unhappySuffering": "qsort.rsq.item.unhappySuffering",
-    "unusualIdeas": "qsort.rsq.item.unusualIdeas",
-    "verbalFluency": "qsort.rsq.item.verbalFluency",
-    "workingHard": "qsort.rsq.item.workingHard",
-    "youFocus": "qsort.rsq.item.youFocus"
-};
+var cards = [
+    'qsort.rsq.item.potentiallyEnjoy',
+    'qsort.rsq.item.complex',
+    'qsort.rsq.item.jobDone',
+    'qsort.rsq.item.tryingImpress',
+    'qsort.rsq.item.convinceYou',
+    'qsort.rsq.item.countingOnYou',
+    'qsort.rsq.item.talkingPermitted',
+    'qsort.rsq.item.talkingExpected',
+    'qsort.rsq.item.askingYou',
+    'qsort.rsq.item.needsHelp',
+    'qsort.rsq.item.minorDetails',
+    'qsort.rsq.item.politics',
+    'qsort.rsq.item.intelligence',
+    'qsort.rsq.item.notClear',
+    'qsort.rsq.item.underThreat',
+    'qsort.rsq.item.criticizing',
+    'qsort.rsq.item.dominate',
+    'qsort.rsq.item.playful',
+    'qsort.rsq.item.rapidlyChanging',
+    'qsort.rsq.item.unhappySuffering',
+    'qsort.rsq.item.reassuringPresent',
+    'qsort.rsq.item.blaming',
+    'qsort.rsq.item.decision',
+    'qsort.rsq.item.selfControl',
+    'qsort.rsq.item.competing',
+    'qsort.rsq.item.reassurance',
+    'qsort.rsq.item.frustrating',
+    'qsort.rsq.item.physicalAttractiveness',
+    'qsort.rsq.item.goodImpression',
+    'qsort.rsq.item.tenseUpset',
+    'qsort.rsq.item.smallAnnoyances',
+    'qsort.rsq.item.hostile',
+    'qsort.rsq.item.disagreeing',
+    'qsort.rsq.item.unusualIdeas',
+    'qsort.rsq.item.physicalThreats',
+    'qsort.rsq.item.emotionalThreats',
+    'qsort.rsq.item.moralIssues',
+    'qsort.rsq.item.quickAction',
+    'qsort.rsq.item.emotionsExpressed',
+    'qsort.rsq.item.ruminateDaydream',
+    'qsort.rsq.item.noisy',
+    'qsort.rsq.item.closeRelationships',
+    'qsort.rsq.item.SomoneCountedon',
+    'qsort.rsq.item.intellectuallyStimulating',
+    'qsort.rsq.item.assertivenessGoal',
+    'qsort.rsq.item.desiresGratified',
+    'qsort.rsq.item.socialInteraction',
+    'qsort.rsq.item.humorous',
+    'qsort.rsq.item.youFocus',
+    'qsort.rsq.item.sensations',
+    'qsort.rsq.item.relevantHealth',
+    'qsort.rsq.item.clearRules',
+    'qsort.rsq.item.breakingRules',
+    'qsort.rsq.item.art',
+    'qsort.rsq.item.anxietyInducing',
+    'qsort.rsq.item.ambition',
+    'qsort.rsq.item.feelInadequate',
+    'qsort.rsq.item.sexuality',
+    'qsort.rsq.item.abusedVictimized',
+    'qsort.rsq.item.oppositeSex',
+    'qsort.rsq.item.romanticPartners',
+    'qsort.rsq.item.simpleClearcut',
+    'qsort.rsq.item.comparingThemselves',
+    'qsort.rsq.item.power',
+    'qsort.rsq.item.masculinity',
+    'qsort.rsq.item.adviceYou',
+    'qsort.rsq.item.positiveEmotions',
+    'qsort.rsq.item.negativeEmotions',
+    'qsort.rsq.item.verbalFluency',
+    'qsort.rsq.item.differentRoles',
+    'qsort.rsq.item.conformToOthers',
+    'qsort.rsq.item.successCooperation',
+    'qsort.rsq.item.complimentingYou',
+    'qsort.rsq.item.femininity',
+    'qsort.rsq.item.religion',
+    'qsort.rsq.item.takenCareOf',
+    'qsort.rsq.item.happeningOnce',
+    'qsort.rsq.item.physicallyActive',
+    'qsort.rsq.item.workingHard',
+    'qsort.rsq.item.food',
+    'qsort.rsq.item.physicallyUncomfortable',
+    'qsort.rsq.item.family',
+    'qsort.rsq.item.honor',
+    'qsort.rsq.item.money',
+    'qsort.rsq.item.athleticsSports',
+    'qsort.rsq.item.shame',
+    'qsort.rsq.item.music',
+    'qsort.rsq.item.newRelationships',
+    'qsort.rsq.item.peopleGetAlong',
+    'qsort.rsq.item.entertainment'
+];
 
 var formatCards = function (items) {
     var cards = [];
-    for (var item in items) {
+    for (var i=0; i < items.length; i++) {
         cards.push({
-            id: item,
-            content: items[item]
+            id: 'rsq' + (i + 1),
+            content: items[i]
         });
     }
     return cards;
@@ -124,7 +124,7 @@ var shuffle = function (array) {
 export default ExpFrameBaseComponent.extend({
     type: 'exp-card-sort',
     layout: layout,
-    page: 'cardSort1',
+    framePage: 0,
 
     cards: Ember.computed(function () {
         return shuffle(formatCards(cards));
@@ -147,22 +147,22 @@ export default ExpFrameBaseComponent.extend({
         let responses = {};
         let cardSortResponse = this.get('cardSortResponse');
         if (cardSortResponse) {
-            responses['cardSort1'] = {};
+            responses['ThreeCat'] = {};
             for (var i = 0; i < cardSortResponse.length; i++) {
                 for (let card of cardSortResponse[i].cards) {
-                    responses['cardSort1'][card.id] = i + 1;
+                    responses['ThreeCat'][card.id] = i + 1;
                 }
             }
         }
-        if (this.get('page') === 'cardSort2') {
+        if (this.get('framePage') === 1) {
             cardSortResponse = this.get('buckets2');
-            responses['cardSort2'] = {};
+            responses['NineCat'] = {};
             // Assumption: this unpacks a list of category objects:
             // { categories: [ {id: id, cards: [cards]},...] }
             for (let categorySet of cardSortResponse) {
                 for (var j = 0; j < categorySet.categories.length; j++) {
                     for (let card of categorySet.categories[j].cards) {
-                        responses['cardSort2'][card.id] = categorySet.categories[j].id;
+                        responses['NineCat'][card.id] = categorySet.categories[j].id;
                     }
                 }
             }
@@ -234,7 +234,7 @@ export default ExpFrameBaseComponent.extend({
             if (this.get('allowNext')) {
                 this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
                 this.send('save');
-                this.set('page', 'cardSort2');
+                this.set('framePage', 1);
                 this.sendAction('updateFramePage', 1);
                 window.scrollTo(0, 0);
             }
@@ -355,43 +355,33 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    loadData: function (frameData) {
-        var cardSort1 = frameData.responses['cardSort1'];
-        var cardSort2 = frameData.responses['cardSort2'];
-        if (cardSort1) {
-            // If cardSort1 is complete, go to cardSort2
-            this.set('page', 'cardSort2');
-            if (cardSort2) {
-                // Show sorted cards
-                for (let bucket of this.get('buckets')) {
-                    Ember.set(bucket, 'cards', []);
+    loadData: function(frameData) {
+        var cardSort1 = frameData.responses['ThreeCat'];
+        if (cardSort1 && this.get('framePage') === 1) {
+            var buckets = {
+                uncharacteristic: [],
+                neutral: [],
+                characteristic: []
+            };
+            // Load cards to be sorted
+            for (let cardId of Object.keys(cardSort1)) {
+                var bucketNumber = cardSort1[cardId];
+                var cardIndex = parseInt(cardId.split('rsq').pop()) - 1;
+                var card = {
+                    id: cardId,
+                    content: cards[cardIndex]
+                };
+                if (bucketNumber === 1) {
+                    buckets.uncharacteristic.push(card);
+                } else if (bucketNumber === 2) {
+                    buckets.neutral.push(card);
+                } else if (bucketNumber === 3) {
+                    buckets.characteristic.push(card);
                 }
-                for (let categorySet of this.get('buckets2')) {
-                    for (let category of categorySet.categories) {
-                        let name = category.name.split('.').pop();
-                        if (cardSort2[name]) {
-                            var cards2 = cardSort2[name].map((item) => {
-                                return {
-                                    id: item,
-                                    content: "qsort.rsq.item." + item
-                                };
-                            });
-                            Ember.set(category, 'cards', cards2);
-                        }
-                    }
-                }
-            } else {
-                // Load cards to be sorted
-                for (let bucket of this.get('buckets')) {
-                    let name = bucket.name.split('.').pop();
-                    var cards = cardSort1[name].map((item) => {
-                        return {
-                            id: item,
-                            content: "qsort.rsq.item." + item
-                        };
-                    });
-                    Ember.set(bucket, 'cards', cards);
-                }
+            }
+            for (let bucket of this.get('buckets')) {
+                let name = bucket.name.split('.').pop();
+                Ember.set(bucket, 'cards', buckets[name]);
             }
         }
     }

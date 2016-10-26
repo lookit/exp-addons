@@ -721,12 +721,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
         }
     },
     loadData: function(frameData) {
-        var questions = this.get('questions');
-        for (var i = 0; i < questions.length; i++) {
-            var question = questions[i];
-            for (var j = 0; j < question.items.length; j++) {
-                var keyName = question.items[j].keyName;
-                Ember.set(question.items[j], 'value', frameData.responses[keyName]);
+        if (this.get('framePage') === 0) {
+            var questions = this.get('questions');
+            for (var i = 0; i < questions.length; i++) {
+                var question = questions[i];
+                for (var j = 0; j < question.items.length; j++) {
+                    var keyName = question.items[j].keyName;
+                    Ember.set(question.items[j], 'value', frameData.responses[keyName]);
+                }
             }
         }
     }
