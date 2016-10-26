@@ -653,12 +653,13 @@ export default ExpFrameBaseComponent.extend(Validations, {
         var responses = {};
         for (var i = 0; i < questions.length; i++) {
             var question = questions[i];
+            responses[i] = {};
             if (i === 0) {
-                responses[question.keyName] = parseInt(question.items[0].value);
+                responses[i][question.keyName] = parseInt(question.items[0].value);
             } else {
                 for (var j = 0; j < question.items.length; j++) {
                     var keyName = question.items[j].keyName;
-                    responses[keyName] = question.items[j].value;
+                    responses[i][keyName] = question.items[j].value;
                 }
             }
         }
@@ -729,7 +730,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 var question = questions[i];
                 for (var j = 0; j < question.items.length; j++) {
                     var keyName = question.items[j].keyName;
-                    Ember.set(question.items[j], 'value', frameData.responses[keyName]);
+                    Ember.set(question.items[j], 'value', frameData.responses[i][keyName]);
                 }
             }
             this.set('dataLoaded', true);
