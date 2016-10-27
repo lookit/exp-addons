@@ -139,8 +139,9 @@ const questions = [
     keyName: 'ReligionYesNo',
     type: 'radio',
     scale: [
-        {label: 'global.yesLabel', value: 1},
-        {label: 'global.noLabel', value: 2}
+        {label: 'survey.sections.1.questions.9.options.yesLabel', value: 1},
+        {label: 'survey.sections.1.questions.9.options.noLabel', value: 2},
+        {label: 'survey.sections.1.questions.9.options.preferNoAnswer', value: 3}
     ],
     labelTop: true,
     value: null
