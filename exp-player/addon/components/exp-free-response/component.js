@@ -22,7 +22,7 @@ const Validations = buildValidations({
     WhatResponse: presence,
     WhereResponse: presence,
     WhoResponse: presence,
-    WhenResponse: presence
+    EventTime: presence
 });
 
 export default ExpFrameBaseComponent.extend(Validations, {
@@ -77,15 +77,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
     placeholder: Ember.computed(function() {
        return this.get('i18n').t('global.selectUnselected');
     }),
-    WhenResponse: null,
+    EventTime: null,
 
-    responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'WhenResponse', function() {
-        var time = this.get('WhenResponse');
+    responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'EventTime', function() {
+        var time = this.get('EventTime');
         if (time !== null) {
             time = time['24h'];
         }
         return {
-            WhenResponse: time,
+            EventTime: time,
             WhatResponse: this.get('WhatResponse'),
             WhereResponse: this.get('WhereResponse'),
             WhoResponse: this.get('WhoResponse')
@@ -114,7 +114,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                 responses: {
                     type: 'object',
                     properties: {
-                        WhenResponse: {
+                        EventTime: {
                             type: 'string'
                         },
                         WhatResponse: {
@@ -140,7 +140,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     loadData: function(frameData) {
         var responses = frameData.responses;
-        this.set('WhenResponse', responses.WhenResponse);
+        this.set('EventTime', responses.EventTime);
         this.set('WhatResponse', responses.WhatResponse);
         this.set('WhereResponse', responses.WhereResponse);
         this.set('WhoResponse', responses.WhoResponse);

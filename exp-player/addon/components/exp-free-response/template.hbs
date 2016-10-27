@@ -6,12 +6,12 @@
         <div id="timeSelect">
           {{#power-select
             dropdownClass='dropdownClass'
-            selected=WhenResponse
+            selected=EventTime
             options=times
             placeholder=placeholder
             renderInPlace=true
             searchEnabled=false
-            onchange=(action (mut WhenResponse))
+            onchange=(action (mut EventTime))
             as |time|
           }}
           <span>{{time.12h}}</span>
