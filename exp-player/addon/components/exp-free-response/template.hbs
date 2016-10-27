@@ -1,5 +1,8 @@
 <div class="row">
-  <p class="break-line">{{t 'survey.sections.2.instructions.firstSection'}}</p>
+  <p>
+    <span class="format-instructions">{{t 'survey.sections.2.instructions.firstSection'}}</span>
+    <span>{{t 'survey.sections.2.instructions.secondSection'}}</span>
+  </p>
   {{#bs-form}}
     {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.14.label'}}</label><br>
@@ -19,7 +22,7 @@
           {{/power-select}}
         </div>
     {{/bs-form-group}}
-    <p class="break-line">{{t 'survey.sections.2.instructions.secondSection'}}</p>
+    <p>{{t 'survey.sections.2.instructions.thirdSection'}}</p>
     {{#bs-form-group}}
       <label>{{t 'survey.sections.2.questions.11.label'}}</label>
       {{#textarea maxlength=75 rows="5" cols="40" class="form-control" value=WhatResponse}}{{/textarea}}
