@@ -32,7 +32,7 @@ export default DS.Model.extend(JamModel, {
     username: Ember.computed.alias('id'),
 
     // Helper methods
-    generateProfileId: function () {
+    generateProfileId() {
         var id = makeId();
         var profileIds = this.get('profiles').map((profile) => profile.get('profileId').split('.')[0]);
         while (profileIds.indexOf(id) !== -1) {
@@ -41,7 +41,7 @@ export default DS.Model.extend(JamModel, {
         return `${this.get('id')}.${id}`;
     },
 
-    profileById: function (profileId) {
+    profileById(profileId) {
         // Scan the list of profiles and gets first one with matching ID (else undefined). Assumes profileIds are unique.
         var profiles = this.get('profiles') || [];
         var getProfile = function (item) {
