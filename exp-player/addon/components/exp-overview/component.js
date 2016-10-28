@@ -8,7 +8,7 @@ import config from 'ember-get-config';
 function range(start, stop) {
   var options = [];
   for (var i=start; i <= stop; i++) {
-    options.push(i);
+    options.push({label: i, value: i});
   }
   return options;
 }
@@ -33,32 +33,38 @@ var generateValidators = function(questions) {
 const questions = [
   {
     question: 'survey.sections.1.questions.1.label',
+    keyName: 'Age',
     type: 'select',
     scale: range(16, 100),
     value: null
   },
   {
     question: 'survey.sections.1.questions.2.label',
+    keyName: 'Gender',
     type: 'select',
-    scale: ['survey.sections.1.questions.2.options.male',
-        'survey.sections.1.questions.2.options.female',
-        'survey.sections.1.questions.2.options.other',
-        'survey.sections.1.questions.2.options.na'
+    scale: [
+        {label: 'survey.sections.1.questions.2.options.male', value: 1},
+        {label: 'survey.sections.1.questions.2.options.female', value: 2},
+        {label: 'survey.sections.1.questions.2.options.other', value: 3},
+        {label: 'survey.sections.1.questions.2.options.na', value: 4}
     ],
     value: null
   },
   {
     question: 'survey.sections.1.questions.3.label',
+    keyName: 'Ethnicity',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.4.label',
+    keyName: 'Language',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.5.label',
+    keyName: 'SocialStatus',
     type: 'radio',
     scale: range(1, 10),
     labelTop: false,
@@ -82,27 +88,31 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.6.label',
+    keyName: 'BirthCity',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.11.label',
+    keyName: 'BirthCountry',
     type: 'input',
     value: null
   },
   {
     question: 'survey.sections.1.questions.7.label',
+    keyName: 'Residence',
     type: 'select',
     scale: [
-        'survey.sections.1.questions.7.options.remoteRural',
-        'survey.sections.1.questions.7.options.rural',
-        'survey.sections.1.questions.7.options.suburban',
-        'survey.sections.1.questions.7.options.urban'
+        {label: 'survey.sections.1.questions.7.options.remoteRural', value: 1},
+        {label: 'survey.sections.1.questions.7.options.rural', value: 2},
+        {label: 'survey.sections.1.questions.7.options.suburban', value: 3},
+        {label: 'survey.sections.1.questions.7.options.urban', value: 4}
     ],
     value: null
   },
   {
     question: 'survey.sections.1.questions.8.label',
+    keyName: 'Religion1to10',
     type: 'radio',
     scale: range(1, 11),
     hiddenOptions: [11],
@@ -126,13 +136,19 @@ const questions = [
   },
   {
     question: 'survey.sections.1.questions.9.label',
+    keyName: 'ReligionYesNo',
     type: 'radio',
-    scale: ['global.yesLabel', 'global.noLabel'],
+    scale: [
+        {label: 'survey.sections.1.questions.9.options.yesLabel', value: 1},
+        {label: 'survey.sections.1.questions.9.options.noLabel', value: 2},
+        {label: 'survey.sections.1.questions.9.options.preferNoAnswer', value: 3}
+    ],
     labelTop: true,
     value: null
   },
   {
     question: 'survey.sections.1.questions.10.label',
+    keyName: 'ReligionFollow',
     type: 'input',
     optional: true,
     value: null
@@ -147,17 +163,20 @@ export default ExpFrameBaseComponent.extend(Validations, {
     questions: questions,
 
     showOptional: Ember.computed('questions.9.value', function() {
-       return this.questions[9].value === 'yesLabel';
+       return this.questions[9].value === 1;
     }),
     responses: Ember.computed(function() {
         var questions = this.get('questions');
         var responses = {};
         for (var i=0; i < questions.length; i++) {
-            if (i === 0) {
-                // Convert value to int bc select-input returns a string (e.g. "16" --> 16)
-                responses[i] = parseInt(questions[i].value);
+            var keyName = questions[i].keyName;
+            // Questions with string values that should get serialized to integers (since select-input returns a string)
+            // (e.g. "16" --> 16)
+            var parseIntResponses = [0, 1, 7];
+            if (parseIntResponses.contains(i)) {
+                responses[keyName] = parseInt(questions[i].value);
             } else {
-                responses[i] = questions[i].value;
+                responses[keyName] = questions[i].value;
             }
         }
         return responses;
@@ -185,37 +204,37 @@ export default ExpFrameBaseComponent.extend(Validations, {
                         //   https://spacetelescope.github.io/understanding-json-schema/reference/object.html#required-properties
                         type: 'object',
                         properties: {
-                            '0': { // age
+                            'Age': {
                                 type: 'integer'
                             },
-                            '1': { // gender
+                            'Gender': {
                                 type: 'string'
                             },
-                            '2': { // ethhnicity
+                            'Ethnicity': {
                                 type: 'string'
                             },
-                            '3': { // firstLanguage
+                            'Language': {
                                type: 'string'
                             },
-                            '4': { // how well off
+                            'SocialStatus': {
                                 type: 'integer'
                             },
-                            '5': { // birth city
+                            'BirthCity': {
                                 type: 'string'
                             },
-                            '6': { // birth country
+                            'BirthCountry': {
                                 type: 'string'
                             },
-                            '7': { // hometown type
+                            'Residence': {
                                type: 'string'
                             },
-                            '8': { // how religious?
+                            'Religion1to10': { // how religious?
                                 type: 'integer'
                             },
-                            '9': { // follows religion?
+                            'ReligionYesNo': { // follows religion?
                                 type: 'string'
                             },
-                            '10': {  // which religion?
+                            'ReligionFollow': {  // which religion?
                                 type: 'string'
                             }
                         }
@@ -232,7 +251,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     loadData: function(frameData) {
         for (var q=0; q < this.get('questions').length; q++) {
-            this.get('questions')[q].value = frameData.responses[q];
+            var question = this.get('questions')[q];
+            var keyName = question.keyName;
+            this.get('questions')[q].value = frameData.responses[keyName];
         }
     }
 });

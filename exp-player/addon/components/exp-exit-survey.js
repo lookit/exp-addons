@@ -86,7 +86,9 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     actions: {
         advanceToProgressBar() {
             // Move from section 1 (survey) to section 2 (progress bar/ finish button)
+            // Mark the session complete at this stage, as all data has been entered
             this.set('section1', false);
+            this.sendAction('sessionCompleted');
             this.send('save');
         },
         continue () {
