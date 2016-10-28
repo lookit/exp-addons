@@ -1,4 +1,26 @@
-.exp-physics-config {
+.exp-physics-config h2 {
+    float:left;
 
 }
 
+.exp-physics-config #not-recording-note {
+    color:red;
+    float:right;
+}
+
+.exp-physics-config hr {
+    clear:both;
+}
+
+.exp-physics-config ul li {
+    margin-top: 20px;
+}
+
+.exp-physics-config .screenshot {
+    display:block;
+    margin:auto;
+}
+
+.exp-physics-config .reload-warning {
+    color: red;
+}
