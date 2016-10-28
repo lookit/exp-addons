@@ -30,6 +30,11 @@
     margin-bottom: 12px;
 }
 
-.bucket-label {
+.bucket-label-margin {
     margin-top: 40px;
+}
+
+.bucket-label {
+    text-align: center;
+    overflow-wrap: break-word;
 }
