@@ -32,19 +32,19 @@ export default ExpFrameBaseComponent.extend(Validations, {
     diff1: Ember.computed('WhatResponse', function() {
         var length = getLength(this.get('WhatResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
-        message = message.replace("0", length.toString());
+        message = message.replace('0', length.toString());
         return message;
     }),
     diff2: Ember.computed('WhereResponse', function() {
         var length = getLength(this.get('WhereResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
-        message = message.replace("0", length.toString());
+        message = message.replace('0', length.toString());
         return message;
     }),
     diff3: Ember.computed('WhoResponse', function() {
         var length = getLength(this.get('WhoResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
-        message = message.replace("0", length.toString());
+        message = message.replace('0', length.toString());
         return message;
     }),
     times: [

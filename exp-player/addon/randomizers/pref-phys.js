@@ -28,7 +28,7 @@ function getConditions(lastSession, frameId) {
         }
 
         showStay = lastConditions.showStay;
-	//parseInt(prompt("Show support-stay (1) or support-fall (0) last session?", "0/1"));
+	//parseInt(prompt('Show support-stay (1) or support-fall (0) last session?', '0/1'));
         showStay = 1 - showStay;
         whichObjects = lastConditions.whichObjects;
         for (var i = 0; i < 4; i++) {
@@ -49,40 +49,40 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
     // Types of comparisons for each event type (gravity, inertia, support-fall, support-stay,
     // control). Format [event, outcomeMoreProb, outcomeLessProb]
     var comparisonsG = [
-        ["table", "down", "continue"],
-        ["table", "down", "up"],
-        ["table", "continue", "up"],
-        ["ramp", "down", "up"],
-        ["ramp", "down", "up"],
-        ["toss", "down", "up"]
+        ['table', 'down', 'continue'],
+        ['table', 'down', 'up'],
+        ['table', 'continue', 'up'],
+        ['ramp', 'down', 'up'],
+        ['ramp', 'down', 'up'],
+        ['toss', 'down', 'up']
     ];
     var comparisonsI = [
-        ["stop", "hand", "nohand"],
-        ["reverse", "barrier", "nobarrier"]
+        ['stop', 'hand', 'nohand'],
+        ['reverse', 'barrier', 'nobarrier']
     ];
     var comparisonsSF = [
-        ["fall", "slightly", "mostly"],
-        ["fall", "next", "mostly"],
-        ["fall", "near", "mostly"],
-        ["fall", "next", "slightly"],
-        ["fall", "near", "slightly"],
-        ["fall", "near", "next"]
+        ['fall', 'slightly', 'mostly'],
+        ['fall', 'next', 'mostly'],
+        ['fall', 'near', 'mostly'],
+        ['fall', 'next', 'slightly'],
+        ['fall', 'near', 'slightly'],
+        ['fall', 'near', 'next']
     ];
     var comparisonsSS = [
-        ["stay", "slightly", "mostly"],
-        ["stay", "next", "mostly"],
-        ["stay", "near", "mostly"],
-        ["stay", "next", "slightly"],
-        ["stay", "near", "slightly"],
-        ["stay", "near", "next"]
+        ['stay', 'slightly', 'mostly'],
+        ['stay', 'next', 'mostly'],
+        ['stay', 'near', 'mostly'],
+        ['stay', 'next', 'slightly'],
+        ['stay', 'near', 'slightly'],
+        ['stay', 'near', 'next']
     ];
     var comparisonsC = [
-        ["same", "A", "B"],
-        ["salience", "interesting", "boring"]
+        ['same', 'A', 'B'],
+        ['salience', 'interesting', 'boring']
     ];
 
 
-    var videotypes = ["gravity", "inertia", "support", "control"];
+    var videotypes = ['gravity', 'inertia', 'support', 'control'];
     var compTypes = [comparisonsG, comparisonsI, [], comparisonsC]; // assign [2] after choosing
     // what to show for support
     var nReps = [1, 3, 1, 3]; // how many times does each comparison type listed need to be shown
@@ -90,58 +90,58 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
 
     // Choose which videos to show for support
     if (showStay === 0) {
-        videotypes[2] = "fall";
+        videotypes[2] = 'fall';
         compTypes[2] = comparisonsSF;
     } else if (showStay === 1) {
-        videotypes[2] = "stay";
+        videotypes[2] = 'stay';
         compTypes[2] = comparisonsSS;
     } /* else {
-        alert("invalid value for showStay (should be '0' or '1'), using '0'");
-        videotypes[2] = "fall";
+        alert('invalid value for showStay (should be '0' or '1'), using '0'');
+        videotypes[2] = 'fall';
         compTypes[2] = comparisonsSF;
     } */
 
     // Objects to use: elements correspond to videotypes
     var objects = [
-        ["apple", "cup", "whiteball", "lotion", "spray", "whiteball"],
-        ["train", "marker", "toycar", "sunglasses", "flashlight", "block"],
-        ["hammer", "tissues", "duck", "book", "shoe", "bowl"],
-        ["box", "funnel", "eraser", "scissors", "spoon", "wrench"]
+        ['apple', 'cup', 'whiteball', 'lotion', 'spray', 'whiteball'],
+        ['train', 'marker', 'toycar', 'sunglasses', 'flashlight', 'block'],
+        ['hammer', 'tissues', 'duck', 'book', 'shoe', 'bowl'],
+        ['box', 'funnel', 'eraser', 'scissors', 'spoon', 'wrench']
     ];
 
     // Options for videos, organized by event
     var cameraAngles = {};
-    cameraAngles['table'] = ["c1", "c2"];
-    cameraAngles['ramp'] = ["c1", "c2"];
-    cameraAngles['toss'] = ["c1", "c2"];
-    cameraAngles['stop'] = ["c1", "c2"];
-    cameraAngles['reverse'] = ["c1", "c2"];
-    cameraAngles['fall'] = ["c1"];
-    cameraAngles['stay'] = ["c1"];
-    cameraAngles['same'] = ["c1"];
-    cameraAngles['salience'] = ["c1"];
+    cameraAngles['table'] = ['c1', 'c2'];
+    cameraAngles['ramp'] = ['c1', 'c2'];
+    cameraAngles['toss'] = ['c1', 'c2'];
+    cameraAngles['stop'] = ['c1', 'c2'];
+    cameraAngles['reverse'] = ['c1', 'c2'];
+    cameraAngles['fall'] = ['c1'];
+    cameraAngles['stay'] = ['c1'];
+    cameraAngles['same'] = ['c1'];
+    cameraAngles['salience'] = ['c1'];
 
     var backgrounds = {};
-    backgrounds['table'] = ["b1", "b2"];
-    backgrounds['ramp'] = ["b1", "b2"];
-    backgrounds['toss'] = ["b1"];
-    backgrounds['stop'] = ["b1"];
-    backgrounds['reverse'] = ["b1"];
-    backgrounds['fall'] = ["b1"];
-    backgrounds['stay'] = ["b1"];
-    backgrounds['same'] = ["b1"];
-    backgrounds['salience'] = ["b1"];
+    backgrounds['table'] = ['b1', 'b2'];
+    backgrounds['ramp'] = ['b1', 'b2'];
+    backgrounds['toss'] = ['b1'];
+    backgrounds['stop'] = ['b1'];
+    backgrounds['reverse'] = ['b1'];
+    backgrounds['fall'] = ['b1'];
+    backgrounds['stay'] = ['b1'];
+    backgrounds['same'] = ['b1'];
+    backgrounds['salience'] = ['b1'];
 
     var flips = {};
-    flips['table'] = ["NR"];
-    flips['ramp'] = ["NN", "RR", "NR", "RN"];
-    flips['toss'] = ["NN", "RR"];
-    flips['stop'] = ["NR"];
-    flips['reverse'] = ["RN"];
-    flips['fall'] = ["NN", "NR", "RN", "RR"];
-    flips['stay'] = ["NN", "NR", "RN", "RR"];
-    flips['same'] = ["NN", "RR", "NR", "RN"];
-    flips['salience'] = ["NN", "NR", "RN", "RR"];
+    flips['table'] = ['NR'];
+    flips['ramp'] = ['NN', 'RR', 'NR', 'RN'];
+    flips['toss'] = ['NN', 'RR'];
+    flips['stop'] = ['NR'];
+    flips['reverse'] = ['RN'];
+    flips['fall'] = ['NN', 'NR', 'RN', 'RR'];
+    flips['stay'] = ['NN', 'NR', 'RN', 'RR'];
+    flips['same'] = ['NN', 'RR', 'NR', 'RN'];
+    flips['salience'] = ['NN', 'NR', 'RN', 'RR'];
 
     // Create list of TYPES (e.g. gravity, inertia, ...)
     var typeOrder = videotypes.slice(startType, videotypes.length);
@@ -161,14 +161,14 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         }
 
         // choose placement of more/less surprising outcomes (balanced)
-        var onLeft = ["moreProb", "moreProb", "moreProb", "lessProb", "lessProb", "lessProb"];
+        var onLeft = ['moreProb', 'moreProb', 'moreProb', 'lessProb', 'lessProb', 'lessProb'];
         onLeft = shuffleArray(onLeft);
 
         // pair objects and comparison types
         var events = [];
         for (var iEvent = 0; iEvent < eventTypeList.length; iEvent++) {
 	    var outcomeL, outcomeR;
-            if (onLeft[iEvent] === "moreProb") {
+            if (onLeft[iEvent] === 'moreProb') {
                 outcomeL = eventTypeList[iEvent][1];
                 outcomeR = eventTypeList[iEvent][2];
             } else {
@@ -240,23 +240,23 @@ function parse_name(fname) {
     //quick hack for dummy clips which have wrong names for some objects
     // (so we can get a correct intro name)
     switch (features.object) {
-        case "A":
-            features.object = "box";
+        case 'A':
+            features.object = 'box';
             break;
-        case "B":
-            features.object = "eraser";
+        case 'B':
+            features.object = 'eraser';
             break;
-        case "C":
-            features.object = "funnel";
+        case 'C':
+            features.object = 'funnel';
             break;
-        case "D":
-            features.object = "scissors";
+        case 'D':
+            features.object = 'scissors';
             break;
-        case "E":
-            features.object = "spoon";
+        case 'E':
+            features.object = 'spoon';
             break;
-        case "F":
-            features.object = "wrench";
+        case 'F':
+            features.object = 'wrench';
             break;
     }
 
@@ -267,12 +267,12 @@ function parse_name(fname) {
 function audioSourceObjs(path, shortname) {
     return  [
                 {
-                    "src": path + shortname + '.ogg',
-                    "type": "audio/ogg"
+                    'src': path + shortname + '.ogg',
+                    'type': 'audio/ogg'
                 },
                 {
-                    "src": path + shortname + '.mp3',
-                    "type": "audio/mp3"
+                    'src': path + shortname + '.mp3',
+                    'type': 'audio/mp3'
                 }
             ];
 }
@@ -281,23 +281,23 @@ function videoSourceObjs(path, shortname, organizedByType) {
     if (!organizedByType) {
         return  [
                     {
-                        "src": path + shortname + '.webm',
-                        "type": "video/webm"
+                        'src': path + shortname + '.webm',
+                        'type': 'video/webm'
                     },
                     {
-                        "src": path + shortname + '.mp4',
-                        "type": "video/mp4"
+                        'src': path + shortname + '.mp4',
+                        'type': 'video/mp4'
                     }
                 ];
     } else {
         return  [
                 {
-                    "src": path + 'webm/' + shortname + '.webm',
-                    "type": "video/webm"
+                    'src': path + 'webm/' + shortname + '.webm',
+                    'type': 'video/webm'
                 },
                 {
-                    "src": path + 'mp4/' + shortname + '.mp4',
-                    "type": "video/mp4"
+                    'src': path + 'mp4/' + shortname + '.mp4',
+                    'type': 'video/mp4'
                 }
             ];
     }
@@ -334,7 +334,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
-                'video_' + ("00" + (e.index)).slice(-2)),
+                'video_' + ('00' + (e.index)).slice(-2)),
             musicSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
                 musicName),

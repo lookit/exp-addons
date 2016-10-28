@@ -167,6 +167,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
             this.get('recorder').stop();
         }
         this._super(...arguments);
-        $(document).off("keypress");
+        $(document).off('keypress');
     }
 });

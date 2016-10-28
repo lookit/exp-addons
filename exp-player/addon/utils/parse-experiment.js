@@ -47,7 +47,7 @@ ExperimentParser.prototype._resolveDependencies = function (frame) {
         var match = urlPattern.exec(frame[key]);
         if (match) {
             var opts = {
-                type: "GET",
+                type: 'GET',
                 url: match.pop(),
                 async: false,
                 headers: {
@@ -83,9 +83,9 @@ ExperimentParser.prototype._resolveFrame = function (frameId, frame) {
         return [[
             this._resolveDependencies(frame)
         ], null];
-    } else if (frame.kind === "block") {
+    } else if (frame.kind === 'block') {
         return this._resolveBlock(frame, frameId);
-    } else if (frame.kind === "choice") {
+    } else if (frame.kind === 'choice') {
         return this._resolveRandom(frame, frameId);
     } else {
         throw `Experiment definition specifies an unknown kind of frame: ${frame.kind}`;
