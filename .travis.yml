@@ -1,0 +1,29 @@
+---
+language: node_js
+node_js:
+  - "4.6.0"
+
+sudo: false
+
+cache:
+  directories:
+    - node_modules
+
+env:
+  matrix:
+    - TEST_DIR="exp-models"
+    - TEST_DIR="exp-player"
+
+before_install:
+  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  - npm config set spin false
+  - npm install -g bower
+
+install:
+  - cd $TEST_DIR
+  - npm install
+  - bower install
+
+script:
+  - pwd
+  - npm test

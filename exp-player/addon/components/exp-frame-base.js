@@ -39,7 +39,7 @@ export default Ember.Component.extend({
     // when it was in didReceiveAttrs.
     setTimings: function() {
         this.set('eventTimings', []);
-    }.on("init"),
+    }.on('init'),
 
     loadData: function(frameData) { // jshint ignore:line
         return null;
