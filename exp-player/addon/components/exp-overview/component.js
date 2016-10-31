@@ -173,7 +173,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             // Questions with string values that should get serialized to integers (since select-input returns a string)
             // (e.g. "16" --> 16)
             var parseIntResponses = [0, 1, 7];
-            if (parseIntResponses.contains(i)) {
+            if (parseIntResponses.includes(i)) {
                 responses[keyName] = parseInt(questions[i].value);
             } else {
                 responses[keyName] = questions[i].value;
