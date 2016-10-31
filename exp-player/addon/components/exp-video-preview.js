@@ -158,7 +158,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     type: 'string'
                 }
             },
-            required: []
+            // No fields are required
         }
     },
 

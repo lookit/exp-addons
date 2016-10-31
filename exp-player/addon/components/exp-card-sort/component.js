@@ -209,11 +209,11 @@ export default ExpFrameBaseComponent.extend({
             var source;
             var target = ops.target.bucket;
 
-            if (cards && cards.contains(card)) {
+            if (cards && cards.includes(card)) {
                 source = cards;
             }
             for (var i = 0; i < buckets.length; i++) {
-                if (buckets[i].cards.contains(card)) {
+                if (buckets[i].cards.includes(card)) {
                     source = buckets[i].cards;
                 }
             }
@@ -221,7 +221,7 @@ export default ExpFrameBaseComponent.extend({
                 for (var group = 0; group < buckets2.length; group++) {
                     for (var category = 0; category < buckets2[group].categories.length; category++) {
                         var bucket = buckets2[group].categories[category];
-                        if (bucket['cards'].contains(card)) {
+                        if (bucket['cards'].includes(card)) {
                             source = bucket['cards'];
                         }
                     }

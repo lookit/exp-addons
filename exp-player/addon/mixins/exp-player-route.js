@@ -40,7 +40,7 @@ export default Ember.Mixin.create({
                             account.pastSessionsFor(experiment, profile).then(function(pastSessions) {
                                 pastSessions = pastSessions.toArray();
 
-                                if (!pastSessions.contains(session)) {
+                                if (!pastSessions.includes(session)) {
                                     pastSessions.pushObject(session);
                                 }
                                 resolve(pastSessions);

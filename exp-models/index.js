@@ -1,6 +1,6 @@
+/*jshint node:true*/
 var path = require('path');
 
-/*jshint node:true*/
 module.exports = {
   name: 'exp-models',
 

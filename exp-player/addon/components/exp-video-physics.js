@@ -118,7 +118,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     type: 'string'
                 }
             },
-            required: []
+            // No fields are required
         }
     },
 
