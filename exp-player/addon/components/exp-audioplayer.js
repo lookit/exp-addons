@@ -75,7 +75,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
 
     actions: {
         loopSound() {
-            var elem = this.$("#player-audio")[0];
+            var elem = this.$('#player-audio')[0];
             elem.currentTime = 0;
             elem.play();
         },

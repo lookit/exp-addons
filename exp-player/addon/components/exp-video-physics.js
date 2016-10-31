@@ -215,8 +215,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         },
 
         playNext() {
-            if (this.get("currentTask") === "intro") {
-                this.set("currentTask", "test");
+            if (this.get('currentTask') === 'intro') {
+                this.set('currentTask', 'test');
             } else {
                 this.send('next'); // moving to intro video
             }
@@ -225,7 +225,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         _afterTest() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
-            $("audio#exp-music")[0].pause();
+            $('audio#exp-music')[0].pause();
             this.send('playNext');
         },
 
@@ -264,7 +264,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 if (this.get('testTime') === 0) {
                     this.send('setTestTimer');
                 }
-                $("audio#exp-music")[0].play();
+                $('audio#exp-music')[0].play();
                 if (this.get('useAlternate')) {
                     this.sendTimeEvent('startAlternateVideo');
                 } else {
@@ -323,7 +323,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 if (!pause && wasPaused) {
                     this.set('doingAttn', false);
                     this.set('isPaused', false);
-                    if (currentState === "test") {
+                    if (currentState === 'test') {
                         if (this.get('useAlternate')) {
                             this.set('skip', true);
                         }
@@ -404,6 +404,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
         // Todo: make removal of event listener more specific (in case a frame comes between the video and the exit survey)
-        $(document).off("keyup");
+        $(document).off('keyup');
     }
 });
