@@ -10,7 +10,6 @@ export default ExpFrameBaseComponent.extend({
     showWarning: false,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-    showWebCamWarning: Ember.computed.not('hasWebCam'),
 
     _setupRecorder() {
         var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
