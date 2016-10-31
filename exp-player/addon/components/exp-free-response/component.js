@@ -140,7 +140,14 @@ export default ExpFrameBaseComponent.extend(Validations, {
     },
     loadData: function(frameData) {
         var responses = frameData.responses;
-        this.set('EventTime', responses.EventTime);
+        var times = this.get('times');
+        var eventTime = null;
+        for (var i=0; i < times.length; i++) {
+            if (times[i]['24h'] === responses.EventTime) {
+                eventTime = times[i];
+            }
+        }
+        this.set('EventTime', eventTime);
         this.set('WhatResponse', responses.WhatResponse);
         this.set('WhereResponse', responses.WhereResponse);
         this.set('WhoResponse', responses.WhoResponse);
