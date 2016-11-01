@@ -239,6 +239,13 @@ export default ExpFrameBaseComponent.extend({
                 window.scrollTo(0, 0);
             }
         },
+        previousPage() {
+            // clear unsaved data
+            for (let bucket of this.get('buckets')) {
+                Ember.set(bucket, 'cards', []);
+            }
+            this.send('previous');
+        },
         continue() {
             if (this.get('isValid')) {
                 this.send('next');
