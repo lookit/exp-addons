@@ -8,9 +8,7 @@
     background-color: #d4efdf;
 }
 
-.video-consent-main {
-    padding-bottom: 10px;
-}
+
 
 .video-consent-main blockquote {
     border-left: 8px solid #d4efdf;
@@ -25,18 +23,45 @@
 }
 
 .video-consent-doc .exp-text-medium {
-        font-size: 1.2em;
+        font-size: 1.1em;
 }
 
-.video-consent-controls {
-    padding-top: 15px;
-    padding-right: 15px;
+.video-consent-direction button {
+    display: inline;
+    float: none !important;
 }
-
 
 .video-consent-body * {
     text-align:left;
 }
 
+.video-consent-numbered-direction {
+    font-weight: bold;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
 
+.video-consent-number {
+    color: #04631c;
+    font-size: 1.5em;
+    font-weight: bold;
+    background-color: #d4efdf;
+    border-radius:15px;
+    padding:2px 6px;
+    margin:2px;
+    border: thin solid #04631c;
+}
 
+.video-consent-direction {
+    color: #04631c;
+    font-size: 1.5em;
+    vertical-align: center;
+}
+
+.video-consent-direction button {
+    font-size: .8em;
+}
+
+.video-consent-outloud {
+    font-size: 1.2em;
+}

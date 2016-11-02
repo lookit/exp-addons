@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from 'exp-player/templates/components/exp-video-config';
+import layout from 'exp-player/templates/components/exp-video-config-quality';
 
 export default ExpFrameBaseComponent.extend({
     layout,
@@ -10,7 +10,6 @@ export default ExpFrameBaseComponent.extend({
     showWarning: false,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-    showWebCamWarning: Ember.computed.not('hasWebCam'),
 
     _setupRecorder() {
         var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
@@ -41,9 +40,9 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    type: 'exp-videoconfig',
+    type: 'exp-video-config-quality',
     meta: {
-        name: 'Video Recorder Configuration',
+        name: 'Video Recorder Configuration for preferential looking',
         description: 'TODO: a description of this frame goes here.',
         parameters: {
             type: 'object',
@@ -51,11 +50,6 @@ export default ExpFrameBaseComponent.extend({
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
-                },
-                instructions: {
-                    type: 'string',
-                    description: 'Instructions to display to the user',
-                    default: 'Please make sure your video camera is working and shows up below!'
                 }
             },
             required: ['id']
