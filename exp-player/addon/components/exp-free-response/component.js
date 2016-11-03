@@ -15,6 +15,7 @@ function getLength(value) {
 
 var presence = validator('presence', {
     presence: true,
+    ignoreBlank: true,
     message: 'This field is required'
 });
 

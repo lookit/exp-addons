@@ -17,6 +17,7 @@ var generateValidators = function(questions) {
   var validators = {};
   var presence = validator('presence', {
     presence:true,
+    ignoreBlank: true,
     message: 'This field is required'
   });
   for (var q=0; q < questions.length; q++) {
