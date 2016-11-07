@@ -69,7 +69,7 @@ export default Ember.Component.extend({
             this.set('id', `${kind}-${frameIndex}`);
         }
 
-        if (config.featureFlags.loadData) {
+        if (clean && config.featureFlags.loadData) {
             var session = this.get('session');
             var expData = session ? session.get('expData') : null;
             if (session && session.get('expData')) {
