@@ -34,6 +34,7 @@
     padding: 10px;
     margin-bottom: 12px;
     overflow-wrap: break-word;
+    word-wrap: break-word; // support for original name: https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap
 }
 
 .bucket-label-margin {
