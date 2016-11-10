@@ -254,7 +254,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         for (var q=0; q < this.get('questions').length; q++) {
             var question = this.get('questions')[q];
             var keyName = question.keyName;
-            this.get('questions')[q].value = frameData.responses[keyName];
+            Ember.set(question, 'value', frameData.responses[keyName]);
         }
     }
 });
