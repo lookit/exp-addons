@@ -1,6 +1,20 @@
 import Ember from 'ember';
 
-export default Ember.Mixin.create({
+import BulkAdapterMixin from './bulk-adapter';
+
+/**
+ * @module exp-models
+ * @submodule adapters
+ */
+
+/**
+ * Adapter for communication with a remote JamDB server
+ *
+ * @class JamDocumentAdapterMixin
+ * @uses BulkAdapterMixin
+ */
+
+export default Ember.Mixin.create(BulkAdapterMixin, {
     updateRecordUrlTemplate: '{+host}/{+namespace}/documents{/namespaceId}.{collectionId}.{id}',
     findRecordUrlTemplate: '{+host}/{+namespace}/documents{/namespaceId}.{collectionId}.{id}',
 
