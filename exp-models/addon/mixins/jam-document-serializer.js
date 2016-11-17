@@ -16,7 +16,7 @@ export default Ember.Mixin.create({
     },
 
     extractId(modelClass, resourceHash) {
-        return resourceHash.id.split('.')[resourceHash.id.split('.').length-1];
+        return resourceHash.id.split('.')[resourceHash.id.split('.').length - 1];
     },
 
     extractAttributes: function(modelClass, resourceHash) {

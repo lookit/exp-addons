@@ -11,15 +11,14 @@ export default Ember.Service.extend({
     namespaceConfig: Ember.inject.service(),
     getCurrentUser() {
         return new Ember.RSVP.Promise((resolve, reject) => {
-            if(!this.get('session.isAuthenticated')) {
+            if (!this.get('session.isAuthenticated')) {
                 resolve([null, null]);
-            }
-            else {
+            } else {
                 var data = this.get('session.data.authenticated');
                 var FakeProfile = Ember.Object.extend({});
-                if(data.provider === 'osf') {
+                if (data.provider === 'osf') {
                     var FakeAccount = Ember.Object.extend({
-                        pastSessionsFor: function() {
+                        pastSessionsFor: function () {
                             return Ember.RSVP.resolve([]);
                         }
                     });
@@ -31,8 +30,7 @@ export default Ember.Service.extend({
                             profileId: ADMIN.profileId
                         })
                     ]);
-                }
-                else if(data.provider === `${this.get('namespaceConfig').get('namespace')}:accounts`) {
+                } else if (data.provider === `${this.get('namespaceConfig').get('namespace')}:accounts`) {
                     this.get('store').findRecord('account', `${data.id}`)
                         .then((account) => {
                             var profile = account.profileById(this.get('session.data.profile.profileId'));

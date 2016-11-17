@@ -35,7 +35,7 @@ export default DS.Model.extend(AnonJamModel, {
     history: DS.hasMany('history'),
 
     getProfile() {
-        let [accountId, ] = this.get('profileId').split('.');
+        let accountId = this.get('profileId').split('.').shift();
         return this.store.findRecord('account', accountId).then((account) => account.profileById(this.get('profileId')));
     },
     anonProfileId: Ember.computed('profileId', function () {

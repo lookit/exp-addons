@@ -26,4 +26,4 @@ install:
 
 script:
   - pwd
-  - npm test
+  - npm run check-style && npm test

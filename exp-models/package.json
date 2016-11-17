@@ -69,9 +69,7 @@
       "tmp",
       "vendor",
       "app/locales",
-      "tests/unit",
-      "tests/integration",
-      "tests/helpers"
+      "tests"
     ],
     "requireSpacesInsideObjectBrackets": false,
     "requireSpacesInsideImportedObjectBraces": false,
