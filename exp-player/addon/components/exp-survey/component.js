@@ -41,7 +41,7 @@ export default ExpFrameBaseComponent.extend({
             this.set('formData', this.get('form').getValue());
             this.send('next');
         },
-        getForm (form) {
+        getForm(form) {
             this.set('form', form);
         }
     }

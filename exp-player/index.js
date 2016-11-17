@@ -5,7 +5,6 @@ var Funnel = require('broccoli-funnel');
 var generate = require('broccoli-auto-generated');
 var BroccoliMergeTrees = require('broccoli-merge-trees');
 
-
 module.exports = {
     name: 'exp-player',
 
@@ -23,7 +22,7 @@ module.exports = {
                 // Set to false to test study multiple times with the same account
                 showStudyCompletedPage: true
             }
-        }
+        };
     },
 
     isDevelopingAddon: function () {
@@ -77,7 +76,6 @@ module.exports = {
         ]);
     }
 };
-
 
 var DEFAULT_OPTIONS = {
     connectionstring: '',
@@ -146,7 +144,7 @@ var DEFAULT_OPTIONS = {
     //desc: when the [SAVE] button is pressed (if it's enabled) save_video_to_db.php (or .asp) is called. If the save operation succeeds AND if this variable is NOT EMPTY, the user will be taken to the URL
     //values: any URL you want the user directed to after he presses the [Save] button
     //default: ""
-    onSaveSuccessURL: "",
+    onSaveSuccessURL: '',
 
     //snapshotSec:Number
     //desc: the snapshot is taken when the recording reaches this length/time
@@ -159,7 +157,7 @@ var DEFAULT_OPTIONS = {
     //desc: if set to true the recorder will take a snapshot
     //values: true or false
     //default: 'true'
-    snapshotEnable: "true",
+    snapshotEnable: 'true',
 
     //minRecordTime:Number
     //desc: the minimum number of seconds a recording must be in length. The STOP button will be disabled until the recording reaches this length!
@@ -171,13 +169,13 @@ var DEFAULT_OPTIONS = {
     //desc: color of background area inside the video recorder around the video area
     //values: any color in hex format
     //default:0x990000 (dark red)
-    backgroundColor: "0xf6f6f6",
+    backgroundColor: '0xf6f6f6',
 
     //menuColor:Hex number
     //desc: the color of the lower area of the recorder containing the buttons and the scrub bar
     //values:any color in hex format
     //default:0x333333 (dark grey)
-    menuColor: "0xe9e9e9",
+    menuColor: '0xe9e9e9',
 
     //radiusCorner:Number
     //desc: the radius of the 4 corners of the video recorder
@@ -207,13 +205,13 @@ var DEFAULT_OPTIONS = {
     //desc: adds a prefix to the video file name on the media server like this: {prefix}{timestamp_random} or {prefix}{userId}{timestamp_random} if the useUserId option is set to true
     //values: a string
     //default: "videoStream_"
-    streamPrefix: "videoStream_",
+    streamPrefix: 'videoStream_',
 
     //streamName:String
     //desc: By default the application generates a random name ({prefix}_{timestamp_random}) for the video file. If you want to use a certain name set this variable and it will overwrite the pattern {prefix}_{timestamp_random}. The stream extension (.flv , .mp4 or .f4v) should NOT be used in the stream name.
     //values: a string
     //default: ""
-    streamName: "",
+    streamName: '',
 
     //disableAudio:String
     //desc: By default the application records audio and video. If you want to disable audio recording set this var to 'true'.
@@ -225,37 +223,37 @@ var DEFAULT_OPTIONS = {
     //desc: If you want to change the permissions on the newly recorded video file after it is saved to the disk on the media server you can use this variable. This works only on Red5 and Wowza.
     //values: "0666","0777", etc.
     //default: ""
-    chmodStreams: "",
+    chmodStreams: '',
 
     //countdownTimer:String
     //desc: set to true if you want the timer to decrease from the upper limit (maxRecordingTime) down to 0
     //values: "true", "false"
     //defaut: "false"
-    countdownTimer: "false",
+    countdownTimer: 'false',
 
     //overlayPath:String
     //desc: relative URL path to the image to be shown as overlay
     //values: any relative path
     //default: "" //no overlay
-    overlayPath: "",
+    overlayPath: '',
 
     //overlayPosition:String
     //desc: position of the overlay image mentioned above
     //values: "tr" for top right, "tl" for top left and "cen" for centered, no other positions are supported
     //default: "tr"
-    overlayPosition: "tr",
+    overlayPosition: 'tr',
 
     //loopbackMic:String
     //desc: whether or not the sound should be also played back in the speakers/heaphones during recording
     //values: "true" for yes, "false" for no
     //default: "false"
-    loopbackMic: "false",
+    loopbackMic: 'false',
 
     //showMenu:String
     //desc: whether or not the bottom menu in the HDFVR shoud show, some people choose to control the HDFVR via JS and they do ot need the menu, when not using the menu you can decrease the height of HDFVR by 32 (3o is the height of the button 2 is the default padding value in this config file)
     //values: "true" to show, "false" to hide
     //default: "true"
-    showMenu: "true",
+    showMenu: 'true',
 
     //showTimer:String
     //desc: Show or hides the timer
@@ -315,7 +313,7 @@ var DEFAULT_OPTIONS = {
     //desc: This sets the conversion command that will be executed with FFMPEG when enableFFMPEGConverting is set to 1. The command has the following pattern: "ffmpeg -i [THE_INPUT_FLV_FILE]  [codec parameters audio/video] [THE_OUTPUT_MP4_FILE]" . The [THE_INPUT_FLV_FILE] and [THE_OUTPUT_MP4_FILE] parts must not be changed, both the path to ffmpeg and to the video files will be detected and set automatically by the media server. Only the codec parameters will be taken into account. The command is expressed like this to put it more into context as opposed to just sending the codec parameters.
     //values:Example command: ffmpeg -i [THE_INPUT_FLV_FILE] -c:v libx264 [THE_OUTPUT_MP4_FILE]
     //default: ffmpeg -i [THE_INPUT_FLV_FILE] -c:v libx264 [THE_OUTPUT_MP4_FILE]
-    ffmpegCommand: "ffmpeg -i [THE_INPUT_FLV_FILE] -c:v libx264 [THE_OUTPUT_MP4_FILE]",
+    ffmpegCommand: 'ffmpeg -i [THE_INPUT_FLV_FILE] -c:v libx264 [THE_OUTPUT_MP4_FILE]',
 
     //autoSave:Number
     //desc: This controls whether or not HDFVR will automatically call the save_video_to_db script, having the same effect as pressing the [SAVE] button in menu. To eliminate the issue of double entries in the database, enabling this setting will automatically hide the [SAVE] button.
@@ -333,13 +331,13 @@ var DEFAULT_OPTIONS = {
     //desc: color of the text and icons
     //values: any color in hex format
     //default:0x333333
-    normalColor: "0x334455",
+    normalColor: '0x334455',
 
     //overColor:Hex number
     //desc: color applied to text and icons on mouse over
     //values: any color in hex format
     //default:0xdf8f90 (dark red)
-    overColor: "0x556677",
+    overColor: '0x556677',
 
     //skipInitialScreen:Number
     //desc: If this settings is enabled HDFVR won't show the initial pre-recording screen introduced in HDFVR 2.0

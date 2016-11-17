@@ -9,7 +9,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "check-style": "./node_modules/jscs/bin/jscs ."
   },
   "repository": "",
   "engines": {
@@ -87,6 +88,7 @@
       "config/environment.js",
       "bower_components",
       "node_modules",
+      "blueprints",
       "lib",
       "dist",
       "docs",
@@ -101,6 +103,8 @@
     "requireSpacesInAnonymousFunctionExpression": false,
     "requireTrailingComma": false,
     "disallowTrailingComma": false,
+    "disallowArrayDestructuringReturn": false,
+     "disallowQuotedKeysInObjects": false,
     "requirePaddingNewLinesAfterBlocks": false,
     "validateIndentation": 4,
     "requirePaddingNewLinesBeforeLineComments": false,

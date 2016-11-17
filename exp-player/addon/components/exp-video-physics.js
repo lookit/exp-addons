@@ -343,7 +343,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     window.clearInterval(this.get('testTimer'));
                     this.set('testTime', 0);
                     this.sendTimeEvent('pauseVideo', {
-                        'currentTask': this.get('currentTask')
+                        currentTask: this.get('currentTask')
                     });
                     if (this.get('recorder')) {
                         this.get('recorder').pause(true);

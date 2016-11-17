@@ -11,7 +11,6 @@ import layout from '../templates/components/exp-exit-survey';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from 'exp-player/mixins/full-screen';
 
-
 const Validations = buildValidations({
     birthDate: validator('presence', {
         presence: true,
@@ -91,7 +90,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
             this.sendAction('sessionCompleted');
             this.send('save');
         },
-        continue () {
+        continue() {
             // Check whether exit survey is valid, and if so, advance to next screen
             if (this.get('validations.isValid')) {
                 if (this.get('withdrawal')) {
@@ -119,9 +118,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
         // Warning, this implementation may be inaccurate
         // TODO, figure out what the client's expected behavior is here and resolve
         // https://openscience.atlassian.net/browse/LEI-111
-        var pastSessionDates = this.get('frameContext.pastSessions').map((session) => {
-            return moment(session.get('createdOn'));
-        });
+        var pastSessionDates = this.get('frameContext.pastSessions').map((session) => moment(session.get('createdOn')));
         var minDate = moment.min(pastSessionDates);
         var maxDate = moment.max(pastSessionDates);
 

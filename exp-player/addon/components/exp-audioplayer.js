@@ -4,7 +4,6 @@ import layout from '../templates/components/exp-audioplayer';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import MediaReload from '../mixins/media-reload';
 
-
 export default ExpFrameBaseComponent.extend(MediaReload, {
     layout: layout,
     didFinishSound: false,

@@ -7,7 +7,6 @@ import MediaReload from '../mixins/media-reload';
 import VideoPause from '../mixins/video-pause';
 import VideoRecord from '../mixins/video-record';
 
-
 //TODO Fullsceen issues/functionality
 export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoRecord, {
     layout: layout,

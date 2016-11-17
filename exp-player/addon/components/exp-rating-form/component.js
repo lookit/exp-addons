@@ -4,7 +4,7 @@ import layout from './template';
 import {validator, buildValidations} from 'ember-cp-validations';
 import config from 'ember-get-config';
 
-
+// jscs:disable requireDotNotation
 var items = {
     '3': [
         'measures.questions.3.items.1.label',
@@ -238,7 +238,7 @@ var generateSchema = function (data) {
         }
         var ret = {
             description: data.items[i],
-            keyName:keyName,
+            keyName: keyName,
             value: null
         };
         Object.keys(options).forEach(setOption);
@@ -500,50 +500,51 @@ var questions = [
             {label: 'measures.questions.11.options.yes', value: 1},
             {label: 'measures.questions.11.options.no', value: 2}
         ],
-        items: [{
-            type: 'radio',
-            keyName: 'ChangeYesNo',
-            value: null,
-            formatLabel: 'negative-margin-top'
-        },
-        {
-            type: 'textarea',
-            description: 'measures.questions.12.label',
-            keyName: 'ChangeDescribe',
-            value: null,
-            optional: true
-        },
-        {
-            type: 'radio',
-            description: 'measures.questions.18.label',
-            keyName: 'ChangeSuccess',
-            value: null,
-            optional: true,
-            labelTop: false,
-            scale: NINE_POINT_SCALE,
-            labels: [
-                {
-                    rating: 1,
-                    label: 'measures.questions.18.options.notatallSuccessful'
-                },
-                {
-                    rating: 3,
-                    label: 'measures.questions.18.options.alittleSuccessful'
-                },
-                {
-                    rating: 5,
-                    label: 'measures.questions.18.options.moderatelySuccessful'
-                },
-                {
-                    rating: 7,
-                    label: 'measures.questions.18.options.verySuccessful'
-                },
-                {
-                    rating: 9,
-                    label: 'measures.questions.18.options.completelySuccessful'
-                }
-            ]
-        }]
+        items: [
+            {
+                type: 'radio',
+                keyName: 'ChangeYesNo',
+                value: null,
+                formatLabel: 'negative-margin-top'
+            },
+            {
+                type: 'textarea',
+                description: 'measures.questions.12.label',
+                keyName: 'ChangeDescribe',
+                value: null,
+                optional: true
+            },
+            {
+                type: 'radio',
+                description: 'measures.questions.18.label',
+                keyName: 'ChangeSuccess',
+                value: null,
+                optional: true,
+                labelTop: false,
+                scale: NINE_POINT_SCALE,
+                labels: [
+                    {
+                        rating: 1,
+                        label: 'measures.questions.18.options.notatallSuccessful'
+                    },
+                    {
+                        rating: 3,
+                        label: 'measures.questions.18.options.alittleSuccessful'
+                    },
+                    {
+                        rating: 5,
+                        label: 'measures.questions.18.options.moderatelySuccessful'
+                    },
+                    {
+                        rating: 7,
+                        label: 'measures.questions.18.options.verySuccessful'
+                    },
+                    {
+                        rating: 9,
+                        label: 'measures.questions.18.options.completelySuccessful'
+                    }
+                ]
+            }]
     },
     generateSchema({
         question: 'measures.questions.13.label',
@@ -553,9 +554,9 @@ var questions = [
         items: items['13'],
         scale: [
             {label: 'measures.questions.13.options.disagreeStrongly', value: 1},
-            {label: 'measures.questions.13.options.disagree',  value: 2},
-            {label: 'measures.questions.13.options.neutral',  value: 3},
-            {label: 'measures.questions.13.options.agree',  value: 4},
+            {label: 'measures.questions.13.options.disagree', value: 2},
+            {label: 'measures.questions.13.options.neutral', value: 3},
+            {label: 'measures.questions.13.options.agree', value: 4},
             {label: 'measures.questions.13.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
@@ -568,9 +569,9 @@ var questions = [
         items: items['14'],
         scale: [
             {label: 'measures.questions.14.options.disagreeStrongly', value: 1},
-            {label: 'measures.questions.14.options.disagree',  value: 2},
-            {label: 'measures.questions.14.options.neutral',  value: 3},
-            {label: 'measures.questions.14.options.agree',  value: 4},
+            {label: 'measures.questions.14.options.disagree', value: 2},
+            {label: 'measures.questions.14.options.neutral', value: 3},
+            {label: 'measures.questions.14.options.agree', value: 4},
             {label: 'measures.questions.14.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
@@ -583,9 +584,9 @@ var questions = [
         items: items['15'],
         scale: [
             {label: 'measures.questions.15.options.disagreeStrongly', value: 1},
-            {label: 'measures.questions.15.options.disagree',  value: 2},
-            {label: 'measures.questions.15.options.neutral',  value: 3},
-            {label: 'measures.questions.15.options.agree',  value: 4},
+            {label: 'measures.questions.15.options.disagree', value: 2},
+            {label: 'measures.questions.15.options.neutral', value: 3},
+            {label: 'measures.questions.15.options.agree', value: 4},
             {label: 'measures.questions.15.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
@@ -612,9 +613,9 @@ var questions = [
         items: items['17'],
         scale: [
             {label: 'measures.questions.17.options.disagreeStrongly', value: 1},
-            {label: 'measures.questions.17.options.disagree',  value: 2},
-            {label: 'measures.questions.17.options.neutral',  value: 3},
-            {label: 'measures.questions.17.options.agree',  value: 4},
+            {label: 'measures.questions.17.options.disagree', value: 2},
+            {label: 'measures.questions.17.options.neutral', value: 3},
+            {label: 'measures.questions.17.options.agree', value: 4},
             {label: 'measures.questions.17.options.agreeStrongly', value: 5}
         ],
         options: {labelTop: true}
@@ -648,7 +649,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         return this.framePage + 5;
     }),
     questions: questions,
-    responses: Ember.computed(function() {
+    responses: Ember.computed(function () {
         var questions = this.get('questions');
         var responses = {};
         for (var i = 0; i < questions.length; i++) {
@@ -675,12 +676,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         'validations.attrs.page4.isValid',
         'validations.attrs.page5.isValid',
         'validations.attrs.page6.isValid',
-        function() {
+        function () {
             // Check validation for questions on the current page
             var page = this.get('framePage');
             var attr = 'validations.attrs.page' + page + '.isValid';
             return this.get(attr) || !config.featureFlags.validate;
-    }),
+        }),
     meta: {
         name: 'ExpRatingForm',
         description: 'TODO: a description of this frame goes here.',
@@ -705,7 +706,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             var page = Math.max(0, this.get('framePage') - 1);
             this.set('framePage', page);
             this.sendAction('updateFramePage', page);
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         },
         continue() {
             if (this.get('allowNext')) {
@@ -722,7 +723,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
             }
         }
     },
-    loadData: function(frameData) {
+    loadData: function (frameData) {
         // Only load data once when the component loads, not with each page
         if (!this.get('dataLoaded')) {
             var questions = this.get('questions');

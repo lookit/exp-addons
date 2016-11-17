@@ -128,7 +128,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     moodOptions: ['1', '2', '3', '4', '5', '6', '7'],
     showValidation: false,
     actions: {
-        continue () {
+        continue() {
             if (this.get('validations.isValid')) {
                 this.send('next');
             } else {

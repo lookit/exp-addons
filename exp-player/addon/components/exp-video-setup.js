@@ -42,7 +42,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 examples: {
                     type: 'array',
-                    'items': {
+                    items: {
                         type: 'object',
                         properties: {
                             src: {

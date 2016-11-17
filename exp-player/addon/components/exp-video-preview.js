@@ -43,8 +43,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         this.send('setTimeEvent', `exp-physics:${name}`, opts);
     },
 
-
-
     actions: {
         accept() {
             this.set('prompt', false);

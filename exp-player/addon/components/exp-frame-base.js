@@ -37,15 +37,15 @@ export default Ember.Component.extend({
     // see https://github.com/emberjs/ember.js/issues/3908. Moved
     // to init because we were losing the first event per instance of a frame
     // when it was in didReceiveAttrs.
-    setTimings: function() {
+    setTimings: function () {
         this.set('eventTimings', []);
     }.on('init'),
 
-    loadData: function(frameData) { // jshint ignore:line
+    loadData: function (frameData) { // jshint ignore:line
         return null;
     },
 
-    didReceiveAttrs: function(options) {
+    didReceiveAttrs: function (options) {
         this._super(...arguments);
 
         if (!this.get('frameConfig')) {
@@ -82,7 +82,7 @@ export default Ember.Component.extend({
     },
     setupParams(clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
-       var params = this.get('frameConfig');
+        var params = this.get('frameConfig');
 
         var defaultParams = {};
         Object.keys(this.get('meta.parameters').properties || {}).forEach((key) => {
@@ -139,7 +139,7 @@ export default Ember.Component.extend({
             this.send('setTimeEvent', 'nextFrame');
             this.send('save');
             this.sendAction('next');
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         },
         last() {
             this.sendAction('last');
@@ -148,7 +148,7 @@ export default Ember.Component.extend({
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
     }
 });

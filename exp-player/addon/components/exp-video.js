@@ -5,7 +5,6 @@ import FullScreen from '../mixins/full-screen';
 import MediaReload from '../mixins/media-reload';
 import VideoPause from '../mixins/video-pause';
 
-
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
     layout: layout,
 
