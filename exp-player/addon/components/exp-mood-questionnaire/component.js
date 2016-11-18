@@ -1,10 +1,11 @@
+import layout from './template';
+
 import {
     validator,
     buildValidations
 } from 'ember-cp-validations';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from '../templates/components/exp-mood-questionnaire';
 
 let pad = function(number) {
     return ('00' + (number || 0)).slice(-2);

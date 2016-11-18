@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from 'exp-player/templates/components/exp-video-config';
+import layout from './template';
 
 export default ExpFrameBaseComponent.extend({
     layout,

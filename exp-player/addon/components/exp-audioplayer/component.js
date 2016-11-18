@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/exp-audioplayer';
+import layout from './template';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import MediaReload from '../mixins/media-reload';

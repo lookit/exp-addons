@@ -1,12 +1,12 @@
 import Ember from 'ember';
+import layout from './template';
+
 import {
     validator,
     buildValidations
 } from 'ember-cp-validations';
 
 import moment from 'moment';
-
-import layout from '../templates/components/exp-exit-survey-pilot';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from 'exp-player/mixins/full-screen';

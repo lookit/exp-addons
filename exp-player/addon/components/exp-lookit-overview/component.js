@@ -1,5 +1,5 @@
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from '../templates/components/exp-lookit-overview';
+import layout from './template';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,

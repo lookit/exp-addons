@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-import layout from '../templates/components/exp-video-physics';
+import layout from './template';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import FullScreen from '../mixins/full-screen';

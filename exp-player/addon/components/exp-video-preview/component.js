@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from 'exp-player/templates/components/exp-video-preview';
+import layout from './template';
 import MediaReload from 'exp-player/mixins/media-reload';
 import VideoRecord from '../mixins/video-record';
 

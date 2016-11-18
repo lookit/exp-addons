@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/exp-player';
+import layout from './template';
 
 import FullScreen from '../mixins/full-screen';
 import ExperimentParser from '../utils/parse-experiment';

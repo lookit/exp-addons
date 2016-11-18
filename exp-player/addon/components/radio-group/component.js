@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from '../templates/components/radio-group';
+import layout from './template';
 
 export default Ember.Component.extend({
     layout,
