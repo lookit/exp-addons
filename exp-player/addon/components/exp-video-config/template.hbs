@@ -1,0 +1,192 @@
+<div class="row exp-physics-config">
+
+    <div class="vertical-pad"></div>
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <h2> Basic webcam setup </h2>
+
+        <p id="not-recording-note">
+            Not recording yet
+        </p>
+
+        <hr>
+
+    </div>
+</div>
+
+<div class="row exp-physics-config">
+
+    <div class="col-md-5 col-md-offset-1">
+        <div class="row exp-physics-config" style="height: 45vh">
+            <div id="recorder" class="col-md-10 col-md-offset-1" style="height:100%"></div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+
+        {{#if showWebCamWarning }}
+            <h4 class="text-warning">
+                We couldn't connect to your webcam. Please make sure you have a webcam connected
+                and <button class="btn btn-default" {{action 'reloadRecorder'}}>reload</button>
+            </h4>
+        {{/if}}
+
+        {{#unless showWebCamWarning }}
+
+            <ol>
+                <li>
+                    <p>
+                        Make sure your camera is working so that you can see yourself to the left! (For troubleshooting
+                        tips, scroll down.)
+                    </p>
+                </li>
+
+                <li>
+                    <p>
+                        To check that your privacy settings are working, click
+                        <button class="btn btn-primary" {{action 'reloadRecorder'}}>reload</button>
+                        . You should see your webcam view again in a moment, <em>without</em> having to click "Allow."
+                        If you were prompted again, this time make sure to also click the "Remember" box," and try
+                        reloading again.
+                    </p>
+                </li>
+
+                <li>
+                    <p>
+                        Make sure your microphone is working: right-click on the camera image, choose "Settings," and
+                        click the microphone tab. If you say "Hi" or clap your hands, you should see the green volume
+                        bar at the left go at least halfway up.
+                    </p>
+                </li>
+
+            </ol>
+
+        {{/unless}}
+
+        <div class="vertical-pad"></div>
+
+        {{#if showWarning}}
+            <div class="reload-warning">
+                * Please try reloading the webcam view to check your privacy settings are working.
+            </div>
+        {{/if}}
+
+        <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'checkReloadedThenNext' }} >
+            Next
+        </button>
+    </div>
+
+
+</div>
+
+<br>
+<div class="row exp-controls exp-physics-config">
+    <div class="col-md-10 col-md-offset-1">
+        <h2> Troubleshooting tips </h2>
+        <hr>
+
+        <h3>Adjusting microphone settings</h3>
+
+
+        <p>
+            If the microphone icon in your video screen shows red bars like this <img src="assets/noSound.png" alt="No sound">, you may
+            not be recording sound. To adjust your microphone settings, right-click on the webcam view and choose
+            "Settings":
+        </p>
+
+        <img class="screenshot" src="assets/flash_setting_select.png" alt="Access flash settings">
+
+        <p>
+            Click on the microphone tab to choose which microphone to use (you may have both a built-in and an external
+            microphone to choose from) and adjust the volume. If you speak or clap near the microphone, you should see
+            the green bar on the left rise and fall:
+        </p>
+
+        <img class="screenshot" src="assets/flash_microphone.png" alt="Microphone settings">
+
+        <h3>First steps if you're not seeing your webcam at all...</h3>
+
+        <ul>
+            <li>Quit any other applications that may be accessing your webcam (e.g. Skype, Google Hangouts.)</li>
+
+            <li>
+                Make sure you're able to view the webcam video outside of Lookit. (E.g., on a Mac, try Photobooth.)
+            </li>
+
+            <li>
+                Make sure you have the latest version of Flash installed and that it's enabled in your web browser.
+                <a href="https://helpx.adobe.com/flash-player.html" target="_blank" rel="noopener">Click here</a> to go to an Adobe
+                website which guides you through this process.
+            </li>
+
+            <li>
+                If all else fails, try using a different browser. Lookit is primarily tested on Firefox and Chrome; on
+                some computers one of these works when the other doesn't. (We aspire to have everything work perfectly,
+                but dealing with webcam video in a browser is still pretty new--Google Hangouts doesn't always work for
+                us either!)
+            </li>
+        </ul>
+
+        <h3>Trouble with privacy settings or getting "reload" to work?</h3>
+        <ul>
+
+            <li>
+                When you see the prompt below, make sure to select "Allow" and "Remember" as shown:
+
+                <img class="screenshot" src="assets/flash_prompt.png" alt="Flash configuration prompt">
+
+                You can check that Flash is not blocking all sites (or Lookit specifically) from webcam access by
+                looking at the "global settings." To check these, right-click on the camera view above and click "global
+                settings":
+
+                <img class="screenshot" src="assets/global_settings.png" alt="How to open settings panel">
+
+                In most browsers, that will open a window. Go to the "Camera and Mic" tab and make sure you have
+                selected "Ask me when a site wants to use the camera or microphone" rather than "Block all sites from
+                using the camera and microphone." Then click "Camera and Microphone Settings by Site..." to check that
+                lookit.mit.edu isn't blocked.
+
+                <img class="screenshot" src="assets/global_settings_main.png" alt="The settings panel">
+
+                In Chrome, you'll need to use the
+                <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager02.html" target="_blank" rel="noopener">online Flash panel</a>
+                to do the same thing. In the first panel, click "Always Ask" to make sure you have set Flash to ask
+                for permission to access the webcam, rather than automatically deny requests. Then go to the privacy
+                tab (shown below) and remove any entry for lookit.mit.edu.
+
+                <img class="screenshot" src="assets/global_settings_chrome.png" alt="The settings page (in Google Chrome)">
+
+            </li>
+
+            <li>
+                Check that Flash is allowed to store data: right-click on the webcam view, choose "Settings," and in the
+                "Storage" tab, click "Allow":
+
+                <img class="screenshot" src="assets/flash_storage.png" alt="Flash storage settings">
+
+            </li>
+
+            <li>
+                For Chrome users: You may need to allow webcam access both in your browser and in the Flash app itself
+                (the webcam view you see on this page). If you're using Chrome, you'll need to click "Allow" in a prompt
+                that looks like this:
+
+                <img class="screenshot" src="assets/chrome_prompt.png" alt="Chrome webcam access prompt">
+
+                <p>
+                    If you previously blocked webcam access in Chrome, that setting might be stored. You can edit
+                    settings for lookit.mit.edu by following the "Change camera and microphone permissions" directions
+                    <a href="https://support.google.com/chrome/answer/2693767?hl=en" target="_blank" rel="noopener">here</a>.
+                </p>
+            </li>
+
+
+        </ul>
+
+        Feel free to let us know about problems you're running into! Just email us at lookit-tech@mit.edu with a short
+        description of what's happening, including the web browser you're using (Firefox, Chrome, Safari, etc.), your
+        username, and anything you've tried from the above list.
+
+    </div>
+</div>

@@ -10,8 +10,7 @@ export default DS.Transform.extend({
         return serialized.map((profile) => {
             if (profile.get) {
                 return profile;
-            }
-            else {
+            } else {
                 profile.birthday = new Date(profile.birthday);
                 this.get('store').push({
                     data: {

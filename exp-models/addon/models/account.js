@@ -56,7 +56,7 @@ export default DS.Model.extend(JamModel, {
         // For most applications, we will care about the newest past sessions first. Fetch as many of those results
         // as possible so that any client side filtering has a chance of working as desired.
         let query = {
-            'sort': '-created_on',
+            sort: '-created_on',
             'page[size]': 100
         };
 

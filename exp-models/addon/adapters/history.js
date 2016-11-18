@@ -5,9 +5,9 @@ export default ApplicationAdapter.extend({
 
     urlSegments: {
         documentId(type, id, snapshot, query) {
-          let dId = query.document.id;
-          delete query.document;
-          return dId;
+            let dId = query.document.id;
+            delete query.document;
+            return dId;
         }
     }
 });

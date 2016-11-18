@@ -9,8 +9,7 @@ export default Ember.Mixin.create({
             if (e.keyCode === 32) {
                 if (player.paused) {
                     player.play();
-                }
-                else {
+                } else {
                     player.pause();
                 }
             }

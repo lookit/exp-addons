@@ -69,7 +69,7 @@ const VideoRecorder = Ember.Object.extend({
         return window.swfobject.getObjectById(this.get('_SWFId'));
     }).volatile(),
 
-    install({ record: record } = { record: false }) {
+    install({record: record} = {record: false}) {
         this.set('divId', `${this.get('divId')}-${this.get('recorderId')}`);
 
         var $element = $(this.get('element'));
@@ -206,7 +206,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     // Stop recording and save the video to the server
-    stop({ destroy: destroy } = { destroy: false }) {
+    stop({destroy: destroy} = {destroy: false}) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
         // We optimistically start the connection before checking for camera access. For now, let recorder stop
         // immediately if recorder never had camera access- the video would be meaningless anyway
@@ -309,8 +309,7 @@ const VideoRecorder = Ember.Object.extend({
     _onConnectionStatus(status) {
         if (status === 'NetConnection.Connect.Success') {
             this.set('connected', true);
-        }
-        else {
+        } else {
             this.set('connected', false);
         }
     }
@@ -336,19 +335,19 @@ export default Ember.Service.extend({
         };
 
         HOOKS.forEach(hookName => {
-            var self = this;
+            var _this = this;
             window[hookName] = function () {
                 var args = Array.prototype.slice.call(arguments);
                 var recorder;
                 if (hookName === 'onUploadDone') {
-                    recorder = self.get(`_recorders.${args[3]}`);
+                    recorder = _this.get(`_recorders.${args[3]}`);
                 } else {
                     var recorderId = args.pop();
-                    recorder = self.get(`_recorders.${recorderId}`);
+                    recorder = _this.get(`_recorders.${recorderId}`);
                 }
                 if (!recorder) {
-                    Object.keys(self.get('_recorders')).forEach((id) => {
-                        recorder = self.get(`_recorders.${id}`);
+                    Object.keys(_this.get('_recorders')).forEach((id) => {
+                        recorder = _this.get(`_recorders.${id}`);
                         runHandler(recorder, hookName, args);
                     });
                 } else {
@@ -361,7 +360,7 @@ export default Ember.Service.extend({
     //Insert the recorder and start recording
     //IE a user might not have granted access to their webcam
     start(videoId, element, settings = {}) {
-        if (typeof(videoId) !== 'string') {
+        if (typeof (videoId) !== 'string') {
             throw new Error('videoId must be a string');
         }
         var defaults = {

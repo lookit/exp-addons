@@ -1,3 +1,4 @@
+// jscs:disable
 // http://stackoverflow.com/a/12646864
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {

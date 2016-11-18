@@ -1,9 +1,10 @@
 import Ember from 'ember';
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
+
 import {validator, buildValidations} from 'ember-cp-validations';
 import config from 'ember-get-config';
 
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 function getLength(value) {
     var length = 0;
@@ -30,19 +31,19 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-free-response',
     layout: layout,
     i18n: Ember.inject.service(),
-    diff1: Ember.computed('WhatResponse', function() {
+    diff1: Ember.computed('WhatResponse', function () {
         var length = getLength(this.get('WhatResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
         message = message.replace('0', length.toString());
         return message;
     }),
-    diff2: Ember.computed('WhereResponse', function() {
+    diff2: Ember.computed('WhereResponse', function () {
         var length = getLength(this.get('WhereResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.12.characterCount').string;
         message = message.replace('0', length.toString());
         return message;
     }),
-    diff3: Ember.computed('WhoResponse', function() {
+    diff3: Ember.computed('WhoResponse', function () {
         var length = getLength(this.get('WhoResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.13.characterCount').string;
         message = message.replace('0', length.toString());
@@ -75,12 +76,12 @@ export default ExpFrameBaseComponent.extend(Validations, {
         {'12h': '11:00 PM', '24h': '23:00'},
         {'12h': '12:00 AM', '24h': '24:00'}
     ],
-    placeholder: Ember.computed(function() {
-       return this.get('i18n').t('global.selectUnselected');
+    placeholder: Ember.computed(function () {
+        return this.get('i18n').t('global.selectUnselected');
     }),
     EventTime: null,
 
-    responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'EventTime', function() {
+    responses: Ember.computed('WhatResponse', 'WhereResponse', 'WhoResponse', 'EventTime', function () {
         var time = this.get('EventTime');
         if (time !== null) {
             time = time['24h'];
@@ -93,7 +94,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
         };
     }),
 
-    allowNext: Ember.computed('validations.isValid', function() {
+    allowNext: Ember.computed('validations.isValid', function () {
         if (config.featureFlags.validate) {
             return this.get('validations.isValid');
         }
@@ -139,11 +140,11 @@ export default ExpFrameBaseComponent.extend(Validations, {
             }
         }
     },
-    loadData: function(frameData) {
+    loadData: function (frameData) {
         var responses = frameData.responses;
         var times = this.get('times');
         var eventTime = null;
-        for (var i=0; i < times.length; i++) {
+        for (var i = 0; i < times.length; i++) {
             if (times[i]['24h'] === responses.EventTime) {
                 eventTime = times[i];
             }

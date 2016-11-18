@@ -32,8 +32,7 @@ ExperimentParser.prototype._resolveRandom = function (frame, frameId) {
     var randomizer = frame.sampler || 'random';  // Random sampling by default
     if (!randomizers[randomizer]) {
         throw new Error(`Randomizer ${randomizer} not recognized`);
-    }
-    else {
+    } else {
         return randomizers[randomizer](
             frameId,
             frame,
@@ -57,8 +56,7 @@ ExperimentParser.prototype._resolveDependencies = function (frame) {
             var res = Ember.$.ajax(opts);
             if (frame[key].indexOf('JSON') === 0) {
                 frame[key] = JSON.parse(res.responseText);
-            }
-            else {
+            } else {
                 frame[key] = res.responseText;
             }
         }
@@ -68,9 +66,10 @@ ExperimentParser.prototype._resolveDependencies = function (frame) {
 /** Convert a block of frames to an array of constituent frame config objects
  **/
 ExperimentParser.prototype._resolveBlock = function (frame) {
-    return [frame.items.map((frameId) => {
-        return this._resolveFrame(frameId);
-    }), null];
+    return [
+        frame.items.map((frameId) => this._resolveFrame(frameId)),
+        null
+    ];
 };
 /** Convert any frame to a list of constituent frame config objects.
  * Centrally dispatches logic for all other frame types
@@ -101,8 +100,9 @@ ExperimentParser.prototype.parse = function () {
             choices[`${index}-${frameId}`] = choice;
         }
     });
-    return [expFrames.map((frame, index) => {
-        return this._reformatFrame(frame, index);
-    }), choices];
+    return [
+        expFrames.map((frame, index) => this._reformatFrame(frame, index)),
+        choices
+    ];
 };
 export default ExperimentParser;

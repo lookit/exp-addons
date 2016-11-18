@@ -1,3 +1,5 @@
+// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
 import Ember from 'ember';
 import config from 'ember-get-config';
 import BaseAuthenticator from 'ember-simple-auth/authenticators/base';
@@ -25,8 +27,8 @@ export default BaseAuthenticator.extend({
             var accountId = payload.sub.split('-').pop();
             return new Ember.RSVP.Promise(resolve => {
                 resolve({
-                  id: accountId,
-                  token: token
+                    id: accountId,
+                    token: token
                 });
             });
         }

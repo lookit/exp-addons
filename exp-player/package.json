@@ -9,7 +9,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "check-style": "./node_modules/jscs/bin/jscs ."
   },
   "repository": "",
   "engines": {
@@ -33,6 +34,7 @@
     "ember-cli-release": "^0.2.9",
     "ember-cli-showdown": "2.5.0",
     "ember-cli-sri": "^2.1.0",
+    "ember-cli-template-lint": "0.5.0",
     "ember-cli-test-loader": "^1.1.0",
     "ember-cli-uglify": "^1.2.0",
     "ember-data": "^2.8.0",
@@ -48,6 +50,7 @@
     "ember-welcome-page": "^1.0.1",
     "eonasdan-bootstrap-datetimepicker": "4.15.35",
     "eonasdan-bootstrap-datetimepicker-npm": "4.17.37",
+    "jscs": "^3.0.7",
     "loader.js": "^4.0.1",
     "moment": "2.13.0",
     "moment-timezone": "0.5.4"
@@ -75,5 +78,38 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
+  },
+  "jscsConfig": {
+    "preset": "airbnb",
+    "excludeFiles": [
+      "package.json",
+      "bower.json",
+      "testem.js",
+      "ember-cli-build.js",
+      "config/environment.js",
+      "bower_components",
+      "node_modules",
+      "blueprints",
+      "lib",
+      "dist",
+      "docs",
+      "examples",
+      "tmp",
+      "vendor",
+      "app/locales",
+      "tests"
+    ],
+    "requireSpacesInsideObjectBrackets": false,
+    "requireSpacesInsideImportedObjectBraces": false,
+    "requireSpacesInAnonymousFunctionExpression": false,
+    "requireTrailingComma": false,
+    "disallowTrailingComma": false,
+    "disallowArrayDestructuringReturn": false,
+    "disallowQuotedKeysInObjects": false,
+    "requirePaddingNewLinesAfterBlocks": false,
+    "validateIndentation": 4,
+    "requirePaddingNewLinesBeforeLineComments": false,
+    "maximumLineLength": false,
+    "disallowSpaceBeforeComma": false
   }
 }

@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import layout from './template';
 import config from 'ember-get-config';
 
-
+// jscs:disable requireDotNotation
 var cards = [
     'qsort.rsq.item.potentiallyEnjoy',
     'qsort.rsq.item.complex',
@@ -99,7 +99,7 @@ var cards = [
 
 var formatCards = function (items) {
     var cards = [];
-    for (var i=0; i < items.length; i++) {
+    for (var i = 0; i < items.length; i++) {
         cards.push({
             id: 'rsq' + (i + 1),
             content: items[i]
@@ -362,7 +362,7 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    loadData: function(frameData) {
+    loadData(frameData) {
         var cardSort1 = frameData.responses['ThreeCat'];
         if (cardSort1 && this.get('framePage') === 1) {
             var buckets = {

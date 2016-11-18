@@ -1,33 +1,35 @@
 <div class="row">
-  <p class="break-line">{{t 'survey.sections.1.instructions'}}</p>
+    <p class="break-line">{{t 'survey.sections.1.instructions'}}</p>
     {{#bs-form}}
-      {{#each questions as |question|}}
-        {{#bs-form-group}}
-          {{#unless question.optional}}
-            <label>{{t question.question}}</label>
-            {{#if (eq question.type 'radio')}}
-              {{isp-radio-group
-                options=question.scale
-                hiddenOptions=question.hiddenOptions
-                labelTop=question.labelTop
-                labels=question.labels
-                formatLabel=question.formatLabel
-                value=question.value
-              }}
-            {{else if (eq question.type 'select')}}
-              {{select-input options=question.scale value=question.value}}
-            {{else if (eq question.type 'input')}}
-              {{#input class="form-control auto-width" value=question.value}}{{/input}}
-            {{/if}}
-          {{else if showOptional}}
-            <label>{{t question.question}}</label>
-            {{#input value=question.value}}{{/input}}
-          {{/unless}}
-        {{/bs-form-group}}
-      {{/each}}
+        {{#each questions as |question|}}
+            {{#bs-form-group}}
+                {{#unless question.optional}}
+                    <label>{{t question.question}}</label>
+                    {{#if (eq question.type 'radio')}}
+                        {{isp-radio-group
+                            options=question.scale
+                            hiddenOptions=question.hiddenOptions
+                            labelTop=question.labelTop
+                            labels=question.labels
+                            formatLabel=question.formatLabel
+                            value=question.value
+                        }}
+                    {{else if (eq question.type 'select')}}
+                        {{select-input options=question.scale value=question.value}}
+                    {{else if (eq question.type 'input')}}
+                        {{#input class="form-control auto-width" value=question.value}}{{/input}}
+                    {{/if}}
+                {{else if showOptional}}
+                    <label>{{t question.question}}</label>
+                    {{#input value=question.value}}{{/input}}
+                {{/unless}}
+            {{/bs-form-group}}
+        {{/each}}
     {{/bs-form}}
 </div>
 <div class="row exp-controls">
-    <button class="btn btn-primary pull-right {{if allowNext  "" "disabled"}}" {{ action 'continue' }}>{{t 'global.continueLabel'}}</button>
+    <button class="btn btn-primary pull-right {{if allowNext  "" "disabled"}}" {{ action 'continue' }}>
+        {{t 'global.continueLabel'}}
+    </button>
     {{progress-bar pageNumber=1}}
 </div>

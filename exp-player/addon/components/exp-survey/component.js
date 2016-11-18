@@ -1,5 +1,5 @@
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 export default ExpFrameBaseComponent.extend({
     type: 'exp-survey',
@@ -41,7 +41,7 @@ export default ExpFrameBaseComponent.extend({
             this.set('formData', this.get('form').getValue());
             this.send('next');
         },
-        getForm (form) {
+        getForm(form) {
             this.set('form', form);
         }
     }
