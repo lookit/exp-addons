@@ -2,8 +2,8 @@
 'use strict';
 
 module.exports = {
-  extends: 'recommended',
-  rules: {
-      'block-indentation': 4
+    extends: 'recommended',
+    rules: {
+        'block-indentation': 4
     }
 };

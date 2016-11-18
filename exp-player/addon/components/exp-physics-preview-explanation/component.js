@@ -1,5 +1,5 @@
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import layout from 'exp-player/templates/components/exp-physics-preview-explanation';
+import layout from './template';
 
 export default ExpFrameBaseComponent.extend({
     type: 'exp-physics-preview-explanation',

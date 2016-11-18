@@ -2,10 +2,10 @@
 'use strict';
 
 module.exports = {
-  extends: 'recommended',
+    extends: 'recommended',
 
-  rules: {
-    'bare-strings': true,
-    'block-indentation': 4
-  }
+    rules: {
+        'bare-strings': false,
+        'block-indentation': 4
+    }
 };

@@ -1,12 +1,12 @@
 <div class="row">
-<div class="col-xs-12">
-    <h2>{{title}}</h2>
-    <ul>
-        <li> <strong> Duration: </strong> {{duration}} </li>
-        <li> <strong> What happens: </strong> {{whatHappens}} </li>
-        <li> <strong> What we're studying: </strong> {{purpose}} </li>
-    </ul>
-</div>
+    <div class="col-xs-12">
+        <h2>{{title}}</h2>
+        <ul>
+            <li><strong> Duration: </strong> {{duration}} </li>
+            <li><strong> What happens: </strong> {{whatHappens}} </li>
+            <li><strong> What we're studying: </strong> {{purpose}} </li>
+        </ul>
+    </div>
 </div>
 
 <div class="row">
@@ -15,9 +15,9 @@
             <h3>
                 {{ subtitleLeft }}
             </h3>
-            <img style="max-width: 100%;" src={{imgLeft}} />
+            <img style="max-width: 100%;" src={{imgLeft}} alt="{{subtitleLeft}}">
             <p>
-            {{captionLeft}}
+                {{captionLeft}}
             </p>
         </div>
     </div>
@@ -26,9 +26,9 @@
             <h3>
                 {{ subtitleRight }}
             </h3>
-            <img style="max-width: 100%;" src={{imgRight}} />
+            <img style="max-width: 100%;" src={{imgRight}} alt="{{subtitleRight}}">
             <p>
-            {{captionRight}}
+                {{captionRight}}
             </p>
         </div>
     </div>
@@ -36,12 +36,12 @@
 <div class="row">
     <div class="col-xs-12 text-center">
         <p>
-        {{summary}}
+            {{summary}}
         </p>
     </div>
 </div>
 <div class="row exp-controls">
     <div class="col-xs-offset-8 col-xs-4">
-        <button class="btn btn-default pull-right" {{ action 'next' }} > Next </button>
+        <button class="btn btn-default pull-right" {{ action 'next' }} > Next</button>
     </div>
 </div>

@@ -5,7 +5,7 @@
             <div class="col-md-10 col-md-offset-1 exp-physics-mood exp-text">
                 <h4>Mood Questionnaire</h4>
                 <p>How are you two doing? We really want to know: we’re interested in how your child’s mood affects which sorts of surprising physical events he/she notices. You can help us find out what babies are really learning as they get older... and what they already knew, but weren’t calm and focused enough to show us!</p>
-                
+
                 <label> How is your CHILD feeling right now? </label>
                 {{#radio-group
                 options=moodOptions
@@ -16,7 +16,7 @@
                     {{#if showValidation}}
                         <p class="text text-danger">
                             {{ validations.attrs.rested.messages }}
-                            
+
                         </p>
                     {{/if}}
                 {{/radio-group}}
@@ -29,7 +29,7 @@
                     {{#if showValidation}}
                         <p class="text text-danger">
                             {{ validations.attrs.healthy.messages }}
-                            
+
                         </p>
                     {{/if}}
                 {{/radio-group}}
@@ -42,7 +42,7 @@
                     {{#if showValidation}}
                         <p class="text text-danger">
                             {{ validations.attrs.childHappy.messages }}
-                            
+
                         </p>
                     {{/if}}
                 {{/radio-group}}
@@ -55,7 +55,7 @@
                     {{#if showValidation}}
                         <p class="text text-danger">
                             {{ validations.attrs.active.messages }}
-                            
+
                         </p>
                     {{/if}}
                 {{/radio-group}}
@@ -118,7 +118,7 @@
                                 useCurrent=false
                                 updateDate=(action 'setTime' 'napWakeUp')}}
                     </div>
-                    <br />
+                    <br>
                     <div class="form-group">
                         <label>
                             Does your child have a usual nap schedule?
@@ -127,7 +127,7 @@
                             <p class="text text-danger">
                                 {{ validations.attrs.usualNapSchedule.messages }}
                             </p>
-                        {{/if}}                 
+                        {{/if}}
                         <div class="radio">
                             <label>
                                 {{radio-button value="no" checked=usualNapSchedule name="usualNapSchedule"}}
@@ -196,7 +196,7 @@
                                 {{ validations.attrs.doingBefore.messages }}
                             </p>
                         {{/if}}
-                        
+
                         {{input value=doingBefore placeholder="examples: having lunch, playing outside, going to the store with me" class="form-control"}}
                     </div>
                 </div>

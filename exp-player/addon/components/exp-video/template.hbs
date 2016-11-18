@@ -2,25 +2,25 @@
     <video id="player-video"
            controls
            autoplay={{autoplay}}
-           poster="{{poster}}"
+               poster="{{poster}}"
            onended={{ if autoforwardOnEnd (action 'playNext') }}
     >
         {{#if doingIntro}}
-        {{#each introSources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
+            {{#each introSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
         {{else}}
-        {{#each sources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
+            {{#each sources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
         {{/if}}
     </video>
 </div>
 
 {{#unless autoforwardOnEnd}}
-<div class="row exp-controls">
-  <button class="btn btn-default pull-right" {{ action 'next' }}>
-    Continue
-  </button>
-</div>
+    <div class="row exp-controls">
+        <button class="btn btn-default pull-right" {{ action 'next' }}>
+            Continue
+        </button>
+    </div>
 {{/unless}}

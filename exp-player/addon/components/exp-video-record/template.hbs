@@ -1,5 +1,7 @@
+{{! template-lint-disable invalid-interactive}}
 <div style={{if blockUI "" "top: -10000px; left: -10000px; z-index: -1; position: absolute"}}>
-    <div class="modal fade-in" style={{if blockUI "display: block; padding-left: 0px;" "display: block; position: absolute;"}}>
+    <div class="modal fade-in" style={{if blockUI "display: block; padding-left: 0px;"
+                                          "display: block; position: absolute;"}}>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -14,11 +16,11 @@
 </div>
 
 <video id="player-video" style="width: 100%"
-        poster="{{poster}}"
-        ontimeupdate={{action 'timeUpdate'}}
-        onended={{action 'videoFinished'}}
-        onplaying={{action 'setTimeEvent' 'videoPlayed'}}
-        onpause={{action 'setTimeEvent' 'videoPaused'}}
+       poster="{{poster}}"
+       ontimeupdate={{action 'timeUpdate'}}
+           onended={{action 'videoFinished'}}
+       onplaying={{action 'setTimeEvent' 'videoPlayed'}}
+           onpause={{action 'setTimeEvent' 'videoPaused'}}
 >
     {{#each sources as |stream|}}
         <source src="{{stream.src}}" type="{{stream.type}}">
