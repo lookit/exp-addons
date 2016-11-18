@@ -1,1 +1,1 @@
-export { default } from 'exp-player/components/exp-video-physics';
+export { default } from 'exp-player/components/exp-video-physics/component';

@@ -1,1 +1,1 @@
-export { default } from 'exp-player/components/exp-audioplayer';
+export { default } from 'exp-player/components/exp-audioplayer/component';

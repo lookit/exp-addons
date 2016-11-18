@@ -1,2 +1,1 @@
-import ExpFreeResponse from 'exp-player/components/exp-free-response/component';
-export default ExpFreeResponse;
+export { default } from 'exp-player/components/exp-free-response/component';

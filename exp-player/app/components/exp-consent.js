@@ -1,2 +1,2 @@
-import ExpConsent from 'exp-player/components/exp-consent';
-export default ExpConsent;
+export { default } from 'exp-player/components/exp-consent/component';
+

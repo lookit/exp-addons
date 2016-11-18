@@ -1,2 +1,1 @@
-import ExpVideoConsent from 'exp-player/components/exp-video-consent';
-export default ExpVideoConsent;
+export { default } from 'exp-player/components/exp-video-consent/component';

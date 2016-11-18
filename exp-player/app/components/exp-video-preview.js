@@ -1,2 +1,1 @@
-import ExpVideoPreview from 'exp-player/components/exp-video-preview';
-export default ExpVideoPreview;
+export { default } from 'exp-player/components/exp-video-preview/component';

@@ -1,2 +1,1 @@
-import ExpExitSurvey from 'exp-player/components/exp-exit-survey';
-export default ExpExitSurvey;
+export { default } from 'exp-player/components/exp-exit-survey/component';

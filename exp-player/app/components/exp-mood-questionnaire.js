@@ -1,2 +1,1 @@
-import ExpMoodQuestionnaire from 'exp-player/components/exp-mood-questionnaire';
-export default ExpMoodQuestionnaire;
+export { default } from 'exp-player/components/exp-mood-questionnaire/component';

@@ -1,2 +1,1 @@
-import ExpLookitOverview from 'exp-player/components/exp-lookit-overview';
-export default ExpLookitOverview;
+export { default } from 'exp-player/components/exp-lookit-overview/component';

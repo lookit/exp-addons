@@ -1,2 +1,1 @@
-import ExpThankYou from 'exp-player/components/exp-thank-you/component';
-export default ExpThankYou;
+export { default } from 'exp-player/components/exp-thank-you/component';
