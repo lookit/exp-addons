@@ -1,5 +1,6 @@
-import ExpRadioGroupComponent from 'exp-player/components/radio-group';
 import layout from './template';
+
+import ExpRadioGroupComponent from '../../components/radio-group/component';
 
 export default ExpRadioGroupComponent.extend({
     layout,

@@ -1,5 +1,5 @@
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 // Generate a random string of length len made up of the characters in charSet (optional)
 function randomString(len, charSet) {

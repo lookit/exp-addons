@@ -1,7 +1,8 @@
 import Em from 'ember';
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
-import VideoRecord from '../mixins/video-record';
+
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import VideoRecord from '../../mixins/video-record';
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,

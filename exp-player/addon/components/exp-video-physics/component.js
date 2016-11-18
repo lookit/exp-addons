@@ -2,10 +2,10 @@ import Ember from 'ember';
 
 import layout from './template';
 
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import FullScreen from '../mixins/full-screen';
-import MediaReload from '../mixins/media-reload';
-import VideoRecord from '../mixins/video-record';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import FullScreen from '../../mixins/full-screen';
+import MediaReload from '../../mixins/media-reload';
+import VideoRecord from '../../mixins/video-record';
 
 let {
     $

@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import layout from './template';
 
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import MediaReload from '../mixins/media-reload';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import MediaReload from '../../mixins/media-reload';
 
 export default ExpFrameBaseComponent.extend(MediaReload, {
     layout: layout,

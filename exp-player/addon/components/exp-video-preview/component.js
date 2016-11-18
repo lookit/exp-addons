@@ -1,13 +1,9 @@
 import Ember from 'ember';
-
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
-import MediaReload from 'exp-player/mixins/media-reload';
-import VideoRecord from '../mixins/video-record';
 
-let {
-    $
-} = Ember;
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import MediaReload from '../../mixins/media-reload';
+import VideoRecord from '../../mixins/video-record';
 
 export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
@@ -165,6 +161,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
             this.get('recorder').stop();
         }
         this._super(...arguments);
-        $(document).off('keypress');
+        Ember.$(document).off('keypress');
     }
 });

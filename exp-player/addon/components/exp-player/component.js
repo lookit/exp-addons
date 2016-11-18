@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import layout from './template';
 
-import FullScreen from '../mixins/full-screen';
-import ExperimentParser from '../utils/parse-experiment';
+import FullScreen from '../../mixins/full-screen';
+import ExperimentParser from '../../utils/parse-experiment';
 
 let {
     $

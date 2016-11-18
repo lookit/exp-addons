@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
 import layout from './template';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 export default ExpFrameBaseComponent.extend({
     layout: layout,

@@ -1,9 +1,9 @@
 import layout from './template';
 
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
-import FullScreen from '../mixins/full-screen';
-import MediaReload from '../mixins/media-reload';
-import VideoPause from '../mixins/video-pause';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import FullScreen from '../../mixins/full-screen';
+import MediaReload from '../../mixins/media-reload';
+import VideoPause from '../../mixins/video-pause';
 
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
     layout: layout,
