@@ -130,7 +130,8 @@ var items = {
         'measures.questions.9.items.9.label',
         'measures.questions.9.items.10.label',
         'measures.questions.9.items.11.label',
-        'measures.questions.9.items.12.label'
+        'measures.questions.9.items.12.label',
+        'measures.questions.9.items.13.label'
     ],
     '10': [
         'measures.questions.10.items.1.label',
