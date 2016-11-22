@@ -47,9 +47,10 @@ function getConditions(lastSession, frameId) {
 }
 
 function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
-    // Types of comparisons for each event type (gravity, inertia, support-fall, support-stay,
-    // control). Format [event, outcomeMoreProb, outcomeLessProb]
-    var comparisonsG = [
+
+    // Types of comparisons for each event type.
+    // Format [event, outcome1, outcome2]
+    var comparisonsGravity = [
         ['table', 'down', 'continue'],
         ['table', 'down', 'up'],
         ['table', 'continue', 'up'],
@@ -57,50 +58,70 @@ function assignVideos(startType, showStay, whichObjects, NPERTYPE) {
         ['ramp', 'down', 'up'],
         ['toss', 'down', 'up']
     ];
-    var comparisonsI = [
+    var comparisonsInertia = [
         ['stop', 'hand', 'nohand'],
-        ['reverse', 'barrier', 'nobarrier']
+        ['reverse', 'barrier', 'nobarrier'],
+        ['calibration']
     ];
-    var comparisonsSF = [
-        ['fall', 'slightly', 'mostly'],
-        ['fall', 'next', 'mostly'],
-        ['fall', 'near', 'mostly'],
-        ['fall', 'next', 'slightly'],
-        ['fall', 'near', 'slightly'],
-        ['fall', 'near', 'next']
-    ];
-    var comparisonsSS = [
-        ['stay', 'slightly', 'mostly'],
-        ['stay', 'next', 'mostly'],
-        ['stay', 'near', 'mostly'],
-        ['stay', 'next', 'slightly'],
-        ['stay', 'near', 'slightly'],
-        ['stay', 'near', 'next']
-    ];
-    var comparisonsC = [
+
+    var comparisonsControl = [
         ['same', 'A', 'B'],
         ['salience', 'interesting', 'boring']
     ];
 
-
-    var videotypes = ['gravity', 'inertia', 'support', 'control'];
-    var compTypes = [comparisonsG, comparisonsI, [], comparisonsC]; // assign [2] after choosing
-    // what to show for support
-    var nReps = [1, 3, 1, 3]; // how many times does each comparison type listed need to be shown
-    // to get to NPERTYPE for that event type?
+    // Start off with support comparisons all 'stay'; change appropriate ones
+    // to 'fall' based on counterbalancing.
+    var comparisonsSupport = [
+        ['stay', 'slightly-on', 'mostly-on'],
+        ['stay', 'next-to', 'mostly-on'],
+        ['stay', 'near', 'mostly-on'],
+        ['stay', 'next-to', 'slightly-on'],
+        ['stay', 'near', 'slightly-on'],
+        ['stay', 'near', 'next-to']
+    ];
+    // List of comparisons to show 'fall' videos for; each session, increment
+    // position in this list so that kids see a variety of stay/fall groupings.
+    var useFallRotation = [
+        [0, 2, 5],
+        [0, 2, 3],
+        [1, 2, 4],
+        [3, 4, 5],
+        [0, 1, 4],
+        [0, 4, 5],
+        [1, 2, 3],
+        [1, 3, 5],
+        [1, 4, 5],
+        [0, 1, 3],
+        [0, 3, 4],
+        [1, 2, 5],
+        [2, 4, 5],
+        [1, 3, 4],
+        [2, 3, 4],
+        [0, 2, 4],
+        [0, 3, 5],
+        [2, 3, 5],
+        [0, 1, 5],
+        [0, 1, 2]
+    ];
 
     // Choose which videos to show for support
-    if (showStay === 0) {
-        videotypes[2] = 'fall';
-        compTypes[2] = comparisonsSF;
-    } else if (showStay === 1) {
-        videotypes[2] = 'stay';
-        compTypes[2] = comparisonsSS;
-    } /* else {
-        alert('invalid value for showStay (should be '0' or '1'), using '0'');
-        videotypes[2] = 'fall';
-        compTypes[2] = comparisonsSF;
-    } */
+    if (showStay < 0 || showStay >= useFallRotation.length) {
+        console.log('invalid value for showStay, using only stay videos');
+    } else {
+        var useFall = useFallRotation[showStay];
+        for (var iFall = 0; iFall < useFall.length; iFall++) {
+            comparisonsSupport[useFall[iFall]][0] = 'fall';
+        }
+    }
+
+    var videotypes = ['gravity', 'inertia', 'support', 'control'];
+    var compTypes = [   comparisonsGravity,
+                        comparisonsInertia,
+                        comparisonsSupport,
+                        comparisonsControl ];
+    // how many times does each comparison type listed need to be shown
+    // to get to NPERTYPE for that event type?
+    var nReps = [1, 2, 1, 3];
 
     // Objects to use: elements correspond to videotypes
     var objects = [
@@ -237,29 +258,6 @@ function parse_name(fname) {
     features.bg = pieces[6];
     var variantExt = pieces[7];
     features.variant = (variantExt.split('.'))[0];
-
-    //quick hack for dummy clips which have wrong names for some objects
-    // (so we can get a correct intro name)
-    switch (features.object) {
-        case 'A':
-            features.object = 'box';
-            break;
-        case 'B':
-            features.object = 'eraser';
-            break;
-        case 'C':
-            features.object = 'funnel';
-            break;
-        case 'D':
-            features.object = 'scissors';
-            break;
-        case 'E':
-            features.object = 'spoon';
-            break;
-        case 'F':
-            features.object = 'wrench';
-            break;
-    }
 
     return features;
 
