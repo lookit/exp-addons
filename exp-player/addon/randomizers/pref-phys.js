@@ -1372,8 +1372,8 @@ function assignVideos(startType, showStay, whichObjects) {
     flips['toss'] = ['NN', 'RR'];
     flips['stop'] = ['NR'];
     flips['reverse'] = ['NN', 'RR', 'NR', 'RN'];
-    flips['fall'] = ['NN', 'RN', 'RR'];
-    flips['stay'] = ['NN', 'RN', 'RR'];
+    flips['fall'] = ['NN', 'RR'];
+    flips['stay'] = ['NN', 'RR'];
     flips['same'] = ['NN', 'RN', 'RR'];
     flips['salience'] = ['NN', 'RN', 'RR'];
 
@@ -1531,7 +1531,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                     'all_done'),
                 attnSources: videoSourceObjs(
                     BASE_DIR + 'stimuli/attention/',
-                    'attentiongrabber'),
+                    'attentiongrabber', true),
             };
         }
         var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_06', 'music_07', 'music_09', 'music_10'];
@@ -1541,7 +1541,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             kind: 'exp-video-physics',
             id: `${frameId}`,
             autoplay: true,
-            testLength: 5, // TODO: change to 20s for actual testing.
+            testLength: 24, // length of test trial in seconds
             isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
@@ -1551,10 +1551,10 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
                 musicName),
             introSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/intro/',
-                `cropped_${e.object}`),
+                `cropped_${e.object}`, true),
             attnSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
-                'attentiongrabber'),
+                'attentiongrabber', true),
             sources: videoSourceObjs(
 		BASE_DIR + 'stimuli/' + e.compType + '/',
 		e.fname, true),
