@@ -1446,14 +1446,15 @@ function assignVideos(startType, showStay, whichObjects) {
         playlistsByType[videotypes[iType]] = events;
     }
 
+
+
     // Put list together
     var allEvents = [];
+    var calEvents = [];
     var filenames = [];
-    var eventNum = 1;
     for (var nEvents = 0; nEvents < 6; nEvents++) {
         for (iType = 0; iType < typeOrder.length; iType++) {
             var e = playlistsByType[typeOrder[iType]][nEvents];
-
             var fname;
             var altName;
             if (e.compType === 'calibration') {
@@ -1462,18 +1463,26 @@ function assignVideos(startType, showStay, whichObjects) {
                 altName = `sbs_calibration_${e.flip}`;
                 e.fname = fname;
                 e.altName = altName;
+                calEvents.push(e);
             } else {
                 fname = `sbs_${e.compType}_${e.outcomeL}_${e.outcomeR}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
                 filenames.push(fname);
                 altName = `sbs_${e.compType}_${e.outcomeR}_${e.outcomeL}_${e.object}_${e.camera}_${e.background}_${e.flip}`;
                 e.fname = fname;
                 e.altName = altName;
+                allEvents.push(e);
             }
-            e.index = eventNum;
-            allEvents.push(e);
-            eventNum++;
         }
     }
+    // Place calibration events in positions 3 and 6
+    allEvents.splice(2, 0, calEvents[0]);
+    allEvents.splice(5, 0, calEvents[1]);
+
+    // Add indices to final list, for selecting appropriate audio intro
+    for (var eventNum = 0; eventNum < allEvents.length; eventNum++) {
+        allEvents[eventNum].index = eventNum + 1;
+    }
+
     return [allEvents, filenames];
 }
 
