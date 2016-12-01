@@ -29,8 +29,7 @@ export default DS.Store.extend({
      * @param {Object} params An object containing user-provided query parameters
      * @param {Object} options Recognized configuration options that control behavior, including `page` (start page) and `page[size]` (# results/page).
      *   For now options are all used as query params, but that may change.
-     * @returns {Promise} A (chained) promise that will resolve to dest when all records have been fetched
-     * @private
+     * @returns {Promise} A (chained) promise that will resolve to an array when all records have been fetched
      */
     queryEverything(collectionName, params, options={}) {
         const results = Ember.A();
