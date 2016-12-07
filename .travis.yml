@@ -15,7 +15,7 @@ env:
     - TEST_DIR="exp-player"
 
 before_install:
-#  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
   - npm config set spin false
   - npm install -g bower
 
