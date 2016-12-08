@@ -17,7 +17,7 @@ export const NL = '\r\n';
 function squashPrefix(obj, prefix) {
     let ret = {};
 
-    for (const key in Object.keys(obj)) {
+    for (const key of Object.keys(obj)) {
         const newPrefix = prefix ? `${prefix}.${key}` : key;
 
         let value = Ember.get(obj, key);
