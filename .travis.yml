@@ -21,6 +21,7 @@ before_install:
 
 install:
   - cd $TEST_DIR
+  - npm link
   - npm install
   - bower install
 

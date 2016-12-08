@@ -32,10 +32,10 @@ And the corresponding package.json entries are:
 For example:
 
 ```bash
-cd lib
-git submodule init
-git submodule update
-cd exp-models
+cd lib && \
+git submodule init && \
+git submodule update && \
+cd exp-models && \
 npm install
 ```
 
@@ -46,10 +46,14 @@ local development. This allows you to make changes to the code without having to
 this:
 
 ```bash
-cd ext/exp-addons/exp-player
-npm link
-cd ../../..
-npm link exp-player
+ROOT=`git rev-parse --show-toplevel`
+cd $ROOT/ext/exp-addons/exp-player && \
+npm link && \
+cd $ROOT/ext/exp-addons/exp-models && \
+npm link && \
+cd $ROOT && \
+npm link exp-player && \
+npm link exp-models
 ```
 
 Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
