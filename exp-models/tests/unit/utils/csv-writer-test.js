@@ -120,16 +120,44 @@ test('uniqueFields', function(assert) {
 test('writeCSV', function(assert) {
     const data = [
         {
-            test: one
+            test1: one,
+            test2: one
         },
         {
-            test: two
+            test1: two,
+            test2: two
         }
     ];
 
     assert.strictEqual(
-        writeCSV(data, ['test']),
-        `test${NL}"one"${NL}"two"`
+        writeCSV(data, ['test1', 'test2']),
+        [
+            'test1,test2',
+            '"one","one"',
+            '"two","two"'
+        ].join(NL)
+    );
+});
+
+test('writeCSV with tabs', function(assert) {
+    const data = [
+        {
+            test1: one,
+            test2: one
+        },
+        {
+            test1: two,
+            test2: two
+        }
+    ];
+
+    assert.strictEqual(
+        writeCSV(data, ['test1', 'test2'], '\t'),
+        [
+            'test1\ttest2',
+            '"one"\t"one"',
+            '"two"\t"two"'
+        ].join(NL)
     );
 });
 
@@ -155,7 +183,11 @@ test('All together', function(assert) {
 
     assert.strictEqual(
         result,
-        `a,mic.check${NL}"one","two"${NL}"one","two"`
+        [
+            'a,mic.check',
+            '"one","two"',
+            '"one","two"'
+        ].join(NL)
     );
 });
 
@@ -235,8 +267,6 @@ test('Columns with no data', function(assert) {
         ].join(NL)
     );
 });
-
-
 
 test('Multiple types of data', function(assert) {
     const fields = [
