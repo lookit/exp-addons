@@ -1,5 +1,5 @@
 import { NL, squash, uniqueFields, writeCSV} from 'exp-models/utils/csv-writer';
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 
 module('Unit | Utility | csv writer');
 
@@ -351,13 +351,14 @@ test('Multiple types of data', function(assert) {
     );
 });
 
+// Skipping the rest until we find a better way to do benchmarking, the Ember way
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-test('50k records', function(assert) {
+skip('50k records', function(assert) {
     const data = [];
     const chars = 'abcdefghijklmnopqrstuvwxyz123456789';
     const charsMax = chars.length - 1;
