@@ -227,6 +227,41 @@ test('Varied fields', function(assert) {
     );
 });
 
+test('Columns with missing data', function(assert) {
+    const fields = [
+        'alpha',
+        'bravo',
+        'charlie'
+    ];
+
+    const data = [
+        {
+            alpha: one,
+            bravo: one,
+        },
+        {
+            bravo: two,
+            charlie: two
+        },
+        {
+            alpha: three,
+            charlie: three
+        }
+    ];
+
+    const result = writeCSV(data, fields);
+
+    assert.strictEqual(
+        result,
+        [
+            'alpha,bravo,charlie',
+            '"one","one",',
+            ',"two","two"',
+            '"three",,"three"'
+        ].join(NL)
+    );
+});
+
 test('Columns with no data', function(assert) {
     const fields = [
         'alpha',
