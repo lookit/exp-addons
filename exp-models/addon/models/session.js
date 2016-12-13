@@ -19,6 +19,8 @@ export default DS.Model.extend(AnonJamModel, {
 
     profileId: DS.attr('string'), // Store ID of related record
 
+    extra: DS.attr({ defaultValue: () => ({}) }),
+
     experimentId: DS.attr('string'),
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
 
