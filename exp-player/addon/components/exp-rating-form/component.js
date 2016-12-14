@@ -173,8 +173,7 @@ var items = {
         'measures.questions.16.items.2.label',
         'measures.questions.16.items.3.label',
         'measures.questions.16.items.4.label',
-        'measures.questions.16.items.5.label',
-        'measures.questions.16.items.6.label'
+        'measures.questions.16.items.5.label'
     ],
     '17': [
         'measures.questions.17.items.1.label',
