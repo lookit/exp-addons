@@ -1,7 +1,7 @@
 ---
 language: node_js
 node_js:
-  - "4.6.0"
+  - "lts/boron"
 
 sudo: false
 
@@ -16,6 +16,7 @@ env:
 
 before_install:
   - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  - npm install npm@latest -g
   - npm config set spin false
   - npm install -g bower
 

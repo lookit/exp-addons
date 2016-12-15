@@ -145,7 +145,8 @@ var items = {
         'measures.questions.13.items.1.label',
         'measures.questions.13.items.2.label',
         'measures.questions.13.items.3.label',
-        'measures.questions.13.items.4.label'
+        'measures.questions.13.items.4.label',
+        'measures.questions.13.items.5.label'
     ],
     '14': [
         'measures.questions.14.items.1.label',
