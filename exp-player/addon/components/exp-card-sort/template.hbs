@@ -17,7 +17,7 @@
                 {{/draggable-object}}
             {{/each}}
         </div>
-        <h4 class="center">{{cards.length}} {{t 'qsort.sections.1.itemsLeft'}}</h4>
+        <h4 class="center">{{t 'qsort.sections.1.itemsLeft' count=cards.length}}</h4>
     {{/if}}
     <div class="row hidden-xs">
         {{#each buckets as |bucket|}}
