@@ -344,7 +344,7 @@ test('Multiple types of data', function(assert) {
         result,
         [
             'alpha,bravo,charlie,delta,echo,foxtrot,golf,hotel,juliet,lima,kilo',
-            '1,null,"str",,,,,,,,',
+            '1,,"str",,,,,,,,',
             ',,,"{""obj"":""val""}","[""a"",""b"",""c""]",TRUE,FALSE,,,,',
             ',,,,,,,,Infinity,-Infinity,NaN'
         ].join(NL)
