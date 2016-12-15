@@ -82,7 +82,7 @@ function csvSafe(val) {
             return value.toString();
         case 'object':
             if (value === null) {
-                return 'null';
+                return '';
             }
 
             value = JSON.stringify(value);
