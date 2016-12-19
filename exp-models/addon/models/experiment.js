@@ -13,13 +13,17 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-export default DS.Model.extend(JamModel, {
-    namespaceConfig: Ember.inject.service(),
-
+// Known states available to experiments. Available as instance variables, or may be imported and used as an enum
+//   directly when no instance is available.
+const expStates = {
     ACTIVE: 'Active',
     DRAFT: 'Draft',
     ARCHIVED: 'Archived',
     DELETED: 'Deleted',
+};
+
+const Experiment = DS.Model.extend(JamModel, {
+    namespaceConfig: Ember.inject.service(),
 
     title: DS.attr('string'),
     description: DS.attr('string'),
@@ -209,3 +213,9 @@ export default DS.Model.extend(JamModel, {
 
     // TODO: In the future, we would like to automatically set session access appropriately when the value of isActive changed AND the experiment record is saved to the server (observer easy for one event, less so for the combination)
 });
+
+// Add states enum as instance-level variables for convenience / backwards compatibility
+Experiment.reopen(expStates);
+
+export default Experiment;
+export {expStates};
