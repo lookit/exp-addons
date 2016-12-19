@@ -13,13 +13,8 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-export default DS.Model.extend(JamModel, {
+const Experiment = DS.Model.extend(JamModel, {
     namespaceConfig: Ember.inject.service(),
-
-    ACTIVE: 'Active',
-    DRAFT: 'Draft',
-    ARCHIVED: 'Archived',
-    DELETED: 'Deleted',
 
     title: DS.attr('string'),
     description: DS.attr('string'),
@@ -209,3 +204,12 @@ export default DS.Model.extend(JamModel, {
 
     // TODO: In the future, we would like to automatically set session access appropriately when the value of isActive changed AND the experiment record is saved to the server (observer easy for one event, less so for the combination)
 });
+
+Experiment.reopenClass({
+    ACTIVE: 'Active',
+    DRAFT: 'Draft',
+    ARCHIVED: 'Archived',
+    DELETED: 'Deleted',
+});
+
+export default Experiment;
