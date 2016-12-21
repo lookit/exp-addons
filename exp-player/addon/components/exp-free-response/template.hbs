@@ -1,4 +1,5 @@
 <div class="row">
+    {{exp-page-number pageNumber=pageNumber}}
     <p>
         <span class="format-instructions">{{t 'survey.sections.2.instructions.firstSection'}}</span>
         <span>{{t 'survey.sections.2.instructions.secondSection'}}</span>
@@ -47,5 +48,5 @@
     <button class="btn btn-primary pull-right {{if allowNext "" "disabled"}}" {{ action 'continue' }}>
         {{t 'global.continueLabel'}}
     </button>
-    {{progress-bar pageNumber=2}}
+    {{progress-bar pageNumber=pageNumber}}
 </div>
