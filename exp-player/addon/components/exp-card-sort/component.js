@@ -125,6 +125,9 @@ export default ExpFrameBaseComponent.extend({
     type: 'exp-card-sort',
     layout: layout,
     framePage: 0,
+    pageNumber: Ember.computed('framePage', function() {
+        return this.get('framePage') + 3;
+    }),
 
     cards: Ember.computed(function () {
         return shuffle(formatCards(cards));

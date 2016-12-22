@@ -161,6 +161,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-overview',
     layout: layout,
     questions: questions,
+    pageNumber: 1,
 
     showOptional: Ember.computed('questions.9.value', function () {
         return this.questions[9].value === 1;

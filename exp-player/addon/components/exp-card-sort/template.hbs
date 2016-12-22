@@ -1,4 +1,5 @@
 <div class="row">
+    {{page-number pageNumber=pageNumber}}
     {{#if (eq framePage 0)}}
         <p>{{t 'qsort.sections.1.instructions'}}</p>
     {{else if (eq framePage 1)}}
@@ -117,12 +118,11 @@
         <button class="btn btn-primary pull-right {{if allowNext '' 'disabled'}}" {{action "nextPage"}}>
             {{t 'global.continueLabel'}}
         </button>
-        {{progress-bar pageNumber=3}}
     {{else if (eq framePage 1)}}
         <button class="btn btn-primary pull-right {{if isValid '' 'disabled'}}" {{ action 'continue' }}>
             {{t 'global.continueLabel'}}
         </button>
-        {{progress-bar pageNumber=4}}
     {{/if}}
+    {{progress-bar pageNumber=pageNumber}}
 </div>
 

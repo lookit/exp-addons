@@ -31,6 +31,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
     type: 'exp-free-response',
     layout: layout,
     i18n: Ember.inject.service(),
+    pageNumber: 2,
     diff1: Ember.computed('WhatResponse', function () {
         var length = getLength(this.get('WhatResponse'));
         var message = this.get('i18n').t('survey.sections.2.questions.11.characterCount').string;
