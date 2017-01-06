@@ -37,7 +37,7 @@ export default Ember.Mixin.create(BulkAdapterMixin, {
     },
 
     handleResponse(status) {
-        // Data adapter mixin only handles 401; Jam sometimes returns 403 instead
+        // Data adapter mixin only handles 401; Jam sometimes returns 403 instead. Make sure that triggers invalidation.
         if (status === 403 && this.get('session.isAuthenticated')) {
             this.get('session').invalidate();
         }
