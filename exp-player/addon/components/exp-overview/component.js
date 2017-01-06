@@ -163,6 +163,9 @@ export default ExpFrameBaseComponent.extend(Validations, {
     questions: questions,
     pageNumber: 1,
 
+    extra: {},
+    isRTL: Ember.computed.alias('extra.isRTL'),
+
     showOptional: Ember.computed('questions.9.value', function () {
         return this.questions[9].value === 1;
     }),

@@ -1,7 +1,13 @@
+import Ember from 'ember';
+
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 export default ExpFrameBaseComponent.extend({
+
+    extra: {},
+    isRTL: Ember.computed.alias('extra.isRTL'),
+
     type: 'exp-thank-you',
     layout: layout,
     meta: {

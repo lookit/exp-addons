@@ -649,6 +649,10 @@ export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
     framePage: 0,
     lastPage: 6,
+
+    extra: {},
+    isRTL: Ember.computed.alias('extra.isRTL'),
+
     progressBarPage: Ember.computed('framePage', function () {
         return this.framePage + 5;
     }),

@@ -46,6 +46,10 @@ export default Ember.Component.extend(FullScreen, {
     allowExit: false,
     hasAttemptedExit: false,
 
+    // Any additional properties we might wish to pass from the player to individual frames. Allows passing of arbitrary config
+    // by individual consuming applications to suit custom needs.
+    extra: {},
+
     /**
      * The message to display in the early exit modal. Newer browsers may not respect this message.
      * @property {String|null} messageEarlyExitModal

@@ -8,6 +8,9 @@ export default ExpRadioGroupComponent.extend({
     labels: null,
     formatLabel: null,
 
+    // In an RTL rendering, draw the radio buttons in reverse order
+    isRTL: null,
+
     /**
      * Option values that should not be displayed
      * @property hiddenOptions
