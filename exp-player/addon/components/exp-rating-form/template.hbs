@@ -11,7 +11,8 @@
                                 <label>{{t item.description}}</label>
                             {{/if}}
                             {{isp-radio-group options=question.scale labelTop=item.labelTop labels=item.labels
-                                              formatLabel=item.formatLabel value=item.value}}
+                                              formatLabel=item.formatLabel value=item.value isRTL=isRTL
+                            }}
                             <br>
                             <br>
                         {{/each}}
@@ -19,13 +20,13 @@
                         {{select-input options=question.scale value=question.items.0.value}}
                     {{else if (eq question.type 'radio-input')}}
                         {{isp-radio-group options=question.scale formatLabel=question.items.0.formatLabel
-                                          value=question.items.0.value}}
+                                          value=question.items.0.value isRTL=isRTL}}
                         {{#if (eq question.items.0.value 1)}}
                             <label class="label-margin-top">{{t question.items.1.description}}</label><br>
                             {{#textarea value=question.items.1.value rows="2" cols="35"}}{{/textarea}}<br>
                             <label class="label-margin-top">{{t question.items.2.description}}</label>
                             {{isp-radio-group options=question.items.2.scale labelTop=question.items.2.labelTop
-                                              labels=question.items.2.labels value=question.items.2.value}}
+                                              labels=question.items.2.labels value=question.items.2.value isRTL=isRTL}}
                             <br>
                         {{/if}}
                         <br>
