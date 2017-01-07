@@ -1,5 +1,5 @@
 <div class="isp-radio-group">
-    {{#each options as |option|}}
+    {{#each optionsItems as |option|}}
         <label class="text-center label-text {{if formatLabel formatLabel}}">
             {{#if labelTop}}
                 {{#if hiddenOptions}}
@@ -10,7 +10,7 @@
                     {{t option.label}}
                 {{/if}}
                 {{radio-button value=option.value checked=value}}
-                {{#each-in labels as |ratings value|}}
+                {{#each-in labelsItems as |ratings value|}}
                     {{#if (eq value.rating option.label)}}
                         <span class="{{if value.formatClass value.formatClass}}">
                             {{t value.label}}
@@ -18,7 +18,7 @@
                     {{/if}}
                 {{/each-in}}
             {{else}}
-                {{#each-in labels as |ratings value|}}
+                {{#each-in labelsItems as |ratings value|}}
                     {{#if (eq value.rating option.label)}}
                         <span class="{{if value.formatClass value.formatClass}}">
                             {{t value.label}}
