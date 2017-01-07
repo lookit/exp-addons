@@ -125,6 +125,10 @@ export default ExpFrameBaseComponent.extend({
     type: 'exp-card-sort',
     layout: layout,
     framePage: 0,
+
+    extra: {},
+    isRTL: Ember.computed.alias('extra.isRTL'),
+
     pageNumber: Ember.computed('framePage', function() {
         return this.get('framePage') + 3;
     }),

@@ -14,6 +14,7 @@
                             labels=question.labels
                             formatLabel=question.formatLabel
                             value=question.value
+                            isRTL=isRTL
                         }}
                     {{else if (eq question.type 'select')}}
                         {{select-input options=question.scale value=question.value}}

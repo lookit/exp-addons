@@ -13,6 +13,8 @@ export default Ember.Component.extend({
     id: null,
     kind: null,
 
+    extra: {},
+
     meta: { // Configuration for all fields available on the component/template
         name: 'Base Experimenter Frame',
         description: 'The abstract base frame for Experimenter frames.',
