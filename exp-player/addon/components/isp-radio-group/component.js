@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import layout from './template';
 
 import ExpRadioGroupComponent from '../../components/radio-group/component';
