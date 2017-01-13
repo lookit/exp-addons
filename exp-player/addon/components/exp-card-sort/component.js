@@ -127,7 +127,7 @@ export default ExpFrameBaseComponent.extend({
     framePage: 0,
 
     extra: {},
-    isRTL: true, // Ember.computed.alias('extra.isRTL'),
+    isRTL: Ember.computed.alias('extra.isRTL'),
 
     pageNumber: Ember.computed('framePage', function() {
         return this.get('framePage') + 3;
