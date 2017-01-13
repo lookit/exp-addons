@@ -137,6 +137,30 @@ export default ExpFrameBaseComponent.extend({
         return shuffle(formatCards(cards));
     }),
 
+    bucketsItems: Ember.computed('isRTL', 'buckets', function() {
+        // Display of card sort bins should respect RTL settings
+        const buckets = this.get('buckets') || [];
+        if (this.get('isRTL')) {
+            return buckets.slice().reverse();
+        } else {
+            return buckets;
+        }
+    }),
+
+    buckets2Items: Ember.computed('isRTL', 'buckets2', function() {
+        // Display of card sort bins should respect RTL settings
+
+        // Buckets2 is a nested data structure, and we need to reverse both the inner and outer lists
+        const buckets2 = this.get('buckets2') || [];
+        if (this.get('isRTL')) {
+            return buckets2.slice().reverse().map(item => ({
+                categories: item.categories.slice().reverse()
+            }));
+        } else {
+            return buckets2;
+        }
+    }),
+
     freeResponses: Ember.computed(function () {
         return this.get('session.expData')['1-1-free-response']['responses'];
     }),
@@ -144,25 +168,27 @@ export default ExpFrameBaseComponent.extend({
     // Represent the sorted cards in a human-readable format for storage in the database
     responses: Ember.computed(function () {
         // Final data should be returned as {
-        //    cardSort1: object {cardId: categoryId,...}
-        //    cardSort2: object {cardId: categoryId,...}
+        //    ThreeCat: object {cardId: categoryId,...}
+        //    NineCat: object {cardId: categoryId,...}
         // }
         // E.g. {
-        //    cardSort1: object {SomoneCountedon: 3,...}
-        //    cardSort2: object {SomoneCountedon: 8,...}
+        //    ThreeCat: object {rsq28: 3,...}
+        //    NineCat: object {rsq29: 8,...}
         // }
         let responses = {};
         let cardSortResponse = this.get('cardSortResponse');
         if (cardSortResponse) {
             responses['ThreeCat'] = {};
-            for (var i = 0; i < cardSortResponse.length; i++) {
-                for (let card of cardSortResponse[i].cards) {
-                    responses['ThreeCat'][card.id] = i + 1;
+            for (let category of cardSortResponse) {
+                // This block is triggered when passing from the first to the second card sort section
+                for (let card of category.cards) {
+                    responses['ThreeCat'][card.id] = category.id;
                 }
             }
         }
         if (this.get('framePage') === 1) {
-            cardSortResponse = this.get('buckets2');
+            // This block is triggered when finishing the second card sort section
+            cardSortResponse = this.get('buckets2Items');
             responses['NineCat'] = {};
             // Assumption: this unpacks a list of category objects:
             // { categories: [ {id: id, cards: [cards]},...] }
@@ -185,20 +211,21 @@ export default ExpFrameBaseComponent.extend({
     }),
 
     isValid: Ember.computed(
-        'buckets2.0.categories.0.cards.[]',
-        'buckets2.0.categories.1.cards.[]',
-        'buckets2.0.categories.2.cards.[]',
-        'buckets2.1.categories.0.cards.[]',
-        'buckets2.1.categories.1.cards.[]',
-        'buckets2.1.categories.2.cards.[]',
-        'buckets2.2.categories.0.cards.[]',
-        'buckets2.2.categories.1.cards.[]',
-        'buckets2.2.categories.2.cards.[]',
+        'buckets2Items.0.categories.0.cards.[]',
+        'buckets2Items.0.categories.1.cards.[]',
+        'buckets2Items.0.categories.2.cards.[]',
+        'buckets2Items.1.categories.0.cards.[]',
+        'buckets2Items.1.categories.1.cards.[]',
+        'buckets2Items.1.categories.2.cards.[]',
+        'buckets2Items.2.categories.0.cards.[]',
+        'buckets2Items.2.categories.1.cards.[]',
+        'buckets2Items.2.categories.2.cards.[]',
         function () {
             if (config.featureFlags.validate) {
-                for (var group = 0; group < this.buckets2.length; group++) {
-                    for (var category = 0; category < this.buckets2[group].categories.length; category++) {
-                        var bucket = this.buckets2[group].categories[category];
+                const buckets2 = this.get('buckets2Items');
+                for (var group = 0; group < buckets2.length; group++) {
+                    for (var category = 0; category < buckets2[group].categories.length; category++) {
+                        var bucket = buckets2[group].categories[category];
                         if (bucket['cards'].length !== bucket['max']) {
                             return false;
                         }
@@ -239,7 +266,7 @@ export default ExpFrameBaseComponent.extend({
         },
         nextPage() {
             if (this.get('allowNext')) {
-                this.set('cardSortResponse', Ember.copy(this.get('buckets'), true));
+                this.set('cardSortResponse', Ember.copy(this.get('bucketsItems'), true));
                 this.send('save');
                 this.set('framePage', 1);
                 this.sendAction('updateFramePage', 1);
@@ -248,7 +275,7 @@ export default ExpFrameBaseComponent.extend({
         },
         previousPage() {
             // clear unsaved data
-            for (let bucket of this.get('buckets')) {
+            for (let bucket of this.get('bucketsItems')) {
                 Ember.set(bucket, 'cards', []);
             }
             this.send('previous');
@@ -270,15 +297,18 @@ export default ExpFrameBaseComponent.extend({
                     default: [
                         {
                             name: 'qsort.sections.1.categories.uncharacteristic',
-                            cards: []
+                            cards: [],
+                            id: 1
                         },
                         {
                             name: 'qsort.sections.1.categories.neutral',
-                            cards: []
+                            cards: [],
+                            id: 2
                         },
                         {
                             name: 'qsort.sections.1.categories.characteristic',
-                            cards: []
+                            cards: [],
+                            id: 3
                         }
                     ]
                 },
@@ -394,6 +424,7 @@ export default ExpFrameBaseComponent.extend({
                 }
             }
             for (let bucket of this.get('buckets')) {
+                // Deserialization is order-dependent
                 let name = bucket.name.split('.').pop();
                 Ember.set(bucket, 'cards', buckets[name]);
             }
