@@ -150,10 +150,12 @@ export default ExpFrameBaseComponent.extend({
     buckets2Items: Ember.computed('isRTL', 'buckets2', function() {
         // Display of card sort bins should respect RTL settings
 
-        // FIXME: Buckets2 is a weird data structure, and this only partially reverses the list
+        // Buckets2 is a nested data structure, and we need to reverse both the inner and outer lists
         const buckets2 = this.get('buckets2') || [];
         if (this.get('isRTL')) {
-            return buckets2.slice().reverse();
+            return buckets2.slice().reverse().map(item => ({
+                categories: item.categories.slice().reverse()
+            }));
         } else {
             return buckets2;
         }
@@ -174,22 +176,18 @@ export default ExpFrameBaseComponent.extend({
         //    NineCat: object {rsq29: 8,...}
         // }
         let responses = {};
-        const isRTL = this.get('isRTL');
         let cardSortResponse = this.get('cardSortResponse');
         if (cardSortResponse) {
             responses['ThreeCat'] = {};
-            for (var i = 0; i < cardSortResponse.length; i++) {
-                // The serialization mechanism uses the placement of the bucket in HTML markup (left to right)
-                //   to get the category identifier. This falls apart in RTL locales, where the columns are backwards.
-                const value = isRTL ? (cardSortResponse.length - i) : i + i
-
-                // length-i = rtlindex?
-                for (let card of cardSortResponse[i].cards) {
-                    responses['ThreeCat'][card.id] = value;
+            for (let category of cardSortResponse) {
+                // This block is triggered when passing from the first to the second card sort section
+                for (let card of category.cards) {
+                    responses['ThreeCat'][card.id] = category.id;
                 }
             }
         }
         if (this.get('framePage') === 1) {
+            // This block is triggered when finishing the second card sort section
             cardSortResponse = this.get('buckets2Items');
             responses['NineCat'] = {};
             // Assumption: this unpacks a list of category objects:
@@ -299,15 +297,18 @@ export default ExpFrameBaseComponent.extend({
                     default: [
                         {
                             name: 'qsort.sections.1.categories.uncharacteristic',
-                            cards: []
+                            cards: [],
+                            id : 1
                         },
                         {
                             name: 'qsort.sections.1.categories.neutral',
-                            cards: []
+                            cards: [],
+                            id: 2
                         },
                         {
                             name: 'qsort.sections.1.categories.characteristic',
-                            cards: []
+                            cards: [],
+                            id: 3
                         }
                     ]
                 },
