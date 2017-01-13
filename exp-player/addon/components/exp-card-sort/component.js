@@ -127,7 +127,7 @@ export default ExpFrameBaseComponent.extend({
     framePage: 0,
 
     extra: {},
-    isRTL: Ember.computed.alias('extra.isRTL'),
+    isRTL: true, // Ember.computed.alias('extra.isRTL'),
 
     pageNumber: Ember.computed('framePage', function() {
         return this.get('framePage') + 3;
@@ -298,7 +298,7 @@ export default ExpFrameBaseComponent.extend({
                         {
                             name: 'qsort.sections.1.categories.uncharacteristic',
                             cards: [],
-                            id : 1
+                            id: 1
                         },
                         {
                             name: 'qsort.sections.1.categories.neutral',
@@ -423,7 +423,8 @@ export default ExpFrameBaseComponent.extend({
                     buckets.characteristic.push(card);
                 }
             }
-            for (let bucket of this.get('bucketsItems')) {
+            for (let bucket of this.get('buckets')) {
+                // Deserialization is order-dependent
                 let name = bucket.name.split('.').pop();
                 Ember.set(bucket, 'cards', buckets[name]);
             }
