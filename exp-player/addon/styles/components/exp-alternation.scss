@@ -1,0 +1,20 @@
+.exp-alternation.alternation-container {
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    width: 100vw;
+    height: 56.25vw; /* 100/56.25 = 1.778 */
+    /*background: pink;*/
+    max-height: 100vh;
+    max-width: 177.78vh; /* 16/9 = 1.778 */
+    margin: auto;
+    top:0;bottom:0; /* vertical center */
+    left:0;right:0; /* horizontal center */
+}
+
+.exp-alternation, .exp-alternation *
+{
+    margin:0;padding:0;
+}
+
+
