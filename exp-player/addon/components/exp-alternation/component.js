@@ -30,7 +30,9 @@ export default ExpFrameBaseComponent.extend({
         data: {
             type: 'object',
             properties: {
-                // define data structure here
+                altOnLeft: {
+                    type: 'boolean'
+                }
             }
         }
     },
@@ -76,8 +78,24 @@ export default ExpFrameBaseComponent.extend({
 
 
         var frame = this;
+        frame.send('setTimeEvent', `exp-alternation:clearTriangles`);
         frame.clearTriangles();
         this.set('stimTimer', window.setTimeout(function() {
+            // TODO: switch to a sendTimeEvent action once doing recording
+            frame.send('setTimeEvent', `exp-alternation:presentTriangles`, {
+                        Lshape: Lshapes[0],
+                        LX: LX,
+                        LY: LY,
+                        LRot: LRot,
+                        LFlip: LFlip,
+                        LSize: LSize,
+                        Rshape: Rshapes[0],
+                        RX: RX,
+                        RY: RY,
+                        RRot: RRot,
+                        RFlip: RFlip,
+                        RSize: RSize
+                    });
             frame.drawTriangles(  Lshapes[0], LX, LY, LRot, LFlip, LSize,
                             Rshapes[0], RX, RY, RRot, RFlip, RSize);
             frame.set('stimTimer', window.setTimeout(function(){
@@ -119,6 +137,8 @@ export default ExpFrameBaseComponent.extend({
             Rshapes = diffShapes;
         }
 
+        //this.set('altOnLeft', this.get('altOnLeft'));
+
         // Constant across CB conditions
         var msBlank = 300;
         var msTriangles = 500;
@@ -129,13 +149,14 @@ export default ExpFrameBaseComponent.extend({
         var rotRange = [0, 360];
         var flipVals = [-1, 1];
         var sizeRange = [0.75, 1.2];
-        var trialLength = 20;
+        var trialLength = this.get('trialLength');
 
         this.presentTriangles(msBlank, msTriangles, Lshapes, Rshapes, XRange, YRange, rotRange, flipVals, sizeRange, LsizeBase, RsizeBase);
         var frame = this;
         window.setTimeout(function(){
             window.clearTimeout(frame.get('stimTimer'));
             frame.clearTriangles();
+            frame.send('next');
         }, trialLength * 1000);
     }
 

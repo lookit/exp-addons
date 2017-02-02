@@ -5,6 +5,7 @@ import next from './next';
 import prefphys from './pref-phys';
 import prefphyspilot from './pref-phys-pilot';
 import prefPhysCalibration from './pref-phys-calibration';
+import geometry from './geometry';
 
 export default {
     random: random,
@@ -13,5 +14,6 @@ export default {
     next: next,
     prefphys: prefphys,
     prefphyspilot: prefphyspilot,
-    'prefphys-calibration': prefPhysCalibration
+    'prefphys-calibration': prefPhysCalibration,
+    geometry: geometry
 };
