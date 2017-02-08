@@ -22,6 +22,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
+    doingIntro: true,
+    settings: null,
+
     meta: {
         name: 'ExpAlternation',
         description: 'TODO: a description of this frame goes here.',
@@ -44,6 +47,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 },
                 triangleLineWidth: {
                     type: 'integer',
+                    default: 5
+                },
+                attnLength: {
+                    type: 'number',
                     default: 5
                 },
                 trialLength: {
@@ -80,6 +87,30 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             }
         }
     },
+
+    actions: {
+
+        startVideo() {
+            // Set a timer to start the trial
+            var frame = this;
+            window.setTimeout(function(){
+                frame.set('doingIntro', false);
+                frame.presentTriangles( frame.settings.LshapesStart,
+                                        frame.settings.RshapesStart,
+                                        frame.settings.LsizeBaseStart,
+                                        frame.settings.RsizeBaseStart);
+                window.setTimeout(function(){
+                    window.clearTimeout(frame.get('stimTimer'));
+                    frame.clearTriangles();
+                    frame.send('next');
+                }, frame.settings.trialLength * 1000);
+            }, frame.get('attnLength') * 1000);
+
+        //this.sendTimeEvent('startAlternateVideo');
+        }
+
+    },
+
 
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
@@ -136,19 +167,27 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         $('#stimuli').html('');
     },
 
-    presentTriangles(msBlank, msPresent, Lshapes, Rshapes, XRange, YRange, rotRange, flipVals, sizeRange, LsizeBase, RsizeBase) {
+    presentTriangles(Lshapes, Rshapes, LsizeBase, RsizeBase) {
         // select X and Y positions for each shape
-        var LX = this.getRandom(XRange[0], XRange[1]);
-        var RX = this.getRandom(XRange[0], XRange[1]);
-        var LY = this.getRandom(YRange[0], YRange[1]);
-        var RY = this.getRandom(YRange[0], YRange[1]);
+        var LX = this.getRandom(this.settings.XRange[0],
+                                this.settings.XRange[1]);
+        var RX = this.getRandom(this.settings.XRange[0],
+                                this.settings.XRange[1]);
+        var LY = this.getRandom(this.settings.YRange[0],
+                                this.settings.YRange[1]);
+        var RY = this.getRandom(this.settings.YRange[0],
+                                this.settings.YRange[1]);
         // select rotation, flip, size per shape
-        var LRot = this.getRandom(rotRange[0], rotRange[1]);
-        var RRot = this.getRandom(rotRange[0], rotRange[1]);
-        var LFlip = this.getRandomElement(flipVals);
-        var RFlip = this.getRandomElement(flipVals);
-        var LSize = this.getRandom(sizeRange[0], sizeRange[1]) * LsizeBase[0];
-        var RSize = this.getRandom(sizeRange[0], sizeRange[1]) * RsizeBase[0];
+        var LRot = this.getRandom(this.settings.rotRange[0],
+                                  this.settings.rotRange[1]);
+        var RRot = this.getRandom(this.settings.rotRange[0],
+                                  this.settings.rotRange[1]);
+        var LFlip = this.getRandomElement(this.settings.flipVals);
+        var RFlip = this.getRandomElement(this.settings.flipVals);
+        var LSize = this.getRandom(this.settings.sizeRange[0],
+                                   this.settings.sizeRange[1]) * LsizeBase[0];
+        var RSize = this.getRandom(this.settings.sizeRange[0],
+                                   this.settings.sizeRange[1]) * RsizeBase[0];
 
         var frame = this;
         frame.send('setTimeEvent', `exp-alternation:clearTriangles`);
@@ -172,12 +211,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             frame.drawTriangles(  Lshapes[0], LX, LY, LRot, LFlip, LSize,
                             Rshapes[0], RX, RY, RRot, RFlip, RSize);
             frame.set('stimTimer', window.setTimeout(function(){
-                frame.presentTriangles(   msBlank, msPresent,
-                                    Lshapes.reverse(), Rshapes.reverse(),
-                                    XRange, YRange, rotRange, flipVals, sizeRange,
+                frame.presentTriangles(Lshapes.reverse(), Rshapes.reverse(),
                                     LsizeBase.reverse(), RsizeBase.reverse());
-            }, msPresent));
-        }, msBlank));
+            }, frame.settings.msTriangles));
+        }, frame.settings.msBlank));
     },
 
 
@@ -223,7 +260,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         // are big skinny/small skinny and big fat/small skinny.
         // altOnLeft: whether to put size-and-shape alteration on left
 
-
         var diffShapes = ['fat', 'skinny'];
         var sameShapes;
         if (this.get('context')) {
@@ -241,27 +277,21 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
             Rshapes = diffShapes;
         }
 
-        // Constant across CB conditions
-        var msBlank = 300;
-        var msTriangles = 500;
-        var LsizeBase = [1, 0.5];
-        var RsizeBase = [1, 0.5];
-        var XRange = [-5, 5];
-        var YRange = [-5, 5];
-        var rotRange = [0, 360];
-        var flipVals = [-1, 1];
-        var sizeRange = [0.75, 1.2];
-        var trialLength = this.get('trialLength');
+        this.set('settings', {
+            msBlank: 300,
+            msTriangles: 500,
+            LsizeBaseStart: [1, 0.5],
+            RsizeBaseStart: [1, 0.5],
+            XRange: [-5, 5],
+            YRange: [-5, 5],
+            rotRange: [0, 360],
+            flipVals: [-1, 1],
+            sizeRange: [0.75, 1.2],
+            trialLength: this.get('trialLength'),
+            LshapesStart: Lshapes,
+            RshapesStart: Rshapes});
 
         this.send('showFullscreen');
-
-        this.presentTriangles(msBlank, msTriangles, Lshapes, Rshapes, XRange, YRange, rotRange, flipVals, sizeRange, LsizeBase, RsizeBase);
-        var frame = this;
-        window.setTimeout(function(){
-            window.clearTimeout(frame.get('stimTimer'));
-            frame.clearTriangles();
-            frame.send('next');
-        }, trialLength * 1000);
     }
 
 });
