@@ -2,14 +2,26 @@ import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import MediaReload from '../../mixins/media-reload';
+import FullScreen from '../../mixins/full-screen';
+import VideoRecord from '../../mixins/video-record';
 
 let {
     $
 } = Ember;
 
-export default ExpFrameBaseComponent.extend(MediaReload, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
     type: 'exp-alternation',
     layout: layout,
+    displayFullscreen: true, // force fullscreen for all uses of this component
+    fullScreenElementId: 'experiment-player',
+    fsButtonID: 'fsButton',
+    videoRecorder: Ember.inject.service(),
+    recorder: null,
+    recordingIsReady: false,
+    warning: null,
+    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
+    videoUploadConnected: Ember.computed.alias('recorder.connected'),
+
     meta: {
         name: 'ExpAlternation',
         description: 'TODO: a description of this frame goes here.',
@@ -25,7 +37,35 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
                     type: 'boolean',
                     description: 'Whether to put the shape+size alternating stream on the left.',
                     default: true
-                }
+                },
+                triangleColor: {
+                    type: 'string',
+                    default: '#056090'
+                },
+                triangleLineWidth: {
+                    type: 'integer',
+                    default: 5
+                },
+                trialLength: {
+                    type: 'number',
+                    default: 6
+                },
+                videoSources: {
+                    type: 'array',
+                    description: 'List of objects specifying video src and type for test videos',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
             }
         },
         data: {
@@ -33,10 +73,40 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
             properties: {
                 altOnLeft: {
                     type: 'boolean'
+                },
+                videoId: {
+                    type: 'string'
                 }
             }
         }
     },
+
+    sendTimeEvent(name, opts = {}) {
+        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
+
+        Ember.merge(opts, {
+            streamTime: streamTime,
+            videoId: this.get('videoId')
+        });
+        this.send('setTimeEvent', `exp-physics:${name}`, opts);
+    },
+
+    onFullscreen() {
+        if (this.get('isDestroyed')) {
+            return;
+        }
+        this._super(...arguments);
+        if (!this.checkFullscreen()) {
+            this.sendTimeEvent('leftFullscreen');
+            // TODO: if setting up pausing of experiment, also pause here.
+            //if (!this.get('isPaused')) {
+            //    this.pauseStudy();
+            //}
+        } else {
+            this.sendTimeEvent('enteredFullscreen');
+        }
+    },
+
     stimTimer: null,
 
     getRandomElement(arr) {
@@ -47,30 +117,18 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
       return Math.random() * (max - min) + min;
     },
 
+    triangleBases: null,
+
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
 
-        var fatBase = ' <polygon id="fat" stroke="#056090" stroke-width="5px" fill="none" points="-15.1908081668 ,  -7.05007860547, 18.1705219916 ,  -7.05007860547, -2.97971382479 ,  14.1001572109"                        vector-effect="non-scaling-stroke"                         stroke-linejoin="round"';
-        var skinnyBase = '<polygon id="skinny" stroke="#056090" stroke-width="5px" fill="none" points="-34.4519811143 ,  -4.07036478068, 23.3315377282 ,  -4.07036478068, 11.1204433861 ,  8.14072956135"                         vector-effect="non-scaling-stroke"                         stroke-linejoin="round"';
-
-        if (Lshape === 'fat') {
-            var Lbase = fatBase;
-        } else {
-            var Lbase = skinnyBase;
-        }
-        if (Rshape === 'fat') {
-            var Rbase = fatBase;
-        } else {
-            var Rbase = skinnyBase;
-        }
-
-        var leftTriangle = Lbase +
-            '" transform=" translate(' + LX + ', ' + LY + ') ' +
-            'translate(37.5, 56) rotate(' + LRot + ') ' +
-            'scale(' + LFlip * LSize + ')" />';
-        var rightTriangle = Rbase +
-            '" transform=" translate(' + RX + ', ' + RY + ') ' +
-            'translate(162.5, 56) rotate(' + RRot + ') ' +
-            'scale(' + RFlip * RSize + ')" />';
+        var leftTriangle = [this.triangleBases[Lshape],
+            '" transform=" translate(', LX, ', ', LY, ') ',
+            'translate(37.5, 56) rotate(', LRot, ') ',
+            'scale(', LFlip * LSize, ')" />'].join(" ");
+        var rightTriangle = [this.triangleBases[Rshape],
+            '" transform=" translate(', RX, ', ', RY, ') ',
+            'translate(162.5, 56) rotate(', RRot, ') ',
+            'scale(', RFlip * RSize, ')" />'].join(" ");
         $('#stimuli').html(leftTriangle + rightTriangle);
     },
 
@@ -91,7 +149,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         var RFlip = this.getRandomElement(flipVals);
         var LSize = this.getRandom(sizeRange[0], sizeRange[1]) * LsizeBase[0];
         var RSize = this.getRandom(sizeRange[0], sizeRange[1]) * RsizeBase[0];
-
 
         var frame = this;
         frame.send('setTimeEvent', `exp-alternation:clearTriangles`);
@@ -127,14 +184,45 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
     didInsertElement() {
         this._super(...arguments);
 
+        // Define basic properties for two triangle shapes used. It would be
+        // more natural to define these in the template, and then use the
+        // <use xlink:href="#name" .../> syntax to transform them as
+        // appropriate, but although this worked fine on experimenter I couldn't
+        // get the links working on lookit. The code was correctly generated,
+        // but while a direct use of polygon showed up, nothing that used
+        // xlink:href showed up at all (even when hard-coded into the template).
+        // Possibly related to issues like
+        // https://github.com/emberjs/ember.js/issues/14752.
+        // --kim
+
+        this.set('triangleBases', {
+            'fat': ['<polygon stroke="', this.get('triangleColor'), '"',
+                     'stroke-width="', this.get('triangleLineWidth'), '"',
+                     'fill="none"',
+                     'points="-15.1908081668 ,  -7.05007860547, ',
+                      '18.1705219916 ,  -7.05007860547, ',
+                      '-2.97971382479 ,  14.1001572109"',
+                     'vector-effect="non-scaling-stroke"',
+                     'stroke-linejoin="round"'
+                    ].join(" "),
+            'skinny': ['<polygon stroke="', this.get('triangleColor'), '"',
+                       'stroke-width="', this.get('triangleLineWidth'), '"',
+                       'fill="none"',
+                       'points="-34.4519811143 ,  -4.07036478068,',
+                        '23.3315377282 ,  -4.07036478068,',
+                        '11.1204433861 ,  8.14072956135"',
+                       'vector-effect="non-scaling-stroke"',
+                       'stroke-linejoin="round"'
+                      ].join(" ")
+        });
+
         // COUNTERBALANCING (2x2):
-        //var context = 'fat'; // or 'skinny' -- whether to use big fat triangle or
+        // context: whether to use big fat triangle or
         // small skinny triangle as context figure. If 'fat', contrasts are
         // big fat/small fat and big fat/small skinny. If 'skinny', contrasts
         // are big skinny/small skinny and big fat/small skinny.
-        //var altOnLeft = true; // whether to put size-and-shape alteration on left
+        // altOnLeft: whether to put size-and-shape alteration on left
 
-        // Implement counterbalancing conditions...
 
         var diffShapes = ['fat', 'skinny'];
         var sameShapes;
@@ -164,6 +252,8 @@ export default ExpFrameBaseComponent.extend(MediaReload, {
         var flipVals = [-1, 1];
         var sizeRange = [0.75, 1.2];
         var trialLength = this.get('trialLength');
+
+        this.send('showFullscreen');
 
         this.presentTriangles(msBlank, msTriangles, Lshapes, Rshapes, XRange, YRange, rotRange, flipVals, sizeRange, LsizeBase, RsizeBase);
         var frame = this;
