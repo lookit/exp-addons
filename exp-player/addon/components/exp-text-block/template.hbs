@@ -3,7 +3,13 @@
 {{/if}}
 {{#if block.text}}
     <p>
-        {{exp-format block.text}}
+        {{#if block.emph}}
+            <b>
+                {{exp-format block.text}}
+            </b>
+        {{else}}
+            {{exp-format block.text}}
+        {{/if}}
     </p>
 {{else if block.markdown}}
     <p>

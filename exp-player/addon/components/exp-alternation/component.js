@@ -137,8 +137,6 @@ export default ExpFrameBaseComponent.extend({
             Rshapes = diffShapes;
         }
 
-        //this.set('altOnLeft', this.get('altOnLeft'));
-
         // Constant across CB conditions
         var msBlank = 300;
         var msTriangles = 500;
