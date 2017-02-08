@@ -212,7 +212,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             type: 'integer'
                         },
                         'Gender': {
-                            type: 'string'
+                            type: 'integer'
                         },
                         'Ethnicity': {
                             type: 'string'
@@ -230,16 +230,16 @@ export default ExpFrameBaseComponent.extend(Validations, {
                             type: 'string'
                         },
                         'Residence': {
-                            type: 'string'
+                            type: 'integer'
                         },
                         'Religion1to10': { // how religious?
                             type: 'integer'
                         },
                         'ReligionYesNo': { // follows religion?
-                            type: 'string'
+                            type: 'integer'
                         },
                         'ReligionFollow': {  // which religion?
-                            type: 'string'
+                            type: ['string', 'null']
                         }
                     }
                 }

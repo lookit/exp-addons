@@ -1,4 +1,4 @@
-import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base';
+import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base/component';
 import layout from './template';
 
 export default ExpFrameBaseComponent.extend({
@@ -10,13 +10,13 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                // define parameters here
+                // define configurable parameters here
             }
         },
         data: {
             type: 'object',
             properties: {
-                // define data structure here
+                // define data to be sent to the server here
             }
         }
     }
