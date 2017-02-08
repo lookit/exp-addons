@@ -1,12 +1,13 @@
 import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import MediaReload from '../../mixins/media-reload';
 
 let {
     $
 } = Ember;
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(MediaReload, {
     type: 'exp-alternation',
     layout: layout,
     meta: {
@@ -47,11 +48,26 @@ export default ExpFrameBaseComponent.extend({
     },
 
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
-        var leftTriangle = '<use xlink:href="#' + Lshape +
+
+        var fatBase = ' <polygon id="fat" stroke="#056090" stroke-width="5px" fill="none" points="-15.1908081668 ,  -7.05007860547, 18.1705219916 ,  -7.05007860547, -2.97971382479 ,  14.1001572109"                        vector-effect="non-scaling-stroke"                         stroke-linejoin="round"';
+        var skinnyBase = '<polygon id="skinny" stroke="#056090" stroke-width="5px" fill="none" points="-34.4519811143 ,  -4.07036478068, 23.3315377282 ,  -4.07036478068, 11.1204433861 ,  8.14072956135"                         vector-effect="non-scaling-stroke"                         stroke-linejoin="round"';
+
+        if (Lshape === 'fat') {
+            var Lbase = fatBase;
+        } else {
+            var Lbase = skinnyBase;
+        }
+        if (Rshape === 'fat') {
+            var Rbase = fatBase;
+        } else {
+            var Rbase = skinnyBase;
+        }
+
+        var leftTriangle = Lbase +
             '" transform=" translate(' + LX + ', ' + LY + ') ' +
             'translate(37.5, 56) rotate(' + LRot + ') ' +
             'scale(' + LFlip * LSize + ')" />';
-        var rightTriangle = '<use xlink:href="#' + Rshape +
+        var rightTriangle = Rbase +
             '" transform=" translate(' + RX + ', ' + RY + ') ' +
             'translate(162.5, 56) rotate(' + RRot + ') ' +
             'scale(' + RFlip * RSize + ')" />';
