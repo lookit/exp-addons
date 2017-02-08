@@ -32,7 +32,7 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
             id: `${frameId}`,
             altOnLeft: position,
             context: context
-        }
+        };
         Object.assign(thisFrame, frame.frameOptions);
 
         position = !position;

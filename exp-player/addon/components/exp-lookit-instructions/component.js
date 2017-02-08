@@ -96,7 +96,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 nextButtonText: {
                     type: 'string',
-                    default: "Start the videos! \n (You'll have a moment to turn around.)"
+                    default: 'Start the videos! \n (You\'ll have a moment to turn around.)'
                 }
             },
             required: ['id']

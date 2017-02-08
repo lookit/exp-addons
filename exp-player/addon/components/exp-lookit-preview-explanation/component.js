@@ -64,7 +64,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 previewButtonText: {
                     type: 'string',
-                    default: "I'd like to preview the videos"
+                    default: 'I\'d like to preview the videos'
                 },
                 skipButtonText: {
                     type: 'string',

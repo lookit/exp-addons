@@ -1,9 +1,6 @@
-import Ember from 'ember';
 import layout from './template';
 
 import {validator, buildValidations} from 'ember-cp-validations';
-
-import moment from 'moment';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from 'exp-player/mixins/full-screen';

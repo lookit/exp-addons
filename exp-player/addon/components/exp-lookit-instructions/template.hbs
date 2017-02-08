@@ -4,33 +4,33 @@
 
         {{#each blocks as |block|}}
 
-        {{#if block.title}}
-            <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
-        {{/if}}
+            {{#if block.title}}
+                <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
+            {{/if}}
 
-        {{#if block.text}}
-            <p>
-                {{exp-format block.text}}
-            </p>
-        {{/if}}
+            {{#if block.text}}
+                <p>
+                    {{exp-format block.text}}
+                </p>
+            {{/if}}
 
-        {{#if block.listblocks}}
-            <ul>
-            {{#each block.listblocks as |listitem|}}
-                <li>
-                    {{exp-format listitem.text}}
+            {{#if block.listblocks}}
+                <ul>
+                    {{#each block.listblocks as |listitem|}}
+                        <li>
+                            {{exp-format listitem.text}}
 
-                    {{#if listitem.img}}
-                    <img class="instructionspic"
-                        src={{listitem.img.src}}
-                        alt={{listitem.img.alt}} >
-                    {{/if}}
+                            {{#if listitem.img}}
+                                <img class="instructionspic"
+                                    src={{listitem.img.src}}
+                                    alt={{listitem.img.alt}} >
+                            {{/if}}
 
-                </li>
-            {{/each}}
-            </ul>
+                        </li>
+                    {{/each}}
+                </ul>
 
-        {{/if}}
+            {{/if}}
 
         {{/each}}
 
@@ -38,39 +38,39 @@
 
         {{#if audioBlock}}
 
-        <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>
-            {{audioBlock.title}}
-        </p>
+            <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>
+                {{audioBlock.title}}
+            </p>
 
-        <p>
-            {{exp-format audioBlock.text}}
-        </p>
+            <p>
+                {{exp-format audioBlock.text}}
+            </p>
 
-        <div id="audio-wrapper">
-            <audio id="player-audio"
-                   controls
-                   onended={{ if mustPlay (action 'soundPlayed') }}
-            >
+            <div id="audio-wrapper">
+                <audio id="player-audio"
+                       controls
+                       onended={{ if mustPlay (action 'soundPlayed') }}
+                >
 
-            {{#each audioBlock.sources as |source|}}
-                <source src={{source.src}} type={{source.type}}>
-            {{/each}}
+                    {{#each audioBlock.sources as |source|}}
+                        <source src={{source.src}} type={{source.type}}>
+                    {{/each}}
 
-            </audio>
+                </audio>
 
-            {{#if showWarning}}
-                <div class="sound-warning">
-                    * {{audioBlock.warningText}}
-                </div>
-            {{/if}}
-        </div>
+                {{#if showWarning}}
+                    <div class="sound-warning">
+                        * {{audioBlock.warningText}}
+                    </div>
+                {{/if}}
+            </div>
 
         {{/if}}
 
         {{#if showPreviousButton}}
-        <button class="btn btn-default pull-left" {{ action 'previous' }}>
-            Previous
-        </button>
+            <button class="btn btn-default pull-left" {{ action 'previous' }}>
+                Previous
+            </button>
         {{/if}}
 
         <button class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
