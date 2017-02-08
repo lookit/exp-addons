@@ -43,23 +43,43 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 },
                 triangleColor: {
                     type: 'string',
+                    description: 'color of triangle outline (3 or 6 char hex, starting with #)',
                     default: '#056090'
                 },
                 triangleLineWidth: {
                     type: 'integer',
+                    description: 'triangle line width in pixels',
                     default: 5
                 },
                 attnLength: {
                     type: 'number',
+                    description: 'minimum amount of time to show attention-getter in seconds',
                     default: 5
                 },
                 trialLength: {
                     type: 'number',
+                    description: 'length of alternation trial in seconds',
                     default: 6
+                },
+                audioSources: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for instructions during attention-getter video',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
                 },
                 videoSources: {
                     type: 'array',
-                    description: 'List of objects specifying video src and type for test videos',
+                    description: 'List of objects specifying video src and type for attention-getter video',
                     default: [],
                     items: {
                         type: 'object',
@@ -155,11 +175,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         var leftTriangle = [this.triangleBases[Lshape],
             '" transform=" translate(', LX, ', ', LY, ') ',
             'translate(37.5, 56) rotate(', LRot, ') ',
-            'scale(', LFlip * LSize, ')" />'].join(" ");
+            'scale(', LFlip * LSize, ')" />'].join(' ');
         var rightTriangle = [this.triangleBases[Rshape],
             '" transform=" translate(', RX, ', ', RY, ') ',
             'translate(162.5, 56) rotate(', RRot, ') ',
-            'scale(', RFlip * RSize, ')" />'].join(" ");
+            'scale(', RFlip * RSize, ')" />'].join(' ');
         $('#stimuli').html(leftTriangle + rightTriangle);
     },
 
@@ -241,7 +261,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                       '-2.97971382479 ,  14.1001572109"',
                      'vector-effect="non-scaling-stroke"',
                      'stroke-linejoin="round"'
-                    ].join(" "),
+                    ].join(' '),
             'skinny': ['<polygon stroke="', this.get('triangleColor'), '"',
                        'stroke-width="', this.get('triangleLineWidth'), '"',
                        'fill="none"',
@@ -250,7 +270,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                         '11.1204433861 ,  8.14072956135"',
                        'vector-effect="non-scaling-stroke"',
                        'stroke-linejoin="round"'
-                      ].join(" ")
+                      ].join(' ')
         });
 
         // COUNTERBALANCING (2x2):
