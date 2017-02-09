@@ -31,7 +31,17 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
             kind: frame.frameType,
             id: `${frameId}`,
             altOnLeft: position,
-            context: context
+            context: context,
+            audioSources: [
+                {
+                    'type': 'audio/mp3',
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/mp3/video_0' + (iFrame+1) + '.mp3'
+                },
+                {
+                    'type': 'audio/ogg',
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/ogg/video_0' + (iFrame+1) + '.ogg'
+                }
+            ]
         };
         Object.assign(thisFrame, frame.frameOptions);
 

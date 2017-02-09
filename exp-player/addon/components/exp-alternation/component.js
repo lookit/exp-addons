@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
-import MediaReload from '../../mixins/media-reload';
+//import MediaReload from '../../mixins/media-reload';
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
 
@@ -9,7 +9,7 @@ let {
     $
 } = Ember;
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
     type: 'exp-alternation',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -22,7 +22,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
-    doingIntro: true,
+    completedAudio: false,
+    completedAttn: false,
+
+    doingIntro: Ember.computed('completedAudio', 'completedAttn',
+        function() {
+            return (!this.get('completedAudio') || !this.get('completedAttn'));
+        }),
+
     settings: null,
 
     meta: {
@@ -112,25 +119,38 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
         startVideo() {
             // Set a timer to start the trial
+            $('#player-audio')[0].play();
             var frame = this;
             window.setTimeout(function(){
-                frame.set('doingIntro', false);
-                frame.presentTriangles( frame.settings.LshapesStart,
-                                        frame.settings.RshapesStart,
-                                        frame.settings.LsizeBaseStart,
-                                        frame.settings.RsizeBaseStart);
-                window.setTimeout(function(){
-                    window.clearTimeout(frame.get('stimTimer'));
-                    frame.clearTriangles();
-                    frame.send('next');
-                }, frame.settings.trialLength * 1000);
+                frame.set('completedAttn', true);
+                if (!frame.get('doingIntro')) {
+                    frame.startTrial();
+                }
             }, frame.get('attnLength') * 1000);
+        },
 
-        //this.sendTimeEvent('startAlternateVideo');
+        endAudio() {
+            this.set('completedAudio', true);
+            if (!this.get('doingIntro')) {
+                    this.startTrial();
+            }
         }
 
     },
 
+
+    startTrial() {
+        var frame = this;
+        frame.presentTriangles( frame.settings.LshapesStart,
+                                        frame.settings.RshapesStart,
+                                        frame.settings.LsizeBaseStart,
+                                        frame.settings.RsizeBaseStart);
+        window.setTimeout(function(){
+            window.clearTimeout(frame.get('stimTimer'));
+            frame.clearTriangles();
+            frame.send('next');
+            }, frame.settings.trialLength * 1000);
+    },
 
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;

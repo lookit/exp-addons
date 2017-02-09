@@ -15,6 +15,14 @@
             {{/each}}
         </video>
 
+        <audio id="player-audio"
+               onended={{action 'endAudio'}}>
+
+            {{#each audioSources as |stream|}}
+                    <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+
     {{else}}
         <svg viewBox="0 0 200 112" id="allstimuli">
 
