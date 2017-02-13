@@ -43,6 +43,18 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
                 }
             ]
         };
+        if (iFrame == 3) {
+            thisFrame.endAudioSources = [
+                {
+                    'type': 'audio/mp3',
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/mp3/all_done.mp3'
+                },
+                {
+                    'type': 'audio/ogg',
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/ogg/all_done.ogg'
+                }
+            ];
+        }
         Object.assign(thisFrame, frame.frameOptions);
 
         position = !position;

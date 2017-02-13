@@ -84,6 +84,38 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
                         }
                     }
                 },
+                musicSources: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for music during attention-getter video',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
+                endAudioSources: {
+                    type: 'array',
+                    description: 'Supply this to play audio at the end of the trial; list of objects specifying audio src and type',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
                 videoSources: {
                     type: 'array',
                     description: 'List of objects specifying video src and type for attention-getter video',
@@ -129,27 +161,51 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
             }, frame.get('attnLength') * 1000);
         },
 
+        // When intro audio is complete
         endAudio() {
             this.set('completedAudio', true);
             if (!this.get('doingIntro')) {
                     this.startTrial();
             }
+        },
+
+        // When end-audio is complete ("all done" instructions)
+        trialComplete() {
+            this.send('next');
         }
 
     },
 
-
     startTrial() {
         var frame = this;
+        var musicPlayer = $('#player-music');
+        musicPlayer.prop("volume", 0.1);
+        musicPlayer[0].play();
+        musicPlayer.animate({volume: 1}, frame.settings.musicFadeLength);
         frame.presentTriangles( frame.settings.LshapesStart,
                                         frame.settings.RshapesStart,
                                         frame.settings.LsizeBaseStart,
                                         frame.settings.RsizeBaseStart);
         window.setTimeout(function(){
+            musicPlayer.animate({volume: 0}, frame.settings.musicFadeLength);
+        }, frame.settings.trialLength * 1000 - frame.settings.musicFadeLength);
+
+        window.setTimeout(function(){
             window.clearTimeout(frame.get('stimTimer'));
             frame.clearTriangles();
-            frame.send('next');
+            frame.endTrial();
             }, frame.settings.trialLength * 1000);
+    },
+
+    // When triangles have been shown for time indicated: play end-audio if
+    // present, or just move on.
+    endTrial() {
+        if (this.get('endAudioSources').length) {
+            $('#player-endaudio')[0].play();
+        }
+        else {
+            this.send('next');
+        }
     },
 
     sendTimeEvent(name, opts = {}) {
@@ -276,18 +332,18 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
             'fat': ['<polygon stroke="', this.get('triangleColor'), '"',
                      'stroke-width="', this.get('triangleLineWidth'), '"',
                      'fill="none"',
-                     'points="-15.1908081668 ,  -7.05007860547, ',
-                      '18.1705219916 ,  -7.05007860547, ',
-                      '-2.97971382479 ,  14.1001572109"',
+                     'points="-12.1369327415 ,  -5.63277008813, ',
+                      '14.5176215029 ,  -5.63277008813, ',
+                      '-2.38068876146 ,  11.2655401763"',
                      'vector-effect="non-scaling-stroke"',
                      'stroke-linejoin="round"'
                     ].join(' '),
             'skinny': ['<polygon stroke="', this.get('triangleColor'), '"',
                        'stroke-width="', this.get('triangleLineWidth'), '"',
                        'fill="none"',
-                       'points="-34.4519811143 ,  -4.07036478068,',
-                        '23.3315377282 ,  -4.07036478068,',
-                        '11.1204433861 ,  8.14072956135"',
+                       'points="-27.5259468096 ,  -3.25208132666,',
+                        '18.6410953948 ,  -3.25208132666,',
+                        '8.88485141479 ,  6.50416265333"',
                        'vector-effect="non-scaling-stroke"',
                        'stroke-linejoin="round"'
                       ].join(' ')
@@ -300,12 +356,18 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
         // are big skinny/small skinny and big fat/small skinny.
         // altOnLeft: whether to put size-and-shape alteration on left
 
-        var diffShapes = ['fat', 'skinny'];
+        var diffShapes;
         var sameShapes;
+        var shapeSizes;
         if (this.get('context')) {
-            sameShapes = ['fat'];
+            sameShapes = ['fat']; // context: big fat triangle
+            shapeSizes = [1, 0.7071]; // big fat vs. small fat/small skinny
+                // sqrt(0.5) = 0.7071, to get factor of two difference in area
+            diffShapes = ['fat', 'skinny']; // start with context
         } else {
-            sameShapes = ['skinny'];
+            sameShapes = ['skinny']; // context: small skinny triangle
+            shapeSizes = [0.7071, 1]; // small skinny vs. big skinny/big fat
+            diffShapes = ['skinny', 'fat']; // start with context
         }
 
         var Lshapes, Rshapes;
@@ -320,16 +382,17 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
         this.set('settings', {
             msBlank: 300,
             msTriangles: 500,
-            LsizeBaseStart: [1, 0.5],
-            RsizeBaseStart: [1, 0.5],
-            XRange: [-5, 5],
-            YRange: [-5, 5],
+            LsizeBaseStart: shapeSizes,
+            RsizeBaseStart: shapeSizes.slice(),
+            XRange: [-3.125, 3.125],
+            YRange: [-3.125, 3.125],
             rotRange: [0, 360],
             flipVals: [-1, 1],
-            sizeRange: [0.75, 1.2],
+            sizeRange: [0.85, 1.15],
             trialLength: this.get('trialLength'),
             LshapesStart: Lshapes,
-            RshapesStart: Rshapes});
+            RshapesStart: Rshapes,
+            musicFadeLength: 2000});
 
         this.send('showFullscreen');
     }

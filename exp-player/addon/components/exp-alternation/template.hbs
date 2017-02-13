@@ -24,6 +24,9 @@
         </audio>
 
     {{else}}
+
+
+
         <svg viewBox="0 0 200 112" id="allstimuli">
 
             {{!-- Box for left image stream --}}
@@ -37,6 +40,22 @@
             </g>
 
         </svg>
+    {{/if}}
+
+    <audio id="player-music"
+           loop>
+        {{#each musicSources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </audio>
+
+    {{#if endAudioSources}}
+        <audio id="player-endaudio"
+               onended={{action 'trialComplete'}}>
+            {{#each endAudioSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
     {{/if}}
 
 </div>
