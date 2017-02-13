@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import DS from 'ember-data';
 
 import config from 'ember-get-config';
 
@@ -97,7 +96,7 @@ export default Ember.Component.extend({
     },
 
     // Display error messages related to save failures
-    displayError(error) {
+    displayError(error) { // jshint ignore:line
         // If the save failure was a server error, warn the user. This error should never disappear.
         const msg = 'If this problem persists, please contact your study coordinator.';
         this.get('toast').error(msg, 'Error: Could not save data', {timeOut: 0, extendedTimeOut: 0});
