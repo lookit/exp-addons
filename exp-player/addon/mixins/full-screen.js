@@ -65,6 +65,12 @@ export default Ember.Mixin.create({
         }
     },
 
+    displayError(error) { // jshint ignore:line
+        // Exit fullscreen first to make sure error is visible to users.
+        this.send('exitFullscreen');
+        return this._super(...arguments);
+    },
+
     actions: {
         showFullscreen: function () {
 

@@ -267,10 +267,13 @@ export default ExpFrameBaseComponent.extend({
         nextPage() {
             if (this.get('allowNext')) {
                 this.set('cardSortResponse', Ember.copy(this.get('bucketsItems'), true));
-                this.send('save');
-                this.set('framePage', 1);
-                this.sendAction('updateFramePage', 1);
-                window.scrollTo(0, 0);
+                this._save()
+                    .then(() => {
+                        this.set('framePage', 1);
+                        this.sendAction('updateFramePage', 1);
+                        window.scrollTo(0, 0);
+                    })
+                    .catch(err => this.displayError(err));
             }
         },
         previousPage() {

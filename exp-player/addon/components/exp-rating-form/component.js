@@ -719,11 +719,15 @@ export default ExpFrameBaseComponent.extend(Validations, {
         continue() {
             if (this.get('allowNext')) {
                 if (this.get('framePage') !== this.get('lastPage')) {
-                    this.send('save');
-                    var page = this.get('framePage') + 1;
-                    this.set('framePage', page);
-                    this.sendAction('updateFramePage', page);
-                    window.scrollTo(0, 0);
+
+                    this._save()
+                        .then(() => {
+                            var page = this.get('framePage') + 1;
+                            this.set('framePage', page);
+                            this.sendAction('updateFramePage', page);
+                            window.scrollTo(0, 0);
+                        })
+                        .catch(err => this.displayError(err));
                 } else {
                     this.sendAction('sessionCompleted');
                     this.send('next');
