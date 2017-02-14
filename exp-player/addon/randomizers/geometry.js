@@ -43,7 +43,7 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
                 }
             ]
         };
-        if (iFrame == 3) {
+        if (iFrame === 3) {
             thisFrame.endAudioSources = [
                 {
                     'type': 'audio/mp3',

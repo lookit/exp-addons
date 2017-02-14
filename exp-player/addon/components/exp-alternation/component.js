@@ -9,7 +9,7 @@ let {
     $
 } = Ember;
 
-export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     type: 'exp-alternation',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -21,16 +21,25 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
+    showVideoWarning: false,
 
+    // Track state of experiment
     completedAudio: false,
     completedAttn: false,
-
     doingIntro: Ember.computed('completedAudio', 'completedAttn',
         function() {
             return (!this.get('completedAudio') || !this.get('completedAttn'));
         }),
+    isPaused: false,
+    hasBeenPaused: false,
 
+    // Timers for intro & stimuli
+    introTimer: null,
+    stimTimer: null,
+
+    // Store data about triangles to show, display lengths, etc. in frame
     settings: null,
+    triangleBases: null,
 
     meta: {
         name: 'ExpAlternation',
@@ -132,6 +141,54 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
                         }
                     }
                 },
+                pauseAudio: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for audio played when pausing study',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
+                unpauseAudio: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for audio played when pausing study',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
+                fsAudio: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for audio played when pausing study if study is not fullscreen',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                }
             }
         },
         data: {
@@ -150,15 +207,30 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
     actions: {
 
         startVideo() {
-            // Set a timer to start the trial
-            $('#player-audio')[0].play();
+
+            // Allow pausing during intro
             var frame = this;
-            window.setTimeout(function(){
-                frame.set('completedAttn', true);
-                if (!frame.get('doingIntro')) {
-                    frame.startTrial();
+            $(document).off('keyup.pauser');
+            $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
+
+            // Start placeholder video right away
+            $('#player-video')[0].play();
+
+            // Pause automatically if not FS. (Short delay to allow showFullscreen to finish if in middle of request)
+            window.setTimeout(function() {
+                if (!frame.checkFullscreen()) {
+                    frame.pauseStudy();
                 }
-            }, frame.get('attnLength') * 1000);
+                // Set a timer to start the trial
+                $('#player-audio')[0].play();
+                frame.set('introTimer', window.setTimeout(function(){
+                    frame.set('completedAttn', true);
+                    if (!frame.get('doingIntro')) {
+                        frame.startTrial();
+                    }
+                }, frame.get('attnLength') * 1000));
+
+            }, 250);
         },
 
         // When intro audio is complete
@@ -178,6 +250,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
 
     startTrial() {
         var frame = this;
+        $(document).off('keyup.pauser');
+
         var musicPlayer = $('#player-music');
         musicPlayer.prop("volume", 0.1);
         musicPlayer[0].play();
@@ -225,16 +299,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
         this._super(...arguments);
         if (!this.checkFullscreen()) {
             this.sendTimeEvent('leftFullscreen');
-            // TODO: if setting up pausing of experiment, also pause here.
-            //if (!this.get('isPaused')) {
-            //    this.pauseStudy();
-            //}
         } else {
             this.sendTimeEvent('enteredFullscreen');
         }
     },
 
-    stimTimer: null,
+
 
     getRandomElement(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
@@ -244,7 +314,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
       return Math.random() * (max - min) + min;
     },
 
-    triangleBases: null,
+
 
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
 
@@ -288,7 +358,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
         var frame = this;
         frame.send('setTimeEvent', `exp-alternation:clearTriangles`);
         frame.clearTriangles();
-        this.set('stimTimer', window.setTimeout(function() {
+        frame.set('stimTimer', window.setTimeout(function() {
             // TODO: switch to a sendTimeEvent action once doing recording
             frame.send('setTimeEvent', `exp-alternation:presentTriangles`, {
                         Lshape: Lshapes[0],
@@ -313,9 +383,64 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
         }, frame.settings.msBlank));
     },
 
+    handleSpace(event, frame) {
+        if (frame.checkFullscreen() || !frame.isPaused) {
+            if (event.which === 32) { // space
+                frame.pauseStudy();
+            }
+        }
+    },
+
+    // Pause/unpause study; only called if doing intro.
+    pauseStudy() {
+
+        if (this.get('showVideoWarning')) {
+            return;
+        }
+
+        Ember.run.once(this, () => {
+            this.set('hasBeenPaused', true);
+            var wasPaused = this.get('isPaused');
+
+            // Currently paused: restart
+            if (wasPaused) {
+                this.set('isPaused', false);
+                this.send('startVideo');
+                try {
+                    this.get('recorder').resume();
+                } catch (_) {
+                    return;
+                }
+            } else { // Not currently paused: pause
+                window.clearInterval(this.get('introTimer'));
+                this.sendTimeEvent('pauseVideo');
+                if (this.get('recorder')) {
+                    this.get('recorder').pause(true);
+                }
+
+                $('#player-audio')[0].pause();
+                $('#player-audio')[0].currentTime = 0;
+                $('#player-pause-audio')[0].pause();
+                $('#player-pause-audio')[0].currentTime = 0;
+                $('#player-pause-audio-leftfs')[0].pause();
+                $('#player-pause-audio-leftfs')[0].currentTime = 0;
+
+                this.set('completedAudio', false);
+                if (this.checkFullscreen()) {
+                    $('#player-pause-audio')[0].play();
+                } else {
+                    $('#player-pause-audio-leftfs')[0].play();
+                }
+                this.set('isPaused', true);
+            }
+        });
+
+    },
+
 
     didInsertElement() {
         this._super(...arguments);
+
 
         // Define basic properties for two triangle shapes used. It would be
         // more natural to define these in the template, and then use the
@@ -394,7 +519,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, {
             RshapesStart: Rshapes,
             musicFadeLength: 2000});
 
+        $('#experiment-player').addClass('exp-alternation');
         this.send('showFullscreen');
+        this.send('startVideo');
+
     }
 
 });

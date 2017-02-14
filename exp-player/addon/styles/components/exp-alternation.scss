@@ -26,6 +26,10 @@
     max-height: 30%;
 }
 
+#experiment-player.player-fullscreen.exp-alternation, #experiment-player.player-fullscreen.exp-alternation * {
+    cursor: none;
+}
+
 #experiment-player.player-fullscreen div {
     height: 100%;
     width: 100%;
@@ -38,7 +42,6 @@
 
 #experiment-player.player-fullscreen > div > div > div  {
     display: table-cell;
-
     text-align: center;
     vertical-align: middle;
 }
@@ -65,6 +68,7 @@ video.player-fullscreen::-webkit-media-controls {
     position: relative;
     display: block;
     font-size: 2em;
+    padding: 10px;
 }
 
 #experiment-player:not(.player-fullscreen) video {
