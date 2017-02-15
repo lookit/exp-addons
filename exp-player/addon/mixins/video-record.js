@@ -5,7 +5,6 @@ import Ember from 'ember';
  * @submodule mixins
  */
 
-
 /**
  * A mixin that can be used to add basic support for video recording to a particular experiment frame
  *

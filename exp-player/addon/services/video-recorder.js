@@ -37,7 +37,6 @@ const PARAMS = {
     wmode: 'transparent'
 };
 
-
 /**
  * An instance of a video recorder tied to or used by one specific page. A given experiment may use more than one
  *   video recorder depending on the number of video capture frames.
@@ -374,7 +373,6 @@ const VideoRecorder = Ember.Object.extend({
     }
     // End Flash hooks
 });
-
 
 /**
  * A service designed to facilitate video recording by providing helper methods and managing multiple recorder objects
