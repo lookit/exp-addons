@@ -1,3 +1,7 @@
+$exp-alternation-cal-width: 12%;
+$exp-alternation-left-rect: 18.75%;
+$exp-alternation-right-rect: 81.25%;
+
 .exp-alternation.alternation-container {
     width:100vw;
     height:100vh;
@@ -17,7 +21,6 @@
     margin:0;padding:0;
 }
 
-
 .exp-alternation video {
     margin:auto;
 }
@@ -25,6 +28,26 @@
 .exp-alternation video.attn {
     max-height: 30%;
 }
+
+.exp-alternation video.calibration {
+    width: $exp-alternation-cal-width;
+    max-height: 300px;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-alternation video.calibration.center {
+    margin-left: 50% - $exp-alternation-cal-width/2;
+}
+
+.exp-alternation video.calibration.left {
+    margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
+}
+
+.exp-alternation video.calibration.right {
+    margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
+}
+
 
 #experiment-player.player-fullscreen.exp-alternation, #experiment-player.player-fullscreen.exp-alternation * {
     cursor: none;

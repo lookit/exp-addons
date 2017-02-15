@@ -64,6 +64,9 @@ var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
 
     return [frames, {'position': position, 'context': context}];
 
+    // Short version for testing
+    //return [[frames[0]], {'position': position, 'context': context}];
+
    // Random choice...
     // Pick one option at random
     //var sample = Math.floor(Math.random() * frame.options.length);

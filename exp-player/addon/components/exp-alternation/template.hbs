@@ -3,6 +3,23 @@
 <div class="row exp-alternation alternation-container">
 
 
+    {{#if doingCalibration}}
+
+        <video id="player-calibration-video"
+               class="calibration center"
+               autoplay
+               loop>
+
+            {{#each calibrationVideoSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </video>
+
+
+
+
+    {{/if}}
+
     {{#if doingIntro}}
         <video id="player-video"
                class="attn"
@@ -64,6 +81,12 @@
     <audio id="player-music"
            loop>
         {{#each musicSources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </audio>
+
+    <audio id="player-calibration-audio">
+        {{#each calibrationAudioSources as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>

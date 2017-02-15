@@ -26,10 +26,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     // Track state of experiment
     completedAudio: false,
     completedAttn: false,
-    doingIntro: Ember.computed('completedAudio', 'completedAttn',
+    doingIntro: Ember.computed('completedAudio', 'completedAttn', 'doingCalibration', 'doingTest',
         function() {
-            return (!this.get('completedAudio') || !this.get('completedAttn'));
+            return ((!this.get('completedAudio') || !this.get('completedAttn')) && !this.get('doingCalibration') && !this.get('doingTest'));
         }),
+    doingCalibration: false,
+    doingTest: false,
     isPaused: false,
     hasBeenPaused: false,
 
@@ -125,6 +127,38 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                calibrationAudioSources: {
+                    type: 'array',
+                    description: 'list of objects specifying audio src and type for calibration audio',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
+                calibrationVideoSources: {
+                    type: 'array',
+                    description: 'list of objects specifying video src and type for calibration audio',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
                 videoSources: {
                     type: 'array',
                     description: 'List of objects specifying video src and type for attention-getter video',
@@ -206,14 +240,17 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     actions: {
 
-        startVideo() {
+        startIntro() {
 
             // Allow pausing during intro
             var frame = this;
+            frame.set('doingCalibration', false);
+            frame.set('doingTest', false);
             $(document).off('keyup.pauser');
             $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
 
             // Start placeholder video right away
+            frame.send('setTimeEvent', 'exp-alternation:startIntro');
             $('#player-video')[0].play();
 
             // Pause automatically if not FS. (Short delay to allow showFullscreen to finish if in middle of request)
@@ -226,7 +263,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                 frame.set('introTimer', window.setTimeout(function(){
                     frame.set('completedAttn', true);
                     if (!frame.get('doingIntro')) {
-                        frame.startTrial();
+                        frame.startCalibration();
                     }
                 }, frame.get('attnLength') * 1000));
 
@@ -237,7 +274,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         endAudio() {
             this.set('completedAudio', true);
             if (!this.get('doingIntro')) {
-                    this.startTrial();
+                    this.startCalibration();
             }
         },
 
@@ -248,22 +285,66 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    startTrial() {
+    startCalibration() {
         var frame = this;
+        // Keep track of status
+        frame.set('doingCalibration', true);
+
+        // Don't allow pausing during calibration
         $(document).off('keyup.pauser');
 
+        var calAudio = $('#player-calibration-audio')[0];
+
+        // Show the calibration segment at center, left, right, center, each
+        // time recording an event and playing the calibration audio.
+        var doCalibrationSegments = function(calList, lastLoc) {
+            if (calList.length === 0) {
+                frame.startTrial();
+            } else {
+                var thisLoc = calList.shift();
+                frame.send('setTimeEvent', 'exp-alternation:startCalibration',
+                    {location: thisLoc});
+                calAudio.pause();
+                calAudio.currentTime = 0;
+                calAudio.play();
+                $('#player-calibration-video').removeClass(lastLoc);
+                $('#player-calibration-video').addClass(thisLoc);
+                window.setTimeout(function(){
+                    doCalibrationSegments(calList, thisLoc);
+                }, frame.settings.calLength);
+            }
+        };
+
+        doCalibrationSegments(['center', 'left', 'right', 'center'], '');
+
+    },
+
+    startTrial() {
+        var frame = this;
+        // Keep track of status
+        frame.set('doingCalibration', false);
+        frame.set('doingTest', true);
+
+        // Don't allow pausing during trial portion.
+        // TODO: don't need once using calibration also
+        $(document).off('keyup.pauser');
+
+        frame.send('setTimeEvent', 'exp-alternation:startTestTrial');
+
+        // Begin playing music; fade in and set to fade out at end of trial
         var musicPlayer = $('#player-music');
         musicPlayer.prop("volume", 0.1);
         musicPlayer[0].play();
         musicPlayer.animate({volume: 1}, frame.settings.musicFadeLength);
-        frame.presentTriangles( frame.settings.LshapesStart,
-                                        frame.settings.RshapesStart,
-                                        frame.settings.LsizeBaseStart,
-                                        frame.settings.RsizeBaseStart);
         window.setTimeout(function(){
             musicPlayer.animate({volume: 0}, frame.settings.musicFadeLength);
         }, frame.settings.trialLength * 1000 - frame.settings.musicFadeLength);
 
+        // Start presenting triangles and set to stop after trial length
+        frame.presentTriangles( frame.settings.LshapesStart,
+                                        frame.settings.RshapesStart,
+                                        frame.settings.LsizeBaseStart,
+                                        frame.settings.RsizeBaseStart);
         window.setTimeout(function(){
             window.clearTimeout(frame.get('stimTimer'));
             frame.clearTriangles();
@@ -405,7 +486,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
             // Currently paused: restart
             if (wasPaused) {
                 this.set('isPaused', false);
-                this.send('startVideo');
+                this.send('startIntro');
                 try {
                     this.get('recorder').resume();
                 } catch (_) {
@@ -517,12 +598,28 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
             trialLength: this.get('trialLength'),
             LshapesStart: Lshapes,
             RshapesStart: Rshapes,
-            musicFadeLength: 2000});
+            musicFadeLength: 2000,
+            calLength: 2500});
 
         $('#experiment-player').addClass('exp-alternation');
         this.send('showFullscreen');
-        this.send('startVideo');
+        this.send('startIntro');
 
+    },
+
+    willDestroyElement() {
+        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
+        //if (this.get('recorder')) {
+        //    this.get('recorder').hide(); // Hide the webcam config screen
+        //    this.get('recorder').stop();
+        //}
+
+        //this.sendTimeEvent('destroyingElement');
+        this._super(...arguments);
+        // Remove pause handler
+        $(document).off('keyup.pauser');
+
+        $('#experiment-player').removeClass('exp-alternation');
     }
 
 });
