@@ -45,7 +45,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     meta: {
         name: 'ExpAlternation',
-        description: 'TODO: a description of this frame goes here.',
+        description: 'Frame to implement specific test trial structure for geometry alternation experiment. Includes announcement, calibration, and alternation (test) phases. During "alternation," two streams of triangles are shown, in rectangles on the left and right of the screen: one one side both size and shape change, on the other only size changes. Frame is displayed fullscreen and video recording is conducted during calibration/test.',
         parameters: {
             type: 'object',
             properties: {
@@ -281,6 +281,41 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         // When end-audio is complete ("all done" instructions)
         trialComplete() {
             this.send('next');
+        },
+
+        showWarning() {
+            if (!this.get('showVideoWarning')) {
+                this.set('showVideoWarning', true);
+                this.sendTimeEvent('webcamNotConfigured');
+
+                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+                // the user is unable to move on.
+                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
+                this.send('save');
+
+                var recorder = this.get('recorder');
+                recorder.show();
+                recorder.on('onCamAccessConfirm', () => {
+                    this.send('removeWarning');
+                    this.get('recorder').record();
+                });
+            }
+        },
+        removeWarning() {
+            this.set('showVideoWarning', false);
+            this.get('recorder').hide();
+            this.send('showFullscreen');
+            this.pauseStudy();
+        },
+
+        next() {
+            //window.clearInterval(this.get('testTimer'));
+            //this.set('testTime', 0);
+            this.sendTimeEvent('stoppingCapture');
+            if (this.get('recorder')) {
+                this.get('recorder').stop();
+            }
+            this._super(...arguments);
         }
 
     },
@@ -290,7 +325,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         // Keep track of status
         frame.set('doingCalibration', true);
 
-        // Don't allow pausing during calibration
+        // Don't allow pausing during calibration/test.
         $(document).off('keyup.pauser');
 
         var calAudio = $('#player-calibration-audio')[0];
@@ -325,11 +360,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         frame.set('doingCalibration', false);
         frame.set('doingTest', true);
 
-        // Don't allow pausing during trial portion.
-        // TODO: don't need once using calibration also
-        $(document).off('keyup.pauser');
-
-        frame.send('setTimeEvent', 'exp-alternation:startTestTrial');
+        frame.sendTimeEvent('exp-alternation:startTestTrial');
 
         // Begin playing music; fade in and set to fade out at end of trial
         var musicPlayer = $('#player-music');
@@ -437,11 +468,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                                    this.settings.sizeRange[1]) * RsizeBase[0];
 
         var frame = this;
-        frame.send('setTimeEvent', `exp-alternation:clearTriangles`);
+        frame.sendTimeEvent(`exp-alternation:clearTriangles`);
         frame.clearTriangles();
         frame.set('stimTimer', window.setTimeout(function() {
-            // TODO: switch to a sendTimeEvent action once doing recording
-            frame.send('setTimeEvent', `exp-alternation:presentTriangles`, {
+            frame.sendTimeEvent(`exp-alternation:presentTriangles`, {
                         Lshape: Lshapes[0],
                         LX: LX,
                         LY: LY,
@@ -517,6 +547,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         });
 
     },
+
+
+
 
 
     didInsertElement() {
@@ -605,14 +638,37 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         this.send('showFullscreen');
         this.send('startIntro');
 
+        if (this.get('experiment') && this.get('id') && this.get('session')) {
+            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+                hidden: true
+            });
+            recorder.install({
+                record: true
+            }).then(() => {
+                this.sendTimeEvent('recorderReady');
+                this.set('recordingIsReady', true);
+            });
+            recorder.on('onCamAccess', (hasAccess) => {
+                this.sendTimeEvent('hasCamAccess', {
+                    hasCamAccess: hasAccess
+                });
+            });
+            recorder.on('onConnectionStatus', (status) => {
+                this.sendTimeEvent('videoStreamConnection', {
+                    status: status
+                });
+            });
+            this.set('recorder', recorder);
+        }
+
     },
 
     willDestroyElement() {
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        //if (this.get('recorder')) {
-        //    this.get('recorder').hide(); // Hide the webcam config screen
-        //    this.get('recorder').stop();
-        //}
+        if (this.get('recorder')) {
+            this.get('recorder').hide(); // Hide the webcam config screen
+            this.get('recorder').stop();
+        }
 
         //this.sendTimeEvent('destroyingElement');
         this._super(...arguments);
