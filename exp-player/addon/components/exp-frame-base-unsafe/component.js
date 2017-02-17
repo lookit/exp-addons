@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+
 
 /**
  * A modified version of the base frame, specifically designed to allow "unsafe" saves and let the user
@@ -8,7 +9,7 @@ import Ember from 'ember';
  * fullscreen mode: if next is fired as a promise, it does not count as a user interaction event
  *  https://openscience.atlassian.net/browse/LEI-369?focusedCommentId=46133&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-46133
  */
-export default Ember.Component.extend({
+export default ExpFrameBaseComponent.extend({
     actions: {
         save() {
             this._save();

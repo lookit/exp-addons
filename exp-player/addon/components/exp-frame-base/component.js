@@ -12,7 +12,6 @@ export default Ember.Component.extend({
      **/
 
     toast: Ember.inject.service(),
-    i18n: Ember.inject.service(),
 
     id: null,
     kind: null,

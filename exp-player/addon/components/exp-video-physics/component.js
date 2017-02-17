@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 import layout from './template';
 
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
@@ -11,7 +11,9 @@ let {
     $
 } = Ember;
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
+export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
+    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
+    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
     layout: layout,
 
     displayFullscreen: true, // force fullscreen for all uses of this component
