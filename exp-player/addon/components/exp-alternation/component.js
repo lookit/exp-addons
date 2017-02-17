@@ -1,13 +1,40 @@
 import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
-//import MediaReload from '../../mixins/media-reload';
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
 
 let {
     $
 } = Ember;
+
+// Events recorded:
+// hasCamAccess
+// onConnectionStatus
+//    status
+// 'stoppingCapture' - immediately before stopping webcam stream
+// 'exp-alternation:startTestTrial' - immediately before starting test trial block
+// 'leftFullscreen'
+// 'enteredFullscreen'
+// 'exp-alternation:clearTriangles'
+// 'exp-alternation:presentTriangles', {
+//                        Lshape: Lshapes[0],
+//                        LX: LX,
+//                        LY: LY,
+//                        LRot: LRot,
+//                        LFlip: LFlip,
+//                        LSize: LSize,
+//                        Rshape: Rshapes[0],
+//                        RX: RX,
+//                        RY: RY,
+//                        RRot: RRot,
+//                        RFlip: RFlip,
+//                        RSize: RSize
+// exp-alternation:startCalibration
+//     location
+// exp-alternation:startIntro
+// pauseVideo (immediately before request to stop recording)
+// unpauseVideo (immediately before request to resume recording)
 
 export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     type: 'exp-alternation',
@@ -17,26 +44,32 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     fsButtonID: 'fsButton',
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
-    warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
-    showVideoWarning: false,
 
     // Track state of experiment
     completedAudio: false,
     completedAttn: false,
-    doingIntro: Ember.computed('completedAudio', 'completedAttn', 'doingCalibration', 'doingTest',
+    currentSegment: 'intro', // 'calibration', 'test' (mutually exclusive)
+
+    readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
         function() {
-            return ((!this.get('completedAudio') || !this.get('completedAttn')) && !this.get('doingCalibration') && !this.get('doingTest'));
+            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAudio') && this.get('completedAttn'));
         }),
-    doingCalibration: false,
-    doingTest: false,
+
+    // used only by template
+    doingCalibration: Ember.computed('currentSegment', function() {
+        return (this.get('currentSegment') === 'calibration');
+    }),
+    doingIntro: Ember.computed('currentSegment', function() {
+        return (this.get('currentSegment') === 'intro');
+    }),
+
     isPaused: false,
     hasBeenPaused: false,
 
     // Timers for intro & stimuli
-    introTimer: null,
+    introTimer: null, // minimum length of intro segment
     stimTimer: null,
 
     // Store data about triangles to show, display lengths, etc. in frame
@@ -233,86 +266,47 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                 },
                 videoId: {
                     type: 'string'
+                },
+                hasBeenPaused: {
+                    type: 'boolean'
                 }
             }
         }
     },
 
+    calObserver: Ember.observer('readyToStartCalibration', function(frame, key) {
+        if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
+            if (!frame.checkFullscreen()) {
+                frame.pauseStudy();
+            } else {
+                frame.set('currentSegment', 'calibration');
+            }
+        }
+    }),
+
+    segmentObserver: Ember.observer('currentSegment', function(frame, key) {
+        // Don't trigger starting intro; that'll be done manually.
+        if (frame.get('currentSegment') === 'calibration') {
+            frame.startCalibration();
+        } else if (frame.get('currentSegment') === 'test') {
+            frame.startTrial();
+        }
+    }),
+
     actions: {
-
-        startIntro() {
-
-            // Allow pausing during intro
-            var frame = this;
-            frame.set('doingCalibration', false);
-            frame.set('doingTest', false);
-            $(document).off('keyup.pauser');
-            $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
-
-            // Start placeholder video right away
-            frame.send('setTimeEvent', 'exp-alternation:startIntro');
-            $('#player-video')[0].play();
-
-            // Pause automatically if not FS. (Short delay to allow showFullscreen to finish if in middle of request)
-            window.setTimeout(function() {
-                if (!frame.checkFullscreen()) {
-                    frame.pauseStudy();
-                }
-                // Set a timer to start the trial
-                $('#player-audio')[0].play();
-                frame.set('introTimer', window.setTimeout(function(){
-                    frame.set('completedAttn', true);
-                    if (!frame.get('doingIntro')) {
-                        frame.startCalibration();
-                    }
-                }, frame.get('attnLength') * 1000));
-
-            }, 250);
-        },
 
         // When intro audio is complete
         endAudio() {
             this.set('completedAudio', true);
-            if (!this.get('doingIntro')) {
-                    this.startCalibration();
-            }
-        },
-
-        // When end-audio is complete ("all done" instructions)
-        trialComplete() {
-            this.send('next');
-        },
-
-        showWarning() {
-            if (!this.get('showVideoWarning')) {
-                this.set('showVideoWarning', true);
-                this.sendTimeEvent('webcamNotConfigured');
-
-                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-                // the user is unable to move on.
-                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
-                this.send('save');
-
-                var recorder = this.get('recorder');
-                recorder.show();
-                recorder.on('onCamAccessConfirm', () => {
-                    this.send('removeWarning');
-                    this.get('recorder').record();
-                });
-            }
-        },
-        removeWarning() {
-            this.set('showVideoWarning', false);
-            this.get('recorder').hide();
-            this.send('showFullscreen');
-            this.pauseStudy();
+            this.notifyPropertyChange('readyToStartCalibration');
         },
 
         next() {
             //window.clearInterval(this.get('testTimer'));
             //this.set('testTime', 0);
-            this.sendTimeEvent('stoppingCapture');
+
             if (this.get('recorder')) {
+                this.sendTimeEvent('stoppingCapture');
                 this.get('recorder').stop();
             }
             this._super(...arguments);
@@ -320,10 +314,26 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
+    startIntro() {
+        // Allow pausing during intro
+        var frame = this;
+        $(document).off('keyup.pauser');
+        $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
+
+        // Start placeholder video right away
+        frame.sendTimeEvent('exp-alternation:startIntro');
+        $('#player-video')[0].play();
+
+        // Set a timer for the minimum length for the intro/break
+        $('#player-audio')[0].play();
+        frame.set('introTimer', window.setTimeout(function(){
+            frame.set('completedAttn', true);
+        }, frame.get('attnLength') * 1000));
+
+    },
+
     startCalibration() {
         var frame = this;
-        // Keep track of status
-        frame.set('doingCalibration', true);
 
         // Don't allow pausing during calibration/test.
         $(document).off('keyup.pauser');
@@ -334,10 +344,10 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         // time recording an event and playing the calibration audio.
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
-                frame.startTrial();
+                frame.set('currentSegment', 'test');
             } else {
                 var thisLoc = calList.shift();
-                frame.send('setTimeEvent', 'exp-alternation:startCalibration',
+                frame.sendTimeEvent('exp-alternation:startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -355,7 +365,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     },
 
     startTrial() {
+
         var frame = this;
+
         // Keep track of status
         frame.set('doingCalibration', false);
         frame.set('doingTest', true);
@@ -386,6 +398,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     // When triangles have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
+
+
+        if (this.get('recorder')) {
+            this.sendTimeEvent('stoppingCapture');
+            this.get('recorder').stop();
+        }
+
         if (this.get('endAudioSources').length) {
             $('#player-endaudio')[0].play();
         }
@@ -396,12 +415,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-
         Ember.merge(opts, {
             streamTime: streamTime,
             videoId: this.get('videoId')
         });
-        this.send('setTimeEvent', `exp-physics:${name}`, opts);
+        this.send('setTimeEvent', `exp-alternation:${name}`, opts);
     },
 
     onFullscreen() {
@@ -505,38 +523,38 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     // Pause/unpause study; only called if doing intro.
     pauseStudy() {
 
-        if (this.get('showVideoWarning')) {
-            return;
-        }
+        $('#player-audio')[0].pause();
+        $('#player-audio')[0].currentTime = 0;
+        $('#player-pause-audio')[0].pause();
+        $('#player-pause-audio')[0].currentTime = 0;
+        $('#player-pause-audio-leftfs')[0].pause();
+        $('#player-pause-audio-leftfs')[0].currentTime = 0;
+
+        this.set('completedAudio', false);
+        this.set('completedAttn', false);
 
         Ember.run.once(this, () => {
             this.set('hasBeenPaused', true);
             var wasPaused = this.get('isPaused');
+            this.set('currentSegment', 'intro');
 
-            // Currently paused: restart
+            // Currently paused: RESUME
             if (wasPaused) {
-                this.set('isPaused', false);
-                this.send('startIntro');
+                this.sendTimeEvent('unpauseVideo');
                 try {
                     this.get('recorder').resume();
                 } catch (_) {
                     return;
                 }
-            } else { // Not currently paused: pause
-                window.clearInterval(this.get('introTimer'));
+                this.startIntro();
+                this.set('isPaused', false);
+            } else { // Not currently paused: PAUSE
+                window.clearTimeout(this.get('introTimer'));
                 this.sendTimeEvent('pauseVideo');
                 if (this.get('recorder')) {
                     this.get('recorder').pause(true);
                 }
 
-                $('#player-audio')[0].pause();
-                $('#player-audio')[0].currentTime = 0;
-                $('#player-pause-audio')[0].pause();
-                $('#player-pause-audio')[0].currentTime = 0;
-                $('#player-pause-audio-leftfs')[0].pause();
-                $('#player-pause-audio-leftfs')[0].currentTime = 0;
-
-                this.set('completedAudio', false);
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
                 } else {
@@ -547,10 +565,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         });
 
     },
-
-
-
-
 
     didInsertElement() {
         this._super(...arguments);
@@ -634,9 +648,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
             musicFadeLength: 2000,
             calLength: 2500});
 
-        $('#experiment-player').addClass('exp-alternation');
         this.send('showFullscreen');
-        this.send('startIntro');
+        this.startIntro();
 
         if (this.get('experiment') && this.get('id') && this.get('session')) {
             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
@@ -664,18 +677,17 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     },
 
     willDestroyElement() {
+        this.sendTimeEvent('destroyingElement');
+
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
         if (this.get('recorder')) {
             this.get('recorder').hide(); // Hide the webcam config screen
             this.get('recorder').stop();
         }
-
-        //this.sendTimeEvent('destroyingElement');
-        this._super(...arguments);
         // Remove pause handler
         $(document).off('keyup.pauser');
 
-        $('#experiment-player').removeClass('exp-alternation');
+        this._super(...arguments);
     }
 
 });

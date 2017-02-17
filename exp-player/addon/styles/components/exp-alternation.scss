@@ -2,13 +2,10 @@ $exp-alternation-cal-width: 12%;
 $exp-alternation-left-rect: 18.75%;
 $exp-alternation-right-rect: 81.25%;
 
-.exp-alternation.alternation-container {
-    width:100vw;
-    height:100vh;
+.exp-alternation {
     overflow:hidden;
     width: 100vw;
     height: 56.25vw; /* 100/56.25 = 1.778 */
-    /*background: pink;*/
     max-height: 100vh;
     max-width: 177.78vh; /* 16/9 = 1.778 */
     margin: auto;
@@ -18,55 +15,13 @@ $exp-alternation-right-rect: 81.25%;
 
 .exp-alternation, .exp-alternation *
 {
-    margin:0;padding:0;
-}
-
-.exp-alternation video {
-    margin:auto;
+    margin:0;
+    padding:0;
 }
 
 .exp-alternation video.attn {
+    margin:auto;
     max-height: 30%;
-}
-
-.exp-alternation video.calibration {
-    width: $exp-alternation-cal-width;
-    max-height: 300px;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-alternation video.calibration.center {
-    margin-left: 50% - $exp-alternation-cal-width/2;
-}
-
-.exp-alternation video.calibration.left {
-    margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
-}
-
-.exp-alternation video.calibration.right {
-    margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
-}
-
-
-#experiment-player.player-fullscreen.exp-alternation, #experiment-player.player-fullscreen.exp-alternation * {
-    cursor: none;
-}
-
-#experiment-player.player-fullscreen div {
-    height: 100%;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-#experiment-player.player-fullscreen > div > div {
-    display: table;
-}
-
-#experiment-player.player-fullscreen > div > div > div  {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
 }
 
 video.player-fullscreen::-webkit-media-controls {
@@ -92,18 +47,26 @@ video.player-fullscreen::-webkit-media-controls {
     display: block;
     font-size: 2em;
     padding: 10px;
+    height: 10%;
+    width: 30%;
 }
 
-#experiment-player:not(.player-fullscreen) video {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    position: relative;
-    display: block;
+#player-calibration-video {
+    width: $exp-alternation-cal-width;
+    max-height: 300px;
+    position: absolute;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
 }
 
-#videoWarningConfig {
-    height: 500px;
-    width: 80%;
-    margin-left: 10%;
+#player-calibration-video.center {
+    margin-left: 50% - $exp-alternation-cal-width/2;
+}
+
+#player-calibration-video.left {
+    margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
+}
+
+#player-calibration-video.right {
+    margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
 }

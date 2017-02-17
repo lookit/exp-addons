@@ -1,7 +1,6 @@
 {{! template-lint-disable invalid-interactive}}
 
-<div class="row exp-alternation alternation-container">
-
+<div class="row exp-alternation" id="alternation-container">
 
     {{#if doingCalibration}}
 
@@ -14,13 +13,10 @@
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </video>
-
-
-
-
     {{/if}}
 
     {{#if doingIntro}}
+
         <video id="player-video"
                class="attn"
                autoplay
@@ -30,8 +26,6 @@
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </video>
-
-
 
         {{#if hasBeenPaused}}
             <audio id="player-audio"
@@ -49,7 +43,6 @@
             </audio>
         {{/if}}
 
-
         <audio id="player-pause-audio">
             {{#each pauseAudio as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
@@ -62,7 +55,9 @@
             {{/each}}
         </audio>
 
-    {{else}}
+    {{/if}}
+
+    {{#unless doingIntro}}
         <svg viewBox="0 0 200 112" id="allstimuli">
 
             {{!-- Box for left image stream --}}
@@ -76,7 +71,7 @@
             </g>
 
         </svg>
-    {{/if}}
+    {{/unless}}
 
     <audio id="player-music"
            loop>
@@ -93,21 +88,20 @@
 
     {{#if endAudioSources}}
         <audio id="player-endaudio"
-               onended={{action 'trialComplete'}}>
+               onended={{action 'next'}}>
             {{#each endAudioSources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
     {{/if}}
 
-    {{#if (and isPaused (not showVideoWarning))}}
+    {{#if isPaused}}
         <p class="pause-instructions"> Study paused </p>
         {{#if updatedIsFullscreen}}
             <p class="pause-instructions"> Press space to resume </p>
             <p class="pause-instructions"> (You'll have a moment to turn around again.) </p>
         {{/if}}
     {{/if}}
-
 
     {{#unless updatedIsFullscreen}}
     <button class="btn btn-success exp-alternation" id="fsButton" {{ action 'showFullscreen'}} >
@@ -116,6 +110,4 @@
     {{/unless}}
 
 </div>
-
-
 

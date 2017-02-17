@@ -27,13 +27,16 @@
 
 #experiment-player.player-fullscreen > div > div > div  {
     display: table-cell;
-
     text-align: center;
     vertical-align: middle;
 }
 
 video.player-fullscreen::-webkit-media-controls {
   display:none !important;
+}
+
+#experiment-player.player-fullscreen, #experiment-player.player-fullscreen * {
+    cursor: none;
 }
 
 .exp-video-physics .pause-instructions {
