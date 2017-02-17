@@ -1,6 +1,5 @@
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
-
 /**
  * A modified version of the base frame, specifically designed to allow "unsafe" saves and let the user
  *   advance even if data from this frame did not save
