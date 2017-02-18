@@ -112,6 +112,11 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                     description: 'length of alternation trial in seconds',
                     default: 6
                 },
+                calibrationLength: {
+                    type: 'number',
+                    description: 'length of single calibration segment in ms',
+                    default: 3000
+                },
                 audioSources: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for instructions during attention-getter video',
@@ -339,11 +344,14 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
         $(document).off('keyup.pauser');
 
         var calAudio = $('#player-calibration-audio')[0];
+        var calVideo = $('#player-calibration-video')[0];
+        $('#player-calibration-video').show();
 
         // Show the calibration segment at center, left, right, center, each
         // time recording an event and playing the calibration audio.
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
+                $('#player-calibration-video').hide();
                 frame.set('currentSegment', 'test');
             } else {
                 var thisLoc = calList.shift();
@@ -352,6 +360,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                 calAudio.pause();
                 calAudio.currentTime = 0;
                 calAudio.play();
+                calVideo.pause();
+                calVideo.currentTime = 0;
+                calVideo.play();
                 $('#player-calibration-video').removeClass(lastLoc);
                 $('#player-calibration-video').addClass(thisLoc);
                 window.setTimeout(function(){
@@ -367,10 +378,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     startTrial() {
 
         var frame = this;
-
-        // Keep track of status
-        frame.set('doingCalibration', false);
-        frame.set('doingTest', true);
 
         frame.sendTimeEvent('exp-alternation:startTestTrial');
 
@@ -646,7 +653,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
             LshapesStart: Lshapes,
             RshapesStart: Rshapes,
             musicFadeLength: 2000,
-            calLength: 2500});
+            calLength: this.get('calibrationLength')});
 
         this.send('showFullscreen');
         this.startIntro();

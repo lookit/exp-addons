@@ -2,18 +2,16 @@
 
 <div class="row exp-alternation" id="alternation-container">
 
-    {{#if doingCalibration}}
 
-        <video id="player-calibration-video"
-               class="calibration center"
-               autoplay
-               loop>
+    <video id="player-calibration-video"
+           class="calibration center"
+           autoplay
+           style="display:none;">
+        {{#each calibrationVideoSources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </video>
 
-            {{#each calibrationVideoSources as |stream|}}
-                <source src="{{stream.src}}" type="{{stream.type}}">
-            {{/each}}
-        </video>
-    {{/if}}
 
     {{#if doingIntro}}
 
