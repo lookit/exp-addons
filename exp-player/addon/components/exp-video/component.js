@@ -7,7 +7,7 @@ import VideoPause from '../../mixins/video-pause';
 
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
     // If fullscreen behavior in a series of videos is desired, may need to extend unsafebase frame in future;
-    //   see exp-video0ohysics for comparison
+    //   see exp-video-physics for comparison
     layout: layout,
 
     displayFullscreen: true,  // force fullscreen for all uses of this component, always
