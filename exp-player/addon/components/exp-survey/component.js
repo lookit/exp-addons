@@ -1,6 +1,7 @@
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+// This component is provided for demonstration purposes and may require modifications to work.
 export default ExpFrameBaseComponent.extend({
     type: 'exp-survey',
     layout: layout,
