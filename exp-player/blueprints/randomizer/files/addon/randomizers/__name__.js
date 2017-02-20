@@ -8,7 +8,7 @@ export default {
     <%= dasherizedModuleName %>: <%= camelizedModuleName %>
 }
  */
-var randomizer = function(/*frame, pastSessions, resolveFrame*/) {
+var randomizer = function(/*frameId, frameConfig, pastSessions, resolveFrame*/) {
     // return [resolvedFrames, conditions]
 };
 export default randomizer;
