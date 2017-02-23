@@ -457,14 +457,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
 
-        var leftTriangle = [this.triangleBases[Lshape],
-            '" transform=" translate(', LX, ', ', LY, ') ',
-            'translate(37.5, 56) rotate(', LRot, ') ',
-            'scale(', LFlip * LSize, ')" />'].join(' ');
-        var rightTriangle = [this.triangleBases[Rshape],
-            '" transform=" translate(', RX, ', ', RY, ') ',
-            'translate(162.5, 56) rotate(', RRot, ') ',
-            'scale(', RFlip * RSize, ')" />'].join(' ');
+        var leftTriangle = `${this.triangleBases[Lshape]}
+            transform=" translate(${LX}, ${LY})
+                        translate(37.5, 56)
+                        rotate(${LRot})
+                        scale(${LFlip * LSize})" />`;
+        var rightTriangle = `${this.triangleBases[Rshape]}
+            transform=" translate(${RX}, ${RY})
+                        translate(162.5, 56)
+                        rotate(${RRot})
+                        scale(${RFlip * RSize})" />`;
         $('#stimuli').html(leftTriangle + rightTriangle);
     },
 
@@ -591,24 +593,23 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         // --kim
 
         this.set('triangleBases', {
-            'fat': ['<polygon stroke="', this.get('triangleColor'), '"',
-                     'stroke-width="', this.get('triangleLineWidth'), '"',
-                     'fill="none"',
-                     'points="-12.1369327415 ,  -5.63277008813, ',
-                      '14.5176215029 ,  -5.63277008813, ',
-                      '-2.38068876146 ,  11.2655401763"',
-                     'vector-effect="non-scaling-stroke"',
-                     'stroke-linejoin="round"'
-                    ].join(' '),
-            'skinny': ['<polygon stroke="', this.get('triangleColor'), '"',
-                       'stroke-width="', this.get('triangleLineWidth'), '"',
-                       'fill="none"',
-                       'points="-27.5259468096 ,  -3.25208132666,',
-                        '18.6410953948 ,  -3.25208132666,',
-                        '8.88485141479 ,  6.50416265333"',
-                       'vector-effect="non-scaling-stroke"',
-                       'stroke-linejoin="round"'
-                      ].join(' ')
+            'fat': `<polygon stroke="${this.get('triangleColor')}"
+                     stroke-width="${this.get('triangleLineWidth')}"
+                     fill="none"
+                     points="-12.1369327415 ,  -5.63277008813,
+                              14.5176215029 ,  -5.63277008813,
+                              -2.38068876146 ,  11.2655401763"
+                     vector-effect="non-scaling-stroke"
+                     stroke-linejoin="round"`,
+            'skinny': `<polygon stroke="${this.get('triangleColor')}"
+                     stroke-width="${this.get('triangleLineWidth')}"
+                     fill="none"
+                     points="-27.5259468096 ,  -3.25208132666,
+                              18.6410953948 ,  -3.25208132666,
+                               8.88485141479 ,  6.50416265333"
+                     vector-effect="non-scaling-stroke"
+                     stroke-linejoin="round"`
+
         });
 
         // COUNTERBALANCING (2x2):
