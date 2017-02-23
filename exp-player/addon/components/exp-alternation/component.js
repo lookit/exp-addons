@@ -281,7 +281,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    calObserver: Ember.observer('readyToStartCalibration', function(frame, key) {
+    calObserver: Ember.observer('readyToStartCalibration', function(frame) {
         if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
             if (!frame.checkFullscreen()) {
                 frame.pauseStudy();
@@ -291,7 +291,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     }),
 
-    segmentObserver: Ember.observer('currentSegment', function(frame, key) {
+    segmentObserver: Ember.observer('currentSegment', function(frame) {
         // Don't trigger starting intro; that'll be done manually.
         if (frame.get('currentSegment') === 'calibration') {
             frame.startCalibration();

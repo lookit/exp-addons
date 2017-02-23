@@ -13,7 +13,7 @@ var getRandomElement = function(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 };
 
-var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
+var randomizer = function(frameId, frame) {
 
     var positionOptions = frame.counterbalance['startPositions'];
     var contextOptions  = frame.counterbalance['contexts'];
