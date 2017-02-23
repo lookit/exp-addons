@@ -1,9 +1,11 @@
 import Ember from 'ember';
 
 import layout from './template';
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseUnsafeComponent.extend({
+    // 'Unsafe' allows this component to come immediately before a full-screen
+    // trial component if needed; no user data from this frame is critical.
     layout: layout,
     type: 'exp-lookit-instructions',
     didFinishSound: false,

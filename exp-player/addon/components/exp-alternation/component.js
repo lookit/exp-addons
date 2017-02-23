@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from './template';
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
 
@@ -36,7 +36,9 @@ let {
 // pauseVideo (immediately before request to stop recording)
 // unpauseVideo (immediately before request to resume recording)
 
-export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
+export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
+    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
+    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369. exp-alternation frames are expected to be repeated, so they need to be unsafe.
     type: 'exp-alternation',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
