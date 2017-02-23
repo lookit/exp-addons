@@ -650,7 +650,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             YRange: [-3.125, 3.125],
             rotRange: [0, 360],
             flipVals: [-1, 1],
-            sizeRange: [0.85, 1.15],
+            sizeRange: [0.921954, 1.072381], // 15% by AREA: sqrt(0.85), sqrt(1.15)
             trialLength: this.get('trialLength'),
             LshapesStart: Lshapes,
             RshapesStart: Rshapes,
