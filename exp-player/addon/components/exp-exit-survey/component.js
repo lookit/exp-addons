@@ -103,7 +103,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
             }
         },
         finish() {
-            console.log('Post-study survey complete.');
             this.send('next');
         }
     },

@@ -25,7 +25,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     }.property('videoIndex'),
 
     currentVideo: Ember.computed('videoIndex', function() {
-        console.log(this.get('videoIndex'));
         return this.get('videos')[this.get('videoIndex')];
     }),
 
