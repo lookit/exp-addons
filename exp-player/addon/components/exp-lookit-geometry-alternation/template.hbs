@@ -2,7 +2,6 @@
 
 <div class="row exp-lookit-geometry-alternation" id="alternation-container">
 
-
     <video id="player-calibration-video"
            class="calibration center"
            autoplay
@@ -55,6 +54,12 @@
 
     {{/if}}
 
+    {{#unless updatedIsFullscreen}}
+    <button class="btn btn-success exp-lookit-geometry-alternation" id="fsButton" {{ action 'showFullscreen'}} >
+            please return to fullscreen
+    </button>
+    {{/unless}}
+
     {{#unless doingIntro}}
         <svg viewBox="0 0 200 112" id="allstimuli">
 
@@ -101,11 +106,7 @@
         {{/if}}
     {{/if}}
 
-    {{#unless updatedIsFullscreen}}
-    <button class="btn btn-success exp-lookit-geometry-alternation" id="fsButton" {{ action 'showFullscreen'}} >
-            please return to fullscreen
-    </button>
-    {{/unless}}
+
 
 </div>
 
