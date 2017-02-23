@@ -2,7 +2,7 @@ $exp-alternation-cal-width: 12%;
 $exp-alternation-left-rect: 18.75%;
 $exp-alternation-right-rect: 81.25%;
 
-.exp-alternation {
+.exp-lookit-geometry-alternation {
     overflow:hidden;
     width: 100vw;
     height: 56.25vw; /* 100/56.25 = 1.778 */
@@ -13,18 +13,18 @@ $exp-alternation-right-rect: 81.25%;
     left:0;right:0; /* horizontal center */
 }
 
-.exp-alternation, .exp-alternation *
+.exp-lookit-geometry-alternation, .exp-alternation *
 {
     margin:0;
     padding:0;
 }
 
-.exp-alternation video.attn {
+.exp-lookit-geometry-alternation video.attn {
     margin:auto;
     max-height: 30%;
 }
 
-.exp-alternation .pause-instructions {
+.exp-lookit-geometry-alternation .pause-instructions {
     display: block;
     position: relative;
     margin-left: auto;
@@ -34,7 +34,7 @@ $exp-alternation-right-rect: 81.25%;
     font-weight: bold;
 }
 
-.exp-alternation button {
+.exp-lookit-geometry-alternation button {
     margin-left: auto;
     margin-right: auto;
     min-height: 75px;
@@ -47,7 +47,7 @@ $exp-alternation-right-rect: 81.25%;
     width: 30%;
 }
 
-.exp-alternation #player-calibration-video {
+.exp-lookit-geometry-alternation #player-calibration-video {
     width: $exp-alternation-cal-width;
     max-height: 300px;
     position: absolute;
@@ -55,14 +55,14 @@ $exp-alternation-right-rect: 81.25%;
     top: 0; left: 0; bottom: 0; right: 0;
 }
 
-.exp-alternation #player-calibration-video.center {
+.exp-lookit-geometry-alternation #player-calibration-video.center {
     margin-left: 50% - $exp-alternation-cal-width/2;
 }
 
-.exp-alternation #player-calibration-video.left {
+.exp-lookit-geometry-alternation #player-calibration-video.left {
     margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
 }
 
-.exp-alternation #player-calibration-video.right {
+.exp-lookit-geometry-alternation #player-calibration-video.right {
     margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
 }

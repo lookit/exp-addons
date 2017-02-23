@@ -39,7 +39,7 @@ let {
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369. exp-alternation frames are expected to be repeated, so they need to be unsafe.
-    type: 'exp-alternation',
+    type: 'exp-lookit-geometry-alternation',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
@@ -79,7 +79,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     triangleBases: null,
 
     meta: {
-        name: 'ExpAlternation',
+        name: 'ExpLookitGeometryAlternation',
         description: 'Frame to implement specific test trial structure for geometry alternation experiment. Includes announcement, calibration, and alternation (test) phases. During "alternation," two streams of triangles are shown, in rectangles on the left and right of the screen: one one side both size and shape change, on the other only size changes. Frame is displayed fullscreen and video recording is conducted during calibration/test.',
         parameters: {
             type: 'object',

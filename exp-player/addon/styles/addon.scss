@@ -1,20 +1,19 @@
 @import "components/exp-player";
 @import "components/exp-video-setup";
+
 @import "components/exp-video-consent";
 @import "components/exp-video-config";
 @import "components/exp-video-config-quality";
+
 @import "components/exp-physics-info";
 @import "components/exp-mood-questionnaire";
-@import "components/exp-lookit-mood-questionnaire";
 @import "components/exit-warning";
 @import "components/exp-physics-preview-exp";
-@import "components/exp-lookit-preview-exp";
 @import "components/exp-video-preview";
 @import "components/exp-physics-pre-video";
-@import "components/exp-lookit-instructions";
 @import "components/exp-exit-survey";
-@import "components/exp-lookit-exit-survey";
 @import "components/exp-video-physics";
+
 @import "components/radio-group";
 @import "components/isp-radio-group";
 @import "components/exp-overview";
@@ -23,7 +22,12 @@
 @import "components/exp-rating-form";
 @import "components/exp-thank-you";
 @import "components/page-number";
-@import "components/exp-alternation";
+
+@import "components/exp-lookit-mood-questionnaire";
+@import "components/exp-lookit-preview-exp";
+@import "components/exp-lookit-instructions";
+@import "components/exp-lookit-exit-survey";
+@import "components/exp-lookit-geometry-alternation";
 
 
 .exp-text-large {

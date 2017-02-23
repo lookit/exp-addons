@@ -65,10 +65,10 @@ const Validations = buildValidations({
 
 export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
-    type: 'exp-geometry-mood-questionnaire',
+    type: 'exp-lookit-mood-questionnaire',
     meta: {
-        name: 'ExpGeometryMoodQuestionnaire',
-        description: 'Mood questionnaire for Lookit geometry alternation study, very slightly generalized from physics version exp-mood-questionnaire',
+        name: 'ExpLookitMoodQuestionnaire',
+        description: 'Mood questionnaire for Lookit studies, very slightly generalized from physics version exp-mood-questionnaire',
         parameters: {
             type: 'object',
             properties: {
