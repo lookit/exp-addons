@@ -1,5 +1,5 @@
 {{! template-lint-disable style-concatenation }}
-<div class="row exp-physics-exit-survey">
+<div class="row exp-lookit-exit-survey">
     <div class="col-md-8 col-md-offset-2">
         {{#if section1}}
             {{#bs-form}}
@@ -135,8 +135,14 @@
                 {{/bs-modal-footer}}
             {{/bs-modal}}
         {{else}}
-            <h4>{{debriefing.title}}</h4>
+            <h2>{{debriefing.title}}</h2>
             <p>
+                {{#if debriefing.image}}
+                    <img class="debriefingpic"
+                         src={{debriefing.image.src}}
+                         alt={{debriefing.image.alt}} >
+                {{/if}}
+
                 {{exp-format debriefing.text}}
             </p>
             <hr>

@@ -46,6 +46,17 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                         },
                         text: {
                             type: 'string'
+                        },
+                        image: {
+                            type: 'object',
+                            properties: {
+                                src: {
+                                    type: 'string'
+                                },
+                                alt: {
+                                    type: 'string'
+                                }
+                            }
                         }
                     }
                 },
