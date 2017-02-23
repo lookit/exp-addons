@@ -1,5 +1,5 @@
-// app/components/exp-frame-base.js
 import Ember from 'ember';
+
 import config from 'ember-get-config';
 
 export default Ember.Component.extend({
@@ -10,6 +10,9 @@ export default Ember.Component.extend({
      @property {object} ctx: a deep copy of the exp-player context
      @property {integer} ctx.frameIndex: the current exp-player frameIndex
      **/
+
+    toast: Ember.inject.service(),
+
     id: null,
     kind: null,
 
@@ -82,6 +85,22 @@ export default Ember.Component.extend({
             }
         }
     },
+
+    // Internal save logic
+    _save() {
+        var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+        // When exiting frame, save the data to the base player using the provided saveHandler
+        const payload = this.serializeContent();
+        return this.attrs.saveHandler(frameId, payload);
+    },
+
+    // Display error messages related to save failures
+    displayError(error) { // jshint ignore:line
+        // If the save failure was a server error, warn the user. This error should never disappear.
+        const msg = 'If this problem persists, please contact your study coordinator.';
+        this.get('toast').error(msg, 'Error: Could not save data', {timeOut: 0, extendedTimeOut: 0});
+    },
+
     setupParams(clean) {
         // Add config properties and data to be serialized as instance parameters (overriding with values explicitly passed in)
         var params = this.get('frameConfig');
@@ -130,22 +149,26 @@ export default Ember.Component.extend({
             timings.push(eventData);
             this.set('eventTimings', timings);
         },
+
         save() {
-            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
-            // When exiting frame, save the data to the base player using the provided saveHandler
-            this.sendAction('saveHandler', frameId, this.get('serializeContent').apply(this)); // todo ugly use of apply
+            this._save().catch(err => this.displayError(err));
         },
+
         next() {
-            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
-            console.log(`Next: Leaving frame ID ${frameId}`);
             this.send('setTimeEvent', 'nextFrame');
-            this.send('save');
-            this.sendAction('next');
-            window.scrollTo(0, 0);
+            // Only advance the form if save succeeded
+            this._save()
+                .then(() => {
+                    this.sendAction('next');
+                    window.scrollTo(0, 0);
+                })
+                .catch(err => this.displayError(err));
         },
+
         last() {
             this.sendAction('last');
         },
+
         previous() {
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Previous: Leaving frame ID ${frameId}`);

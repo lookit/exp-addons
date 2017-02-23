@@ -3,6 +3,12 @@ import Ember from 'ember';
 /*
  Allow any media-containing component to correctly reset.
  Fix LEI-93, an issue where the second of two consecutive videos did not play correctly.
+
+  Due to an internal ember quirk/optimization, the component instance is not destroyed if two of the same thing are
+  used in a row, which means the same video tag was being dynamically reassigned- something HTML does not normally
+  allow. The page needs to be manually told to load the correct new video.
+
+ See commentary here: http://stackoverflow.com/a/18454389/1422268
  */
 export default Ember.Mixin.create({
     mediaTags: ['audio', 'video'],

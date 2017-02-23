@@ -1,9 +1,11 @@
 import Ember from 'ember';
 
 import layout from './template';
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseUnsafeComponent.extend({
+    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
+    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
     layout: layout,
     type: 'exp-physics-pre-video',
     didFinishSound: false,
