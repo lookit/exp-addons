@@ -24,10 +24,6 @@ $exp-alternation-right-rect: 81.25%;
     max-height: 30%;
 }
 
-video.player-fullscreen::-webkit-media-controls {
-  display:none !important;
-}
-
 .exp-alternation .pause-instructions {
     display: block;
     position: relative;
@@ -51,7 +47,7 @@ video.player-fullscreen::-webkit-media-controls {
     width: 30%;
 }
 
-#player-calibration-video {
+.exp-alternation #player-calibration-video {
     width: $exp-alternation-cal-width;
     max-height: 300px;
     position: absolute;
@@ -59,14 +55,14 @@ video.player-fullscreen::-webkit-media-controls {
     top: 0; left: 0; bottom: 0; right: 0;
 }
 
-#player-calibration-video.center {
+.exp-alternation #player-calibration-video.center {
     margin-left: 50% - $exp-alternation-cal-width/2;
 }
 
-#player-calibration-video.left {
+.exp-alternation #player-calibration-video.left {
     margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
 }
 
-#player-calibration-video.right {
+.exp-alternation #player-calibration-video.right {
     margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
 }

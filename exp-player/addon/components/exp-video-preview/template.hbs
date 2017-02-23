@@ -1,7 +1,7 @@
-<div>
+<div class="exp-video-preview">
     <div class="vertical-pad"></div>
 
-    <div class="row exp-text" id="exp-physics-preview-container">
+    <div class="row exp-text" id="exp-lookit-preview-container">
         <div class="col-md-8 col-md-offset-2">
             {{#unless prompt}}
                 {{currentVideo.caption}}
@@ -21,11 +21,11 @@
                 <div class="col-md-10 col-md-offset-1 text-center">
                     {{#if currentVideo.imgSrc}}
 
-                        <img class="exp-physics-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}} alt="Video preview">
+                        <img class="exp-lookit-preview-video" style="width: 100%;" src={{currentVideo.imgSrc}} alt="Video preview">
 
                     {{else}}
 
-                        <video class="exp-physics-preview-video" controls style="width: 100%;">
+                        <video class="exp-lookit-preview-video" controls style="width: 100%;">
                             {{#each currentVideo.sources as |source|}}
                                 <source src={{source.src}} type={{source.type}}>
                             {{/each}}
