@@ -2,17 +2,55 @@ import Ember from 'ember';
 
 import config from 'ember-get-config';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/** An abstract component for defining experimenter frames
+ *
+ * This provides common base behavior required for any experiment frame. All experiment frames must extend this one.
+ *
+ * This frame has no configuration options because all of its logic is internal, and is almost never directly used
+ *   in an experiment. It exports no data. Sample experiment definition usage (provided for completeness):
+  ```json
+    "frames": {
+       "my-sample-frame": {
+         "kind": "exp-base-frame"
+       }
+    }
+ * ```
+ *
+ * As a user you will almost never need to insert a component into a template directly- the platform should handle that
+ *   by automatically inserting `exp-player` when your experiment starts.
+ * However, a sample template usage is provided below for completeness.
+ *
+ * ```handlebars
+ *  {{
+      component currentFrameTemplate
+        frameIndex=frameIndex
+        framePage=framePage
+        updateFramePage=(action 'updateFramePage')
+        frameConfig=currentFrameConfig
+        frameContext=currentFrameContext
+
+        session=session
+        experiment=experiment
+
+        next=(action 'next')
+        previous=(action 'previous')
+        saveHandler=(action 'saveFrame')
+        skipone=(action 'skipone')
+        sessionCompleted=(action 'sessionCompleted')
+
+        extra=extra
+    }}
+ * ```
+ * @class ExpFrameBase
+ */
 export default Ember.Component.extend({
-    /** An abstract component for defining experimenter frames
-
-     @property {string} id: the unique identifier for the _instance_
-     @property {string} type: the static class-level type of this frame, e.g.: exp-consent-form
-     @property {object} ctx: a deep copy of the exp-player context
-     @property {integer} ctx.frameIndex: the current exp-player frameIndex
-     **/
-
     toast: Ember.inject.service(),
-
+    // {String} the unique identifier for the _instance_
     id: null,
     kind: null,
 
@@ -30,7 +68,7 @@ export default Ember.Component.extend({
             properties: {}
         }
     },
-
+    // {Number} the current exp-player frameIndex
     frameIndex: null,
     framePage: null,
     frameConfig: null,
@@ -127,6 +165,14 @@ export default Ember.Component.extend({
         return defaultParams;
     },
 
+    /**
+     * The base class does not define any data to save to the server. It does, however, capture some basic event
+     *   timing data. (such as when the user clicks the "next" button)
+     *
+     * @param {Object} eventTimings
+     * @method serializeContent
+     * @return {Object}
+     */
     serializeContent() {
         // Serialize selected parameters for this frame, plus eventTiming data
         var serialized = this.getProperties(Object.keys(this.get('meta.data.properties') || {}));

@@ -3,16 +3,20 @@
   "version": "0.0.1",
   "description": "The Experimenter player and associated components",
   "directories": {
-    "doc": "doc",
+    "doc": "docs",
     "test": "tests"
   },
   "scripts": {
+    "docs": "yuidoc --lint && yuidoc",
     "build": "ember build",
     "start": "ember server",
     "test": "yarn run check-style && ember test",
     "check-style": "./node_modules/jscs/bin/jscs ."
   },
-  "repository": "",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/CenterForOpenScience/exp-addons.git"
+  },
   "engines": {
     "node": ">=6"
   },
