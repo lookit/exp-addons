@@ -169,6 +169,9 @@ export default Ember.Component.extend({
      * The base class does not define any data to save to the server. It does, however, capture some basic event
      *   timing data. (such as when the user clicks the "next" button)
      *
+     * This section slightly breaks YUIDoc conventions- rather than being a literal guide to using the code, the
+     *   "parameters" here are abstract descriptions of what data is captured.
+     *
      * @param {Object} eventTimings
      * @method serializeContent
      * @return {Object}
