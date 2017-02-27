@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 /**
- * @module experimenter
+ * @module exp-player
  * @submodule mixins
  */
 
@@ -13,8 +13,8 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
     /**
-     * @property videoRecorder Automatically injects the video recorder service, making its methods available to your
-     * component
+     * This mixin automatically injects the video recorder service, making its methods available to your frame
+     * @property videoRecorder
      */
     videoRecorder: Ember.inject.service(),
 

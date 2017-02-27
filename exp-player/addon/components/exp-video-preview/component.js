@@ -10,7 +10,6 @@ import VideoRecord from '../../mixins/video-record';
  * @submodule frames
  */
 
-
 /**
  * A frame that displays a series of videos to preview, without collecting data as a live experiment.
  ```json

@@ -10,7 +10,7 @@ export default ExpRadioGroupComponent.extend({
     labels: null,
     formatLabel: null,
 
-    /**
+    /*
      * Option values that should not be displayed
      * @property hiddenOptions
      * @type: {Array}

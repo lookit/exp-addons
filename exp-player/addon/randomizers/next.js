@@ -1,4 +1,4 @@
-/**
+/*
  *  WARNING: This is provided solely on an example basis.  It represents unused code and may require revisions to
  *    run according to the newest design of the platform.
  */
