@@ -17,17 +17,17 @@ var ExperimentParser = function (context = {
     this.sequence = context.structure.sequence;
 
 };
-/** Modifies the data in the experiment schema definition to match
+/* Modifies the data in the experiment schema definition to match
  * the format expected by exp-player
- **/
+ */
 ExperimentParser.prototype._reformatFrame = function (frame, index) {
     var newConfig = Ember.copy(frame, true);
     newConfig.id = `${index}-${frame.id}`;
     return newConfig;
 };
-/** Convert a random frame to a list of constituent
+/* Convert a random frame to a list of constituent
  * frame config objects
- **/
+ */
 ExperimentParser.prototype._resolveRandom = function (frame, frameId) {
     var randomizer = frame.sampler || 'random';  // Random sampling by default
     if (!randomizers[randomizer]) {
@@ -63,17 +63,17 @@ ExperimentParser.prototype._resolveDependencies = function (frame) {
     });
     return frame;
 };
-/** Convert a block of frames to an array of constituent frame config objects
- **/
+/* Convert a block of frames to an array of constituent frame config objects
+ */
 ExperimentParser.prototype._resolveBlock = function (frame) {
     return [
         frame.items.map((frameId) => this._resolveFrame(frameId)),
         null
     ];
 };
-/** Convert any frame to a list of constituent frame config objects.
+/* Convert any frame to a list of constituent frame config objects.
  * Centrally dispatches logic for all other frame types
- **/
+ */
 ExperimentParser.prototype._resolveFrame = function (frameId, frame) {
     frame = frame || this.frames[frameId];
     if (frameNamePattern.test(frame.kind)) {

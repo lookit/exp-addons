@@ -26,7 +26,7 @@ let {
  *   frameIndex=0
  *   fullScreenElementId='expContainer'}}
  * ```
- * @class exp-player
+ * @class ExpPlayer
  */
 export default Ember.Component.extend(FullScreen, {
     layout: layout,
@@ -59,8 +59,8 @@ export default Ember.Component.extend(FullScreen, {
     /**
      * Customize what happens when the user exits the page
      * @method beforeUnload
-     * @parameter {event} event The event to be handled
-     * @returns {String|null} If string is provided, triggers a modal to confirm user wants to leave page
+     * @param {event} event The event to be handled
+     * @return {String|null} If string is provided, triggers a modal to confirm user wants to leave page
      */
     beforeUnload(event) {
         if (!this.get('allowExit')) {

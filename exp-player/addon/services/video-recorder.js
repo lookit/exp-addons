@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 /**
- * @module experimenter
+ * @module exp-player
  * @submodule services
  */
 
@@ -232,7 +232,7 @@ const VideoRecorder = Ember.Object.extend({
     /**
      * Get a timestamp based on the current recording position. Useful to ensure that tracked timing events
      *  line up with the video.
-     *
+     * @method getTime
      * @return {Date|null}
      */
     getTime() {
@@ -292,8 +292,8 @@ const VideoRecorder = Ember.Object.extend({
     /**
      * Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
      *   a problem with video capture settings
-     *
-     * @returns {boolean}
+     * @method show
+     * @return {boolean}
      */
     show() {
         this.get('$container').removeClass('video-recorder-hidden');
