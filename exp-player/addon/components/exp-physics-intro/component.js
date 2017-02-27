@@ -1,6 +1,18 @@
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-addons
+ * @submodule components
+ */
+
+/**
+@class exp-mood-questionnaire
+@extends exp-frame-base-component
+@deprecated This is a frame for introducing the "Your baby the physicist" study, with hardcoded text. Use exp-lookit-text instead.
+*/
+
+
 // Generate a random string of length len made up of the characters in charSet (optional)
 function randomString(len, charSet) {
     charSet = charSet || 'HKLMNTVWXYZbdgjpqr02468';

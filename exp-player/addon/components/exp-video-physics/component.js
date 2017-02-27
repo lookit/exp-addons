@@ -7,6 +7,21 @@ import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
+/**
+ * @module exp-addons
+ * @submodule components
+ */
+
+/**
+Test trial for the 'Your baby the physicist' study: audio instructions, intro video, and test video, with webcam recording.
+
+@class exp-video-physics
+@extends exp-frame-base-unsafe-component
+@uses FullScreen
+@uses MediaReload
+@uses VideoRecord
+*/
+
 let {
     $
 } = Ember;
@@ -51,56 +66,128 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         parameters: {
             type: 'object',
             properties: {
-                autoforwardOnEnd: { // Generally leave this true, since controls will be hidden for fullscreen videos
+                /**
+                Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.
+                @param autoforwardOnEnd
+                @type Boolean
+                @default true
+                */
+                autoforwardOnEnd: {
                     type: 'boolean',
                     description: 'Whether to automatically advance to the next frame when the video is complete',
                     default: true
                 },
+                /**
+                Whether to automatically start the trial on load.
+                @param autoplay
+                @type Boolean
+                @default true
+                */
                 autoplay: {
                     type: 'boolean',
                     description: 'Whether to autoplay the video on load',
                     default: true
                 },
+                /**
+                A still image to show until the video starts playing.
+                @param poster
+                @type String
+                @default ''
+                */
                 poster: {
                     type: 'string',
                     description: 'A still image to show until the video starts playing',
                     default: ''
                 },
+                /**
+                List of objects specifying video src and type for test videos.
+                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
+                @param sources
+                @type String
+                @default ''
+                */
                 sources: {
                     type: 'string',
                     description: 'List of objects specifying video src and type for test videos',
                     default: []
                 },
+                /**
+                List of objects specifying video src and type for alternate test videos.
+                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
+                @param altSources
+                @type String
+                @default ''
+                */
                 altSources: {
                     type: 'string',
                     description: 'List of objects specifying video src and type for alternate test videos',
                     default: []
                 },
+                /**
+                List of objects specifying intro video src and type.
+                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
+                @param introSources
+                @type String
+                @default ''
+                */
                 introSources: {
                     type: 'string',
                     description: 'List of objects specifying intro video src and type',
                     default: []
                 },
+                /**
+                List of objects specifying attention-grabber video src and type.
+                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
+                @param attnSources
+                @type String
+                @default ''
+                */
                 attnSources: {
                     type: 'string',
                     description: 'List of objects specifying attention-grabber video src and type',
                     default: []
                 },
+                /**
+                List of objects specifying intro announcement src and type.
+                Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
+                @param audioSources
+                @type String
+                @default ''
+                */
                 audioSources: {
                     type: 'string',
                     description: 'List of objects specifying intro announcement audio src and type',
                     default: []
                 },
+                /**
+                List of objects specifying music audio src and type.
+                Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
+                @param musicSources
+                @type String
+                @default ''
+                */
                 musicSources: {
                     type: 'string',
                     description: 'List of objects specifying music audio src and type',
                     default: []
                 },
+                /**
+                Length to loop test videos, in seconds
+                @param testLength
+                @type Number
+                @default 20
+                */
                 testLength: {
                     type: 'number',
                     description: 'Length of test videos in seconds',
                     default: 20
                 },
+                /**
+                Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)
+                @param isLast
+                @type Boolean
+                @default false
+                */
                 isLast: {
                     type: 'boolean',
                     description: 'Whether this is the last exp-physics-video frame in the group',
@@ -112,10 +199,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             // Capture
             type: 'object',
             properties: {
+                /**
+                Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
+                @property videosShown
+                @type String
+                */
                 videosShown: {
                     type: 'string',
                     default: []
                 },
+                /**
+                Webcam recording ID
+                @property videoID
+                @type String
+                */
                 videoId: {
                     type: 'string'
                 }

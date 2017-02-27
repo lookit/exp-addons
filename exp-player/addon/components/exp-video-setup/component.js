@@ -3,6 +3,17 @@ import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-addons
+ * @submodule components
+ */
+
+/**
+@class exp-video-setup
+@extends exp-frame-base-component
+@deprecated This is a frame created as an early example of using a video recorder on Lookit. It can be deleted if safe for other projects. For examples of using video recording, see instead exp-video-consent, exp-video-preview, or exp-video-physics.
+*/
+
 export default ExpFrameBaseComponent.extend({
     type: 'exp-video-setup',
     layout: layout,

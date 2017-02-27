@@ -4,6 +4,18 @@ import {validator, buildValidations} from 'ember-cp-validations';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-addons
+ * @submodule components
+ */
+
+/**
+@class exp-mood-questionnaire
+@extends exp-frame-base-component
+@uses Validations
+@deprecated This is the mood survey used by "Your baby the physicist" and associated pilot. Use the updated frame exp-lookit-mood-questionnaire instead.
+*/
+
 let pad = function(number) {
     return ('00' + (number || 0)).slice(-2);
 };

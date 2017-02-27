@@ -8,6 +8,19 @@ import moment from 'moment';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from 'exp-player/mixins/full-screen';
 
+/**
+ * @module exp-addons
+ * @submodule components
+ */
+
+/**
+@class exp-exit-survey
+@extends exp-frame-base-component
+@uses Validations
+@uses FullScreen
+@deprecated This is the exit survey used by "Your baby the physicist". Use the updated frame exp-lookit-exit-survey instead.
+*/
+
 const Validations = buildValidations({
     birthDate: validator('presence', {
         presence: true,
