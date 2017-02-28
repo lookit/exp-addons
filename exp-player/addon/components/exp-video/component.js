@@ -10,7 +10,7 @@ import VideoPause from '../../mixins/video-pause';
  * @submodule frames
  */
 
-/**
+/*
 @class ExpVideo
 @extends ExpFrameBase
 @deprecated This is a frame created as an early example of displaying videos on Lookit. It can be deleted if safe for other projects. For current example of displaying videos, see exp-video-physics.
