@@ -10,10 +10,12 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  */
 
 /**
+This is the mood survey used by "Your baby the physicist" and associated pilot. Use the updated frame {{#crossLink "ExpLookitMoodQuestionnaire"}}{{/crossLink}}  instead.
+
 @class ExpMoodQuestionnaire
 @extends ExpFrameBase
 @uses Validations
-@deprecated This is the mood survey used by "Your baby the physicist" and associated pilot. Use the updated frame exp-lookit-mood-questionnaire instead.
+@deprecated
 */
 
 let pad = function(number) {

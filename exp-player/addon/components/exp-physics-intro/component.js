@@ -7,9 +7,11 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  */
 
 /**
+This is a frame for introducing the "Your baby the physicist" study, with hardcoded text. Use {{#crossLink "ExpLookitText"}}{{/crossLink}}  instead.
+
 @class ExpPhysicsIntro
 @extends ExpFrameBase
-@deprecated This is a frame for introducing the "Your baby the physicist" study, with hardcoded text. Use exp-lookit-text instead.
+@deprecated
 */
 
 

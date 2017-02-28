@@ -9,9 +9,11 @@ import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/
  */
 
 /**
+This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use {{#crossLink "ExpLookitText"}}{{/crossLink}} or {{#crossLink "ExpLookitInstructions"}}{{/crossLink}} instead.
+
 @class ExpPhysicsPreVideo
 @extends ExpFrameBaseUnsafe
-@deprecated This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use exp-lookit-text or exp-lookit-instructions instead.
+@deprecated
 */
 
 export default ExpFrameBaseUnsafeComponent.extend({
