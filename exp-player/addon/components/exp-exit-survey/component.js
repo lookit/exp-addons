@@ -9,13 +9,13 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from 'exp-player/mixins/full-screen';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-exit-survey
-@extends exp-frame-base-component
+@class ExpExitSurvey
+@extends ExpFrameBase
 @uses Validations
 @uses FullScreen
 @deprecated This is the exit survey used by "Your baby the physicist". Use the updated frame exp-lookit-exit-survey instead.

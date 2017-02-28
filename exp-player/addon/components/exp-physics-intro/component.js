@@ -2,13 +2,13 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-mood-questionnaire
-@extends exp-frame-base-component
+@class ExpPhysicsIntro
+@extends ExpFrameBase
 @deprecated This is a frame for introducing the "Your baby the physicist" study, with hardcoded text. Use exp-lookit-text instead.
 */
 

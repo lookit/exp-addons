@@ -3,13 +3,13 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-mood-questionnaire
-@extends exp-frame-base-component
+@class ExpPhysicsPreviewExplanation
+@extends ExpFrameBase
 @deprecated This is a frame for offering parents the option to preview videos for the "Your baby the physicist" study, with hardcoded text. Use exp-lookit-preview-explanation (followed by exp-video-preview) instead.
 */
 

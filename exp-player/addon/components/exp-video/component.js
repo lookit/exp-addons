@@ -6,13 +6,13 @@ import MediaReload from '../../mixins/media-reload';
 import VideoPause from '../../mixins/video-pause';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-video
-@extends exp-frame-base-component
+@class ExpVideo
+@extends ExpFrameBase
 @deprecated This is a frame created as an early example of displaying videos on Lookit. It can be deleted if safe for other projects. For current example of displaying videos, see exp-video-physics.
 */
 

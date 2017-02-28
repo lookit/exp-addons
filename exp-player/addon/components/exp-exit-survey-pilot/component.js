@@ -9,13 +9,13 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-exit-survey-pilot
-@extends exp-frame-base-component
+@class ExpExitSurveyPilot
+@extends ExpFrameBase
 @uses Validations
 @uses FullScreen
 @deprecated This is the exit survey used by the "Your baby the physicist" pilot. Use the updated frame exp-lookit-exit-survey instead.
@@ -44,7 +44,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     type: 'exp-exit-survey-pilot',
     fullScreenElementId: 'experiment-player',
     meta: {
-        name: 'ExpExitSurvey',
+        name: 'ExpExitSurveyPilot',
         description: 'Exit survey for Lookit.',
         parameters: {
             type: 'object',

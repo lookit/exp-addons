@@ -8,13 +8,13 @@ import VideoPause from '../../mixins/video-pause';
 import VideoRecord from '../../mixins/video-record';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-video-record
-@extends exp-frame-base-component
+@class ExpVideoRecord
+@extends ExpFrameBase
 @deprecated This is a frame created as an early example of displaying a video and recording webcam video on Lookit. It can be deleted if safe for other projects. For current example of displaying videos and recording, see exp-video-physics.
 */
 

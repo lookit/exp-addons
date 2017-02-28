@@ -5,13 +5,13 @@ import {validator, buildValidations} from 'ember-cp-validations';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-mood-questionnaire
-@extends exp-frame-base-component
+@class ExpMoodQuestionnaire
+@extends ExpFrameBase
 @uses Validations
 @deprecated This is the mood survey used by "Your baby the physicist" and associated pilot. Use the updated frame exp-lookit-mood-questionnaire instead.
 */

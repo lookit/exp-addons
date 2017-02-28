@@ -8,15 +8,16 @@ import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
 Test trial for the 'Your baby the physicist' study: audio instructions, intro video, and test video, with webcam recording.
 
-@class exp-video-physics
-@extends exp-frame-base-unsafe-component
+@class ExpVideoPhysics
+@extends ExpFrameBaseUnsafe
+
 @uses FullScreen
 @uses MediaReload
 @uses VideoRecord
@@ -68,8 +69,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             properties: {
                 /**
                 Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.
-                @param autoforwardOnEnd
-                @type Boolean
+                @property {Boolean} autoforwardOnEnd
                 @default true
                 */
                 autoforwardOnEnd: {
@@ -79,8 +79,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 /**
                 Whether to automatically start the trial on load.
-                @param autoplay
-                @type Boolean
+                @property {Boolean} autoplay
                 @default true
                 */
                 autoplay: {
@@ -89,9 +88,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     default: true
                 },
                 /**
-                A still image to show until the video starts playing.
-                @param poster
-                @type String
+                Source URL for an image to show until the video starts playing.
+                @property {String} poster
                 @default ''
                 */
                 poster: {
@@ -100,81 +98,90 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     default: ''
                 },
                 /**
-                List of objects specifying video src and type for test videos.
-                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
-                @param sources
-                @type String
-                @default ''
+                Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). Example value:
+
+                ```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```
+                @property {Array} sources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 sources: {
                     type: 'string',
                     description: 'List of objects specifying video src and type for test videos',
                     default: []
                 },
+
                 /**
-                List of objects specifying video src and type for alternate test videos.
-                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
-                @param altSources
-                @type String
-                @default ''
+                Array of objects specifying video src and type for alternate test video, as for sources.
+                @property {Array} altSources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 altSources: {
                     type: 'string',
                     description: 'List of objects specifying video src and type for alternate test videos',
                     default: []
                 },
+
                 /**
-                List of objects specifying intro video src and type.
-                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
-                @param introSources
-                @type String
-                @default ''
+                Array of objects specifying intro video src and type, as for sources.
+                @property {Array} introSources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 introSources: {
                     type: 'string',
                     description: 'List of objects specifying intro video src and type',
                     default: []
                 },
+
                 /**
-                List of objects specifying attention-grabber video src and type.
-                Example: `[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]`
-                @param attnSources
-                @type String
-                @default ''
+                Array of objects specifying attention-grabber video src and type, as for sources.
+                @property {Array} attnSources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 attnSources: {
                     type: 'string',
                     description: 'List of objects specifying attention-grabber video src and type',
                     default: []
                 },
+
                 /**
                 List of objects specifying intro announcement src and type.
                 Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
-                @param audioSources
-                @type String
-                @default ''
+                @property {Array} audioSources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 audioSources: {
                     type: 'string',
                     description: 'List of objects specifying intro announcement audio src and type',
                     default: []
                 },
+
                 /**
-                List of objects specifying music audio src and type.
-                Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
+                List of objects specifying music audio src and type, as for audioSources.
                 @param musicSources
-                @type String
-                @default ''
+                @property {Array} audioSources
+                    @param {String} src
+                    @param {String} type
+                @default []
                 */
                 musicSources: {
                     type: 'string',
                     description: 'List of objects specifying music audio src and type',
                     default: []
                 },
+
                 /**
                 Length to loop test videos, in seconds
-                @param testLength
-                @type Number
+                @property {Number} testLength
                 @default 20
                 */
                 testLength: {
@@ -184,8 +191,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 /**
                 Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)
-                @param isLast
-                @type Boolean
+                @property {Boolean} isLast
                 @default false
                 */
                 isLast: {
@@ -198,21 +204,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         data: {
             // Capture
             type: 'object',
+             /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
+             * @param {Object} eventTimings
+             * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @return {Object} The payload sent to the server
+             */
             properties: {
-                /**
-                Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
-                @property videosShown
-                @type String
-                */
                 videosShown: {
                     type: 'string',
                     default: []
                 },
-                /**
-                Webcam recording ID
-                @property videoID
-                @type String
-                */
                 videoId: {
                     type: 'string'
                 }

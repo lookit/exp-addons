@@ -4,13 +4,13 @@ import layout from './template';
 import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 
 /**
- * @module exp-addons
- * @submodule components
+ * @module exp-player
+ * @submodule frames
  */
 
 /**
-@class exp-physics-pre-video
-@extends exp-frame-base-unsafe-component
+@class ExpPhysicsPreVideo
+@extends ExpFrameBaseUnsafe
 @deprecated This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use exp-lookit-text or exp-lookit-instructions instead.
 */
 
