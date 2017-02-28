@@ -14,8 +14,8 @@
     "check-style": "./node_modules/jscs/bin/jscs ."
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/CenterForOpenScience/exp-addons.git"
+    "type": "git",
+    "url": "https://github.com/CenterForOpenScience/exp-addons.git"
   },
   "engines": {
     "node": ">=6"
@@ -56,7 +56,8 @@
     "jscs": "^3.0.7",
     "loader.js": "^4.0.1",
     "moment": "2.13.0",
-    "moment-timezone": "0.5.4"
+    "moment-timezone": "0.5.4",
+    "yuidocjs": "^0.10.2"
   },
   "keywords": [
     "ember-addon"
