@@ -3,6 +3,29 @@ import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+ /**
+Video configuration frame guiding user through making sure permissions are set appropriately and microphone is working, with troubleshooting text. All content is hard-coded for a general-purpose technical setup frame.
+
+```json
+"frames": {
+    "video-config": {
+        "id": "video-config",
+        "kind": "exp-video-config"
+    }
+}
+```
+
+@class ExpVideoConfig
+@extends ExpFrameBase
+
+*/
+
+
 export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Ember.inject.service(),
@@ -49,14 +72,13 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
+                /**
+                A unique identifier for this item
+                @property {String} id
+                */
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
-                },
-                instructions: {
-                    type: 'string',
-                    description: 'Instructions to display to the user',
-                    default: 'Please make sure your video camera is working and shows up below!'
                 }
             },
             required: ['id']

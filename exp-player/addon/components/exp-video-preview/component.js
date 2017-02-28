@@ -11,14 +11,15 @@ import VideoRecord from '../../mixins/video-record';
  */
 
 /**
- * A frame that displays a series of videos to preview, without collecting data as a live experiment.
+ * A frame that displays a series of videos to preview, without collecting data as a live experiment. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.
  ```json
  "frames": {
-       "my-sample-frame": {
-          "kind": "exp-video-preview",
-         "text": "Some text that is shown to the user",
-         "prompt": "Text of a button prompt",
-         "videos": [
+    "my-sample-frame": {
+        "id": "video-preview",
+        "kind": "exp-video-preview",
+        "text": "Here are the videos your child will see in this study. You can watch them ahead of time--please just don't show your child yet!",
+        "prompt": "My child can NOT see the screen. Start the preview!",
+        "videos": [
            {
              "caption": "User-facing text that appears below the video",
              "sources": [
@@ -34,6 +35,7 @@ import VideoRecord from '../../mixins/video-record';
            }
          ]
     }
+
  * ```
  * @class ExpVideoPreview
  * @extends ExpFrameBase
@@ -128,6 +130,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                  * @property {Array} videos
                  *   @param {String} caption Some text to appear under this video
                  *   @param {Object[]} sources Array of {src: 'url', type: 'MIMEtype'} objects.
+                 *   @param {String} imgSrc URL of image to display (optional; each preview video should designate either sources or imgSrc)
                  */
                 videos: {
                     type: 'array',
@@ -164,13 +167,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     default: []
                 },
                 /**
-                 * Text of the button prompt asking the user to continue
+                 * Text on the button prompt asking the user to continue to the videos
                  *
                  * @property {String} prompt
                  */
                 prompt: {
                     type: 'object',
-                    description: 'Require a button press before showing the videos',
+                    description: 'Text on the button prompt asking the user to continue to the videos',
                     properties: {
                         title: {
                             type: 'string'
@@ -182,13 +185,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     default: null
                 },
                 /**
-                 * Informational text to display to the user
+                 * Informational text to display to the user before videos are shown, along with button to continue
                  *
                  * @property {String} text
                  */
                 text: {
                     type: 'string',
-                    description: 'Text to display to the user',
+                    description: 'Informational text to display to the user before videos are shown, along with button to continue',
                     default: ''
                 }
             },
