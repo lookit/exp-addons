@@ -17,7 +17,7 @@ function shuffleArray(array) {
  *
  * @method getLastSession
  * @param {Session[]} pastSessions An array of session records. This returns the first match, eg assumes newest-first sort order
- * @returns {Session} The model representing the last session in which the user participated
+ * @return {Session} The model representing the last session in which the user participated
  */
 function getLastSession(pastSessions) {
     // Base randomization on the newest (last completed) session for which the participant got at

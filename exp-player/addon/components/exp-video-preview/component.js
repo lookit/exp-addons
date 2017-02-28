@@ -5,6 +5,39 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * A frame that displays a series of videos to preview, without collecting data as a live experiment.
+ ```json
+ "frames": {
+       "my-sample-frame": {
+          "kind": "exp-video-preview",
+         "text": "Some text that is shown to the user",
+         "prompt": "Text of a button prompt",
+         "videos": [
+           {
+             "caption": "User-facing text that appears below the video",
+             "sources": [
+               {
+                 "type": "video/webm",
+                 "src": "https://url.com/example_intro.webm"
+               },
+               {
+                 "type": "video/mp4",
+                 "src": "https://url.com/example_intro.webm"
+               }
+             ]
+           }
+         ]
+    }
+ * ```
+ * @class ExpVideoPreview
+ * @extends ExpFrameBase
+ */
 export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
     videoIndex: 0,
@@ -90,6 +123,13 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     type: 'integer',
                     default: 0
                 },
+                /**
+                 * A series of preview videos to display within a single frame, defined as an array of objects.
+                 *
+                 * @property {Array} videos
+                 *   @param {String} caption Some text to appear under this video
+                 *   @param {Object[]} sources Array of {src: 'url', type: 'MIMEtype'} objects.
+                 */
                 videos: {
                     type: 'array',
                     description: 'A list of videos to preview',
@@ -124,6 +164,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     },
                     default: []
                 },
+                /**
+                 * Text of the button prompt asking the user to continue
+                 *
+                 * @property {String} prompt
+                 */
                 prompt: {
                     type: 'object',
                     description: 'Require a button press before showing the videos',
@@ -137,6 +182,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                     },
                     default: null
                 },
+                /**
+                 * Informational text to display to the user
+                 *
+                 * @property {String} text
+                 */
                 text: {
                     type: 'string',
                     description: 'Text to display to the user',
@@ -147,6 +197,14 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         data: {
             type: 'object',
+            /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {Object} eventTimings
+             * @return {Object} The payload sent to the server
+             */
             properties: {
                 videoId: {
                     type: 'string'

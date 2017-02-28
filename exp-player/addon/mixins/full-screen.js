@@ -4,14 +4,28 @@ let {
     $
 } = Ember;
 
-/*
- Allow components to specify fullscreen capabilities based on minimal configuration options
+/**
+ * @module exp-player
+ * @submodule mixins
+ */
+
+/**
+ * Allow components to specify fullscreen capabilities based on minimal configuration options
+ * @class FullScreen
  */
 export default Ember.Mixin.create({
-    fullScreenElementId: null, // String containing the ID of the element to make full screen
-    displayFullscreen: false,  // Whether to show this element in fullscreen mode by default
+    /**
+     *  The element ID of the thing to make full screen (video element, div, etc)
+     * @property {String} fullScreenElementId
+     */
+    fullScreenElementId: null,
+    displayFullscreen: false,
 
-    fsButtonID: false, // ID for button element to show if user leaves FS
+    /**
+     * The element ID of a button to show if the user leaves fullscreen mode
+     * @property {String} fsButtonID
+     */
+    fsButtonID: false,
 
     // Note: to avoid handler being called repeatedly (bubbling
     // up?) I'm just having components that extend FullScreen call
@@ -72,6 +86,10 @@ export default Ember.Mixin.create({
     },
 
     actions: {
+        /**
+         * Make a specified element fullscreen
+         * @method showFullscreen
+         */
         showFullscreen: function () {
 
             if (!this.get('displayFullscreen')) {
@@ -106,7 +124,10 @@ export default Ember.Mixin.create({
             Ember.$(document).off('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange');
             Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector, buttonSel));
         },
-
+        /**
+         * Exit fullscreen mode
+         * @method exitFullscreen
+         */
         exitFullscreen: function () {
             console.log('exiting FS mode');
             if (document.exitFullscreen) {
