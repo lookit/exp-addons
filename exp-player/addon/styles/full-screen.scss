@@ -19,5 +19,6 @@ video.player-fullscreen::-webkit-media-controls {
 }
 
 #experiment-player.player-fullscreen, #experiment-player.player-fullscreen * {
-    cursor: none;
+    // blank cursor (1px transparent image)
+    cursor: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7), none;
 }
