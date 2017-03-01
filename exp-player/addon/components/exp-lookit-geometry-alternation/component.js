@@ -325,7 +325,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         // Allow pausing during intro
         var _this = this;
         $(document).off('keyup.pauser');
-        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, frame);});
+        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
 
         // Start placeholder video right away
         _this.sendTimeEvent('exp-alternation:startIntro');
@@ -398,7 +398,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                         _this.settings.LsizeBaseStart,
                                         _this.settings.RsizeBaseStart);
         window.setTimeout(function() {
-                window.clearTimeout(frame.get('stimTimer'));
+                window.clearTimeout(_this.get('stimTimer'));
                 _this.clearTriangles();
                 _this.endTrial();
             }, _this.settings.trialLength * 1000);
