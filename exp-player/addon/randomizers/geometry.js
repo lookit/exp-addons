@@ -15,8 +15,8 @@ var getRandomElement = function(arr) {
 
 var randomizer = function(frameId, frame) {
 
-    var positionOptions = frame.counterbalance['startPositions'];
-    var contextOptions  = frame.counterbalance['contexts'];
+    var positionOptions = frame.counterbalance.startPositions;
+    var contextOptions  = frame.counterbalance.contexts;
 
     var position = getRandomElement(positionOptions);
     var context  = getRandomElement(contextOptions);
@@ -26,7 +26,7 @@ var randomizer = function(frameId, frame) {
 
     var frames = [];
     var thisFrame = {};
-    for (var iFrame=0; iFrame<4; iFrame++) {
+    for (var iFrame = 0; iFrame < 4; iFrame++) {
         thisFrame = {
             kind: frame.frameType,
             id: `${frameId}`,
@@ -35,11 +35,11 @@ var randomizer = function(frameId, frame) {
             audioSources: [
                 {
                     'type': 'audio/mp3',
-                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/mp3/video_0' + (iFrame+1) + '.mp3'
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/mp3/video_0' + (iFrame + 1) + '.mp3'
                 },
                 {
                     'type': 'audio/ogg',
-                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/ogg/video_0' + (iFrame+1) + '.ogg'
+                    'src': 'https://s3.amazonaws.com/lookitcontents/geometry/ogg/video_0' + (iFrame + 1) + '.ogg'
                 }
             ]
         };
@@ -67,7 +67,7 @@ var randomizer = function(frameId, frame) {
     // Short version for testing
     //return [[frames[0]], {'position': position, 'context': context}];
 
-   // Random choice...
+    // Random choice...
     // Pick one option at random
     //var sample = Math.floor(Math.random() * frame.options.length);
     //var choice = frame.options[sample];

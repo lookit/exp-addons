@@ -8,7 +8,7 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  * @submodule frames
  */
 
- /**
+/**
 Video configuration frame showing webcam view at right and instructions for checking video quality for preferential looking setup at left, with pictures. Content is hard-coded for preferential looking requirements and images; this frame can serve as a template for other applications (e.g., verbal responses, where we might care less about lighting but want to generally be able to see the child's face) or can be generalized to show an arbitrary set of instructions/images.
 
 ```json
@@ -24,8 +24,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 @extends ExpFrameBase
 
 */
-
-
 
 export default ExpFrameBaseComponent.extend({
     layout,

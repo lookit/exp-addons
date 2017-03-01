@@ -14,7 +14,6 @@ This is a frame for introducing the "Your baby the physicist" study, with hardco
 @deprecated
 */
 
-
 // Generate a random string of length len made up of the characters in charSet (optional)
 function randomString(len, charSet) {
     charSet = charSet || 'HKLMNTVWXYZbdgjpqr02468';
