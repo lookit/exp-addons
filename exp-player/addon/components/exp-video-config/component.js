@@ -8,7 +8,7 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  * @submodule frames
  */
 
- /**
+/**
 Video configuration frame guiding user through making sure permissions are set appropriately and microphone is working, with troubleshooting text. All content is hard-coded for a general-purpose technical setup frame.
 
 ```json
@@ -22,9 +22,7 @@ Video configuration frame guiding user through making sure permissions are set a
 
 @class ExpVideoConfig
 @extends ExpFrameBase
-
 */
-
 
 export default ExpFrameBaseComponent.extend({
     layout,

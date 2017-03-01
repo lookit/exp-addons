@@ -204,7 +204,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         data: {
             // Capture
             type: 'object',
-             /**
+            /**
              * Parameters captured and sent to the server
              *
              * @method serializeContent

@@ -323,24 +323,24 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     startIntro() {
         // Allow pausing during intro
-        var frame = this;
+        var _this = this;
         $(document).off('keyup.pauser');
-        $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
+        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, frame);});
 
         // Start placeholder video right away
-        frame.sendTimeEvent('exp-alternation:startIntro');
+        _this.sendTimeEvent('exp-alternation:startIntro');
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
         $('#player-audio')[0].play();
-        frame.set('introTimer', window.setTimeout(function(){
-            frame.set('completedAttn', true);
-        }, frame.get('attnLength') * 1000));
+        _this.set('introTimer', window.setTimeout(function() {
+            _this.set('completedAttn', true);
+        }, _this.get('attnLength') * 1000));
 
     },
 
     startCalibration() {
-        var frame = this;
+        var _this = this;
 
         // Don't allow pausing during calibration/test.
         $(document).off('keyup.pauser');
@@ -354,10 +354,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
                 $('#player-calibration-video').hide();
-                frame.set('currentSegment', 'test');
+                _this.set('currentSegment', 'test');
             } else {
                 var thisLoc = calList.shift();
-                frame.sendTimeEvent('exp-alternation:startCalibration',
+                _this.sendTimeEvent('exp-alternation:startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -367,9 +367,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 calVideo.play();
                 $('#player-calibration-video').removeClass(lastLoc);
                 $('#player-calibration-video').addClass(thisLoc);
-                window.setTimeout(function(){
+                window.setTimeout(function() {
                     doCalibrationSegments(calList, thisLoc);
-                }, frame.settings.calLength);
+                }, _this.settings.calLength);
             }
         };
 
@@ -379,45 +379,41 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     startTrial() {
 
-        var frame = this;
+        var _this = this;
 
-        frame.sendTimeEvent('exp-alternation:startTestTrial');
+        _this.sendTimeEvent('exp-alternation:startTestTrial');
 
         // Begin playing music; fade in and set to fade out at end of trial
-        var musicPlayer = $('#player-music');
-        musicPlayer.prop("volume", 0.1);
-        musicPlayer[0].play();
-        musicPlayer.animate({volume: 1}, frame.settings.musicFadeLength);
-        window.setTimeout(function(){
-            musicPlayer.animate({volume: 0}, frame.settings.musicFadeLength);
-        }, frame.settings.trialLength * 1000 - frame.settings.musicFadeLength);
+        var $musicPlayer = $('#player-music');
+        $musicPlayer.prop('volume', 0.1);
+        $musicPlayer[0].play();
+        $musicPlayer.animate({volume: 1}, _this.settings.musicFadeLength);
+        window.setTimeout(function() {
+            $musicPlayer.animate({volume: 0}, _this.settings.musicFadeLength);
+        }, _this.settings.trialLength * 1000 - _this.settings.musicFadeLength);
 
         // Start presenting triangles and set to stop after trial length
-        frame.presentTriangles( frame.settings.LshapesStart,
-                                        frame.settings.RshapesStart,
-                                        frame.settings.LsizeBaseStart,
-                                        frame.settings.RsizeBaseStart);
-        window.setTimeout(function(){
-            window.clearTimeout(frame.get('stimTimer'));
-            frame.clearTriangles();
-            frame.endTrial();
-            }, frame.settings.trialLength * 1000);
+        _this.presentTriangles(_this.settings.LshapesStart,
+                                        _this.settings.RshapesStart,
+                                        _this.settings.LsizeBaseStart,
+                                        _this.settings.RsizeBaseStart);
+        window.setTimeout(function() {
+                window.clearTimeout(frame.get('stimTimer'));
+                _this.clearTriangles();
+                _this.endTrial();
+            }, _this.settings.trialLength * 1000);
     },
 
     // When triangles have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
-
-
         if (this.get('recorder')) {
             this.sendTimeEvent('stoppingCapture');
             this.get('recorder').stop();
         }
-
         if (this.get('endAudioSources').length) {
             $('#player-endaudio')[0].play();
-        }
-        else {
+        } else {
             this.send('next');
         }
     },
@@ -443,17 +439,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-
-
     getRandomElement(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+        return arr[Math.floor(Math.random() * arr.length)];
     },
 
     getRandom(min, max) {
-      return Math.random() * (max - min) + min;
+        return Math.random() * (max - min) + min;
     },
-
-
 
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
 
@@ -496,11 +488,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var RSize = this.getRandom(this.settings.sizeRange[0],
                                    this.settings.sizeRange[1]) * RsizeBase[0];
 
-        var frame = this;
-        frame.sendTimeEvent(`exp-alternation:clearTriangles`);
-        frame.clearTriangles();
-        frame.set('stimTimer', window.setTimeout(function() {
-            frame.sendTimeEvent(`exp-alternation:presentTriangles`, {
+        var _this = this;
+        _this.sendTimeEvent(`exp-alternation:clearTriangles`);
+        _this.clearTriangles();
+        _this.set('stimTimer', window.setTimeout(function() {
+            _this.sendTimeEvent(`exp-alternation:presentTriangles`, {
                         Lshape: Lshapes[0],
                         LX: LX,
                         LY: LY,
@@ -514,13 +506,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         RFlip: RFlip,
                         RSize: RSize
                     });
-            frame.drawTriangles(  Lshapes[0], LX, LY, LRot, LFlip, LSize,
+            _this.drawTriangles(Lshapes[0], LX, LY, LRot, LFlip, LSize,
                             Rshapes[0], RX, RY, RRot, RFlip, RSize);
-            frame.set('stimTimer', window.setTimeout(function(){
-                frame.presentTriangles(Lshapes.reverse(), Rshapes.reverse(),
+            _this.set('stimTimer', window.setTimeout(function() {
+                _this.presentTriangles(Lshapes.reverse(), Rshapes.reverse(),
                                     LsizeBase.reverse(), RsizeBase.reverse());
-            }, frame.settings.msTriangles));
-        }, frame.settings.msBlank));
+            }, _this.settings.msTriangles));
+        }, _this.settings.msBlank));
     },
 
     handleSpace(event, frame) {
@@ -580,7 +572,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
-
         // Define basic properties for two triangle shapes used. It would be
         // more natural to define these in the template, and then use the
         // <use xlink:href="#name" .../> syntax to transform them as
@@ -625,7 +616,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         if (this.get('context')) {
             sameShapes = ['fat']; // context: big fat triangle
             shapeSizes = [1, 0.7071]; // big fat vs. small fat/small skinny
-                // sqrt(0.5) = 0.7071, to get factor of two difference in area
+            // sqrt(0.5) = 0.7071, to get factor of two difference in area
             diffShapes = ['fat', 'skinny']; // start with context
         } else {
             sameShapes = ['skinny']; // context: small skinny triangle
@@ -633,7 +624,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             diffShapes = ['skinny', 'fat']; // start with context
         }
 
-        var Lshapes, Rshapes;
+        var Lshapes;
+        var Rshapes;
         if (this.get('altOnLeft')) {
             Lshapes = diffShapes;
             Rshapes = sameShapes;

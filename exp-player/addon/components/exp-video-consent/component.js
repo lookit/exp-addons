@@ -9,7 +9,7 @@ import VideoRecord from '../../mixins/video-record';
  * @submodule frames
  */
 
- /**
+/**
 Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. Example of MIT consent form, as of 2/28/2017:
 
 ```json
