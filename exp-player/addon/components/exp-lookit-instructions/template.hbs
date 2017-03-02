@@ -1,0 +1,86 @@
+<div class="row exp-text" id="exp-lookit-instructions">
+    <div class="vertical-pad"></div>
+    <div class="col-md-8 col-md-offset-2 exp-lookit-instructions">
+
+        {{#each blocks as |block|}}
+
+            {{#if block.title}}
+                <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
+            {{/if}}
+
+            {{#if block.text}}
+                <p>
+                    {{exp-format block.text}}
+                </p>
+            {{/if}}
+
+            {{#if block.listblocks}}
+                <ul>
+                    {{#each block.listblocks as |listitem|}}
+                        <li>
+                            {{exp-format listitem.text}}
+
+                            {{#if listitem.image}}
+                                <img class="instructionspic"
+                                    src={{listitem.image.src}}
+                                    alt={{listitem.image.alt}} >
+                            {{/if}}
+
+                        </li>
+                    {{/each}}
+                </ul>
+
+            {{/if}}
+
+        {{/each}}
+
+
+
+        {{#if audioBlock}}
+
+            <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>
+                {{audioBlock.title}}
+            </p>
+
+            <p>
+                {{exp-format audioBlock.text}}
+            </p>
+
+            <div id="audio-wrapper">
+                <audio id="player-audio"
+                       controls
+                       onended={{ if mustPlay (action 'soundPlayed') }}
+                >
+
+                    {{#each audioBlock.sources as |source|}}
+                        <source src={{source.src}} type={{source.type}}>
+                    {{/each}}
+
+                </audio>
+
+                {{#if showWarning}}
+                    <div class="sound-warning">
+                        * {{audioBlock.warningText}}
+                    </div>
+                {{/if}}
+            </div>
+
+        {{/if}}
+
+        {{#if showPreviousButton}}
+            <button class="btn btn-default pull-left" {{ action 'previous' }}>
+                Previous
+            </button>
+        {{/if}}
+
+        <button class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
+            {{exp-format nextButtonText}}
+
+        </button>
+
+    </div>
+
+
+</div>
+
+

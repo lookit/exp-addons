@@ -1,0 +1,33 @@
+.exp-lookit-instructions h2 {
+    font-size: large;
+}
+
+.exp-lookit-instructions em {
+    font-weight: bold;
+    font-style: normal;
+}
+
+
+.exp-lookit-instructions .instructionspic {
+    float: right;
+    max-height: 180px;
+    border-radius: 10%;
+    border: thin solid black;
+}
+
+.exp-lookit-instructions li {
+    margin-bottom: 20px;
+}
+
+.exp-lookit-instructions #audio-wrapper {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.exp-lookit-instructions .sound-warning {
+    color: red;
+}

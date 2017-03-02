@@ -2,6 +2,20 @@ import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+This is a frame for offering parents the option to preview videos for the "Your baby the physicist" study, with hardcoded text. Use {{#crossLink "ExpLookitPreviewExplanation"}}{{/crossLink}} (followed by {{#crossLink "ExpVideoPreview"}}{{/crossLink}}) instead.
+
+
+@class ExpPhysicsPreviewExplanation
+@extends ExpFrameBase
+@deprecated
+*/
+
 export default ExpFrameBaseComponent.extend({
     type: 'exp-physics-preview-explanation',
     layout: layout,

@@ -7,6 +7,17 @@ import MediaReload from '../../mixins/media-reload';
 import VideoPause from '../../mixins/video-pause';
 import VideoRecord from '../../mixins/video-record';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/*
+@class ExpVideoRecord
+@extends ExpFrameBase
+@deprecated This is a frame created as an early example of displaying a video and recording webcam video on Lookit. It can be deleted if safe for other projects. For current example of displaying videos and recording, see exp-video-physics.
+*/
+
 //TODO Fullsceen issues/functionality
 export default ExpFrameBaseComponent.extend(MediaReload, VideoPause, VideoRecord, {
     layout: layout,

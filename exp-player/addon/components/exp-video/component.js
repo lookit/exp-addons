@@ -5,6 +5,17 @@ import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoPause from '../../mixins/video-pause';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/*
+@class ExpVideo
+@extends ExpFrameBase
+@deprecated This is a frame created as an early example of displaying videos on Lookit. It can be deleted if safe for other projects. For current example of displaying videos, see exp-video-physics.
+*/
+
 export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoPause, {
     // If fullscreen behavior in a series of videos is desired, may need to extend unsafebase frame in future;
     //   see exp-video-physics for comparison

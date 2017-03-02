@@ -1,6 +1,19 @@
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+This is a frame for introducing the "Your baby the physicist" study, with hardcoded text. Use {{#crossLink "ExpLookitText"}}{{/crossLink}}  instead.
+
+@class ExpPhysicsIntro
+@extends ExpFrameBase
+@deprecated
+*/
+
 // Generate a random string of length len made up of the characters in charSet (optional)
 function randomString(len, charSet) {
     charSet = charSet || 'HKLMNTVWXYZbdgjpqr02468';

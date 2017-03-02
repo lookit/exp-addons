@@ -4,20 +4,6 @@ import {validator, buildValidations} from 'ember-cp-validations';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
-/**
- * @module exp-player
- * @submodule frames
- */
-
-/**
-This is the mood survey used by "Your baby the physicist" and associated pilot. Use the updated frame {{#crossLink "ExpLookitMoodQuestionnaire"}}{{/crossLink}}  instead.
-
-@class ExpMoodQuestionnaire
-@extends ExpFrameBase
-@uses Validations
-@deprecated
-*/
-
 let pad = function(number) {
     return ('00' + (number || 0)).slice(-2);
 };
@@ -79,16 +65,21 @@ const Validations = buildValidations({
 
 export default ExpFrameBaseComponent.extend(Validations, {
     layout: layout,
-    type: 'exp-mood-questionnaire',
+    type: 'exp-lookit-mood-questionnaire',
     meta: {
-        name: 'ExpMoodQuestionnaire',
-        description: 'Mood questionnaire for Lookit.',
+        name: 'ExpLookitMoodQuestionnaire',
+        description: 'Mood questionnaire for Lookit studies, very slightly generalized from physics version exp-mood-questionnaire',
         parameters: {
             type: 'object',
             properties: {
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
+                },
+                introText: {
+                    type: 'string',
+                    description: 'Intro paragraph describing why we want mood info',
+                    default: 'How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.'
                 }
             },
             required: ['id']

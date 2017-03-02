@@ -3,6 +3,19 @@ import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use {{#crossLink "ExpLookitText"}}{{/crossLink}} or {{#crossLink "ExpLookitInstructions"}}{{/crossLink}} instead.
+
+@class ExpPhysicsPreVideo
+@extends ExpFrameBaseUnsafe
+@deprecated
+*/
+
 export default ExpFrameBaseUnsafeComponent.extend({
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369

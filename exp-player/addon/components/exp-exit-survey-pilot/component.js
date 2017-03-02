@@ -8,6 +8,21 @@ import moment from 'moment';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+This is the exit survey used by the "Your baby the physicist" pilot. Use the updated frame {{#crossLink "ExpLookitExitSurvey"}}{{/crossLink}} instead.
+
+@class ExpExitSurveyPilot
+@extends ExpFrameBase
+@uses Validations
+@uses FullScreen
+@deprecated
+*/
+
 const Validations = buildValidations({
     birthDate: validator('presence', {
         presence: true,
@@ -31,7 +46,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
     type: 'exp-exit-survey-pilot',
     fullScreenElementId: 'experiment-player',
     meta: {
-        name: 'ExpExitSurvey',
+        name: 'ExpExitSurveyPilot',
         description: 'Exit survey for Lookit.',
         parameters: {
             type: 'object',
