@@ -4,6 +4,7 @@ $exp-alternation-right-rect: 81.25%;
 
 .exp-lookit-preferential-looking #allstimuli {
     overflow:hidden;
+    position:relative;
     width: 100vw;
     height: 56.25vw; /* 100/56.25 = 1.778 */
     max-height: 100vh;
@@ -13,7 +14,7 @@ $exp-alternation-right-rect: 81.25%;
     left:0;right:0; /* horizontal center */
 }
 
-.exp-lookit-preferential-looking, .exp-lookit-geometry-alternation *
+.exp-lookit-preferential-looking, .exp-lookit-preferential-looking *
 {
     margin:0;
     padding:0;
@@ -77,15 +78,66 @@ $exp-alternation-right-rect: 81.25%;
     display: block;
 }
 
-#experiment-player:not(.player-fullscreen) .exp-lookit-preferential-looking #alternation-container {
-    overflow:hidden;
-    width: 100vw;
-    max-height: 56.25vw; /* 100/56.25 = 1.778 */
-    margin: auto;
-    top:0;bottom:0; /* vertical center */
-    left:0;right:0; /* horizontal center */
-}
-
 #experiment-player:not(.player-fullscreen) .exp-lookit-preferential-looking #allstimuli {
     width:100%;
+}
+
+.exp-lookit-preferential-looking #left-container {
+    min-width: 30%;
+    max-width: 30%;
+    left: 10%;
+    min-height: 60%;
+    max-height: 60%;
+    top: 20%;
+    position: absolute;
+    border: thin solid blue;
+}
+
+.exp-lookit-preferential-looking #right-container {
+    min-width: 30%;
+    max-width: 30%;
+    left: 60%;
+    min-height: 60%;
+    max-height: 60%;
+    top: 20%;
+    position: absolute;
+    border: thin solid red;
+}
+
+.exp-lookit-preferential-looking #center-container {
+    min-width: 20%;
+    max-width: 20%;
+    left: 40%;
+    min-height: 60%;
+    max-height: 60%;
+    top: 20%;
+    position: absolute;
+    border: thin solid green;
+}
+
+.exp-lookit-preferential-looking #right-image {
+    border: thin solid red;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-lookit-preferential-looking #left-image {
+    border: thin solid blue;
+    width:100%;
+    object-fit: contain;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-lookit-preferential-looking #center-image {
+    border: thin solid green;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
 }

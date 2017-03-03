@@ -8,33 +8,138 @@ let {
     $
 } = Ember;
 
-// Events recorded:
-// hasCamAccess
-// onConnectionStatus
-//    status
-// 'stoppingCapture' - immediately before stopping webcam stream
-// 'exp-alternation:startTestTrial' - immediately before starting test trial block
-// 'leftFullscreen'
-// 'enteredFullscreen'
-// 'exp-alternation:clearTriangles'
-// 'exp-alternation:presentTriangles', {
-//                        Lshape: Lshapes[0],
-//                        LX: LX,
-//                        LY: LY,
-//                        LRot: LRot,
-//                        LFlip: LFlip,
-//                        LSize: LSize,
-//                        Rshape: Rshapes[0],
-//                        RX: RX,
-//                        RY: RY,
-//                        RRot: RRot,
-//                        RFlip: RFlip,
-//                        RSize: RSize
-// exp-alternation:startCalibration
-//     location
-// exp-alternation:startIntro
-// pauseVideo (immediately before request to stop recording)
-// unpauseVideo (immediately before request to resume recording)
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * Frame to implement a basic preferential looking trial, with static images
+ * displayed in the center or at left and right of the screen. Trial proceeds
+ * in segments:
+ * - Intro: central attentiongrabber video (looping) & intro audio [wait until
+ *   recording is established to move on, and a minimum amount of time]
+ * - Test: image(s) displayed, any test audio played [set amount of time]
+ * - Final audio: central attentiongrabber video (looping) & final audio
+ *   (optional section, intended for last trial in block)
+ *
+ *
+ * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
+ * and expected to be repeated.
+
+```json
+ "frames": {
+    "preferential-looking": {
+        "allowPausingDuringTest": true,
+        "rightImage": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/fam.jpg",
+        "leftImage":
+        "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/novel.jpg",
+        "centerImage":
+        "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/0001.jpg",
+        "pauseAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/pause.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "trialLength": 10,
+        "kind": "exp-lookit-preferential-looking",
+        "fsAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/fullscreen.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/fullscreen.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "calibrationLength": 3000,
+        "id": "pref-trial",
+        "attnLength": 1,
+        "endAudioSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/all_done.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/all_done.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "introAudioSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "testAudioSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/mp3/Familiarization_find_dax_amplified_repeated.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/ogg/Familiarization_find_dax_amplified_repeated.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "unpauseAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/return_after_pause.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "calibrationVideoSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/webm/attention.webm",
+                "type": "video/webm"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp4/attention.mp4",
+                "type": "video/mp4"
+            }
+        ],
+        "videoSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/webm/attentiongrabber.webm",
+                "type": "video/webm"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/mp4/attentiongrabber.mp4",
+                "type": "video/mp4"
+            }
+        ],
+        "calibrationAudioSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg",
+                "type": "audio/ogg"
+            }
+        ]
+    }
+ }
+
+ * ```
+ * @class ExpLookitPreferentialLooking
+ * @extends ExpFrameBaseUnsafe
+ * @uses FullScreen
+ * @uses VideoRecord
+ */
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
@@ -52,11 +157,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // Track state of experiment
     completedAudio: false,
     completedAttn: false,
-    currentSegment: 'intro', // 'calibration', 'test' (mutually exclusive)
+    currentSegment: 'intro', // 'calibration', 'test', 'finalaudio' (mutually exclusive)
 
     readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
         function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAudio') && this.get('completedAttn'));
+            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn'));
         }),
 
     // used only by template
@@ -65,6 +170,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     }),
     doingIntro: Ember.computed('currentSegment', function() {
         return (this.get('currentSegment') === 'intro');
+    }),
+    doingTest: Ember.computed('currentSegment', function() {
+        return (this.get('currentSegment') === 'test');
+    }),
+    doingFinalAudio: Ember.computed('currentSegment', function() {
+        return (this.get('currentSegment') === 'finalaudio');
     }),
 
     isPaused: false,
@@ -84,42 +195,108 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         parameters: {
             type: 'object',
             properties: {
-                context: {
+                /**
+                 * Whether to allow user to pause the study during the test
+                 * segment and restart from intro; otherwise, user can pause but
+                 * this frame will end upon unpausing
+                 *
+                 * @property {Boolean} allowPausingDuringTest
+                 */
+                allowPausingDuringTest: {
                     type: 'boolean',
-                    description: 'True to use big fat triangle as context, or false to use small skinny triangle as context.',
-                    default: true
+                    description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
                 },
-                altOnLeft: {
-                    type: 'boolean',
-                    description: 'Whether to put the shape+size alternating stream on the left.',
-                    default: true
-                },
-                triangleColor: {
+                /**
+                 * URL of image to show on left (include to show left/right
+                 * images)
+                 *
+                 * @property {String} leftImage
+                 */
+                leftImage: {
                     type: 'string',
-                    description: 'color of triangle outline (3 or 6 char hex, starting with #)',
-                    default: '#056090'
+                    description: 'URL of image to show on left'
                 },
-                triangleLineWidth: {
-                    type: 'integer',
-                    description: 'triangle line width in pixels',
-                    default: 5
+                /**
+                 * URL of image to show on right
+                 *
+                 * @property {String} right
+                 */
+                rightImage: {
+                    type: 'string',
+                    description: 'URL of image to show on left'
                 },
+                /**
+                 * URL of image to show at center (include to show a center
+                 * image)
+                 *
+                 * @property {String} centerImage
+                 */
+                centerImage: {
+                    type: 'string',
+                    description: 'URL of image to show on left'
+                },
+                /**
+                 * minimum amount of time to show attention-getter in seconds
+                 *
+                 * @property {Number} attnLength
+                 * @default 5
+                 */
                 attnLength: {
                     type: 'number',
                     description: 'minimum amount of time to show attention-getter in seconds',
                     default: 5
                 },
+                /**
+                 * length of preferential looking trial in seconds
+                 *
+                 * @property {Number} trialLength
+                 * @default 6
+                 */
                 trialLength: {
                     type: 'number',
-                    description: 'length of alternation trial in seconds',
+                    description: 'length of preferential looking trial in seconds',
                     default: 6
                 },
+                /**
+                 * length of single calibration segment in seconds
+                 *
+                 * @property {Number} calibrationLength
+                 * @default 3
+                 */
                 calibrationLength: {
                     type: 'number',
-                    description: 'length of single calibration segment in ms',
-                    default: 3000
+                    description: 'length of single calibration segment in seconds',
+                    default: 3
                 },
-                audioSources: {
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for audio played during test trial
+                 *
+                 * @property {Object[]} testAudioSources
+                 */
+                testAudioSources: {
+                    type: 'array',
+                    description: 'List of objects specifying audio src and type for audio played during test trial',
+                    default: [],
+                    items: {
+                        type: 'object',
+                        properties: {
+                            'src': {
+                                type: 'string'
+                            },
+                            'type': {
+                                type: 'string'
+                            }
+                        }
+                    }
+                },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for instructions during attention-getter video
+                 *
+                 * @property {Object[]} introAudioSources
+                 */
+                introAudioSources: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for instructions during attention-getter video',
                     default: [],
@@ -135,22 +312,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
-                musicSources: {
-                    type: 'array',
-                    description: 'List of objects specifying audio src and type for music during attention-getter video',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            }
-                        }
-                    }
-                },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for audio played after trial ends (optional, intended for
+                 * last trial)
+                 *
+                 * @property {Object[]} endAudioSources
+                 */
                 endAudioSources: {
                     type: 'array',
                     description: 'Supply this to play audio at the end of the trial; list of objects specifying audio src and type',
@@ -167,6 +335,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for calibration audio, played from start during each
+                 * calibration segment
+                 *
+                 * @property {Object[]} calibrationAudioSources
+                 */
                 calibrationAudioSources: {
                     type: 'array',
                     description: 'list of objects specifying audio src and type for calibration audio',
@@ -183,9 +358,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for calibration video, played from start during each
+                 * calibration segment
+                 *
+                 * @property {Object[]} calibrationVideoSources
+                 */
                 calibrationVideoSources: {
                     type: 'array',
-                    description: 'list of objects specifying video src and type for calibration audio',
+                    description: 'list of objects specifying video src and type for calibration video',
                     default: [],
                     items: {
                         type: 'object',
@@ -199,6 +381,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
+                 * for attention-getter video
+                 *
+                 * @property {Object[]} videoSources
+                 */
                 videoSources: {
                     type: 'array',
                     description: 'List of objects specifying video src and type for attention-getter video',
@@ -215,6 +403,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played upon pausing study
+                 *
+                 * @property {Object[]} pauseAudio
+                 */
                 pauseAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study',
@@ -231,6 +425,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played upon resuming study
+                 *
+                 * @property {Object[]} unpauseAudio
+                 */
                 unpauseAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study',
@@ -247,6 +447,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played when study is paused due to not being fullscreen
+                 *
+                 * @property {Object[]} fsAudio
+                 */
                 fsAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study if study is not fullscreen',
@@ -266,11 +472,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         },
         data: {
+            /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {Boolean} hasBeenPaused whether this trial was paused
+             * @param {Object} eventTimings
+             * @return {Object} The payload sent to the server
+             */
             type: 'object',
             properties: {
-                altOnLeft: {
-                    type: 'boolean'
-                },
                 videoId: {
                     type: 'string'
                 },
@@ -286,7 +498,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             if (!frame.checkFullscreen()) {
                 frame.pauseStudy();
             } else {
-                frame.set('currentSegment', 'calibration');
+                frame.set('currentSegment', 'test');
             }
         }
     }),
@@ -309,10 +521,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            //window.clearInterval(this.get('testTimer'));
-            //this.set('testTime', 0);
-
             if (this.get('recorder')) {
+            /**
+             * Just before stopping webcam video capture
+             *
+             * @event stoppingCapture
+             */
                 this.sendTimeEvent('stoppingCapture');
                 this.get('recorder').stop();
             }
@@ -327,14 +541,19 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $(document).off('keyup.pauser');
         $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
 
-        // Start placeholder video right away
-        frame.sendTimeEvent('exp-alternation:startIntro');
+        /**
+         * Just before starting intro segment
+         *
+         * @event startIntro
+         */
+        frame.sendTimeEvent('startIntro');
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
         $('#player-audio')[0].play();
         frame.set('introTimer', window.setTimeout(function(){
             frame.set('completedAttn', true);
+            frame.notifyPropertyChange('readyToStartCalibration');
         }, frame.get('attnLength') * 1000));
 
     },
@@ -343,7 +562,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var frame = this;
 
         // Don't allow pausing during calibration/test.
-        $(document).off('keyup.pauser');
+        // TODO: generalize whether to allow pausing during each segment of the experiment.
+        // $(document).off('keyup.pauser');
 
         var calAudio = $('#player-calibration-audio')[0];
         var calVideo = $('#player-calibration-video')[0];
@@ -357,7 +577,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 frame.set('currentSegment', 'test');
             } else {
                 var thisLoc = calList.shift();
-                frame.sendTimeEvent('exp-alternation:startCalibration',
+                /**
+                 * Start of EACH calibration segment
+                 *
+                 * @event startCalibration
+                 * @param {String} location location of calibration ball, relative to child: 'left', 'right', or 'center'
+                 */
+                frame.sendTimeEvent('startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -381,40 +607,34 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         var frame = this;
 
-        frame.sendTimeEvent('exp-alternation:startTestTrial');
+        frame.sendTimeEvent('startTestTrial');
 
-        // Begin playing music; fade in and set to fade out at end of trial
-        var musicPlayer = $('#player-music');
-        musicPlayer.prop("volume", 0.1);
-        musicPlayer[0].play();
-        musicPlayer.animate({volume: 1}, frame.settings.musicFadeLength);
-        window.setTimeout(function(){
-            musicPlayer.animate({volume: 0}, frame.settings.musicFadeLength);
-        }, frame.settings.trialLength * 1000 - frame.settings.musicFadeLength);
+        // TODO: play audio here
+        var audioPlayer = $('#player-test-audio');
+        audioPlayer[0].currentTime = 0;
+        audioPlayer[0].play();
 
-        // Start presenting triangles and set to stop after trial length
-        frame.presentTriangles( frame.settings.LshapesStart,
-                                        frame.settings.RshapesStart,
-                                        frame.settings.LsizeBaseStart,
-                                        frame.settings.RsizeBaseStart);
-        window.setTimeout(function(){
+        // Now presenting stimuli; stop after trial length.
+        // TODO: consider actually setting to visible here
+        frame.set('stimTimer', window.setTimeout(function(){
             window.clearTimeout(frame.get('stimTimer'));
-            frame.clearTriangles();
+            audioPlayer[0].pause();
             frame.endTrial();
-            }, frame.settings.trialLength * 1000);
+            }, frame.trialLength * 1000));
     },
 
-    // When triangles have been shown for time indicated: play end-audio if
+    // When stimuli have been shown for time indicated: play end-audio if
     // present, or just move on.
+    // TODO: make sure stimuli are hidden once end-audio starts; maybe show ball.
     endTrial() {
-
-
+        // Don't allow pausing anymore
+        $(document).off('keyup.pauser');
         if (this.get('recorder')) {
             this.sendTimeEvent('stoppingCapture');
             this.get('recorder').stop();
         }
-
         if (this.get('endAudioSources').length) {
+            this.set('currentSegment', 'finalaudio');
             $('#player-endaudio')[0].play();
         }
         else {
@@ -422,105 +642,37 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
+    // TODO: should this be moved to the recording mixin?
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
         Ember.merge(opts, {
             streamTime: streamTime,
             videoId: this.get('videoId')
         });
-        this.send('setTimeEvent', `exp-alternation:${name}`, opts);
+        this.send('setTimeEvent', `exp-lookit-preferential-looking:${name}`, opts);
     },
 
+    // TODO: should this be moved to the fullscreen mixin?
     onFullscreen() {
         if (this.get('isDestroyed')) {
             return;
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
+            /**
+             * Upon detecting change out of fullscreen mode
+             *
+             * @event leftFullscreen
+            */
             this.sendTimeEvent('leftFullscreen');
         } else {
+            /**
+             * Upon detecting change to fullscreen mode
+             *
+             * @event enteredFullscreen
+            */
             this.sendTimeEvent('enteredFullscreen');
         }
-    },
-
-
-
-    getRandomElement(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    },
-
-    getRandom(min, max) {
-      return Math.random() * (max - min) + min;
-    },
-
-
-
-    drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
-
-        var leftTriangle = `${this.triangleBases[Lshape]}
-            transform=" translate(${LX}, ${LY})
-                        translate(37.5, 56)
-                        rotate(${LRot})
-                        scale(${LFlip * LSize})" />`;
-        var rightTriangle = `${this.triangleBases[Rshape]}
-            transform=" translate(${RX}, ${RY})
-                        translate(162.5, 56)
-                        rotate(${RRot})
-                        scale(${RFlip * RSize})" />`;
-        $('#stimuli').html(leftTriangle + rightTriangle);
-    },
-
-    clearTriangles() {
-        $('#stimuli').html('');
-    },
-
-    presentTriangles(Lshapes, Rshapes, LsizeBase, RsizeBase) {
-        // select X and Y positions for each shape
-        var LX = this.getRandom(this.settings.XRange[0],
-                                this.settings.XRange[1]);
-        var RX = this.getRandom(this.settings.XRange[0],
-                                this.settings.XRange[1]);
-        var LY = this.getRandom(this.settings.YRange[0],
-                                this.settings.YRange[1]);
-        var RY = this.getRandom(this.settings.YRange[0],
-                                this.settings.YRange[1]);
-        // select rotation, flip, size per shape
-        var LRot = this.getRandom(this.settings.rotRange[0],
-                                  this.settings.rotRange[1]);
-        var RRot = this.getRandom(this.settings.rotRange[0],
-                                  this.settings.rotRange[1]);
-        var LFlip = this.getRandomElement(this.settings.flipVals);
-        var RFlip = this.getRandomElement(this.settings.flipVals);
-        var LSize = this.getRandom(this.settings.sizeRange[0],
-                                   this.settings.sizeRange[1]) * LsizeBase[0];
-        var RSize = this.getRandom(this.settings.sizeRange[0],
-                                   this.settings.sizeRange[1]) * RsizeBase[0];
-
-        var frame = this;
-        frame.sendTimeEvent(`exp-alternation:clearTriangles`);
-        frame.clearTriangles();
-        frame.set('stimTimer', window.setTimeout(function() {
-            frame.sendTimeEvent(`exp-alternation:presentTriangles`, {
-                        Lshape: Lshapes[0],
-                        LX: LX,
-                        LY: LY,
-                        LRot: LRot,
-                        LFlip: LFlip,
-                        LSize: LSize,
-                        Rshape: Rshapes[0],
-                        RX: RX,
-                        RY: RY,
-                        RRot: RRot,
-                        RFlip: RFlip,
-                        RSize: RSize
-                    });
-            frame.drawTriangles(  Lshapes[0], LX, LY, LRot, LFlip, LSize,
-                            Rshapes[0], RX, RY, RRot, RFlip, RSize);
-            frame.set('stimTimer', window.setTimeout(function(){
-                frame.presentTriangles(Lshapes.reverse(), Rshapes.reverse(),
-                                    LsizeBase.reverse(), RsizeBase.reverse());
-            }, frame.settings.msTriangles));
-        }, frame.settings.msBlank));
     },
 
     handleSpace(event, frame) {
@@ -531,15 +683,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    // Pause/unpause study; only called if doing intro.
+    // Pause/unpause study.
     pauseStudy() {
 
+        // TODO: generalize across audio segments
         $('#player-audio')[0].pause();
         $('#player-audio')[0].currentTime = 0;
         $('#player-pause-audio')[0].pause();
         $('#player-pause-audio')[0].currentTime = 0;
         $('#player-pause-audio-leftfs')[0].pause();
         $('#player-pause-audio-leftfs')[0].currentTime = 0;
+        $('#player-calibration-audio')[0].pause();
+        $('#player-calibration-audio')[0].currentTime = 0;
+        $('#player-test-audio')[0].pause();
+        $('#player-test-audio')[0].currentTime = 0;
 
         this.set('completedAudio', false);
         this.set('completedAttn', false);
@@ -547,25 +704,45 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         Ember.run.once(this, () => {
             this.set('hasBeenPaused', true);
             var wasPaused = this.get('isPaused');
-            this.set('currentSegment', 'intro');
 
             // Currently paused: RESUME
             if (wasPaused) {
+                /**
+                 * When unpausing study, immediately before request to resume webcam recording
+                 *
+                 * @event unpauseVideo
+                 */
                 this.sendTimeEvent('unpauseVideo');
-                try {
-                    this.get('recorder').resume();
-                } catch (_) {
-                    return;
+                // Always allow resuming if study was paused during intro; also
+                // allow if designated for this frame
+                if (this.get('allowPausingDuringTest') || this.get('currentSegment') === 'intro') {
+                    try {
+                        this.get('recorder').resume();
+                    } catch (_) {
+                        return;
+                    }
+                    this.startIntro();
+                    this.set('isPaused', false);
                 }
-                this.startIntro();
-                this.set('isPaused', false);
+                else { // If restarting isn't allowed, end trial now
+                    this.set('isPaused', false);
+                    this.endTrial();
+                }
+
             } else { // Not currently paused: PAUSE
+                this.set('currentSegment', 'intro');
+                // TODO: generalize across timers
                 window.clearTimeout(this.get('introTimer'));
+                window.clearTimeout(this.get('stimTimer'));
+                /**
+                 * When pausing study, immediately before request to pause webcam recording
+                 *
+                 * @event pauseVideo
+                 */
                 this.sendTimeEvent('pauseVideo');
                 if (this.get('recorder')) {
                     this.get('recorder').pause(true);
                 }
-
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
                 } else {
@@ -580,87 +757,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
-
-        // Define basic properties for two triangle shapes used. It would be
-        // more natural to define these in the template, and then use the
-        // <use xlink:href="#name" .../> syntax to transform them as
-        // appropriate, but although this worked fine on experimenter I couldn't
-        // get the links working on lookit. The code was correctly generated,
-        // but while a direct use of polygon showed up, nothing that used
-        // xlink:href showed up at all (even when hard-coded into the template).
-        // Possibly related to issues like
-        // https://github.com/emberjs/ember.js/issues/14752.
-        // --kim
-
-        this.set('triangleBases', {
-            'fat': `<polygon stroke="${this.get('triangleColor')}"
-                     stroke-width="${this.get('triangleLineWidth')}"
-                     fill="none"
-                     points="-12.1369327415 ,  -5.63277008813,
-                              14.5176215029 ,  -5.63277008813,
-                              -2.38068876146 ,  11.2655401763"
-                     vector-effect="non-scaling-stroke"
-                     stroke-linejoin="round"`,
-            'skinny': `<polygon stroke="${this.get('triangleColor')}"
-                     stroke-width="${this.get('triangleLineWidth')}"
-                     fill="none"
-                     points="-27.5259468096 ,  -3.25208132666,
-                              18.6410953948 ,  -3.25208132666,
-                               8.88485141479 ,  6.50416265333"
-                     vector-effect="non-scaling-stroke"
-                     stroke-linejoin="round"`
-
-        });
-
-        // COUNTERBALANCING (2x2):
-        // context: whether to use big fat triangle or
-        // small skinny triangle as context figure. If 'fat', contrasts are
-        // big fat/small fat and big fat/small skinny. If 'skinny', contrasts
-        // are big skinny/small skinny and big fat/small skinny.
-        // altOnLeft: whether to put size-and-shape alteration on left
-
-        var diffShapes;
-        var sameShapes;
-        var shapeSizes;
-        if (this.get('context')) {
-            sameShapes = ['fat']; // context: big fat triangle
-            shapeSizes = [1, 0.7071]; // big fat vs. small fat/small skinny
-                // sqrt(0.5) = 0.7071, to get factor of two difference in area
-            diffShapes = ['fat', 'skinny']; // start with context
-        } else {
-            sameShapes = ['skinny']; // context: small skinny triangle
-            shapeSizes = [0.7071, 1]; // small skinny vs. big skinny/big fat
-            diffShapes = ['skinny', 'fat']; // start with context
-        }
-
-        var Lshapes, Rshapes;
-        if (this.get('altOnLeft')) {
-            Lshapes = diffShapes;
-            Rshapes = sameShapes;
-        } else {
-            Lshapes = sameShapes;
-            Rshapes = diffShapes;
-        }
-
-        this.set('settings', {
-            msBlank: 300,
-            msTriangles: 500,
-            LsizeBaseStart: shapeSizes,
-            RsizeBaseStart: shapeSizes.slice(),
-            XRange: [-3.125, 3.125],
-            YRange: [-3.125, 3.125],
-            rotRange: [0, 360],
-            flipVals: [-1, 1],
-            sizeRange: [0.921954, 1.072381], // 15% by AREA: sqrt(0.85), sqrt(1.15)
-            trialLength: this.get('trialLength'),
-            LshapesStart: Lshapes,
-            RshapesStart: Rshapes,
-            musicFadeLength: 2000,
-            calLength: this.get('calibrationLength')});
-
         this.send('showFullscreen');
         this.startIntro();
 
+        // TODO: move handlers that just record events to the VideoRecord mixin?
         if (this.get('experiment') && this.get('id') && this.get('session')) {
             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
                 hidden: true
@@ -671,11 +771,24 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.sendTimeEvent('recorderReady');
                 this.set('recordingIsReady', true);
             });
+            /**
+             * When recorder detects a change in camera access
+             *
+             * @event onCamAccess
+             * @param {Boolean} hasCamAccess
+             */
             recorder.on('onCamAccess', (hasAccess) => {
                 this.sendTimeEvent('hasCamAccess', {
                     hasCamAccess: hasAccess
                 });
             });
+            /**
+             * When recorder detects a change in video stream connection status
+             *
+             * @event videoStreamConnection
+             * @param {String} status status of video stream connection, e.g.
+             * 'NetConnection.Connect.Success' if successful
+             */
             recorder.on('onConnectionStatus', (status) => {
                 this.sendTimeEvent('videoStreamConnection', {
                     status: status

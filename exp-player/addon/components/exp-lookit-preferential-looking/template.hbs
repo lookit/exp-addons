@@ -1,6 +1,6 @@
 {{! template-lint-disable invalid-interactive}}
 
-<div class="row exp-lookit-geometry-alternation" id="alternation-container">
+<div class="row exp-lookit-preferential-looking">
 
     <video id="player-calibration-video"
            class="calibration center"
@@ -11,47 +11,15 @@
         {{/each}}
     </video>
 
-
-    {{#if doingIntro}}
-
+    {{#if (or doingIntro doingFinalAudio)}}
         <video id="player-video"
                class="attn"
                autoplay
                loop>
-
             {{#each videoSources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </video>
-
-        {{#if hasBeenPaused}}
-            <audio id="player-audio"
-                   onended={{action 'endAudio'}}>
-                {{#each unpauseAudio as |stream|}}
-                    <source src="{{stream.src}}" type="{{stream.type}}">
-                {{/each}}
-            </audio>
-        {{else}}
-            <audio id="player-audio"
-                   onended={{action 'endAudio'}}>
-                {{#each audioSources as |stream|}}
-                    <source src="{{stream.src}}" type="{{stream.type}}">
-                {{/each}}
-            </audio>
-        {{/if}}
-
-        <audio id="player-pause-audio">
-            {{#each pauseAudio as |stream|}}
-                <source src="{{stream.src}}" type="{{stream.type}}">
-            {{/each}}
-        </audio>
-
-        <audio id="player-pause-audio-leftfs">
-            {{#each fsAudio as |stream|}}
-                <source src="{{stream.src}}" type="{{stream.type}}">
-            {{/each}}
-        </audio>
-
     {{/if}}
 
     {{#if isPaused}}
@@ -63,36 +31,66 @@
     {{/if}}
 
     {{#unless updatedIsFullscreen}}
-    <button class="btn btn-success exp-lookit-geometry-alternation" id="fsButton" {{ action 'showFullscreen'}} >
-            please return to fullscreen
-    </button>
+        <button class="btn btn-success exp-lookit-preferential-looking" id="fsButton" {{ action 'showFullscreen'}} >
+                please return to fullscreen
+        </button>
     {{/unless}}
 
-    {{#unless doingIntro}}
-        <svg viewBox="0 0 200 112" id="allstimuli">
+    {{#if doingTest}}
+        <div id="allstimuli">
+            {{#if leftImage}}
+                <div id="left-container">
+                    <img id="left-image" src={{leftImage}} class="left-image"/>
+                </div>
+                <div id="right-container">
+                    <img id="right-image" src={{rightImage}} class="right-image"/>
+                </div>
+            {{/if}}
 
-            {{!-- Box for left image stream --}}
-            <rect x="2.5" y="5.6" width="70" height="100.8" fill="none" stroke="#666" stroke-width=".5"/>
+            {{#if centerImage}}
+                <div id="center-container">
+                    <img id="center-image" src={{centerImage}} class="center-image"/>
+                </div>
+            {{/if}}
+        </div>
+    {{/if}}
 
-            {{!-- Box for right image stream --}}
-            <rect x="127.5" y="5.6" width="70" height="100.8" fill="none" stroke="#666" stroke-width=".5"/>
-
-            {{!-- Actual triangles go here --}}
-            <g id="stimuli">
-            </g>
-
-        </svg>
-    {{/unless}}
-
-    <audio id="player-music"
-           loop>
-        {{#each musicSources as |stream|}}
+    <audio id="player-calibration-audio">
+        {{#each calibrationAudioSources as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
 
-    <audio id="player-calibration-audio">
-        {{#each calibrationAudioSources as |stream|}}
+    {{#if hasBeenPaused}}
+        <audio id="player-audio"
+               onended={{action 'endAudio'}}>
+            {{#each unpauseAudio as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+    {{else}}
+        <audio id="player-audio"
+               onended={{action 'endAudio'}}>
+            {{#each introAudioSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+    {{/if}}
+
+    <audio id="player-test-audio">
+        {{#each testAudioSources as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </audio>
+
+    <audio id="player-pause-audio">
+        {{#each pauseAudio as |stream|}}
+            <source src="{{stream.src}}" type="{{stream.type}}">
+        {{/each}}
+    </audio>
+
+    <audio id="player-pause-audio-leftfs">
+        {{#each fsAudio as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
@@ -105,10 +103,6 @@
             {{/each}}
         </audio>
     {{/if}}
-
-
-
-
 
 </div>
 
