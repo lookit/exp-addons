@@ -8,6 +8,49 @@ let pad = function(number) {
     return ('00' + (number || 0)).slice(-2);
 };
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * A standard mood survey with questions about factors that might affect a
+ * child's responses. Includes Likert-type ratings of the CHILD's position on
+ * the following scales:
+ * - Tired - Rested
+ * - Sick - Healthy
+ * - Fussy - Happy
+ * - Calm - Active
+ *
+ * and of the PARENT's position on:
+ * - Tired - Energetic
+ * - Overwhelmed - On top of things
+ * - Upset - Happy
+ *
+ * It also asks for a response in hours:minutes for:
+ * - how long ago the child last woke up from sleep or a nap
+ * - how long until he/she is due for another nap/sleep (if regular nap schedule)
+ * - how long ago the child last ate/drank
+ *
+ * and for what the child was doing just before this (free-response). Responses
+ * to all questions are required to move on.
+ *
+ * This frame can be used as a starting point/example for other custom survey frames, or development of a customizable survey frame.
+
+```json
+ "frames": {
+    "mood-survey": {
+        "introText": "How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.",
+        "id": "mood-survey",
+        "kind": "exp-lookit-mood-questionnaire"
+    }
+ }
+
+ * ```
+ * @class ExpLookitMoodQuestionnaire
+ * @extends ExpFrameBase
+ */
+
 const Validations = buildValidations({
     napWakeUp: validator('presence', {
         presence: true,
@@ -72,10 +115,21 @@ export default ExpFrameBaseComponent.extend(Validations, {
         parameters: {
             type: 'object',
             properties: {
+                /**
+                 * A unique identifier for this item
+                 *
+                 * @property {String} id
+                 */
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
                 },
+                /**
+                 * Intro paragraph describing why we want mood info
+                 *
+                 * @property {String} introText
+                 * @default 'How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.'
+                 */
                 introText: {
                     type: 'string',
                     description: 'Intro paragraph describing why we want mood info',
@@ -85,6 +139,24 @@ export default ExpFrameBaseComponent.extend(Validations, {
             required: ['id']
         },
         data: {
+            /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {String} rested Rating for CHILD on tired - rested scale, '1' to '7' where '7' is rested
+             * @param {String} healthy Rating for CHILD on sick - healthy scale, '1' to '7' where '7' is healthy
+             * @param {String} childHappy Rating for CHILD on fussy - happy scale, '1' to '7' where '7' is happy
+             * @param {String} active Rating for CHILD on calm - active scale, '1' to '7' where '7' is active
+             * @param {String} energetic Rating for PARENT on tired - energetic scale, '1' to '7' where '7' is energetic
+             * @param {String} ontopofstuff Rating for PARENT on overwhelmed - on top of stuff scale, '1' to '7' where '7' is on top of stuff
+             * @param {String} healthy Rating for PARENT on upset - happy scale, '1' to '7' where '7' is happy
+             * @param {String} napWakeUp how long since the child woke up from nap, HH:mm
+             * @param {String} usualNapSchedule whether the child has a typical nap schedule: 'no', 'yes', or 'yes-overdue' if child is overdue for nap
+             * @param {String} nextNap only valid if usualNapSchedule is 'yes';  how long until child is due to sleep again, HH:mm
+             * @param {String} lastEat how long since the child ate/drank, HH:mm
+             * @param {String} doingBefore what the child was doing before this (free response)
+             * @return {Object} The payload sent to the server
+             */
             type: 'object',
             properties: {
                 rested: {
