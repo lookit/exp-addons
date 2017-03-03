@@ -134,8 +134,8 @@ let {
  * ```
  * @class ExpLookitGeometryAlternation
  * @extends ExpFrameBaseUnsafe
- * @extends FullScreen
- * @extends VideoRecord
+ * @uses FullScreen
+ * @uses VideoRecord
  */
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
@@ -524,9 +524,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            //window.clearInterval(this.get('testTimer'));
-            //this.set('testTime', 0);
-
             /**
              * Just before stopping webcam video capture
              *
@@ -815,7 +812,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * When unpausing study, immediately before request to resume webcam recording
                  *
-                 * @event pauseVideo
+                 * @event unpauseVideo
                  */
                 this.sendTimeEvent('unpauseVideo');
                 try {
