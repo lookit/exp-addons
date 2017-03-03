@@ -142,8 +142,11 @@ let {
  */
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
-    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369. exp-alternation frames are expected to be repeated, so they need to be unsafe.
+    // In the Lookit use case, the frame BEFORE the one that goes fullscreen
+    // must use "unsafe" saves (in order for the fullscreen event to register as
+    // being user-initiated and not from a promise handler) #LEI-369.
+    // exp-alternation frames are expected to be repeated, so they need to be
+    // unsafe.
     type: 'exp-lookit-preferential-looking',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -158,13 +161,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     completedAudio: false,
     completedAttn: false,
     currentSegment: 'intro', // 'calibration', 'test', 'finalaudio' (mutually exclusive)
+    previousSegment: 'intro', // used when pausing/unpausing - refers to segment that study was paused during
 
     readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
         function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn'));
+            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn') && (!this.get('hasBeenPaused') || this.get('completedAudio')));
         }),
 
-    // used only by template
+    // helpers for use in template
     doingCalibration: Ember.computed('currentSegment', function() {
         return (this.get('currentSegment') === 'calibration');
     }),
@@ -184,10 +188,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // Timers for intro & stimuli
     introTimer: null, // minimum length of intro segment
     stimTimer: null,
-
-    // Store data about triangles to show, display lengths, etc. in frame
-    settings: null,
-    triangleBases: null,
 
     meta: {
         name: 'ExpLookitPreferentialLooking',
@@ -495,11 +495,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     calObserver: Ember.observer('readyToStartCalibration', function(frame) {
         if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
-            if (!frame.checkFullscreen()) {
-                frame.pauseStudy();
-            } else {
-                frame.set('currentSegment', 'test');
-            }
+            frame.set('currentSegment', 'test');
         }
     }),
 
@@ -515,7 +511,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     actions: {
 
         // When intro audio is complete
-        endAudio() {
+        completedIntroAudio() {
             this.set('completedAudio', true);
             this.notifyPropertyChange('readyToStartCalibration');
         },
@@ -609,7 +605,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         frame.sendTimeEvent('startTestTrial');
 
-        // TODO: play audio here
         var audioPlayer = $('#player-test-audio');
         audioPlayer[0].currentTime = 0;
         audioPlayer[0].play();
@@ -625,7 +620,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     // When stimuli have been shown for time indicated: play end-audio if
     // present, or just move on.
-    // TODO: make sure stimuli are hidden once end-audio starts; maybe show ball.
     endTrial() {
         // Don't allow pausing anymore
         $(document).off('keyup.pauser');
@@ -652,7 +646,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.send('setTimeEvent', `exp-lookit-preferential-looking:${name}`, opts);
     },
 
-    // TODO: should this be moved to the fullscreen mixin?
+    // TODO: should the events here be moved to the fullscreen mixin?
     onFullscreen() {
         if (this.get('isDestroyed')) {
             return;
@@ -665,6 +659,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @event leftFullscreen
             */
             this.sendTimeEvent('leftFullscreen');
+            if (!this.get('isPaused') && !(this.get('currentSegment') === 'finalaudio')) {
+                this.pauseStudy();
+            }
         } else {
             /**
              * Upon detecting change to fullscreen mode
@@ -676,6 +673,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     handleSpace(event, frame) {
+        // Only pause/unpause on space if study is fullscreen (or not currently paused)
         if (frame.checkFullscreen() || !frame.isPaused) {
             if (event.which === 32) { // space
                 frame.pauseStudy();
@@ -715,7 +713,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.sendTimeEvent('unpauseVideo');
                 // Always allow resuming if study was paused during intro; also
                 // allow if designated for this frame
-                if (this.get('allowPausingDuringTest') || this.get('currentSegment') === 'intro') {
+                if (this.get('allowPausingDuringTest') || this.get('previousSegment') === 'intro') {
                     try {
                         this.get('recorder').resume();
                     } catch (_) {
@@ -730,6 +728,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 }
 
             } else { // Not currently paused: PAUSE
+                this.set('previousSegment', this.get('currentSegment'));
                 this.set('currentSegment', 'intro');
                 // TODO: generalize across timers
                 window.clearTimeout(this.get('introTimer'));

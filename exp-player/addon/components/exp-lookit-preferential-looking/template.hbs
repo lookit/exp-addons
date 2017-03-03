@@ -63,14 +63,13 @@
 
     {{#if hasBeenPaused}}
         <audio id="player-audio"
-               onended={{action 'endAudio'}}>
+               onended={{action 'completedIntroAudio'}}>
             {{#each unpauseAudio as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
     {{else}}
-        <audio id="player-audio"
-               onended={{action 'endAudio'}}>
+        <audio id="player-audio">
             {{#each introAudioSources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
