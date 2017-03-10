@@ -90,7 +90,7 @@ $exp-alternation-right-rect: 81.25%;
     max-height: 60%;
     top: 20%;
     position: absolute;
-    border: thin solid blue;
+    //border: thin solid blue;
 }
 
 .exp-lookit-preferential-looking #right-container {
@@ -101,7 +101,7 @@ $exp-alternation-right-rect: 81.25%;
     max-height: 60%;
     top: 20%;
     position: absolute;
-    border: thin solid red;
+    //border: thin solid red;
 }
 
 .exp-lookit-preferential-looking #center-container {
@@ -112,11 +112,11 @@ $exp-alternation-right-rect: 81.25%;
     max-height: 60%;
     top: 20%;
     position: absolute;
-    border: thin solid green;
+    //border: thin solid green;
 }
 
 .exp-lookit-preferential-looking #right-image {
-    border: thin solid red;
+    //border: thin solid red;
     max-width: 100%;
     max-height: 100%;
     margin: auto;
@@ -125,7 +125,7 @@ $exp-alternation-right-rect: 81.25%;
 }
 
 .exp-lookit-preferential-looking #left-image {
-    border: thin solid blue;
+    //border: thin solid blue;
     width:100%;
     object-fit: contain;
     margin: auto;
@@ -134,7 +134,7 @@ $exp-alternation-right-rect: 81.25%;
 }
 
 .exp-lookit-preferential-looking #center-image {
-    border: thin solid green;
+    //border: thin solid green;
     max-width: 100%;
     max-height: 100%;
     margin: auto;

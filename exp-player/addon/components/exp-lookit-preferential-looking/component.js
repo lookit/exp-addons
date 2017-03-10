@@ -605,15 +605,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         frame.sendTimeEvent('startTestTrial');
 
+        $('#allstimuli').show();
+
         var audioPlayer = $('#player-test-audio');
         audioPlayer[0].currentTime = 0;
         audioPlayer[0].play();
 
         // Now presenting stimuli; stop after trial length.
         // TODO: consider actually setting to visible here
-        frame.set('stimTimer', window.setTimeout(function(){
+        frame.set('stimTimer', window.setTimeout(function() {
             window.clearTimeout(frame.get('stimTimer'));
             audioPlayer[0].pause();
+            $('#allstimuli').hide();
             frame.endTrial();
             }, frame.trialLength * 1000));
     },
@@ -621,6 +624,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // When stimuli have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
+        // TODO: possibly put all calls to next here, rather than calling
+        // next directly from ending audio in the template, for clarity
         // Don't allow pausing anymore
         $(document).off('keyup.pauser');
         if (this.get('recorder')) {
@@ -695,6 +700,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $('#player-calibration-audio')[0].currentTime = 0;
         $('#player-test-audio')[0].pause();
         $('#player-test-audio')[0].currentTime = 0;
+        $('#allstimuli').hide();
 
         this.set('completedAudio', false);
         this.set('completedAttn', false);

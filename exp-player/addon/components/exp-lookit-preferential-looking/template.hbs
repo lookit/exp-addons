@@ -36,24 +36,24 @@
         </button>
     {{/unless}}
 
-    {{#if doingTest}}
-        <div id="allstimuli">
-            {{#if leftImage}}
-                <div id="left-container">
-                    <img id="left-image" src={{leftImage}} class="left-image"/>
-                </div>
-                <div id="right-container">
-                    <img id="right-image" src={{rightImage}} class="right-image"/>
-                </div>
-            {{/if}}
 
-            {{#if centerImage}}
-                <div id="center-container">
-                    <img id="center-image" src={{centerImage}} class="center-image"/>
-                </div>
-            {{/if}}
-        </div>
-    {{/if}}
+    <div id="allstimuli" style="display:none;">
+        {{#if leftImage}}
+            <div id="left-container">
+                <img id="left-image" src={{leftImage}} class="left-image"/>
+            </div>
+        {{/if}}
+        {{#if rightImage}}
+            <div id="right-container">
+                <img id="right-image" src={{rightImage}} class="right-image"/>
+            </div>
+        {{/if}}
+        {{#if centerImage}}
+            <div id="center-container">
+                <img id="center-image" src={{centerImage}} class="center-image"/>
+            </div>
+        {{/if}}
+    </div>
 
     <audio id="player-calibration-audio">
         {{#each calibrationAudioSources as |stream|}}
