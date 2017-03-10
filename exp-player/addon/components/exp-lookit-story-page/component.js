@@ -136,7 +136,7 @@ let {
  }
 
  * ```
- * @class ExpLookitPreferentialLooking
+ * @class ExpLookitStoryPage
  * @extends ExpFrameBaseUnsafe
  * @uses FullScreen
  * @uses VideoRecord
@@ -764,44 +764,44 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this._super(...arguments);
 
         this.send('showFullscreen');
-        this.startIntro();
+        //this.startIntro();
 
         // TODO: move handlers that just record events to the VideoRecord mixin?
-        if (this.get('experiment') && this.get('id') && this.get('session')) {
-            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
-                hidden: true
-            });
-            recorder.install({
-                record: true
-            }).then(() => {
-                this.sendTimeEvent('recorderReady');
-                this.set('recordingIsReady', true);
-            });
-            /**
-             * When recorder detects a change in camera access
-             *
-             * @event onCamAccess
-             * @param {Boolean} hasCamAccess
-             */
-            recorder.on('onCamAccess', (hasAccess) => {
-                this.sendTimeEvent('hasCamAccess', {
-                    hasCamAccess: hasAccess
-                });
-            });
-            /**
-             * When recorder detects a change in video stream connection status
-             *
-             * @event videoStreamConnection
-             * @param {String} status status of video stream connection, e.g.
-             * 'NetConnection.Connect.Success' if successful
-             */
-            recorder.on('onConnectionStatus', (status) => {
-                this.sendTimeEvent('videoStreamConnection', {
-                    status: status
-                });
-            });
-            this.set('recorder', recorder);
-        }
+//         if (this.get('experiment') && this.get('id') && this.get('session')) {
+//             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+//                 hidden: true
+//             });
+//             recorder.install({
+//                 record: true
+//             }).then(() => {
+//                 this.sendTimeEvent('recorderReady');
+//                 this.set('recordingIsReady', true);
+//             });
+//             /**
+//              * When recorder detects a change in camera access
+//              *
+//              * @event onCamAccess
+//              * @param {Boolean} hasCamAccess
+//              */
+//             recorder.on('onCamAccess', (hasAccess) => {
+//                 this.sendTimeEvent('hasCamAccess', {
+//                     hasCamAccess: hasAccess
+//                 });
+//             });
+//             /**
+//              * When recorder detects a change in video stream connection status
+//              *
+//              * @event videoStreamConnection
+//              * @param {String} status status of video stream connection, e.g.
+//              * 'NetConnection.Connect.Success' if successful
+//              */
+//             recorder.on('onConnectionStatus', (status) => {
+//                 this.sendTimeEvent('videoStreamConnection', {
+//                     status: status
+//                 });
+//             });
+//             this.set('recorder', recorder);
+//         }
 
     },
 
