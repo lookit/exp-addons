@@ -665,7 +665,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @event leftFullscreen
             */
             this.sendTimeEvent('leftFullscreen');
-            if (!this.get('isPaused') && !(this.get('currentSegment') === 'finalaudio')) {
+            if (!(this.get('isPaused') || (this.get('currentSegment') === 'finalaudio'))) {
                 this.pauseStudy();
             }
         } else {
