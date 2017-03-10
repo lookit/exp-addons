@@ -4,22 +4,11 @@
 
     <div id="story-area">
         {{#each images as |image|}}
-            <div id={{image.id}}>
+            <div id={{image.id}} class="story-image-container" style="left:{{image.left}}%; width:{{image.width}}%; top:{{image.top}}%; height:{{image.height}}%;">
                 <img src={{image.src}} class="story-image">
             </div>
         {{/each}}
     </div>
-
-    {{#if (not doingIntro)}}
-        <video id="player-video"
-               class="attn"
-               autoplay
-               loop>
-            {{#each videoSources as |stream|}}
-                <source src="{{stream.src}}" type="{{stream.type}}">
-            {{/each}}
-        </video>
-    {{/if}}
 
     {{#unless updatedIsFullscreen}}
         <button class="btn btn-success exp-lookit-story-page" id="fsButton" {{ action 'showFullscreen'}} >
@@ -27,45 +16,12 @@
         </button>
     {{/unless}}
 
-    <audio id="player-calibration-audio">
-        {{#each calibrationAudioSources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
-
-    {{#if hasBeenPaused}}
-        <audio id="player-audio"
-               onended={{action 'completedIntroAudio'}}>
-            {{#each unpauseAudio as |stream|}}
+    {{#each audioSources as |audioSourceObject|}}
+        <audio class="player-audio" id={{audioSourceObject.audioId}}>
+            {{#each audioSourceObject.sources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
-    {{else}}
-        <audio id="player-audio">
-            {{#each introAudioSources as |stream|}}
-                <source src="{{stream.src}}" type="{{stream.type}}">
-            {{/each}}
-        </audio>
-    {{/if}}
-
-    <audio id="player-test-audio">
-        {{#each testAudioSources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
-
-    <audio id="player-pause-audio">
-        {{#each pauseAudio as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
-
-    <audio id="player-pause-audio-leftfs">
-        {{#each fsAudio as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
-
+    {{/each}}
 
 </div>
-
