@@ -1,14 +1,14 @@
-$exp-alternation-cal-width: 12%;
-$exp-alternation-left-rect: 18.75%;
-$exp-alternation-right-rect: 81.25%;
+$expLookit-preferential-looking-AR: 2;
+$exp-lookit-preferential-looking-picwidth: 30;
+$exp-lookit-preferential-looking-picmargin: 2;
 
-.exp-lookit-preferential-looking #allstimuli {
+.exp-lookit-preferential-looking #allstimuli, #experiment-player.player-fullscreen .exp-lookit-preferential-looking #allstimuli{
     overflow:hidden;
-    position:relative;
+    position:fixed;
     width: 100vw;
-    height: 56.25vw; /* 100/56.25 = 1.778 */
+    height: 30vw;
     max-height: 100vh;
-    max-width: 177.78vh; /* 16/9 = 1.778 */
+    max-width: (100 / $exp-lookit-preferential-looking-picwidth) * 100vh;
     margin: auto;
     top:0;bottom:0; /* vertical center */
     left:0;right:0; /* horizontal center */
@@ -82,59 +82,33 @@ $exp-alternation-right-rect: 81.25%;
     width:100%;
 }
 
-.exp-lookit-preferential-looking #left-container {
-    min-width: 30%;
-    max-width: 30%;
-    left: 10%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
+@mixin pic-container($left-pos) {
+    min-width: $exp-lookit-preferential-looking-picwidth * 1%;
+    max-width: $exp-lookit-preferential-looking-picwidth * 1%;
+    left: $left-pos;
+    min-height: 100%;
+    max-height: 100%;
+    top: 0;
     position: absolute;
-    //border: thin solid blue;
+}
+
+.exp-lookit-preferential-looking #left-container {
+    @include pic-container($exp-lookit-preferential-looking-picmargin * 1%);
+    border: thin solid blue;
 }
 
 .exp-lookit-preferential-looking #right-container {
-    min-width: 30%;
-    max-width: 30%;
-    left: 60%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
-    position: absolute;
-    //border: thin solid red;
+    @include pic-container((100 - $exp-lookit-preferential-looking-picmargin - $exp-lookit-preferential-looking-picwidth) * 1%);
+    border: thin solid red;
 }
 
 .exp-lookit-preferential-looking #center-container {
-    min-width: 20%;
-    max-width: 20%;
-    left: 40%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
-    position: absolute;
-    //border: thin solid green;
+    @include pic-container(((100 - $exp-lookit-preferential-looking-picwidth) / 2) * 1%);
+    border: thin solid green;
 }
 
-.exp-lookit-preferential-looking #right-image {
+.exp-lookit-preferential-looking img.stim-image {
     //border: thin solid red;
-    max-width: 100%;
-    max-height: 100%;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-lookit-preferential-looking #left-image {
-    //border: thin solid blue;
-    width:100%;
-    object-fit: contain;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-lookit-preferential-looking #center-image {
-    //border: thin solid green;
     max-width: 100%;
     max-height: 100%;
     margin: auto;
