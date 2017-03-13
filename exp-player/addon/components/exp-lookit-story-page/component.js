@@ -63,6 +63,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     currentSegment: 'intro', // 'calibration', 'test', 'finalaudio' (mutually exclusive)
     previousSegment: 'intro', // used when pausing/unpausing - refers to segment that study was paused during
 
+    currentAudioIndex: 0, // during initial sequential audio, holds an index into audioSources
+
     readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
         function() {
             return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn') && (!this.get('hasBeenPaused') || this.get('completedAudio')));
@@ -103,18 +105,40 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     type: 'boolean',
                     description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
                 },
-                testAudioSources: {
+                /**
+                 * Array of objects describing audio to play at the start of
+                 * this frame. Each element describes a separate audio segment.
+                 *
+                 * @property {Object[]} audioSources
+                 *   @param {String} audioId unique string identifying this
+                 *      audio segment
+                 *   @param {Object[]} sources Array of {src: 'url', type:
+                 *      'MIMEtype'} objects with audio sources for this segment
+                 *   @param {Object[]} annotations
+                 */
+                audioSources: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played during test trial',
                     default: [],
                     items: {
                         type: 'object',
                         properties: {
-                            'src': {
+                            'audioId': {
                                 type: 'string'
                             },
-                            'type': {
-                                type: 'string'
+                            'sources': {
+                                type: 'object',
+                                properties: {
+                                'src': {
+                                    type: 'string'
+                                },
+                                'type': {
+                                    type: 'string'
+                                    }
+                                },
+                            },
+                            'annotations': {
+                                type: 'object'
                             }
                         }
                     }
@@ -218,6 +242,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.get('recorder').stop();
             }
             this._super(...arguments);
+        },
+
+        playNextAudioSegment() {
+            if (this.currentAudioIndex < this.get('audioSources').length) {
+                $('#' + this.get('audioSources')[this.currentAudioIndex].audioId)[0].play();
+            } else {
+                // TODO: handle cases where we wait for a response, rather than auto-proceeding
+                this.send('next');
+            }
+            this.currentAudioIndex++;
         }
 
     },
@@ -362,6 +396,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         this.send('showFullscreen');
         //this.startIntro();
+        this.send('playNextAudioSegment');
 
         // TODO: move handlers that just record events to the VideoRecord mixin?
 //         if (this.get('experiment') && this.get('id') && this.get('session')) {

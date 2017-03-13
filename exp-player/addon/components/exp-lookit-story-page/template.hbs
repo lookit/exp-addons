@@ -17,7 +17,7 @@
     {{/unless}}
 
     {{#each audioSources as |audioSourceObject|}}
-        <audio class="player-audio" id={{audioSourceObject.audioId}}>
+        <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}}>
             {{#each audioSourceObject.sources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
