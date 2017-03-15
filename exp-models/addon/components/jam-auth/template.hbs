@@ -1,0 +1,21 @@
+<div class="well">
+    <div class="form">
+        <div class="form-group">
+            <label for="identifier">Username</label>
+            <div class="form-input">
+                {{input value=username}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="participant">Password</label>
+            <div class="form-input">
+                {{input value=password}}
+            </div>
+        </div>
+        <div class="form-group">
+            <button disabled={{disableLogin}} class="btn btn-primary" onclick={{action 'authenticate'}}>
+                Login
+            </button>
+        </div>
+    </div>
+</div>

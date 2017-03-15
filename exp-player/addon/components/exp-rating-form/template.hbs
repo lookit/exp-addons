@@ -1,0 +1,50 @@
+<div class="row">
+    {{page-number pageNumber=progressBarPage}}
+    {{#bs-form}}
+        {{#each questions as |question index|}}
+            {{#if (eq question.page framePage)}}
+                {{#bs-form-group}}
+                    <label class="break-line question-label">{{add index 1}}. {{t question.question}}</label><br>
+                    {{#if (eq question.type 'radio')}}
+                        {{#each question.items as |item|}}
+                            {{#if item.description}}
+                                <label>{{t item.description}}</label>
+                            {{/if}}
+                            {{isp-radio-group options=question.scale labelTop=item.labelTop labels=item.labels
+                                              formatLabel=item.formatLabel value=item.value
+                            }}
+                            <br>
+                            <br>
+                        {{/each}}
+                    {{else if (eq question.type 'select')}}
+                        {{select-input options=question.scale value=question.items.0.value}}
+                    {{else if (eq question.type 'radio-input')}}
+                        {{isp-radio-group options=question.scale formatLabel=question.items.0.formatLabel
+                                          value=question.items.0.value}}
+                        {{#if (eq question.items.0.value 1)}}
+                            <label class="label-margin-top">{{t question.items.1.description}}</label><br>
+                            {{#textarea value=question.items.1.value rows="2" cols="35"}}{{/textarea}}<br>
+                            <label class="label-margin-top">{{t question.items.2.description}}</label>
+                            {{isp-radio-group options=question.items.2.scale labelTop=question.items.2.labelTop
+                                              labels=question.items.2.labels value=question.items.2.value}}
+                            <br>
+                        {{/if}}
+                        <br>
+                    {{/if}}
+                {{/bs-form-group}}
+            {{/if}}
+        {{/each}}
+    {{/bs-form}}
+</div>
+<div class="row exp-controls">
+    <button class='btn btn-primary pull-right {{if allowNext "" "disabled"}}' {{action 'continue'}}>
+        {{t
+        'global.continueLabel'}}
+    </button>
+    {{#unless (eq framePage 0)}}
+        <button class="btn btn-default" {{ action 'previousPage' }}>
+            {{t 'global.previousLabel'}}
+        </button>
+    {{/unless}}
+    {{progress-bar pageNumber=progressBarPage}}
+</div>

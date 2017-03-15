@@ -1,0 +1,47 @@
+.isp-radio-group {
+  white-space: nowrap;
+}
+
+.isp-radio-group {
+  input {
+	  margin: 10px;
+    height: 1em;
+  }
+}
+
+.label-text {
+  font-size: 12px;
+  font-weight:normal;
+  text-align:center;
+  display: inline-block;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  margin-right: 10px;
+  max-width: 10%;
+}
+
+.format-label {
+  width: 9%;
+  margin-top: -15px;
+}
+
+.measure-four {
+  width: 6%;
+}
+
+.measure-six {
+    width: 8%;
+    margin-right: 20px;
+}
+
+.negative-margin-top {
+    margin-top: -25px;
+}
+
+.hidden-label {
+    display: none;
+}
+
+.narrow-width {
+    width: 5%;
+}

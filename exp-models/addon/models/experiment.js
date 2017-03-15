@@ -1,5 +1,7 @@
+// jscs:disable disallowArrayDestructuringReturn
+
 /*
-Manage data about one or more documents in the experiments collection
+ Manage data about one or more documents in the experiments collection
  */
 import Ember from 'ember';
 import DS from 'ember-data';
@@ -11,13 +13,17 @@ import SessionAdapter from '../adapters/session';
 import SessionModel from '../models/session';
 import SessionSerializer from '../serializers/session';
 
-export default DS.Model.extend(JamModel, {
-    namespaceConfig: Ember.inject.service(),
-
+// Known states available to experiments. Available as instance variables, or may be imported and used as an enum
+//   directly when no instance is available.
+const expStates = {
     ACTIVE: 'Active',
     DRAFT: 'Draft',
     ARCHIVED: 'Archived',
     DELETED: 'Deleted',
+};
+
+const Experiment = DS.Model.extend(JamModel, {
+    namespaceConfig: Ember.inject.service(),
 
     title: DS.attr('string'),
     description: DS.attr('string'),
@@ -37,7 +43,7 @@ export default DS.Model.extend(JamModel, {
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
     _thumbnail: null,
-    onReady: function() {
+    onReady: function () {
         var thumbnailId = this.get('thumbnailId');
         if (thumbnailId) {
             this.get('store').findRecord('thumbnail', thumbnailId).then((thumbnail) => {
@@ -87,10 +93,10 @@ export default DS.Model.extend(JamModel, {
     permissions: DS.attr(),
 
     state: DS.attr('string'),
-    isActive: Ember.computed('state', function() {
+    isActive: Ember.computed('state', function () {
         return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
-    onStateChange: function() {
+    onStateChange: function () {
         if (this.get('isNew')) {
             return;
         }
@@ -106,7 +112,7 @@ export default DS.Model.extend(JamModel, {
     eligibilityMaxAge: DS.attr('string'),
     eligibilityMinAge: DS.attr('string'),
     eligibilityString: DS.attr('string'),
-    _parseAge: function(age) {
+    _parseAge: function (age) {
         var inflector = new Ember.Inflector();
         var [amount, unit] = age.split(' ');
         return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
@@ -133,7 +139,7 @@ export default DS.Model.extend(JamModel, {
         maxDays = maxDays || Number.MAX_SAFE_INTEGER;
         return minDays <= age && age <= maxDays;
     },
-    ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function() {
+    ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function () {
         let {
             eligibilityMinAge,
             eligibilityMaxAge
@@ -151,13 +157,13 @@ export default DS.Model.extend(JamModel, {
     }),
 
     history: DS.hasMany('history'),
-    getCurrentVersion: function() {
-        return this.get('history').then(function(changes) {
+    getCurrentVersion: function () {
+        return this.get('history').then(function (changes) {
             return changes.objectAt(0).get('id');
         });
     },
 
-    sessionCollectionId: Ember.computed('shortId', function() {
+    sessionCollectionId: Ember.computed('shortId', function () {
         // Return a string corresponding to the session collection shortID, to be used by model/adapter/serializer
         // Eg an experiment called 'test0' would have a collection 'session-test0'
         return `session${this.get('id')}s`; // FIXME: the spurious s is a requirement imposed by genschemas...
@@ -173,10 +179,11 @@ export default DS.Model.extend(JamModel, {
         var container = Ember.getOwner(this);
         container.register(`model:${cId}`, SessionModel.extend()); // register a dummy model. This seems to work even if model already registered
         container.register(`adapter:${cId}`, SessionAdapter.extend({
-            'sessionCollectionId': cId
+            sessionCollectionId: cId,
+            shouldReloadAll: () => true
         })); // Override part of adapter URL
         container.register(`serializer:${cId}`, SessionSerializer.extend({
-            'modelName': cId
+            modelName: cId
         })); // Tell serializer what model to use
     },
 
@@ -206,3 +213,9 @@ export default DS.Model.extend(JamModel, {
 
     // TODO: In the future, we would like to automatically set session access appropriately when the value of isActive changed AND the experiment record is saved to the server (observer easy for one event, less so for the combination)
 });
+
+// Add states enum as instance-level variables for convenience / backwards compatibility
+Experiment.reopen(expStates);
+
+export default Experiment;
+export {expStates};

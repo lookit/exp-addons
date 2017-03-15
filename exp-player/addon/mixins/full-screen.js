@@ -4,15 +4,28 @@ let {
     $
 } = Ember;
 
+/**
+ * @module exp-player
+ * @submodule mixins
+ */
 
-/*
-    Allow components to specify fullscreen capabilities based on minimal configuration options
+/**
+ * Allow components to specify fullscreen capabilities based on minimal configuration options
+ * @class FullScreen
  */
 export default Ember.Mixin.create({
-    fullScreenElementId: null, // String containing the ID of the element to make full screen
-    displayFullscreen: false,  // Whether to show this element in fullscreen mode by default
+    /**
+     *  The element ID of the thing to make full screen (video element, div, etc)
+     * @property {String} fullScreenElementId
+     */
+    fullScreenElementId: null,
+    displayFullscreen: false,
 
-    fsButtonID: false, // ID for button element to show if user leaves FS
+    /**
+     * The element ID of a button to show if the user leaves fullscreen mode
+     * @property {String} fsButtonID
+     */
+    fsButtonID: false,
 
     // Note: to avoid handler being called repeatedly (bubbling
     // up?) I'm just having components that extend FullScreen call
@@ -23,22 +36,24 @@ export default Ember.Mixin.create({
 
     counter: 0,
 
-    updatedIsFullscreen: Ember.computed('counter', function() {
+    updatedIsFullscreen: Ember.computed('counter', function () {
         return this.checkFullscreen();
     }),
 
     isFullscreen: false, // Keep track of state
 
-    checkFullscreen: function() {  // Abstract away vendor-prefixed APIs
+    checkFullscreen: function () {  // Abstract away vendor-prefixed APIs
 
         var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
-            if (!!document[opt]) {return true;}
+            if (!!document[opt]) {
+                return true;
+            }
         }
         return false;
     },
 
-    onFullscreen: function($element) {
+    onFullscreen: function ($element) {
         this.set('counter', this.get('counter') + 1);
         if (this.get('isDestroyed')) {
             // Short-circuit if object is destroyed (eg we leave fullscreen because a video frame ended)
@@ -48,12 +63,12 @@ export default Ember.Mixin.create({
         var isFS = this.checkFullscreen();
         this.set('isFullscreen', isFS);
 
-	var $button = $(`#${this.get('fsButtonID')}`);
+        var $button = $(`#${this.get('fsButtonID')}`);
         if (isFS) {
-           // alert('went fs');
+            // alert('went fs');
             $element.addClass('player-fullscreen');
             if (this.displayFullscreen && this.fsButtonID) {
-		$button.hide();
+                $button.hide();
             }
         } else {
             //alert('left fs');
@@ -64,7 +79,17 @@ export default Ember.Mixin.create({
         }
     },
 
+    displayError(error) { // jshint ignore:line
+        // Exit fullscreen first to make sure error is visible to users.
+        this.send('exitFullscreen');
+        return this._super(...arguments);
+    },
+
     actions: {
+        /**
+         * Make a specified element fullscreen
+         * @method showFullscreen
+         */
         showFullscreen: function () {
 
             if (!this.get('displayFullscreen')) {
@@ -99,17 +124,20 @@ export default Ember.Mixin.create({
             Ember.$(document).off('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange');
             Ember.$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', this.onFullscreen.bind(this, selector, buttonSel));
         },
-
+        /**
+         * Exit fullscreen mode
+         * @method exitFullscreen
+         */
         exitFullscreen: function () {
             console.log('exiting FS mode');
             if (document.exitFullscreen) {
-              document.exitFullscreen();
+                document.exitFullscreen();
             } else if (document.msExitFullscreen) {
-              document.msExitFullscreen();
+                document.msExitFullscreen();
             } else if (document.mozCancelFullScreen) {
-              document.mozCancelFullScreen();
+                document.mozCancelFullScreen();
             } else if (document.webkitExitFullscreen) {
-              document.webkitExitFullscreen();
+                document.webkitExitFullscreen();
             }
             this.set('isFullscreen', false);
             var elementId = this.get('fullScreenElementId');

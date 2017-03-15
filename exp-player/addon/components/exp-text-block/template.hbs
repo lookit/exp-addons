@@ -1,12 +1,18 @@
 {{#if block.title}}
-  <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
+    <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
 {{/if}}
 {{#if block.text}}
-  <p>
-    {{exp-format block.text}}
-  </p>
-  {{else if block.markdown}}
-  <p>
-    {{markdown-to-html  markdown=block.markdown}}
-  </p>
+    <p>
+        {{#if block.emph}}
+            <b>
+                {{exp-format block.text}}
+            </b>
+        {{else}}
+            {{exp-format block.text}}
+        {{/if}}
+    </p>
+{{else if block.markdown}}
+    <p>
+        {{markdown-to-html  markdown=block.markdown}}
+    </p>
 {{/if}}

@@ -10,14 +10,23 @@ export default DS.Transform.extend({
         return serialized.map((profile) => {
             if (profile.get) {
                 return profile;
-            }
-            else {
+            } else {
                 profile.birthday = new Date(profile.birthday);
-                return this.get('store').createRecord('profile', profile);
+                this.get('store').push({
+                    data: {
+                        type: 'profile',
+                        id: profile.profileId,
+                        attributes: profile
+                    }
+                });
+                return this.get('store').peekRecord('profile', profile.profileId);
             }
         });
     },
     serialize(deserialized) {
-        return deserialized.toArray().map((item) => item.toJSON());
+        if (deserialized) {
+            return deserialized.toArray().map((item) => item.toJSON());
+        }
+        return null;
     }
 });

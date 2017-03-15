@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import BaseAuthenticator from 'ember-simple-auth/authenticators/base';
 
-
 import config from 'ember-get-config';
 
 export default BaseAuthenticator.extend({

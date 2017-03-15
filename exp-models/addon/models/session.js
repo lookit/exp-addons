@@ -1,5 +1,5 @@
 /*
-Manage data about one or more documents in the sessions collection
+ Manage data about one or more documents in the sessions collection
  */
 
 import Ember from 'ember';
@@ -13,7 +13,13 @@ export default DS.Model.extend(AnonJamModel, {
     conditions: DS.attr(),
     expData: DS.attr(),  // Data is a reserved keyword in ember
 
+    // Timing information for events captured by the player but not tied to a specific frame. Eg, early exit
+    //  from experiment
+    globalEventTimings: DS.attr({ defaultValue: () => [] }),
+
     profileId: DS.attr('string'), // Store ID of related record
+
+    extra: DS.attr({ defaultValue: () => ({}) }),
 
     experimentId: DS.attr('string'),
     experimentVersion: DS.attr('string'),  // TODO: Currently this field is not acted on in any way
@@ -31,15 +37,16 @@ export default DS.Model.extend(AnonJamModel, {
     history: DS.hasMany('history'),
 
     getProfile() {
-	let [accountId, ] = this.get('profileId').split('.');
-	return this.store.findRecord('account', accountId).then((account) => account.profileById(this.get('profileId')));
+        let accountId = this.get('profileId').split('.').shift();
+        return this.store.findRecord('account', accountId).then((account) => account.profileById(this.get('profileId')));
     },
-    anonProfileId: Ember.computed('profileId', function() {
+    anonProfileId: Ember.computed('profileId', function () {
         // For a profile id of format `<acctShortId>.random`, strip off the identifying account ID
         var profileId = this.get('profileId');
-        return profileId.split ? profileId.split('.')[1] : profileId;}),
+        return profileId.split ? profileId.split('.')[1] : profileId;
+    }),
 
-    experiment: Ember.computed('experimentId', function() {
+    experiment: Ember.computed('experimentId', function () {
         var storeId = this.get('experimentId');
         return this.store.findRecord('experiment', storeId);
     })

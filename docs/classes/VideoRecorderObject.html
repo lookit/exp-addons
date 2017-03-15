@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>VideoRecorderObject - exp-player</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.5.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
+                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
+                                <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
+                                <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
+                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
+                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
+                                <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
+                                <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
+                                <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
+                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
+                                <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
+                                <li><a href="../classes/FullScreen.html">FullScreen</a></li>
+                                <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
+                                <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
+                                <li><a href="../classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/components.html">components</a></li>
+                                <li><a href="../modules/exp-player.html">exp-player</a></li>
+                                <li><a href="../modules/frames.html">frames</a></li>
+                                <li><a href="../modules/mixins.html">mixins</a></li>
+                                <li><a href="../modules/services.html">services</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>VideoRecorderObject Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/addon_services_video-recorder.js.html#l40"><code>addon&#x2F;services&#x2F;video-recorder.js:40</code></a>
+        </div>
+
+            Module: <a href="../modules/services.html">services</a><br>
+            Parent Module: <a href="../modules/exp-player.html">exp-player</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>An instance of a video recorder tied to or used by one specific page. A given experiment may use more than one
+video recorder depending on the number of video capture frames.</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_destroy">destroy</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getLastSession">getLastSession</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getLastSession">getLastSession</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getTime">getTime</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hide">hide</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_install">install</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_pause">pause</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_record">record</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_resume">resume</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_show">show</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_stop">stop</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_destroy" class="method item">
+    <h3 class="name"><code>destroy</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l304"><code>addon&#x2F;services&#x2F;video-recorder.js:304</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Uninstall the video recorder from the page</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_getLastSession" class="method item">
+    <h3 class="name"><code>getLastSession</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>pastSessions</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Session</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_randomizers_pref-phys-pilot.js.html#l15"><code>addon&#x2F;randomizers&#x2F;pref-phys-pilot.js:15</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Select the first matching session from an array of options, according to the specified rules</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">pastSessions</code>
+                        <span class="type">Session</span>
+
+
+                    <div class="param-description">
+                        <p>An array of session records. This returns the first match, eg assumes newest-first sort order</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Session</span>:
+                    <p>The model representing the last session in which the user participated</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getLastSession" class="method item">
+    <h3 class="name"><code>getLastSession</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>pastSessions</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Session</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_randomizers_pref-phys.js.html#l15"><code>addon&#x2F;randomizers&#x2F;pref-phys.js:15</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Select the first matching session from an array of options, according to the specified rules</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">pastSessions</code>
+                        <span class="type">Session</span>
+
+
+                    <div class="param-description">
+                        <p>An array of session records. This returns the first match, eg assumes newest-first sort order</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Session</span>:
+                    <p>The model representing the last session in which the user participated</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getTime" class="method item">
+    <h3 class="name"><code>getTime</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a> | Null</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l232"><code>addon&#x2F;services&#x2F;video-recorder.js:232</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Get a timestamp based on the current recording position. Useful to ensure that tracked timing events
+line up with the video.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a> | Null</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hide" class="method item">
+    <h3 class="name"><code>hide</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l282"><code>addon&#x2F;services&#x2F;video-recorder.js:282</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
+distract the user.</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_install" class="method item">
+    <h3 class="name"><code>install</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>record</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l82"><code>addon&#x2F;services&#x2F;video-recorder.js:82</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Install a recorder onto the page and optionally begin recording immediately.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">record</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>:
+                    <p>Indicate whether widget was successfully installed and started</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_pause" class="method item">
+    <h3 class="name"><code>pause</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>skipIfMissing</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l204"><code>addon&#x2F;services&#x2F;video-recorder.js:204</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Pause the recorder. If optional skipIfMissing argument is provided (and
+true), don't raise an error if recording isn't ready yet.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">skipIfMissing</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_record" class="method item">
+    <h3 class="name"><code>record</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l170"><code>addon&#x2F;services&#x2F;video-recorder.js:170</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Start recording a video, and allow the state of the recording to be accessed for later usage</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_resume" class="method item">
+    <h3 class="name"><code>resume</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l219"><code>addon&#x2F;services&#x2F;video-recorder.js:219</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Resume the recording</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_show" class="method item">
+    <h3 class="name"><code>show</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l292"><code>addon&#x2F;services&#x2F;video-recorder.js:292</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
+a problem with video capture settings</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_stop" class="method item">
+    <h3 class="name"><code>stop</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>destroy</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l246"><code>addon&#x2F;services&#x2F;video-recorder.js:246</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Stop recording and save the video to the server</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">destroy</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+            </div>
+
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

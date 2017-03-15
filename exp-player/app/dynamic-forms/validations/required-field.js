@@ -4,11 +4,11 @@ export default Ember.Object.extend({
     validate(callback) {
         var value = this.getValue();
         var message = this.options.message;
-        if (value === "") {
-            callback({"status": false, "message": message});
+        if (value === '') {
+            callback({'status': false, 'message': message});
             return;
         }
-        callback({"status": true});
+        callback({'status': true});
         return;
     }
 });

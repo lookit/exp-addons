@@ -11,8 +11,8 @@ export default Ember.Mixin.create({
 
     },
     _getSession(params, experiment) { // jshint ignore: line
-        return this.get('currentUser').getCurrentUser().then(([account, profile]) => {
-            return this.store.createRecord(experiment.get('sessionCollectionId'), {
+        return this.get('currentUser').getCurrentUser().then(([account, profile]) =>
+            this.store.createRecord(experiment.get('sessionCollectionId'), {
                 experimentId: experiment.id,
                 profileId: profile.get('profileId'),
                 completed: false,
@@ -20,8 +20,8 @@ export default Ember.Mixin.create({
                 hasReadFeedback: '',
                 expData: {},
                 sequence: []
-            });
-        });
+            })
+        );
     },
     model(params) {
         // While a little gross, this ensures all the criteria for participation
@@ -37,7 +37,12 @@ export default Ember.Mixin.create({
                     session.set('experimentVersion', '');
                     session.save().then(() => {
                         this.get('currentUser').getCurrentUser().then(([account, profile]) => {
-                            account.pastSessionsFor(experiment, profile).then(function(pastSessions) {
+                            account.pastSessionsFor(experiment, profile).then(function (pastSessions) {
+                                pastSessions = pastSessions.toArray();
+
+                                if (!pastSessions.includes(session)) {
+                                    pastSessions.pushObject(session);
+                                }
                                 resolve(pastSessions);
                             });
                         });

@@ -1,0 +1,39 @@
+<div class="isp-radio-group">
+    {{#each options as |option|}}
+        <label class="text-center label-text {{if formatLabel formatLabel}}">
+            {{#if labelTop}}
+                {{#if hiddenOptions}}
+                    {{#each hiddenOptions as |hidden|}}
+                        <span class="{{if (eq hidden option.label) 'hidden'}}">{{t option.label}}</span>
+                    {{/each}}
+                {{else}}
+                    {{t option.label}}
+                {{/if}}
+                {{radio-button value=option.value checked=value}}
+                {{#each-in labels as |ratings value|}}
+                    {{#if (eq value.rating option.label)}}
+                        <span class="{{if value.formatClass value.formatClass}}">
+                            {{t value.label}}
+                        </span>
+                    {{/if}}
+                {{/each-in}}
+            {{else}}
+                {{#each-in labels as |ratings value|}}
+                    {{#if (eq value.rating option.label)}}
+                        <span class="{{if value.formatClass value.formatClass}}">
+                            {{t value.label}}
+                        </span>
+                    {{/if}}
+                {{/each-in}}
+                {{radio-button value=option.value checked=value}}
+                {{#if hiddenOptions}}
+                    {{#each hiddenOptions as |hidden|}}
+                        <span class="{{if (eq hidden option.label) 'hidden-label'}}">{{t option.label}}</span>
+                    {{/each}}
+                {{else}}
+                    {{t option.label}}
+                {{/if}}
+            {{/if}}
+        </label>
+    {{/each}}
+</div>

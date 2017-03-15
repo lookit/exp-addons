@@ -1,16 +1,39 @@
+// Shared across platform
 @import "components/exp-player";
-@import "components/exp-video-setup";
+
+// Lookit-specific
 @import "components/exp-video-consent";
+@import "components/exp-video-config";
+@import "components/exp-video-config-quality";
+@import "components/exp-lookit-mood-questionnaire";
+@import "components/exp-lookit-preview-exp";
+@import "components/exp-lookit-instructions";
+@import "components/exp-lookit-exit-survey";
+@import "components/exp-lookit-geometry-alternation";
+@import "components/exp-video-preview";
+@import "components/exit-warning";
+@import "full-screen";
+
 @import "components/exp-physics-info";
 @import "components/exp-mood-questionnaire";
-@import "components/exit-warning";
 @import "components/exp-physics-preview-exp";
-@import "components/exp-physics-preview";
 @import "components/exp-physics-pre-video";
 @import "components/exp-exit-survey";
 @import "components/exp-video-physics";
+
+// ISP-specific
 @import "components/radio-group";
+@import "components/isp-radio-group";
+@import "components/exp-overview";
+@import "components/exp-free-response";
 @import "components/exp-card-sort";
+@import "components/exp-rating-form";
+@import "components/exp-thank-you";
+@import "components/page-number";
+
+// Unused??
+@import "components/exp-video-setup";
+
 
 .exp-text-large {
     font-size: 2em;
@@ -24,10 +47,6 @@
 
 .breaklines {
     white-space: pre-wrap
-}
-
-.btn {
-    margin-bottom: 15px;
 }
 
 .exp-controls {
@@ -52,6 +71,9 @@
     width: 80%;
 }
 
+.break-line {
+  white-space: pre-line;
+}
 
 .video-recorder-visible {
     position: absolute;

@@ -1,5 +1,10 @@
 import Ember from 'ember';
 
+/**
+ * @module exp-player
+ * @submodule services
+ */
+
 let {
     $,
     RSVP
@@ -32,6 +37,11 @@ const PARAMS = {
     wmode: 'transparent'
 };
 
+/**
+ * An instance of a video recorder tied to or used by one specific page. A given experiment may use more than one
+ *   video recorder depending on the number of video capture frames.
+ * @class VideoRecorderObject
+ */
 const VideoRecorder = Ember.Object.extend({
     manager: null,
 
@@ -65,15 +75,18 @@ const VideoRecorder = Ember.Object.extend({
     _recordPromise: null,
     _stopPromise: null,
 
-    recorder: Ember.computed(function() {
+    recorder: Ember.computed(function () {
         return window.swfobject.getObjectById(this.get('_SWFId'));
     }).volatile(),
 
-    install({
-        record: record
-    } = {
-        record: false
-    }) {
+    /**
+     * Install a recorder onto the page and optionally begin recording immediately.
+     *
+     * @method install
+     * @param record
+     * @return {Promise} Indicate whether widget was successfully installed and started
+     */
+    install({record: record} = {record: false}) {
         this.set('divId', `${this.get('divId')}-${this.get('recorderId')}`);
 
         var $element = $(this.get('element'));
@@ -109,7 +122,7 @@ const VideoRecorder = Ember.Object.extend({
             );
         }
 
-        $container.append(`<div id="${divId}"></div`);
+        $container.append(`<div id="${divId}"></div>`);
         $element.append($container);
         if (hidden) {
             $container.append(
@@ -154,6 +167,12 @@ const VideoRecorder = Ember.Object.extend({
         });
     },
 
+    /**
+     * Start recording a video, and allow the state of the recording to be accessed for later usage
+     *
+     * @method record
+     * @return {Promise}
+     */
     record() {
         if (!this.get('started')) {
             throw new Error('Must call start before record');
@@ -182,8 +201,12 @@ const VideoRecorder = Ember.Object.extend({
         });
     },
 
-    // Pause the recorder. If optional skipIfMissing argument is provided (and
-    // true), don't raise an error if recording isn't ready yet.
+    /**
+     * Pause the recorder. If optional skipIfMissing argument is provided (and
+     *   true), don't raise an error if recording isn't ready yet.
+     * @method pause
+     * @param skipIfMissing
+     */
     pause(skipIfMissing) {
         var recorder = this.get('recorder');
         if (!skipIfMissing || recorder.pauseRecording) {
@@ -193,6 +216,10 @@ const VideoRecorder = Ember.Object.extend({
         this.set('_recording', false);
         return new Ember.RSVP.Promise((resolve) => resolve());
     },
+    /**
+     * Resume the recording
+     * @method resume
+     */
     resume() {
         console.log('Recording resumed');
         this.get('recorder').resumeRecording();
@@ -201,6 +228,13 @@ const VideoRecorder = Ember.Object.extend({
             window.setTimeout(() => resolve(), 0);
         });
     },
+
+    /**
+     * Get a timestamp based on the current recording position. Useful to ensure that tracked timing events
+     *  line up with the video.
+     * @method getTime
+     * @return {Date|null}
+     */
     getTime() {
         let recorder = this.get('recorder');
         if (recorder && recorder.getStreamTime) {
@@ -209,25 +243,32 @@ const VideoRecorder = Ember.Object.extend({
         return null;
     },
 
-    // Stop recording and save the video to the server
-    stop({
-        destroy: destroy
-    } = {
-        destroy: false
-    }) {
+    /**
+     * Stop recording and save the video to the server
+     * @method stop
+     * @param destroy
+     */
+    stop({destroy: destroy} = {destroy: false}) {
         // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-        if (1.5 - this.getTime() > 0) {
+        // We optimistically start the connection before checking for camera access. For now, let recorder stop
+        // immediately if recorder never had camera access- the video would be meaningless anyway
+        if (this.get('hasCamAccess') && (1.5 - this.getTime() > 0)) {
             window.setTimeout(this.stop.bind(this, {
                 destroy: destroy
             }), 1.5 - this.getTime());
         } else {
-	    var recorder = this.get('recorder');
-            try {
-		if (recorder) {
-		    recorder.stopVideo();
-		}
-            } catch (e) {}
-	    this.set('_recording', false);
+            var recorder = this.get('recorder');
+            if (recorder) {
+                Ember.run.next(this, () => {
+                    try {
+                        recorder.stopVideo();
+                    } catch (e) {
+                        // TODO: Under some conditions there is no stopVideo method- can we do a better job of
+                        //  identifying genuine errors?
+                    }
+                    this.set('_recording', false);
+                });
+            }
         }
         var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
             this.set('_stopPromise', {
@@ -238,19 +279,35 @@ const VideoRecorder = Ember.Object.extend({
         return _stopPromise;
     },
 
+    /**
+     * Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
+     *   distract the user.
+     * @method hide
+     */
     hide() {
         this.get('$container').removeClass('video-recorder-visible');
         this.get('$container').addClass('video-recorder-hidden');
     },
+
+    /**
+     * Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
+     *   a problem with video capture settings
+     * @method show
+     * @return {boolean}
+     */
     show() {
         this.get('$container').removeClass('video-recorder-hidden');
         this.get('$container').addClass('video-recorder-visible');
         return true;
     },
 
-    // Uninstall the video recorder
+    /**
+     * Uninstall the video recorder from the page
+     *
+     * @method destroy
+     */
     destroy() {
-        console.log('Destroying the videoRecorder');
+        console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
         $(`#${this.get('divId')}-container`).remove();
         this.set('_SWFId', null);
         this.set('_recording', false);
@@ -308,22 +365,28 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     _onConnectionStatus(status) {
-	if (status === 'NetConnection.Connect.Success') {
-	    this.set('connected', true);
-	}
-	else {
-	    this.set('connected', false);
-	}
+        if (status === 'NetConnection.Connect.Success') {
+            this.set('connected', true);
+        } else {
+            this.set('connected', false);
+        }
     }
     // End Flash hooks
 });
 
+/**
+ * A service designed to facilitate video recording by providing helper methods and managing multiple recorder objects
+ *  Using a persistent service is intended to ensure we destroy recorder elements when the video is done uploading,
+ *  rather than just when the user exits the frame
+ *
+ * @class videoRecorder
+ */
 export default Ember.Service.extend({
     _recorders: {},
 
     //Initial setup, installs flash hooks into the page
     init() {
-        var runHandler = function(recorder, hookName, args) {
+        var runHandler = function (recorder, hookName, args) {
             if (recorder.get('debug')) {
                 console.log(hookName, args);
             }
@@ -337,19 +400,19 @@ export default Ember.Service.extend({
         };
 
         HOOKS.forEach(hookName => {
-            var self = this;
-            window[hookName] = function() {
+            var _this = this;
+            window[hookName] = function () {
                 var args = Array.prototype.slice.call(arguments);
                 var recorder;
                 if (hookName === 'onUploadDone') {
-                    recorder = self.get(`_recorders.${args[3]}`);
+                    recorder = _this.get(`_recorders.${args[3]}`);
                 } else {
                     var recorderId = args.pop();
-                    recorder = self.get(`_recorders.${recorderId}`);
+                    recorder = _this.get(`_recorders.${recorderId}`);
                 }
                 if (!recorder) {
-                    Object.keys(self.get('_recorders')).forEach((id) => {
-                        recorder = self.get(`_recorders.${id}`);
+                    Object.keys(_this.get('_recorders')).forEach((id) => {
+                        recorder = _this.get(`_recorders.${id}`);
                         runHandler(recorder, hookName, args);
                     });
                 } else {
@@ -362,7 +425,7 @@ export default Ember.Service.extend({
     //Insert the recorder and start recording
     //IE a user might not have granted access to their webcam
     start(videoId, element, settings = {}) {
-        if (typeof(videoId) !== 'string') {
+        if (typeof (videoId) !== 'string') {
             throw new Error('videoId must be a string');
         }
         var defaults = {
