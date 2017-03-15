@@ -1,0 +1,1383 @@
+{
+    "project": {
+        "url": "https://github.com/CenterForOpenScience/exp-addons",
+        "name": "exp-player",
+        "description": "The Experimenter player and associated components",
+        "version": "0.5.0"
+    },
+    "files": {
+        "addon/components/exp-exit-survey/component.js": {
+            "name": "addon/components/exp-exit-survey/component.js",
+            "modules": {
+                "frames": 1
+            },
+            "classes": {
+                "ExpExitSurvey": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-exit-survey-pilot/component.js": {
+            "name": "addon/components/exp-exit-survey-pilot/component.js",
+            "modules": {},
+            "classes": {
+                "ExpExitSurveyPilot": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-frame-base/component.js": {
+            "name": "addon/components/exp-frame-base/component.js",
+            "modules": {},
+            "classes": {
+                "ExpFrameBase": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-frame-base-unsafe/component.js": {
+            "name": "addon/components/exp-frame-base-unsafe/component.js",
+            "modules": {},
+            "classes": {
+                "ExpFrameBaseUnsafe": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-mood-questionnaire/component.js": {
+            "name": "addon/components/exp-mood-questionnaire/component.js",
+            "modules": {},
+            "classes": {
+                "ExpMoodQuestionnaire": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-physics-intro/component.js": {
+            "name": "addon/components/exp-physics-intro/component.js",
+            "modules": {},
+            "classes": {
+                "ExpPhysicsIntro": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-physics-pre-video/component.js": {
+            "name": "addon/components/exp-physics-pre-video/component.js",
+            "modules": {},
+            "classes": {
+                "ExpPhysicsPreVideo": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-physics-preview-explanation/component.js": {
+            "name": "addon/components/exp-physics-preview-explanation/component.js",
+            "modules": {},
+            "classes": {
+                "ExpPhysicsPreviewExplanation": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-player/component.js": {
+            "name": "addon/components/exp-player/component.js",
+            "modules": {
+                "components": 1
+            },
+            "classes": {
+                "ExpPlayer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video/component.js": {
+            "name": "addon/components/exp-video/component.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-config/component.js": {
+            "name": "addon/components/exp-video-config/component.js",
+            "modules": {},
+            "classes": {
+                "ExpVideoConfig": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-config-quality/component.js": {
+            "name": "addon/components/exp-video-config-quality/component.js",
+            "modules": {},
+            "classes": {
+                "ExpVideoConfigQuality": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-consent/component.js": {
+            "name": "addon/components/exp-video-consent/component.js",
+            "modules": {},
+            "classes": {
+                "ExpVideoConsent": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-physics/component.js": {
+            "name": "addon/components/exp-video-physics/component.js",
+            "modules": {},
+            "classes": {
+                "ExpVideoPhysics": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-preview/component.js": {
+            "name": "addon/components/exp-video-preview/component.js",
+            "modules": {},
+            "classes": {
+                "ExpVideoPreview": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-record/component.js": {
+            "name": "addon/components/exp-video-record/component.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/components/exp-video-setup/component.js": {
+            "name": "addon/components/exp-video-setup/component.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/mixins/full-screen.js": {
+            "name": "addon/mixins/full-screen.js",
+            "modules": {
+                "mixins": 1
+            },
+            "classes": {
+                "FullScreen": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/mixins/media-reload.js": {
+            "name": "addon/mixins/media-reload.js",
+            "modules": {},
+            "classes": {
+                "MediaReload": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/mixins/video-record.js": {
+            "name": "addon/mixins/video-record.js",
+            "modules": {},
+            "classes": {
+                "VideoRecordMixin": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/randomizers/pref-phys-pilot.js": {
+            "name": "addon/randomizers/pref-phys-pilot.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/randomizers/pref-phys.js": {
+            "name": "addon/randomizers/pref-phys.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/services/video-recorder.js": {
+            "name": "addon/services/video-recorder.js",
+            "modules": {
+                "services": 1
+            },
+            "classes": {
+                "VideoRecorderObject": 1,
+                "videoRecorder": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "addon/yuidoc-prose.js": {
+            "name": "addon/yuidoc-prose.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "exp-player": {
+            "name": "exp-player",
+            "submodules": {
+                "frames": 1,
+                "components": 1,
+                "mixins": 1,
+                "services": 1
+            },
+            "elements": {},
+            "classes": {
+                "ExpExitSurvey": 1,
+                "ExpExitSurveyPilot": 1,
+                "ExpFrameBase": 1,
+                "ExpFrameBaseUnsafe": 1,
+                "ExpMoodQuestionnaire": 1,
+                "ExpPhysicsIntro": 1,
+                "ExpPhysicsPreVideo": 1,
+                "ExpPhysicsPreviewExplanation": 1,
+                "ExpPlayer": 1,
+                "ExpVideoConfig": 1,
+                "ExpVideoConfigQuality": 1,
+                "ExpVideoConsent": 1,
+                "ExpVideoPhysics": 1,
+                "ExpVideoPreview": 1,
+                "FullScreen": 1,
+                "MediaReload": 1,
+                "VideoRecordMixin": 1,
+                "VideoRecorderObject": 1,
+                "videoRecorder": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "file": "addon/services/video-recorder.js",
+            "line": 377
+        },
+        "frames": {
+            "name": "frames",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "ExpExitSurvey": 1,
+                "ExpExitSurveyPilot": 1,
+                "ExpFrameBase": 1,
+                "ExpFrameBaseUnsafe": 1,
+                "ExpMoodQuestionnaire": 1,
+                "ExpPhysicsIntro": 1,
+                "ExpPhysicsPreVideo": 1,
+                "ExpPhysicsPreviewExplanation": 1,
+                "ExpVideoConfig": 1,
+                "ExpVideoConfigQuality": 1,
+                "ExpVideoConsent": 1,
+                "ExpVideoPhysics": 1,
+                "ExpVideoPreview": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "exp-player",
+            "namespace": "",
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 13,
+            "description": "Reusable frames that can be used as part of user-defined experiments. This is the main reference for researchers\n  looking to build their own experiment definitions on the experimenter platform.",
+            "tag": "main",
+            "itemtype": "main"
+        },
+        "components": {
+            "name": "components",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "ExpPlayer": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "exp-player",
+            "namespace": "",
+            "file": "addon/components/exp-player/component.js",
+            "line": 16,
+            "description": "Reusable components for UI rendering and interactivity",
+            "tag": "main",
+            "itemtype": "main"
+        },
+        "mixins": {
+            "name": "mixins",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "FullScreen": 1,
+                "MediaReload": 1,
+                "VideoRecordMixin": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "exp-player",
+            "namespace": "",
+            "file": "addon/mixins/video-record.js",
+            "line": 8,
+            "description": "Mixins that can be used to add functionality, eg to a specific frame",
+            "tag": "main",
+            "itemtype": "main"
+        },
+        "services": {
+            "name": "services",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "VideoRecorderObject": 1,
+                "videoRecorder": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "exp-player",
+            "namespace": "",
+            "file": "addon/services/video-recorder.js",
+            "line": 377,
+            "description": "Services used to share data or provide centralized functionality",
+            "tag": "main",
+            "itemtype": "main"
+        }
+    },
+    "classes": {
+        "ExpExitSurvey": {
+            "name": "ExpExitSurvey",
+            "shortname": "ExpExitSurvey",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-exit-survey/component.js",
+            "line": 16,
+            "description": "This is the exit survey used by \"Your baby the physicist\". Use the updated frame {{#crossLink \"ExpLookitExitSurvey\"}}{{/crossLink}} instead.",
+            "extends": "ExpFrameBase",
+            "uses": [
+                "Validations",
+                "FullScreen"
+            ],
+            "deprecated": true
+        },
+        "ExpExitSurveyPilot": {
+            "name": "ExpExitSurveyPilot",
+            "shortname": "ExpExitSurveyPilot",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-exit-survey-pilot/component.js",
+            "line": 16,
+            "description": "This is the exit survey used by the \"Your baby the physicist\" pilot. Use the updated frame {{#crossLink \"ExpLookitExitSurvey\"}}{{/crossLink}} instead.",
+            "extends": "ExpFrameBase",
+            "uses": [
+                "Validations",
+                "FullScreen"
+            ],
+            "deprecated": true
+        },
+        "ExpFrameBase": {
+            "name": "ExpFrameBase",
+            "shortname": "ExpFrameBase",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-frame-base/component.js",
+            "line": 10,
+            "description": "This provides common base behavior required for any experiment frame. All experiment frames must extend this one.\nThis frame has no configuration options because all of its logic is internal, and is almost never directly used\n   in an experiment. It exports no data. Sample experiment definition usage (provided for completeness):\n  ```json\n    \"frames\": {\n       \"my-sample-frame\": {\n         \"kind\": \"exp-base-frame\"\n       }\n    }\n ```\nAs a user you will almost never need to insert a component into a template directly- the platform should handle that\n   by automatically inserting `exp-player` when your experiment starts.\n However, a sample template usage is provided below for completeness.\n```handlebars\n  {{\n      component currentFrameTemplate\n        frameIndex=frameIndex\n        framePage=framePage\n        updateFramePage=(action 'updateFramePage')\n        frameConfig=currentFrameConfig\n        frameContext=currentFrameContext\n       session=session\n        experiment=experiment\n       next=(action 'next')\n        previous=(action 'previous')\n        saveHandler=(action 'saveFrame')\n        skipone=(action 'skipone')\n        sessionCompleted=(action 'sessionCompleted')\n       extra=extra\n    }}\n ```"
+        },
+        "ExpFrameBaseUnsafe": {
+            "name": "ExpFrameBaseUnsafe",
+            "shortname": "ExpFrameBaseUnsafe",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-frame-base-unsafe/component.js",
+            "line": 8,
+            "description": "A modified version of the base frame, specifically designed to allow \"unsafe\" saves and let the user\n  advance even if data from this frame did not save\n\nThe primary use case for this component is experiments that need to move through a series of frames without leaving\nfullscreen mode: if next is fired as a promise, it does not count as a user interaction event\n https://openscience.atlassian.net/browse/LEI-369?focusedCommentId=46133&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-46133\n\nThis frame has no configuration options because all of its logic is internal, and is almost never directly used\n  in an experiment. It exports no data. Sample experiment definition usage (provided for completeness):\n```json\n\"frames\": {\n      \"my-sample-frame\": {\n        \"kind\": \"exp-base-frame-unsafe\"\n      }\n   }\n```",
+            "extends": "ExpFrameBase"
+        },
+        "ExpMoodQuestionnaire": {
+            "name": "ExpMoodQuestionnaire",
+            "shortname": "ExpMoodQuestionnaire",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-mood-questionnaire/component.js",
+            "line": 12,
+            "description": "This is the mood survey used by \"Your baby the physicist\" and associated pilot. Use the updated frame {{#crossLink \"ExpLookitMoodQuestionnaire\"}}{{/crossLink}}  instead.",
+            "extends": "ExpFrameBase",
+            "uses": [
+                "Validations"
+            ],
+            "deprecated": true
+        },
+        "ExpPhysicsIntro": {
+            "name": "ExpPhysicsIntro",
+            "shortname": "ExpPhysicsIntro",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-physics-intro/component.js",
+            "line": 9,
+            "description": "This is a frame for introducing the \"Your baby the physicist\" study, with hardcoded text. Use {{#crossLink \"ExpLookitText\"}}{{/crossLink}}  instead.",
+            "extends": "ExpFrameBase",
+            "deprecated": true
+        },
+        "ExpPhysicsPreVideo": {
+            "name": "ExpPhysicsPreVideo",
+            "shortname": "ExpPhysicsPreVideo",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-physics-pre-video/component.js",
+            "line": 11,
+            "description": "This is a frame for instructions given immediately before the \"Your baby the physicist\" video start, with hardcoded text. Use {{#crossLink \"ExpLookitText\"}}{{/crossLink}} or {{#crossLink \"ExpLookitInstructions\"}}{{/crossLink}} instead.",
+            "extends": "ExpFrameBaseUnsafe",
+            "deprecated": true
+        },
+        "ExpPhysicsPreviewExplanation": {
+            "name": "ExpPhysicsPreviewExplanation",
+            "shortname": "ExpPhysicsPreviewExplanation",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-physics-preview-explanation/component.js",
+            "line": 10,
+            "description": "This is a frame for offering parents the option to preview videos for the \"Your baby the physicist\" study, with hardcoded text. Use {{#crossLink \"ExpLookitPreviewExplanation\"}}{{/crossLink}} (followed by {{#crossLink \"ExpVideoPreview\"}}{{/crossLink}}) instead.",
+            "extends": "ExpFrameBase",
+            "deprecated": true
+        },
+        "ExpPlayer": {
+            "name": "ExpPlayer",
+            "shortname": "ExpPlayer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "components",
+            "namespace": "",
+            "file": "addon/components/exp-player/component.js",
+            "line": 16,
+            "description": "Experiment player: a component that renders a series of frames that define an experiment\n\nSample usage:\n```handlebars\n{{exp-player\n  experiment=experiment\n  session=session\n  pastSessions=pastSessions\n  saveHandler=(action 'saveSession')\n  frameIndex=0\n  fullScreenElementId='expContainer'}}\n```"
+        },
+        "ExpVideoConfig": {
+            "name": "ExpVideoConfig",
+            "shortname": "ExpVideoConfig",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-video-config/component.js",
+            "line": 11,
+            "description": "Video configuration frame guiding user through making sure permissions are set appropriately and microphone is working, with troubleshooting text. All content is hard-coded for a general-purpose technical setup frame.\n\n```json\n\"frames\": {\n    \"video-config\": {\n        \"id\": \"video-config\",\n        \"kind\": \"exp-video-config\"\n    }\n}\n```",
+            "extends": "ExpFrameBase"
+        },
+        "ExpVideoConfigQuality": {
+            "name": "ExpVideoConfigQuality",
+            "shortname": "ExpVideoConfigQuality",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-video-config-quality/component.js",
+            "line": 11,
+            "description": "Video configuration frame showing webcam view at right and instructions for checking video quality for preferential looking setup at left, with pictures. Content is hard-coded for preferential looking requirements and images; this frame can serve as a template for other applications (e.g., verbal responses, where we might care less about lighting but want to generally be able to see the child's face) or can be generalized to show an arbitrary set of instructions/images.\n\n```json\n\"frames\": {\n    \"video-quality\": {\n        \"id\": \"video-quality\",\n        \"kind\": \"exp-video-config-quality\"\n    }\n}\n```",
+            "extends": "ExpFrameBase"
+        },
+        "ExpVideoConsent": {
+            "name": "ExpVideoConsent",
+            "shortname": "ExpVideoConsent",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 12,
+            "description": "Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. Example of MIT consent form, as of 2/28/2017:\n\n```json\n\"frames\": {\n    \"video-consent\": {\n        \"blocks\": [\n            {\n                 \"text\": \"Observing your child's behavior during this experimental session will help us to understand how infants and children use evidence to learn and make predictions about the world.\",\n                \"title\": \"About the study\"\n            },\n            {\n                \"text\": \"Your and your child's participation in this session are completely voluntary. If you and your child choose to participate, you may stop the session at any point with no penalty. Please pause or stop the session if your child becomes very fussy or does not want to participate. If this is a study with multiple sessions, there are no penalties for not completing all sessions.\",\n                \"title\": \"Participation\"\n            },\n            {\n                \"text\": \"During the session, you and your child will be recorded via your computer's webcam and microphone while watching a video or completing an activity. Video recordings and other data you enter are sent securely to our lab. At the end of the session, or when you end it early, you will be prompted to choose a privacy level for your webcam recordings. \",\n                \"title\": \"Webcam recording\"\n            },\n            {\n                \"text\": \"Recordings and survey responses will be stored on a password-protected server and accessed only by the Lookit researchers working on this study and any other groups you allow when selecting a privacy level. A researcher may transcribe responses or record information such as where you or your child is looking. Data will not be used to identify you or your child. The results of the research may be presented at scientific meetings or published in scientific journals, but no video clips will be shared unless you allow this when selecting a privacy level.\\n\\nRaw data may also be published when it can not identify children; for instance, we may publish children’s looking times to the left versus right of the screen, or parent comments with children’s names removed. We may also study your child’s responses in connection with his or her previous responses to this or other studies, siblings’ responses, or demographic survey responses. We never publish children’s birthdates or names, and we never publish your demographic data in conjunction with your child’s video.\",\n                \"title\": \"Use of data\"\n            },\n            {\n                \"text\": \"If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: lschulz@mit.edu or (617) 324-4859.\",\n                \"title\": \"Contact information\"\n            }\n        ],\n        \"id\": \"video-consent\",\n        \"prompt\": \"\\\"I have read and understand the consent document. I am this child's parent or legal guardian and we both agree to participate in this study.\\\"\",\n        \"kind\": \"exp-video-consent\"\n    }\n}\n```",
+            "extends": "ExpFrameBase",
+            "uses": [
+                "VideoRecord"
+            ]
+        },
+        "ExpVideoPhysics": {
+            "name": "ExpVideoPhysics",
+            "shortname": "ExpVideoPhysics",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 15,
+            "description": "Test trial for the 'Your baby the physicist' study: audio instructions, intro video, and test video, with webcam recording.",
+            "extends": "ExpFrameBaseUnsafe",
+            "uses": [
+                "FullScreen",
+                "MediaReload",
+                "VideoRecord"
+            ]
+        },
+        "ExpVideoPreview": {
+            "name": "ExpVideoPreview",
+            "shortname": "ExpVideoPreview",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 13,
+            "description": "A frame that displays a series of videos to preview, without collecting data as a live experiment. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.\n```json\n\"frames\": {\n   \"my-sample-frame\": {\n       \"id\": \"video-preview\",\n       \"kind\": \"exp-video-preview\",\n       \"text\": \"Here are the videos your child will see in this study. You can watch them ahead of time--please just don't show your child yet!\",\n       \"prompt\": \"My child can NOT see the screen. Start the preview!\",\n       \"videos\": [\n          {\n            \"caption\": \"User-facing text that appears below the video\",\n            \"sources\": [\n              {\n                \"type\": \"video/webm\",\n                \"src\": \"https://url.com/example_intro.webm\"\n              },\n              {\n                \"type\": \"video/mp4\",\n                \"src\": \"https://url.com/example_intro.webm\"\n              }\n            ]\n          }\n        ]\n   }\n\n```",
+            "extends": "ExpFrameBase"
+        },
+        "FullScreen": {
+            "name": "FullScreen",
+            "shortname": "FullScreen",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "ExpExitSurvey",
+                "ExpExitSurveyPilot",
+                "ExpVideoPhysics"
+            ],
+            "module": "exp-player",
+            "submodule": "mixins",
+            "namespace": "",
+            "file": "addon/mixins/full-screen.js",
+            "line": 12,
+            "description": "Allow components to specify fullscreen capabilities based on minimal configuration options"
+        },
+        "MediaReload": {
+            "name": "MediaReload",
+            "shortname": "MediaReload",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "ExpVideoPhysics"
+            ],
+            "module": "exp-player",
+            "submodule": "mixins",
+            "namespace": "",
+            "file": "addon/mixins/media-reload.js",
+            "line": 8,
+            "description": "Allow any media-containing frame to correctly reset.\nFix LEI-93, an issue where the second of two consecutive videos did not play correctly.\n\nDue to an internal ember quirk/optimization, the component instance is not destroyed if two of the same thing are\n used in a row, which means the same video tag was being dynamically reassigned- something HTML does not normally\nallow. The page needs to be manually told to load the correct new video.\n\nSee commentary here: http://stackoverflow.com/a/18454389/1422268"
+        },
+        "VideoRecordMixin": {
+            "name": "VideoRecordMixin",
+            "shortname": "VideoRecordMixin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "mixins",
+            "namespace": "",
+            "file": "addon/mixins/video-record.js",
+            "line": 8,
+            "description": "A mixin that can be used to add basic support for video recording to a particular experiment frame"
+        },
+        "VideoRecorderObject": {
+            "name": "VideoRecorderObject",
+            "shortname": "VideoRecorderObject",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "services",
+            "namespace": "",
+            "file": "addon/services/video-recorder.js",
+            "line": 40,
+            "description": "An instance of a video recorder tied to or used by one specific page. A given experiment may use more than one\n  video recorder depending on the number of video capture frames."
+        },
+        "videoRecorder": {
+            "name": "videoRecorder",
+            "shortname": "videoRecorder",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "services",
+            "namespace": "",
+            "file": "addon/services/video-recorder.js",
+            "line": 377,
+            "description": "A service designed to facilitate video recording by providing helper methods and managing multiple recorder objects\n Using a persistent service is intended to ensure we destroy recorder elements when the video is done uploading,\n rather than just when the user exits the frame"
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "addon/components/exp-frame-base/component.js",
+            "line": 168,
+            "description": "The base class does not define any data to save to the server. It does, however, capture some basic event\n  timing data. (such as when the user clicks the \"next\" button)\n\nThis section slightly breaks YUIDoc conventions- rather than being a literal guide to using the code, the\n  \"parameters\" here are abstract descriptions of what data is captured.",
+            "params": [
+                {
+                    "name": "eventTimings",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "itemtype": "method",
+            "name": "serializeContent",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "ExpFrameBase",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-player/component.js",
+            "line": 53,
+            "description": "The message to display in the early exit modal. Newer browsers may not respect this message.",
+            "itemtype": "property",
+            "name": "messageEarlyExitModal",
+            "type": "String|null",
+            "class": "ExpPlayer",
+            "module": "exp-player",
+            "submodule": "components"
+        },
+        {
+            "file": "addon/components/exp-player/component.js",
+            "line": 59,
+            "description": "Customize what happens when the user exits the page",
+            "itemtype": "method",
+            "name": "beforeUnload",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "The event to be handled",
+                    "type": "Event"
+                }
+            ],
+            "return": {
+                "description": "If string is provided, triggers a modal to confirm user wants to leave page",
+                "type": "String|null"
+            },
+            "class": "ExpPlayer",
+            "module": "exp-player",
+            "submodule": "components"
+        },
+        {
+            "file": "addon/components/exp-video-config/component.js",
+            "line": 73,
+            "description": "A unique identifier for this item",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "class": "ExpVideoConfig",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-config-quality/component.js",
+            "line": 73,
+            "description": "A unique identifier for this item",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "class": "ExpVideoConfigQuality",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 88,
+            "description": "A unique identifier for this item",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "class": "ExpVideoConsent",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 97,
+            "description": "Title of the consent document",
+            "itemtype": "property",
+            "name": "title",
+            "type": "String",
+            "default": "'Consent to participate in behavioral research: <br> Inference and induction study'",
+            "class": "ExpVideoConsent",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 107,
+            "description": "Array of paragraphs of the consent document, each with title and text.",
+            "itemtype": "property",
+            "name": "blocks",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoConsent",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "title",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "text",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 130,
+            "description": "Text the user is asked to read aloud to consent",
+            "itemtype": "property",
+            "name": "prompt",
+            "type": "String",
+            "default": "'I consent to participate in this study'",
+            "class": "ExpVideoConsent",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-consent/component.js",
+            "line": 142,
+            "description": "Parameters captured and sent to the server",
+            "itemtype": "method",
+            "name": "serializeContent",
+            "params": [
+                {
+                    "name": "videoID",
+                    "description": "The ID of any webcam video recorded during this frame",
+                    "type": "String"
+                },
+                {
+                    "name": "eventTimings",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The payload sent to the server",
+                "type": "Object"
+            },
+            "class": "ExpVideoConsent",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 70,
+            "description": "Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.",
+            "itemtype": "property",
+            "name": "autoforwardOnEnd",
+            "type": "Boolean",
+            "default": "true",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 80,
+            "description": "Whether to automatically start the trial on load.",
+            "itemtype": "property",
+            "name": "autoplay",
+            "type": "Boolean",
+            "default": "true",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 90,
+            "description": "Source URL for an image to show until the video starts playing.",
+            "itemtype": "property",
+            "name": "poster",
+            "type": "String",
+            "default": "''",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 100,
+            "description": "Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). Example value:\n\n```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```",
+            "itemtype": "property",
+            "name": "sources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 115,
+            "description": "Array of objects specifying video src and type for alternate test video, as for sources.",
+            "itemtype": "property",
+            "name": "altSources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 128,
+            "description": "Array of objects specifying intro video src and type, as for sources.",
+            "itemtype": "property",
+            "name": "introSources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 141,
+            "description": "Array of objects specifying attention-grabber video src and type, as for sources.",
+            "itemtype": "property",
+            "name": "attnSources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 154,
+            "description": "List of objects specifying intro announcement src and type.\nExample: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`",
+            "itemtype": "property",
+            "name": "audioSources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 168,
+            "description": "List of objects specifying music audio src and type, as for audioSources.",
+            "itemtype": "property",
+            "name": "audioSources",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "musicSources",
+                    "description": ""
+                },
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 182,
+            "description": "Length to loop test videos, in seconds",
+            "itemtype": "property",
+            "name": "testLength",
+            "type": "Number",
+            "default": "20",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 192,
+            "description": "Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)",
+            "itemtype": "property",
+            "name": "isLast",
+            "type": "Boolean",
+            "default": "false",
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-physics/component.js",
+            "line": 207,
+            "description": "Parameters captured and sent to the server",
+            "itemtype": "method",
+            "name": "serializeContent",
+            "params": [
+                {
+                    "name": "videosShown",
+                    "description": "Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].",
+                    "type": "Array"
+                },
+                {
+                    "name": "eventTimings",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "videoID",
+                    "description": "The ID of any webcam video recorded during this frame",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The payload sent to the server",
+                "type": "Object"
+            },
+            "class": "ExpVideoPhysics",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 127,
+            "description": "A series of preview videos to display within a single frame, defined as an array of objects.",
+            "itemtype": "property",
+            "name": "videos",
+            "type": "Array",
+            "class": "ExpVideoPreview",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "caption",
+                    "description": "Some text to appear under this video",
+                    "type": "String"
+                },
+                {
+                    "name": "sources",
+                    "description": "Array of {src: 'url', type: 'MIMEtype'} objects.",
+                    "type": "Object[]"
+                },
+                {
+                    "name": "imgSrc",
+                    "description": "URL of image to display (optional; each preview video should designate either sources or imgSrc)",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 169,
+            "description": "Text on the button prompt asking the user to continue to the videos",
+            "itemtype": "property",
+            "name": "prompt",
+            "type": "String",
+            "class": "ExpVideoPreview",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 187,
+            "description": "Informational text to display to the user before videos are shown, along with button to continue",
+            "itemtype": "property",
+            "name": "text",
+            "type": "String",
+            "class": "ExpVideoPreview",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-video-preview/component.js",
+            "line": 202,
+            "description": "Parameters captured and sent to the server",
+            "itemtype": "method",
+            "name": "serializeContent",
+            "params": [
+                {
+                    "name": "videoID",
+                    "description": "The ID of any video recorded during this frame",
+                    "type": "String"
+                },
+                {
+                    "name": "eventTimings",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The payload sent to the server",
+                "type": "Object"
+            },
+            "class": "ExpVideoPreview",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/mixins/full-screen.js",
+            "line": 17,
+            "description": "The element ID of the thing to make full screen (video element, div, etc)",
+            "itemtype": "property",
+            "name": "fullScreenElementId",
+            "type": "String",
+            "class": "FullScreen",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/full-screen.js",
+            "line": 24,
+            "description": "The element ID of a button to show if the user leaves fullscreen mode",
+            "itemtype": "property",
+            "name": "fsButtonID",
+            "type": "String",
+            "class": "FullScreen",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/full-screen.js",
+            "line": 89,
+            "description": "Make a specified element fullscreen",
+            "itemtype": "method",
+            "name": "showFullscreen",
+            "class": "FullScreen",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/full-screen.js",
+            "line": 127,
+            "description": "Exit fullscreen mode",
+            "itemtype": "method",
+            "name": "exitFullscreen",
+            "class": "FullScreen",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 15,
+            "description": "This mixin automatically injects the video recorder service, making its methods available to your frame",
+            "itemtype": "property",
+            "name": "videoRecorder",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 21,
+            "description": "A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`\n\nThere may be additional prefixes/suffixes added elsewhere in the video recording process. A final video\ncaptured via this mixin might this have a name like:\n  `videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv`",
+            "itemtype": "property",
+            "name": "videoId",
+            "type": "String",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/randomizers/pref-phys-pilot.js",
+            "line": 15,
+            "description": "Select the first matching session from an array of options, according to the specified rules",
+            "itemtype": "method",
+            "name": "getLastSession",
+            "params": [
+                {
+                    "name": "pastSessions",
+                    "description": "An array of session records. This returns the first match, eg assumes newest-first sort order",
+                    "type": "Session[]"
+                }
+            ],
+            "return": {
+                "description": "The model representing the last session in which the user participated",
+                "type": "Session"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player"
+        },
+        {
+            "file": "addon/randomizers/pref-phys.js",
+            "line": 15,
+            "description": "Select the first matching session from an array of options, according to the specified rules",
+            "itemtype": "method",
+            "name": "getLastSession",
+            "params": [
+                {
+                    "name": "pastSessions",
+                    "description": "An array of session records. This returns the first match, eg assumes newest-first sort order",
+                    "type": "Session[]"
+                }
+            ],
+            "return": {
+                "description": "The model representing the last session in which the user participated",
+                "type": "Session"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 82,
+            "description": "Install a recorder onto the page and optionally begin recording immediately.",
+            "itemtype": "method",
+            "name": "install",
+            "params": [
+                {
+                    "name": "record",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "Indicate whether widget was successfully installed and started",
+                "type": "Promise"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 170,
+            "description": "Start recording a video, and allow the state of the recording to be accessed for later usage",
+            "itemtype": "method",
+            "name": "record",
+            "return": {
+                "description": "",
+                "type": "Promise"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 204,
+            "description": "Pause the recorder. If optional skipIfMissing argument is provided (and\n  true), don't raise an error if recording isn't ready yet.",
+            "itemtype": "method",
+            "name": "pause",
+            "params": [
+                {
+                    "name": "skipIfMissing",
+                    "description": ""
+                }
+            ],
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 219,
+            "description": "Resume the recording",
+            "itemtype": "method",
+            "name": "resume",
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 232,
+            "description": "Get a timestamp based on the current recording position. Useful to ensure that tracked timing events\n line up with the video.",
+            "itemtype": "method",
+            "name": "getTime",
+            "return": {
+                "description": "",
+                "type": "Date|null"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 246,
+            "description": "Stop recording and save the video to the server",
+            "itemtype": "method",
+            "name": "stop",
+            "params": [
+                {
+                    "name": "destroy",
+                    "description": ""
+                }
+            ],
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 282,
+            "description": "Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to\n  distract the user.",
+            "itemtype": "method",
+            "name": "hide",
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 292,
+            "description": "Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix\n  a problem with video capture settings",
+            "itemtype": "method",
+            "name": "show",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        },
+        {
+            "file": "addon/services/video-recorder.js",
+            "line": 304,
+            "description": "Uninstall the video recorder from the page",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "VideoRecorderObject",
+            "module": "exp-player",
+            "submodule": "services"
+        }
+    ],
+    "warnings": []
+}
