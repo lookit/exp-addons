@@ -6,6 +6,6 @@
         "paths": [
             "addon"
         ],
-        "outdir": "docs/"
+        "outdir": "../docs/"
     }
 }

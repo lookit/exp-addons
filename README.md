@@ -74,6 +74,25 @@ known working state" for your app.
 Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
 now be automagically reflected in the consuming project.
 
+### Updating docs
+Documentation of `exp-player` components is generated using YUIDoc:
+ ```
+ $ cd exp-player
+ $ yarn run docs
+ ```
+ 
+At the moment, this is a manual process: whatever 
+ files are in the top level `/docs/` folder of the master branch will be served via GitHub pages. New documentation 
+ releases will require manually making a new "release" to update the master branch, which can be done on request. 
+
+
+### Releasing a new version
+Within the `exp-player` folder, we provide a simple convenience command for handling new version releases: 
+`yarn run bump-version <MAJOR | MINOR| PATCH>`.
+
+This command handles incrementing the version number, verifying tests pass, and updating the documentation build. You 
+  will be responsible for committing the changes before handling the actual release (using a process such as git flow).
+
 ### COS is Hiring!
 
 Want to help save science? Want to get paid to develop free, open source software? [Check out our openings!](http://cos.io/jobs)

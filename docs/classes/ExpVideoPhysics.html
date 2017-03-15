@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ExpVideoPhysics - exp-player</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.5.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
+                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
+                                <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
+                                <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
+                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
+                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
+                                <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
+                                <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
+                                <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
+                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
+                                <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
+                                <li><a href="../classes/FullScreen.html">FullScreen</a></li>
+                                <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
+                                <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
+                                <li><a href="../classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/components.html">components</a></li>
+                                <li><a href="../modules/exp-player.html">exp-player</a></li>
+                                <li><a href="../modules/frames.html">frames</a></li>
+                                <li><a href="../modules/mixins.html">mixins</a></li>
+                                <li><a href="../modules/services.html">services</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>ExpVideoPhysics Class</h1>
+<div class="box meta">
+        <div class="uses">
+            Uses
+            <ul class="inline commas">
+                    <li><a href="FullScreen.html">FullScreen</a></li>
+                    <li><a href="MediaReload.html">MediaReload</a></li>
+                    <li><a href="VideoRecord.html">VideoRecord</a></li>
+            </ul>
+        </div>
+
+        <div class="extends">
+            Extends <a href="../classes/ExpFrameBaseUnsafe.html" class="crosslink">ExpFrameBaseUnsafe</a>
+        </div>
+
+        <div class="foundat">
+            Defined in: <a href="../files/addon_components_exp-video-physics_component.js.html#l15"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:15</code></a>
+        </div>
+
+            Module: <a href="../modules/frames.html">frames</a><br>
+            Parent Module: <a href="../modules/exp-player.html">exp-player</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>Test trial for the 'Your baby the physicist' study: audio instructions, intro video, and test video, with webcam recording.</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods extends">
+                            <li class="index-item method inherited">
+                                <a href="#method_exitFullscreen">exitFullscreen</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_serializeContent">serializeContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_showFullscreen">showFullscreen</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties extends">
+                            <li class="index-item property">
+                                <a href="#property_altSources">altSources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_attnSources">attnSources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_audioSources">audioSources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_audioSources">audioSources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_autoforwardOnEnd">autoforwardOnEnd</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_autoplay">autoplay</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_fsButtonID">fsButtonID</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_fullScreenElementId">fullScreenElementId</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_introSources">introSources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_isLast">isLast</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_poster">poster</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_sources">sources</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_testLength">testLength</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_exitFullscreen" class="method item inherited">
+    <h3 class="name"><code>exitFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l127"><code>addon&#x2F;mixins&#x2F;full-screen.js:127</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Exit fullscreen mode
+    </div>
+
+
+
+
+</div>
+<div id="method_serializeContent" class="method item">
+    <h3 class="name"><code>serializeContent</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>videosShown</code>
+                </li>
+                <li class="arg">
+                        <code>eventTimings</code>
+                </li>
+                <li class="arg">
+                        <code>videoID</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/ExpFrameBase.html#method_serializeContent">
+                ExpFrameBase
+            </a>
+            but overwritten in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l207"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:207</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Parameters captured and sent to the server</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">videosShown</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+                    <div class="param-description">
+                        <p>Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">eventTimings</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoID</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The ID of any webcam video recorded during this frame</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    <p>The payload sent to the server</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showFullscreen" class="method item inherited">
+    <h3 class="name"><code>showFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l89"><code>addon&#x2F;mixins&#x2F;full-screen.js:89</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Make a specified element fullscreen
+    </div>
+
+
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_altSources" class="property item">
+    <h3 class="name"><code>altSources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l115"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:115</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying video src and type for alternate test video, as for sources.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_attnSources" class="property item">
+    <h3 class="name"><code>attnSources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l141"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:141</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying attention-grabber video src and type, as for sources.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_audioSources" class="property item">
+    <h3 class="name"><code>audioSources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l168"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:168</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>List of objects specifying music audio src and type, as for audioSources.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">musicSources</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_audioSources" class="property item">
+    <h3 class="name"><code>audioSources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l154"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:154</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>List of objects specifying intro announcement src and type.
+Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]</code></p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_autoforwardOnEnd" class="property item">
+    <h3 class="name"><code>autoforwardOnEnd</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l70"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:70</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_autoplay" class="property item">
+    <h3 class="name"><code>autoplay</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l80"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:80</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to automatically start the trial on load.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_fsButtonID" class="property item inherited">
+    <h3 class="name"><code>fsButtonID</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of a button to show if the user leaves fullscreen mode
+    </div>
+
+
+
+</div>
+<div id="property_fullScreenElementId" class="property item inherited">
+    <h3 class="name"><code>fullScreenElementId</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of the thing to make full screen (video element, div, etc)
+    </div>
+
+
+
+</div>
+<div id="property_introSources" class="property item">
+    <h3 class="name"><code>introSources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l128"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:128</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying intro video src and type, as for sources.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_isLast" class="property item">
+    <h3 class="name"><code>isLast</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l192"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:192</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_poster" class="property item">
+    <h3 class="name"><code>poster</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l90"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:90</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Source URL for an image to show until the video starts playing.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> &#x27;&#x27;</p>
+
+
+</div>
+<div id="property_sources" class="property item">
+    <h3 class="name"><code>sources</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l100"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:100</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). Example value:</p>
+<p><code>[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]</code></p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_testLength" class="property item">
+    <h3 class="name"><code>testLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-physics_component.js.html#l182"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:182</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Length to loop test videos, in seconds</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 20</p>
+
+
+</div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
