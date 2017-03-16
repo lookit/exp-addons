@@ -2,14 +2,24 @@
 
 <div class="row exp-lookit-preferential-looking">
 
-    <video id="player-calibration-video"
-           class="calibration center"
-           autoplay
-           style="display:none;">
-        {{#each calibrationVideoSources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </video>
+    {{#if isCalibrationFrame}}
+
+        <video id="player-calibration-video"
+               class="calibration center"
+               autoplay
+               style="display:none;">
+            {{#each calibrationVideoSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </video>
+
+        <audio id="player-calibration-audio">
+            {{#each calibrationAudioSources as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+
+    {{/if}}
 
     {{#if (or doingIntro doingFinalAudio)}}
         <video id="player-video"
@@ -54,12 +64,6 @@
             </div>
         {{/if}}
     </div>
-
-    <audio id="player-calibration-audio">
-        {{#each calibrationAudioSources as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
-    </audio>
 
     {{#if hasBeenPaused}}
         <audio id="player-audio"

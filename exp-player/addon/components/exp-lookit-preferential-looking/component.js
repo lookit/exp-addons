@@ -19,17 +19,29 @@ let {
  * in segments:
  * - Intro: central attentiongrabber video (looping) & intro audio [wait until
  *   recording is established to move on, and a minimum amount of time]
- * - Test: image(s) displayed, any test audio played [set amount of time]
+ * - Test: image(s) displayed, any test audio played [set amount of time] OR
+ * Calibration: calibration video displayed at center, left, right, center, each
+ * for calibrationLength s.
  * - Final audio: central attentiongrabber video (looping) & final audio
  *   (optional section, intended for last trial in block)
  *
+ * There are three basic uses of this frame expected:
+ * - Familiarization trial with a single central image. Provide a value for
+ * centerImage, but not rightImage or leftImage.
+ * - Test trial with right and left images. Provide a value for rightImage and
+ * leftImage, but not centerImage. (There is no explicit "preferential looking
+ * vs. familiarization" switch: all of the images provided will be displayed.)
+ * - Calibration trial. Set isCalibrationFrame to true, and provide
+ * calibrationLength (length of each calibration segment in s),
+ * calibrationVideoSources, and calibrationAudioSources.
  *
- * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
- * and expected to be repeated.
+ * This frame extends ExpFrameBaseUnsafe because it is displayed fullscreen
+ * and is expected to be repeated.
 
 ```json
  "frames": {
     "preferential-looking": {
+        "isCalibrationFrame": false,
         "allowPausingDuringTest": true,
         "rightImage": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/fam.jpg",
         "leftImage":
@@ -58,7 +70,7 @@ let {
                 "type": "audio/ogg"
             }
         ],
-        "calibrationLength": 3000,
+        "calibrationLength": 3,
         "id": "pref-trial",
         "attnLength": 1,
         "endAudioSources": [
@@ -188,6 +200,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // Timers for intro & stimuli
     introTimer: null, // minimum length of intro segment
     stimTimer: null,
+    calTimer: null,
 
     meta: {
         name: 'ExpLookitPreferentialLooking',
@@ -196,9 +209,24 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             type: 'object',
             properties: {
                 /**
+                 * Whether to do calibration instead of a static image display.
+                 * If this is true, then provide calibrationLength,
+                 * calibrationAudioSources, and calibrationVideoSources as well.
+                 *
+                 * @property {Boolean} isCalibrationFrame
+                 * @default false
+                 */
+                isCalibrationFrame: {
+                    type: 'boolean',
+                    default: false,
+                    description: 'Whether to do calibration instead of a static image display'
+                },
+                /**
                  * Whether to allow user to pause the study during the test
                  * segment and restart from intro; otherwise, user can pause but
-                 * this frame will end upon unpausing
+                 * this frame will end upon unpausing. Applies to pausing during
+                 * both image display and calibration segments. Pausing is
+                 * always allowed during the intro.
                  *
                  * @property {Boolean} allowPausingDuringTest
                  */
@@ -207,8 +235,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
                 },
                 /**
-                 * URL of image to show on left (include to show left/right
-                 * images)
+                 * URL of image to show on left, if any
                  *
                  * @property {String} leftImage
                  */
@@ -217,7 +244,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'URL of image to show on left'
                 },
                 /**
-                 * URL of image to show on right
+                 * URL of image to show on right, if any
                  *
                  * @property {String} right
                  */
@@ -226,8 +253,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'URL of image to show on left'
                 },
                 /**
-                 * URL of image to show at center (include to show a center
-                 * image)
+                 * URL of image to show at center, if any
                  *
                  * @property {String} centerImage
                  */
@@ -236,7 +262,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'URL of image to show on left'
                 },
                 /**
-                 * minimum amount of time to show attention-getter in seconds
+                 * minimum amount of time to show attention-getter in seconds.
+                 * attention-getter intro video will be shown for at least this
+                 * long, and also until any intro audio finishes playing and a
+                 * webcam connection is established.
                  *
                  * @property {Number} attnLength
                  * @default 5
@@ -247,7 +276,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     default: 5
                 },
                 /**
-                 * length of preferential looking trial in seconds
+                 * length of preferential looking trial in seconds. (Only used
+                 * if not isCalibrationFrame.)
                  *
                  * @property {Number} trialLength
                  * @default 6
@@ -258,7 +288,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     default: 6
                 },
                 /**
-                 * length of single calibration segment in seconds
+                 * length of single calibration segment in seconds (only used
+                 * if isCalibrationFrame)
                  *
                  * @property {Number} calibrationLength
                  * @default 3
@@ -270,7 +301,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for audio played during test trial
+                 * for audio played during test trial. (Only used if not
+                 * isCalibrationFrame.)
                  *
                  * @property {Object[]} testAudioSources
                  */
@@ -292,7 +324,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for instructions during attention-getter video
+                 * for instructions or any other audio during attention-getter
+                 * video
                  *
                  * @property {Object[]} introAudioSources
                  */
@@ -315,7 +348,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for audio played after trial ends (optional, intended for
-                 * last trial)
+                 * use on last trial to let parents know they can open their
+                 * eyes)
                  *
                  * @property {Object[]} endAudioSources
                  */
@@ -338,7 +372,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for calibration audio, played from start during each
-                 * calibration segment
+                 * calibration segment (only used if isCalibrationFrame)
                  *
                  * @property {Object[]} calibrationAudioSources
                  */
@@ -361,7 +395,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for calibration video, played from start during each
-                 * calibration segment
+                 * calibration segment (only used if isCalibrationFrame)
                  *
                  * @property {Object[]} calibrationVideoSources
                  */
@@ -478,6 +512,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @method serializeContent
              * @param {String} videoID The ID of any video recorded during this frame
              * @param {Boolean} hasBeenPaused whether this trial was paused
+             * @param {Boolean} isCalibrationFrame whether this is a calibration frame (given as a property of the frame)
+             * @param {Boolean} allowPausingDuringTest whether the user can return to the test/calibration period after pausing (given as a property of the frame)
+             * @param {String} rightImage URL of image shown on right (given as a property of the frame)
+             * @param {String} leftImage URL of image shown on left (given as a property of the frame)
+             * @param {String} centerImage URL of image shown at center (given as a property of the frame)
+             * @param {Number} trialLength seconds to display images if this is a test trial (given as a property of the frame)
+             * @param {Number} calibrationLength s to display calibration video in each of four locations if this is a calibration trial (given as a property of the frame)
+             * @param {Object[]} testAudioSources Array of {src: 'url', type: 'MIMEtype'} objects for audio played during test trial (given as a property of the frame)
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
@@ -488,6 +530,30 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 hasBeenPaused: {
                     type: 'boolean'
+                },
+                isCalibrationFrame: {
+                    type: 'boolean'
+                },
+                allowPausingDuringTest: {
+                    type: 'boolean'
+                },
+                rightImage: {
+                    type: 'string'
+                },
+                leftImage: {
+                    type: 'string'
+                },
+                centerImage: {
+                    type: 'string'
+                },
+                trialLength: {
+                    type: 'number'
+                },
+                testAudioSources: {
+                    type: 'object'
+                },
+                calibrationLength: {
+                    type: 'number'
                 }
             }
         }
@@ -500,10 +566,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     }),
 
     segmentObserver: Ember.observer('currentSegment', function(frame) {
-        // Don't trigger starting intro; that'll be done manually.
-        if (frame.get('currentSegment') === 'calibration') {
-            frame.startCalibration();
-        } else if (frame.get('currentSegment') === 'test') {
+        // Don't trigger starting calibration or intro; that'll be done manually.
+        if (frame.get('currentSegment') === 'test') {
             frame.startTrial();
         }
     }),
@@ -557,12 +621,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     startCalibration() {
         var frame = this;
 
-        // Don't allow pausing during calibration/test.
-        // TODO: generalize whether to allow pausing during each segment of the experiment.
-        // $(document).off('keyup.pauser');
-
         var calAudio = $('#player-calibration-audio')[0];
         var calVideo = $('#player-calibration-video')[0];
+
         $('#player-calibration-video').show();
 
         // Show the calibration segment at center, left, right, center, each
@@ -570,7 +631,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
                 $('#player-calibration-video').hide();
-                frame.set('currentSegment', 'test');
+                frame.endTrial();
             } else {
                 var thisLoc = calList.shift();
                 /**
@@ -589,12 +650,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 calVideo.play();
                 $('#player-calibration-video').removeClass(lastLoc);
                 $('#player-calibration-video').addClass(thisLoc);
-                window.setTimeout(function(){
+                frame.set('calTimer', window.setTimeout(function(){
                     doCalibrationSegments(calList, thisLoc);
-                }, frame.settings.calLength);
+                }, frame.get('calibrationLength')));
             }
         };
 
+        $('#player-calibration-video').removeClass('left right');
+        $('#player-calibration-video').addClass('center');
         doCalibrationSegments(['center', 'left', 'right', 'center'], '');
 
     },
@@ -605,20 +668,25 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         frame.sendTimeEvent('startTestTrial');
 
-        $('#allstimuli').show();
+        if (frame.get('isCalibrationFrame')) { // Calibration frame
+            frame.set('currentSegment', 'calibration');
+            frame.startCalibration();
+        } else { // Regular static image preferential looking frame
+            $('#allstimuli').show();
+            frame.set('currentSegment', 'test');
 
-        var audioPlayer = $('#player-test-audio');
-        audioPlayer[0].currentTime = 0;
-        audioPlayer[0].play();
+            var audioPlayer = $('#player-test-audio');
+            audioPlayer[0].currentTime = 0;
+            audioPlayer[0].play();
 
-        // Now presenting stimuli; stop after trial length.
-        // TODO: consider actually setting to visible here
-        frame.set('stimTimer', window.setTimeout(function() {
-            window.clearTimeout(frame.get('stimTimer'));
-            audioPlayer[0].pause();
-            $('#allstimuli').hide();
-            frame.endTrial();
-            }, frame.trialLength * 1000));
+            // Now presenting stimuli; stop after trial length.
+            frame.set('stimTimer', window.setTimeout(function() {
+                window.clearTimeout(frame.get('stimTimer'));
+                audioPlayer[0].pause();
+                $('#allstimuli').hide();
+                frame.endTrial();
+                }, frame.trialLength * 1000));
+        }
     },
 
     // When stimuli have been shown for time indicated: play end-audio if
@@ -626,6 +694,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     endTrial() {
         // TODO: possibly put all calls to next here, rather than calling
         // next directly from ending audio in the template, for clarity
+
         // Don't allow pausing anymore
         $(document).off('keyup.pauser');
         if (this.get('recorder')) {
@@ -689,18 +758,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // Pause/unpause study.
     pauseStudy() {
 
-        // TODO: generalize across audio segments
-        $('#player-audio')[0].pause();
-        $('#player-audio')[0].currentTime = 0;
-        $('#player-pause-audio')[0].pause();
-        $('#player-pause-audio')[0].currentTime = 0;
-        $('#player-pause-audio-leftfs')[0].pause();
-        $('#player-pause-audio-leftfs')[0].currentTime = 0;
-        $('#player-calibration-audio')[0].pause();
-        $('#player-calibration-audio')[0].currentTime = 0;
-        $('#player-test-audio')[0].pause();
-        $('#player-test-audio')[0].currentTime = 0;
+        $('audio, video').each(function() {
+            this.pause();
+            this.currentTime = 0;
+        });
+
         $('#allstimuli').hide();
+        $('#player-calibration-video').hide();
 
         this.set('completedAudio', false);
         this.set('completedAttn', false);
@@ -739,6 +803,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 // TODO: generalize across timers
                 window.clearTimeout(this.get('introTimer'));
                 window.clearTimeout(this.get('stimTimer'));
+                window.clearTimeout(this.get('calTimer'));
                 /**
                  * When pausing study, immediately before request to pause webcam recording
                  *
