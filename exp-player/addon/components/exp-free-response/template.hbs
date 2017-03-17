@@ -7,7 +7,8 @@
     {{#bs-form}}
         {{#bs-form-group}}
             <label>{{t 'survey.sections.2.questions.14.label'}}</label><br>
-            <div id="timeSelect" dir="ltr"> {{! Prevent date display from being mangled in RTL languages- TODO improve fix }}
+            <div id="timeSelect" dir="ltr">
+                {{! Prevent date display from being mangled in RTL languages- TODO improve fix }}
                 {{#power-select
                     dropdownClass='dropdownClass'
                     selected=EventTime
