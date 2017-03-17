@@ -199,8 +199,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     // Timers for intro & stimuli
     introTimer: null, // minimum length of intro segment
-    stimTimer: null,
-    calTimer: null,
+    stimTimer: null,  // display of static images
+    calTimer: null,   // display of calibration video
 
     meta: {
         name: 'ExpLookitPreferentialLooking',
@@ -562,12 +562,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     calObserver: Ember.observer('readyToStartCalibration', function(frame) {
         if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
             frame.set('currentSegment', 'test');
-        }
-    }),
-
-    segmentObserver: Ember.observer('currentSegment', function(frame) {
-        // Don't trigger starting calibration or intro; that'll be done manually.
-        if (frame.get('currentSegment') === 'test') {
             frame.startTrial();
         }
     }),
@@ -692,9 +686,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // When stimuli have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
-        // TODO: possibly put all calls to next here, rather than calling
-        // next directly from ending audio in the template, for clarity
-
         // Don't allow pausing anymore
         $(document).off('keyup.pauser');
         if (this.get('recorder')) {
@@ -733,7 +724,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @event leftFullscreen
             */
             this.sendTimeEvent('leftFullscreen');
-            if (!this.get('isPaused') && !(this.get('currentSegment') === 'finalaudio')) {
+            if (!(this.get('isPaused')) && (this.get('currentSegment') !== 'finalaudio')) {
                 this.pauseStudy();
             }
         } else {
@@ -800,7 +791,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             } else { // Not currently paused: PAUSE
                 this.set('previousSegment', this.get('currentSegment'));
                 this.set('currentSegment', 'intro');
-                // TODO: generalize across timers
+
                 window.clearTimeout(this.get('introTimer'));
                 window.clearTimeout(this.get('stimTimer'));
                 window.clearTimeout(this.get('calTimer'));
