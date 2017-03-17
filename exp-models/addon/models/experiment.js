@@ -139,6 +139,21 @@ const Experiment = DS.Model.extend(JamModel, {
         maxDays = maxDays || Number.MAX_SAFE_INTEGER;
         return minDays <= age && age <= maxDays;
     },
+    isOldEnough(participant) {
+        var age = participant.get('age');
+
+        let {
+            eligibilityMinAge
+        } = this.getProperties('eligibilityMinAge');
+
+        var minDays;
+        if (eligibilityMinAge) {
+            let [minNumber, minUnit] = eligibilityMinAge.split(' ');
+            minDays = moment.duration(parseFloat(minNumber), minUnit).asDays();
+        }
+        minDays = minDays || -1;
+        return minDays <= age;
+    },
     ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function () {
         let {
             eligibilityMinAge,
