@@ -43,14 +43,14 @@ const Experiment = DS.Model.extend(JamModel, {
     // cannot be indexed by Elasticsearch.
     thumbnailId: DS.attr('string'),
     _thumbnail: null,
-    onReady: function () {
+    onReady: Ember.on('ready', function () {
         var thumbnailId = this.get('thumbnailId');
         if (thumbnailId) {
             this.get('store').findRecord('thumbnail', thumbnailId).then((thumbnail) => {
                 this.set('_thumbnail', thumbnail);
             });
         }
-    }.on('ready'),
+    }),
     thumbnail: Ember.computed('_thumbnail', {
         get() {
             return this.get('_thumbnail');
@@ -96,18 +96,18 @@ const Experiment = DS.Model.extend(JamModel, {
     isActive: Ember.computed('state', function () {
         return Ember.isEqual(this.get('state'), this.ACTIVE);
     }),
-    onStateChange: function () {
+    onStateChange: Ember.observer('state', function () {
         if (this.get('isNew')) {
             return;
         }
-        var state = this.get('state');
+        const state = this.get('state');
         // if changed from inactive to active
         if (state === this.ACTIVE) {
             this.set('beginDate', new Date());
         } else if (state !== this.DELETED) {
             this.set('endDate', new Date());
         }
-    }.observes('state'),
+    }),
 
     eligibilityMaxAge: DS.attr('string'),
     eligibilityMinAge: DS.attr('string'),
