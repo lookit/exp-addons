@@ -1,4 +1,5 @@
-$exp-lookit-story-page-AR: 2.25;
+$exp-lookit-story-page-AR: 2; // aspect ratio of story page, width:height
+
 $exp-lookit-story-page-side-margin: 2; // in vw
 $exp-lookit-story-page-top-margin: 2; // in vh
 $exp-lookit-story-page-controls-height: 20; // in vh
@@ -38,6 +39,8 @@ $exp-lookit-story-page-height: (100 - $exp-lookit-story-page-top-margin - $exp-l
 .exp-lookit-story-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
     position: absolute;
     display: block;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .exp-lookit-story-page img.story-image {
@@ -63,8 +66,6 @@ $exp-lookit-story-page-height: (100 - $exp-lookit-story-page-top-margin - $exp-l
 .exp-lookit-story-page * {
     cursor: auto !important;
 }
-
-
 
 .exp-lookit-story-page #story-controls button, #experiment-player.player-fullscreen .exp-lookit-story-page #story-controls button {
     display: inline-block;
@@ -101,6 +102,11 @@ $exp-lookit-story-page-height: (100 - $exp-lookit-story-page-top-margin - $exp-l
     background-color: $exp-lookit-story-page-parent-text-color;
     color: black;
     border-radius: 15px;
+}
+
+.exp-lookit-story-page #waitForVideo {
+    font-size: x-large;
+    margin-top: 20%;
 }
 
 .exp-lookit-story-page #fsButton {

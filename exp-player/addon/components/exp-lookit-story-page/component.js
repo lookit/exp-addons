@@ -57,6 +57,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
+    aspectRatio: 2, // aspect ratio of story page, width:height; manually match exp-lookit-story-page.scss
+
     // Track state of experiment
     completedAudio: false,
     completedAttn: false,
@@ -65,28 +67,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
 
-    readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
+    readyToStartAudio: Ember.computed('hasCamAccess', 'videoUploadConnected',
         function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn') && (!this.get('hasBeenPaused') || this.get('completedAudio')));
+            return (this.get('hasCamAccess') && this.get('videoUploadConnected'));
         }),
-
-    // helpers for use in template
-    doingCalibration: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'calibration');
-    }),
-    doingIntro: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'intro');
-    }),
-    doingTest: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'test');
-    }),
-    doingFinalAudio: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'finalaudio');
-    }),
-
-    // Timers for intro & stimuli
-    introTimer: null, // minimum length of intro segment
-    stimTimer: null,
 
     meta: {
         name: 'ExpLookitStoryPage',
@@ -94,6 +78,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         parameters: {
             type: 'object',
             properties: {
+                /**
+                 * Whether to do webcam recording (will wait for webcam
+                 * connection before starting audio if so)
+                 *
+                 * @property {Boolean} doRecording
+                 */
+                doRecording: {
+                    type: 'boolean',
+                    description: 'Whether to do webcam recording (will wait for webcam connection before starting audio if so'
+                },
                 /**
                  * Whether to proceed automatically after audio (and hide
                  * replay/next buttons)
@@ -239,31 +233,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    calObserver: Ember.observer('readyToStartCalibration', function(frame) {
-        if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
-            frame.set('currentSegment', 'test');
-        }
-    }),
-
-    segmentObserver: Ember.observer('currentSegment', function(frame) {
-        // Don't trigger starting intro; that'll be done manually.
-        if (frame.get('currentSegment') === 'calibration') {
-            frame.startCalibration();
-        } else if (frame.get('currentSegment') === 'test') {
-            frame.startTrial();
+    audioObserver: Ember.observer('readyToStartAudio', function(frame) {
+        if (frame.get('readyToStartAudio')) {
+            $('#waitForVideo').hide();
+            $('.story-image-container').show();
+            frame.set('currentAudioIndex', -1);
+            frame.send('playNextAudioSegment');
         }
     }),
 
     actions: {
 
-        // When intro audio is complete
-        completedIntroAudio() {
-            this.set('completedAudio', true);
-            this.notifyPropertyChange('readyToStartCalibration');
-        },
-
         // During playing audio
         updateCharacterHighlighting() {
+
             var thisAudioData = this.get('audioSources')[this.currentAudioIndex];
             var t = $('#' + thisAudioData.audioId)[0].currentTime;
 
@@ -316,66 +299,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    startIntro() {
-        var frame = this;
-
-        /**
-         * Just before starting intro segment
-         *
-         * @event startIntro
-         */
-        frame.sendTimeEvent('startIntro');
-        $('#player-video')[0].play();
-
-        // Set a timer for the minimum length for the intro/break
-        $('#player-audio')[0].play();
-        frame.set('introTimer', window.setTimeout(function(){
-            frame.set('completedAttn', true);
-            frame.notifyPropertyChange('readyToStartCalibration');
-        }, frame.get('attnLength') * 1000));
-
-    },
-
-    startTrial() {
-
-        var frame = this;
-
-        frame.sendTimeEvent('startTestTrial');
-
-        $('#allstimuli').show();
-
-        var audioPlayer = $('#player-test-audio');
-        audioPlayer[0].currentTime = 0;
-        audioPlayer[0].play();
-
-        // Now presenting stimuli; stop after trial length.
-        // TODO: consider actually setting to visible here
-        frame.set('stimTimer', window.setTimeout(function() {
-            window.clearTimeout(frame.get('stimTimer'));
-            audioPlayer[0].pause();
-            $('#allstimuli').hide();
-            frame.endTrial();
-            }, frame.trialLength * 1000));
-    },
-
-    // When stimuli have been shown for time indicated: play end-audio if
-    // present, or just move on.
-    endTrial() {
-        // TODO: possibly put all calls to next here, rather than calling
-        // next directly from ending audio in the template, for clarity
-        if (this.get('recorder')) {
-            this.sendTimeEvent('stoppingCapture');
-            this.get('recorder').stop();
-        }
-        if (this.get('endAudioSources').length) {
-            this.set('currentSegment', 'finalaudio');
-            $('#player-endaudio')[0].play();
-        }
-        else {
-            this.send('next');
-        }
-    },
-
     // TODO: should this be moved to the recording mixin?
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
@@ -412,47 +335,61 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
+        var _this = this;
+        var images = this.get('images');
+        images.forEach(function(im, ind) {
+            var thisIm = $('#' + images[ind].id);
+            thisIm.css('height', images[ind].height * _this.get('aspectRatio') + '%');
+
+        });
+
         this.send('showFullscreen');
-        //this.startIntro();
-        this.send('playNextAudioSegment');
         $('#nextbutton').prop('disabled', true);
 
-        // TODO: move handlers that just record events to the VideoRecord mixin?
-//         if (this.get('experiment') && this.get('id') && this.get('session')) {
-//             let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
-//                 hidden: true
-//             });
-//             recorder.install({
-//                 record: true
-//             }).then(() => {
-//                 this.sendTimeEvent('recorderReady');
-//                 this.set('recordingIsReady', true);
-//             });
-//             /**
-//              * When recorder detects a change in camera access
-//              *
-//              * @event onCamAccess
-//              * @param {Boolean} hasCamAccess
-//              */
-//             recorder.on('onCamAccess', (hasAccess) => {
-//                 this.sendTimeEvent('hasCamAccess', {
-//                     hasCamAccess: hasAccess
-//                 });
-//             });
-//             /**
-//              * When recorder detects a change in video stream connection status
-//              *
-//              * @event videoStreamConnection
-//              * @param {String} status status of video stream connection, e.g.
-//              * 'NetConnection.Connect.Success' if successful
-//              */
-//             recorder.on('onConnectionStatus', (status) => {
-//                 this.sendTimeEvent('videoStreamConnection', {
-//                     status: status
-//                 });
-//             });
-//             this.set('recorder', recorder);
-//         }
+        if (this.get('doRecording')) {
+            $('.story-image-container').hide();
+            if (this.get('experiment') && this.get('id') && this.get('session')) {
+                let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+                    hidden: true
+                });
+                recorder.install({
+                    record: true
+                }).then(() => {
+                    this.sendTimeEvent('recorderReady');
+                    this.set('recordingIsReady', true);
+                    this.notifyPropertyChange('readyToStartAudio');
+                });
+                // TODO: move handlers that just record events to the VideoRecord mixin?
+                /**
+                 * When recorder detects a change in camera access
+                 *
+                 * @event onCamAccess
+                 * @param {Boolean} hasCamAccess
+                 */
+                recorder.on('onCamAccess', (hasAccess) => {
+                    this.sendTimeEvent('hasCamAccess', {
+                        hasCamAccess: hasAccess
+                    });
+                    this.notifyPropertyChange('readyToStartAudio');
+                });
+                /**
+                 * When recorder detects a change in video stream connection status
+                 *
+                 * @event videoStreamConnection
+                 * @param {String} status status of video stream connection, e.g.
+                 * 'NetConnection.Connect.Success' if successful
+                 */
+                recorder.on('onConnectionStatus', (status) => {
+                    this.sendTimeEvent('videoStreamConnection', {
+                        status: status
+                    });
+                    this.notifyPropertyChange('readyToStartAudio');
+                });
+                this.set('recorder', recorder);
+            }
+        } else {
+            this.send('playNextAudioSegment');
+        }
 
     },
 

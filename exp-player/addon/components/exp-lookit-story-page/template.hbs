@@ -3,8 +3,12 @@
 <div class="exp-lookit-story-page" id="exp-lookit-story-page-container">
 
     <div id="story-area">
+        {{#if doRecording}}
+            <p id='waitForVideo'> establishing video connection <br> please wait... </p>
+        {{/if}}
+
         {{#each images as |image|}}
-            <div id={{image.id}} class="story-image-container" style="left:{{image.left}}%; width:{{image.width}}%; top:{{image.top}}%; height:{{image.height}}%;">
+            <div id={{image.id}} class="story-image-container" style="left:{{image.left}}%; width:{{image.width}}%; top:{{image.top}}%; ">
                 <img src={{image.src}} class="story-image">
             </div>
         {{/each}}
