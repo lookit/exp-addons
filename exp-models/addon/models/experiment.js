@@ -117,16 +117,27 @@ const Experiment = DS.Model.extend(JamModel, {
         var [amount, unit] = age.split(' ');
         return moment.duration(parseFloat(amount), inflector.pluralize(unit)).asDays();
     },
-    isEligible(participant) {
-        var age = participant.get('age');
-
+    /**
+     * Internal logic for checking whether a participant age is within the required range for the experiment.
+     *  Returns 0 if in range, else returns the number of days outside the range
+     *
+     * This method may be wrapped by others, or used as a sorting comparison function, or for "come back in x days"
+     *   messages to users
+     *
+     * @method _ageCheck
+     * @param {Date} age A datetime object representing the participant age
+     * @return {number} Similar behavior as a comparison function: Negative number indicates participant is too young,
+     *   0 indicates within range, and positive indicates too old.
+     * @private
+     */
+    _ageCheck(age) {
         let {
             eligibilityMinAge,
             eligibilityMaxAge
         } = this.getProperties('eligibilityMinAge', 'eligibilityMaxAge');
 
-        var minDays;
-        var maxDays;
+        let minDays;
+        let maxDays;
         if (eligibilityMinAge) {
             let [minNumber, minUnit] = eligibilityMinAge.split(' ');
             minDays = moment.duration(parseFloat(minNumber), minUnit).asDays();
@@ -137,22 +148,35 @@ const Experiment = DS.Model.extend(JamModel, {
         }
         minDays = minDays || -1;
         maxDays = maxDays || Number.MAX_SAFE_INTEGER;
-        return minDays <= age && age <= maxDays;
-    },
-    isOldEnough(participant) {
-        var age = participant.get('age');
 
-        let {
-            eligibilityMinAge
-        } = this.getProperties('eligibilityMinAge');
-
-        var minDays;
-        if (eligibilityMinAge) {
-            let [minNumber, minUnit] = eligibilityMinAge.split(' ');
-            minDays = moment.duration(parseFloat(minNumber), minUnit).asDays();
+        if (age <= minDays) {
+            return age - minDays;
+        } else if (age >= maxDays) {
+            return age - maxDays;
+        } else {
+            return 0;
         }
-        minDays = minDays || -1;
-        return minDays <= age;
+    },
+    /**
+     * Participant age is within eligibility range
+     * @method isEligible
+     * @param {Profile} participant
+     * @return {boolean}
+     */
+    isEligible(participant) {
+        const age = participant.get('age');
+        return this._ageCheck(age) === 0;
+    },
+    /**
+     * Eligibility check that only looks at minimum age (not max)
+     * @method isOldEnough
+     * @param {Profile} participant
+     * @return {Boolean}
+     */
+    isOldEnough(participant) {
+        const age = participant.get('age');
+        const check = this._ageCheck(age);
+        return check >= 0;
     },
     ageRange: Ember.computed('eligibilityMinAge', 'eligibilityMaxAge', function () {
         let {
