@@ -11,17 +11,33 @@
     </div>
 
     {{#unless updatedIsFullscreen}}
-        <button class="btn btn-success exp-lookit-story-page" id="fsButton" {{ action 'showFullscreen'}} >
-                please return to fullscreen
+        <button class="btn btn-warning exp-lookit-story-page" id="fsButton" {{ action 'showFullscreen'}} >
+                please return
+                <br>
+                to fullscreen
         </button>
     {{/unless}}
 
     {{#each audioSources as |audioSourceObject|}}
-        <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}}>
+        <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}} ontimeupdate={{action 'updateCharacterHighlighting'}}>
             {{#each audioSourceObject.sources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
     {{/each}}
 
+    <div id="story-controls">
+        {{#unless autoProceed}}
+            <button id="replaybutton" class="btn btn-primary left"  {{ action 'replay' }}> Replay</button>
+        {{/unless}}
+        <div id="parenttext">
+            {{exp-text-block block=parentTextBlock}}
+        </div>
+        {{#unless autoProceed}}
+        <button id="nextbutton" class="btn btn-success right" {{ action 'next' }} > Next</button>
+        {{/unless}}
+    </div>
+
+
 </div>
+

@@ -1,4 +1,11 @@
-$exp-lookit-story-page-AR: 2;
+$exp-lookit-story-page-AR: 2.25;
+$exp-lookit-story-page-side-margin: 2; // in vw
+$exp-lookit-story-page-top-margin: 2; // in vh
+$exp-lookit-story-page-controls-height: 20; // in vh
+$exp-lookit-story-page-parent-text-color: #f8f3bf;
+
+$exp-lookit-story-page-width: (100 - 2*$exp-lookit-story-page-side-margin) * 1vw;
+$exp-lookit-story-page-height: (100 - $exp-lookit-story-page-top-margin - $exp-lookit-story-page-controls-height) * 1vh;
 
 .exp-lookit-story-page, .exp-lookit-story-page *
 {
@@ -19,19 +26,18 @@ $exp-lookit-story-page-AR: 2;
     background-color: white;
     overflow:hidden;
     position: fixed;
-    width: 100vw;
-    height: 1/$exp-lookit-story-page-AR * 100vw;
-    max-height: 100vh;
-    max-width: $exp-lookit-story-page-AR * 100vh;
+    width: $exp-lookit-story-page-width;
+    height: 1/$exp-lookit-story-page-AR * $exp-lookit-story-page-width;
+    max-height: $exp-lookit-story-page-height;
+    max-width: $exp-lookit-story-page-AR * $exp-lookit-story-page-height;
     margin: auto;
-    top:0;bottom:0; /* vertical center */
+    margin-top: 0; top: $exp-lookit-story-page-top-margin * 1vh;
     left:0;right:0; /* horizontal center */
 }
 
 .exp-lookit-story-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
     position: absolute;
     display: block;
-    border: thin solid blue;
 }
 
 .exp-lookit-story-page img.story-image {
@@ -47,103 +53,66 @@ $exp-lookit-story-page-AR: 2;
     bottom: 0;
 }
 
-
-
-.exp-lookit-story-page video.attn {
-    margin:auto;
-    max-height: 30%;
+.exp-lookit-story-page .story-image-container.highlight  {
+    border: thick solid green;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.6);
 }
 
-.exp-lookit-story-page .pause-instructions {
-    display: block;
-    position: relative;
+.exp-lookit-story-page * {
+    cursor: auto !important;
+}
+
+
+
+.exp-lookit-story-page #story-controls button, #experiment-player.player-fullscreen .exp-lookit-story-page #story-controls button {
+    display: inline-block;
+    position: fixed;
+    padding: 0px; margin: 0px;
+    font-size: x-large;
+    width: 20vw;
     margin-left: auto;
-    margin-right:auto;
-    text-align: center;
-    font-size: 3em;
-    font-weight: bold;
+    margin-right: auto;
+    min-width: 100px;
+    min-height: 50px;
+    bottom: 2vh;
+    height: $exp-lookit-story-page-controls-height * 0.5vh;
+    bottom: $exp-lookit-story-page-controls-height * 0.25vh;
 }
 
-.exp-lookit-story-page button {
+.exp-lookit-story-page button.right {
+    right: 1vw;
+}
+
+.exp-lookit-story-page button.left {
+    left: 1vw;
+}
+
+.exp-lookit-story-page #parenttext, #experiment-player.player-fullscreen .exp-lookit-story-page #parenttext {
+    font-size: x-large;
+    right: 0; left: 0;
+    width: 50vw;
+    text-align: center;
+    margin: auto;
+    height: ($exp-lookit-story-page-controls-height - 4) * 1vh;
+    bottom: 2vh;
+    position: fixed;
+    background-color: $exp-lookit-story-page-parent-text-color;
+    color: black;
+    border-radius: 15px;
+}
+
+.exp-lookit-story-page #fsButton {
     margin-left: auto;
     margin-right: auto;
     min-height: 75px;
-    min-width: 300px;
+    min-width: 100px;
+    margin-top: 5%;
+    padding: 20px;
     position: relative;
     display: block;
-    font-size: 2em;
-    padding: 10px;
-    height: 10%;
-    width: 30%;
+    font-size: x-large;
 }
 
 
-#experiment-player:not(.player-fullscreen) .exp-lookit-story-page video {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    width: 50%;
-    max-width: 250px;
-    position: relative;
-    display: block;
-}
-
-.exp-lookit-story-page #left-container {
-    min-width: 30%;
-    max-width: 30%;
-    left: 10%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
-    position: absolute;
-    //border: thin solid blue;
-}
-
-.exp-lookit-story-page #right-container {
-    min-width: 30%;
-    max-width: 30%;
-    left: 60%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
-    position: absolute;
-    //border: thin solid red;
-}
-
-.exp-lookit-story-page #center-container {
-    min-width: 20%;
-    max-width: 20%;
-    left: 40%;
-    min-height: 60%;
-    max-height: 60%;
-    top: 20%;
-    position: absolute;
-    //border: thin solid green;
-}
-
-.exp-lookit-story-page #right-image {
-    //border: thin solid red;
-    max-width: 100%;
-    max-height: 100%;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-lookit-story-page #left-image {
-    //border: thin solid blue;
-    width:100%;
-    object-fit: contain;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-lookit-story-page #center-image {
-    //border: thin solid green;
-    max-width: 100%;
-    max-height: 100%;
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-}

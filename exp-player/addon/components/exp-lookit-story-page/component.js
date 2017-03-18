@@ -63,7 +63,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     currentSegment: 'intro', // 'calibration', 'test', 'finalaudio' (mutually exclusive)
     previousSegment: 'intro', // used when pausing/unpausing - refers to segment that study was paused during
 
-    currentAudioIndex: 0, // during initial sequential audio, holds an index into audioSources
+    currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
 
     readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
         function() {
@@ -95,15 +95,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             type: 'object',
             properties: {
                 /**
-                 * Whether to allow user to pause the study during the test
-                 * segment and restart from intro; otherwise, user can pause but
-                 * this frame will end upon unpausing
+                 * Whether to proceed automatically after audio (and hide
+                 * replay/next buttons)
                  *
-                 * @property {Boolean} allowPausingDuringTest
+                 * @property {Boolean} autoProceed
                  */
-                allowPausingDuringTest: {
+                autoProceed: {
                     type: 'boolean',
-                    description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
+                    description: 'Whether to proceed automatically after audio (and hide replay/next buttons)'
                 },
                 /**
                  * Array of objects describing audio to play at the start of
@@ -114,7 +113,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  *      audio segment
                  *   @param {Object[]} sources Array of {src: 'url', type:
                  *      'MIMEtype'} objects with audio sources for this segment
-                 *   @param {Object[]} annotations
+                 *   @param {Object[]} highlights Array of {'range': [startT,
+                 *      endT], 'image': 'imageId'} objects, where the imageId
+                 *      values correspond to the ids given in images
                  */
                 audioSources: {
                     type: 'array',
@@ -137,52 +138,82 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                     }
                                 },
                             },
-                            'annotations': {
-                                type: 'object'
+                            'highlights': {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        'range': {
+                                            type: 'array',
+                                            items: {
+                                                type: 'number'
+                                            }
+                                        },
+                                        'image': {
+                                            'type': 'string'
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 },
                 /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for calibration audio, played from start during each
-                 * calibration segment
+                 * Text block to display to parent.
                  *
-                 * @property {Object[]} calibrationAudioSources
+                 * @property {Object} parentTextBlock
+                 *   @param {String} title title to display
+                 *   @param {String} text paragraph of text
+                 *   @param {Boolean} emph whether to bold this paragraph
                  */
-                calibrationAudioSources: {
-                    type: 'array',
-                    description: 'list of objects specifying audio src and type for calibration audio',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            }
+                parentTextBlock: {
+                    type: 'object',
+                    properties: {
+                        title: {
+                            type: 'string'
+                        },
+                        text: {
+                            type: 'string'
+                        },
+                        emph: {
+                            type: 'boolean'
                         }
-                    }
+                    },
+                    default: []
                 },
                 /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for attention-getter video
+                 * Array of images to display and information about their placement
                  *
-                 * @property {Object[]} videoSources
+                 * @property {Object[]} images
+                 *   @param {String} id unique ID for this image
+                 *   @param {String} src URL of image source
+                 *   @param {String} left left margin, as percentage of story area width
+                 *   @param {String} width image width, as percentage of story area width
+                 *   @param {String} top top margin, as percentage of story area height
+                 *   @param {String} height image height, as percentage of story area height
+
                  */
-                videoSources: {
+                images: {
                     type: 'array',
-                    description: 'List of objects specifying video src and type for attention-getter video',
-                    default: [],
                     items: {
                         type: 'object',
                         properties: {
+                            'id': {
+                                type: 'string'
+                            },
                             'src': {
                                 type: 'string'
                             },
-                            'type': {
+                            'left': {
+                                type: 'string'
+                            },
+                            'width': {
+                                type: 'string'
+                            },
+                            'top': {
+                                type: 'string'
+                            },
+                            'height': {
                                 type: 'string'
                             }
                         }
@@ -231,6 +262,32 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.notifyPropertyChange('readyToStartCalibration');
         },
 
+        // During playing audio
+        updateCharacterHighlighting() {
+            var thisAudioData = this.get('audioSources')[this.currentAudioIndex];
+            var t = $('#' + thisAudioData.audioId)[0].currentTime;
+
+            $('.story-image-container').removeClass('highlight');
+
+            thisAudioData.highlights.forEach(function (h) {
+                if (t > h.range[0] && t < h.range[1]) {
+                    $('#' + h.image).addClass('highlight');
+                }
+            });
+        },
+
+        replay() {
+            // pause any current audio, and set times to 0
+            $('audio').each(function() {
+                this.pause();
+                this.currentTime = 0;
+            });
+            // reset to index -1 as at start of study
+            this.set('currentAudioIndex', -1);
+            // restart audio
+            this.send('playNextAudioSegment');
+        },
+
         next() {
             if (this.get('recorder')) {
             /**
@@ -245,19 +302,21 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         playNextAudioSegment() {
+            this.set('currentAudioIndex', this.get('currentAudioIndex') + 1);
             if (this.currentAudioIndex < this.get('audioSources').length) {
                 $('#' + this.get('audioSources')[this.currentAudioIndex].audioId)[0].play();
             } else {
-                // TODO: handle cases where we wait for a response, rather than auto-proceeding
-                this.send('next');
+                if (this.get('autoProceed')) {
+                    this.send('next');
+                } else {
+                    $('#nextbutton').prop('disabled', false);
+                }
             }
-            this.currentAudioIndex++;
         }
 
     },
 
     startIntro() {
-        // Allow pausing during intro
         var frame = this;
 
         /**
@@ -274,47 +333,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             frame.set('completedAttn', true);
             frame.notifyPropertyChange('readyToStartCalibration');
         }, frame.get('attnLength') * 1000));
-
-    },
-
-    startCalibration() {
-        var frame = this;
-
-        var calAudio = $('#player-calibration-audio')[0];
-        var calVideo = $('#player-calibration-video')[0];
-        $('#player-calibration-video').show();
-
-        // Show the calibration segment at center, left, right, center, each
-        // time recording an event and playing the calibration audio.
-        var doCalibrationSegments = function(calList, lastLoc) {
-            if (calList.length === 0) {
-                $('#player-calibration-video').hide();
-                frame.set('currentSegment', 'test');
-            } else {
-                var thisLoc = calList.shift();
-                /**
-                 * Start of EACH calibration segment
-                 *
-                 * @event startCalibration
-                 * @param {String} location location of calibration ball, relative to child: 'left', 'right', or 'center'
-                 */
-                frame.sendTimeEvent('startCalibration',
-                    {location: thisLoc});
-                calAudio.pause();
-                calAudio.currentTime = 0;
-                calAudio.play();
-                calVideo.pause();
-                calVideo.currentTime = 0;
-                calVideo.play();
-                $('#player-calibration-video').removeClass(lastLoc);
-                $('#player-calibration-video').addClass(thisLoc);
-                window.setTimeout(function(){
-                    doCalibrationSegments(calList, thisLoc);
-                }, frame.settings.calLength);
-            }
-        };
-
-        doCalibrationSegments(['center', 'left', 'right', 'center'], '');
 
     },
 
@@ -397,6 +415,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.send('showFullscreen');
         //this.startIntro();
         this.send('playNextAudioSegment');
+        $('#nextbutton').prop('disabled', true);
 
         // TODO: move handlers that just record events to the VideoRecord mixin?
 //         if (this.get('experiment') && this.get('id') && this.get('session')) {
