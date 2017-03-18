@@ -57,8 +57,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
-    aspectRatio: 2, // aspect ratio of story page, width:height; manually match exp-lookit-story-page.scss
-
     // Track state of experiment
     completedAudio: false,
     completedAttn: false,
@@ -184,7 +182,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  *   @param {String} left left margin, as percentage of story area width
                  *   @param {String} width image width, as percentage of story area width
                  *   @param {String} top top margin, as percentage of story area height
-                 *   @param {String} height image height, as percentage of story area height
 
                  */
                 images: {
@@ -205,9 +202,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'top': {
-                                type: 'string'
-                            },
-                            'height': {
                                 type: 'string'
                             }
                         }
@@ -334,14 +328,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     didInsertElement() {
         this._super(...arguments);
-
-        var _this = this;
-        var images = this.get('images');
-        images.forEach(function(im, ind) {
-            var thisIm = $('#' + images[ind].id);
-            thisIm.css('height', images[ind].height * _this.get('aspectRatio') + '%');
-
-        });
 
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
