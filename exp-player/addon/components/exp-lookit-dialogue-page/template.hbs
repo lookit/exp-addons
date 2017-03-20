@@ -1,9 +1,6 @@
 <div class="exp-lookit-dialogue-page" id="exp-lookit-dialogue-page-container">
 
     <div id="story-area">
-        {{#if doRecording}}
-            <p id='waitForVideo'> establishing video connection <br> please wait... </p>
-        {{/if}}
 
         {{#each images as |image|}}
             <div id={{image.id}} class="story-image-container" onclick={{action 'clickSpeaker' image.id}} style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">

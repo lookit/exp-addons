@@ -300,7 +300,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             streamTime: streamTime,
             videoId: this.get('videoId')
         });
-        this.send('setTimeEvent', `exp-lookit-preferential-looking:${name}`, opts);
+        this.send('setTimeEvent', `exp-lookit-story-page:${name}`, opts);
     },
 
     // TODO: should the events here be moved to the fullscreen mixin?

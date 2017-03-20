@@ -14,24 +14,166 @@ let {
  */
 
 /**
- * TODO: document correctly (below is for pref-look)
- * Frame to implement a basic preferential looking trial, with static images
- * displayed in the center or at left and right of the screen. Trial proceeds
- * in segments:
- * - Intro: central attentiongrabber video (looping) & intro audio [wait until
- *   recording is established to move on, and a minimum amount of time]
- * - Test: image(s) displayed, any test audio played [set amount of time]
- * - Final audio: central attentiongrabber video (looping) & final audio
- *   (optional section, intended for last trial in block)
+ * Frame to implement a storybook page with dialogue spoken by characters.
+ * First, characters appear and any main narration audio is played.
+ * Next, the user can click on the characters to play additional audio
+ * associated with each character image, or (for a choice trial) the user clicks
+ * one of the images to select it as an answer. Once main narration audio has
+ * been played and either a selection has been made (for a choice trial,
+ * isChoiceFrame: true) or all
+ * required character audio has been played (for a non-choice trial), the user
+ * can proceed by pressing 'next'. (A trial with only main narration audio can
+ * also simply auto-proceed when audio is finished.)
  *
+ * Recording is optional. If webcam recording is conducted (doRecording: true)
+ * then audio does not start until recording does, to ensure the entire trial
+ * is recorded.
  *
- * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
+ * The character images are specified in 'images', including an image source,
+ * positioning on the screen, any animation at the start of the trial, any
+ * associated audio, and whether that audio is required.
+ *
+ * This frame extends ExpFrameBaseUnsafe because it is displayed fullscreen
  * and expected to be repeated.
 
 ```json
  "frames": {
-    "story-trial": {
-    }
+         "phase-1": {
+            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
+            "doRecording": true,
+            "autoProceed": false,
+            "parentTextBlock": {
+                "title": "Parents!",
+                "text": "some instructions",
+                "emph": true
+            },
+            "images": [
+                {
+                    "id": "protagonist",
+                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_listener1.png",
+                    "left": "40",
+                    "bottom": "2",
+                    "height": "60"
+                }
+            ],
+            "kind": "exp-lookit-dialogue-page",
+            "id": "phase-1",
+            "audioSources": [
+                {
+                    "audioId": "firstAudio",
+                    "sources": [
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_1intro.mp3",
+                            "type": "audio/mp3"
+                        },
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_1intro.ogg",
+                            "type": "audio/ogg"
+                        }
+                    ]
+                }
+            ]
+        },
+        "phase-2": {
+            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
+            "doRecording": false,
+            "autoProceed": false,
+            "parentTextBlock": {
+                "title": "Parents!",
+                "text": "some instructions",
+                "emph": true
+            },
+            "images": [
+                {
+                    "id": "protagonist",
+                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_listener1.png",
+                    "left": "40",
+                    "bottom": "2",
+                    "height": "60"
+                },
+                {
+                    "id": "speaker1",
+                    "text": "Click to hear what he said!",
+                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker1.png",
+                    "left": "20",
+                    "bottom": "2",
+                    "height": "60",
+                    "animate": "flyleft",
+                    "requireAudio": true,
+                    "imageAudio": [
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_2_2speaker1polite.mp3",
+                            "type": "audio/mp3"
+                        },
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_2_2speaker1polite.ogg",
+                            "type": "audio/ogg"
+                        }
+                    ]
+                }
+            ],
+            "kind": "exp-lookit-dialogue-page",
+            "id": "phase-2",
+            "audioSources": [
+                {
+                    "audioId": "firstAudio",
+                    "sources": [
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_2_1intro.mp3",
+                            "type": "audio/mp3"
+                        },
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_2_1intro.ogg",
+                            "type": "audio/ogg"
+                        }
+                    ]
+                }
+            ]
+        },
+        "phase-5": {
+            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
+            "doRecording": false,
+            "autoProceed": false,
+            "isChoiceFrame": true,
+            "parentTextBlock": {
+                "title": "Parents:",
+                "text": "click on the character your child selects.",
+                "emph": true
+            },
+            "images": [
+                {
+                    "id": "speaker1",
+                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker1.png",
+                    "left": "20",
+                    "bottom": "2",
+                    "height": "60"
+                },
+                {
+                    "id": "speaker2",
+                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker2.png",
+                    "left": "60",
+                    "bottom": "2",
+                    "height": "60"
+                }
+            ],
+            "kind": "exp-lookit-dialogue-page",
+            "id": "phase-5",
+            "audioSources": [
+                {
+                    "audioId": "firstAudio",
+                    "sources": [
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_5q1.mp3",
+                            "type": "audio/mp3"
+                        },
+                        {
+                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_5q1.ogg",
+                            "type": "audio/ogg"
+                        }
+                    ]
+                }
+            ]
+        }
  }
 
  * ```
@@ -64,6 +206,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
 
+    // Can the user click the 'next' button yet? Require all 'main' audio to
+    // have played. For a choice frame, require that one of the images is
+    // selected; for other frames, require that any required image-audio has
+    // completed.
     readyToProceed: Ember.computed('completedAudio', 'imageAudioCompleted', 'currentlyHighlighted',
         function() {
             var okayToProceed = this.get('completedAudio');
@@ -81,6 +227,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             return okayToProceed;
         }),
 
+    // Are we ready to start playing the audio? Wait for recording (used if
+    // doing a recording frame).
     readyToStartAudio: Ember.computed('hasCamAccess', 'videoUploadConnected',
         function() {
             return (this.get('hasCamAccess') && this.get('videoUploadConnected'));
@@ -100,6 +248,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 backgroundImage: {
                     type: 'string',
                     description: 'URL of background image; will be stretched to width of page'
+                },
+                /**
+                 * Whether this is a frame where the user needs to click to
+                 * select one of the images before proceeding
+                 *
+                 * @property {Boolean} isChoiceFrame
+                 * @default false
+                 */
+                isChoiceFrame: {
+                    type: 'boolean',
+                    description: 'Whether this is a frame where the user needs to click to select one of the images before proceeding'
                 },
                 /**
                  * Whether to do webcam recording (will wait for webcam
@@ -202,12 +361,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Array of images to display and information about their placement
                  *
                  * @property {Object[]} images
-                 *   @param {String} id unique ID for this image
+                 *   @param {String} id unique ID for this image. This will be used to refer to the choice made by the user, if any.
                  *   @param {String} src URL of image source
                  *   @param {String} left left margin, as percentage of story area width
-                 *   @param {String} width image width, as percentage of story area width
-                 *   @param {String} top top margin, as percentage of story area height
-
+                 *   @param {String} height image height, as percentage of story area height
+                 *   @param {String} bottom bottom margin, as percentage of story area height
+                 *   @param {String} animate animation to use at start of trial on this image, if any. If not provided, image is shown throughout trial. Options are 'fadein', 'fadeout', 'flyleft' (fly from left), and 'flyright'.
+                 *   @param {String} text text to display above image, e.g. 'Click to hear what he said!' If omitted, no text is shown.
+                 *   @param {Object[]} imageAudio sources Array of {src: 'url',
+                 * type: 'MIMEtype'} objects with audio sources for audio to play when this image is clicked, if any. (Omit to not associate audio with this image.)
+                 *   @param {Boolean} requireAudio whether to require the user to click this image and complete the audio associated before proceeding to the next trial. (Incompatible with autoProceed.)
                  */
                 images: {
                     type: 'array',
@@ -223,11 +386,34 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             'left': {
                                 type: 'string'
                             },
-                            'width': {
+                            'height': {
                                 type: 'string'
                             },
-                            'top': {
+                            'bottom': {
                                 type: 'string'
+                            },
+                            'animate': {
+                                type: 'string'
+                            },
+                            'text': {
+                                type: 'string'
+                            },
+                            'imageAudio': {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                    'src': {
+                                        type: 'string'
+                                    },
+                                    'type': {
+                                        type: 'string'
+                                        }
+                                    }
+                                }
+                            },
+                            'requireAudio': {
+                                type: 'boolean'
                             }
                         }
                     }
@@ -241,6 +427,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @method serializeContent
              * @param {String} videoID The ID of any video recorded during this frame
              * @param {Object} eventTimings
+             * @param {String} currentlyHighlighted which image is selected at
+             *   the end of the trial, or null if none is. This indicates the
+             *   final selected choice for a choice trial.
              * @return {Object} The payload sent to the server
              */
             type: 'object',
@@ -257,8 +446,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     audioObserver: Ember.observer('readyToStartAudio', function(frame) {
         if (frame.get('readyToStartAudio')) {
-            $('#waitForVideo').hide();
-            $('.story-image-container').show();
             frame.set('currentAudioIndex', -1);
             frame.send('playNextAudioSegment');
         }
@@ -270,6 +457,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         clickSpeaker(imageId) {
             // On a choice frame, highlight this choice
             if (this.get('isChoiceFrame')) {
+
+                /**
+                 * When one of the images is clicked during a choice frame
+                 *
+                 * @event clickSpeaker
+                 * @param {String} imageId
+                 */
+                this.sendTimeEvent('clickSpeaker', {
+                    imageId: imageId
+                });
 
                 $('.story-image-container').removeClass('highlight');
                 $('#' + imageId).addClass('highlight');
@@ -287,11 +484,32 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     });
                     // play this image's associated audio
                     $('#' + imageId + ' audio')[0].play();
+
+                    /**
+                     * When image audio is started
+                     *
+                     * @event startSpeakerAudio
+                     * @param {String} imageId
+                     */
+                    this.sendTimeEvent('startSpeakerAudio', {
+                        imageId: imageId
+                    });
                 }
             }
         },
 
         markAudioCompleted(imageId) {
+
+            /**
+             * When image audio is completed (not recorded if interrupted)
+             *
+             * @event completeSpeakerAudio
+             * @param {String} imageId
+             */
+            this.sendTimeEvent('completeSpeakerAudio', {
+                imageId: imageId
+            });
+
             this.imageAudioCompleted.add(imageId);
             this.notifyPropertyChange('readyToProceed');
         },
@@ -329,6 +547,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 if (this.get('autoProceed')) {
                     this.send('next');
                 } else {
+                    /**
+                     * When narration audio is completed
+                     *
+                     * @event completeMainAudio
+                     */
+                    this.sendTimeEvent('completeMainAudio');
+
                     this.set('completedAudio', true);
                     this.notifyPropertyChange('readyToProceed');
 
@@ -346,7 +571,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             streamTime: streamTime,
             videoId: this.get('videoId')
         });
-        this.send('setTimeEvent', `exp-lookit-preferential-looking:${name}`, opts);
+        this.send('setTimeEvent', `exp-lookit-dialogue-page:${name}`, opts);
     },
 
     // TODO: should the events here be moved to the fullscreen mixin?
@@ -378,9 +603,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
 
+        // Any animations as images are displayed at start of this phase
         $('.story-image-container').hide();
-
-        // Any animations as images are displayed
         this.get('images').forEach(function (im) {
             if (im.animate === 'fadein') {
                 $('#' + im.id).fadeIn(1000);
@@ -404,9 +628,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-
+        // If we're recording this trial, set up, and rely on audioObserver to
+        // start audio once recording is ready. Otherwise, start audio right
+        // away.
         if (this.get('doRecording')) {
-            $('.story-image-container').hide();
             if (this.get('experiment') && this.get('id') && this.get('session')) {
                 let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
                     hidden: true
