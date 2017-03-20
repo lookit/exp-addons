@@ -39,17 +39,36 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
 .exp-lookit-dialogue-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
     position: absolute;
     display: block;
-    height: auto;
+    //height: auto;
     padding: 10px;
     border-radius: 15px;
     border:5px solid transparent; // to avoid rearranging upon adding the highlight
+    width: auto;
 }
 
-.exp-lookit-dialogue-page img.story-image {
+.exp-lookit-dialogue-page img.story-image,  #experiment-player.player-fullscreen  .exp-lookit-dialogue-page img.story-image {
     max-width: 100%;
     max-height: 100%;
     vertical-align: center;
     margin: auto;
+    height:100%;
+    cursor:pointer;
+}
+
+.exp-lookit-dialogue-page p.image-text, #experiment-player.player-fullscreen .exp-lookit-dialogue-page p.image-text {
+    color: black;
+    font-size: x-large;
+    font-weight: bold;
+    width: 80%;
+    margin-top: -3em;
+    margin-left: 10%;
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+}
+
+.exp-lookit-dialogue-page p.image-text.disabled, #experiment-player.player-fullscreen .exp-lookit-dialogue-page p.image-text.disabled {
+    color: #ABABAB;
 }
 
 .exp-lookit-dialogue-page .story-image-container.highlight,  #experiment-player.player-fullscreen .exp-lookit-dialogue-page .story-image-container.highlight  {
@@ -82,6 +101,19 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
 
 .exp-lookit-dialogue-page button.left {
     left: 1vw;
+}
+
+.exp-lookit-dialogue-page button.btn-success:disabled {
+    background-color: gray;
+    border: 0px;
+}
+
+.exp-lookit-dialogue-page #background-image, #experiment-player.player-fullscreen #background-image {
+    width: 100%;
+    height:auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow:hidden;
 }
 
 .exp-lookit-dialogue-page #parenttext, #experiment-player.player-fullscreen .exp-lookit-dialogue-page #parenttext {
