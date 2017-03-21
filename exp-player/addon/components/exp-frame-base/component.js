@@ -80,9 +80,9 @@ export default Ember.Component.extend({
     // see https://github.com/emberjs/ember.js/issues/3908. Moved
     // to init because we were losing the first event per instance of a frame
     // when it was in didReceiveAttrs.
-    setTimings: function () {
+    setTimings: Ember.on('init', function () {
         this.set('eventTimings', []);
-    }.on('init'),
+    }),
 
     loadData: function (frameData) { // jshint ignore:line
         return null;

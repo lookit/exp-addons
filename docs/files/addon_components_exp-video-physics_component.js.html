@@ -371,12 +371,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     },
 
     sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get(&#x27;recorder&#x27;) ? this.get(&#x27;recorder&#x27;).getTime() : null;
-
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get(&#x27;videoId&#x27;)
-        });
         this.send(&#x27;setTimeEvent&#x27;, &#x60;exp-physics:${name}&#x60;, opts);
     },
 

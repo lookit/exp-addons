@@ -698,6 +698,33 @@
             "submodule": "frames"
         },
         {
+            "file": "addon/components/exp-frame-base/component.js",
+            "line": 186,
+            "description": "Create the time event payload for a particular frame / event. This can be overridden to add fields to every\n event sent by a particular frame",
+            "itemtype": "method",
+            "name": "makeTimeEvent",
+            "params": [
+                {
+                    "name": "eventName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "extra",
+                    "description": "An object with additional properties to be sent to the server",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Event type, time, and any additional metadata provided",
+                "type": "Object"
+            },
+            "class": "ExpFrameBase",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
             "file": "addon/components/exp-player/component.js",
             "line": 53,
             "description": "The message to display in the early exit modal. Newer browsers may not respect this message.",
@@ -1196,6 +1223,17 @@
         {
             "file": "addon/mixins/video-record.js",
             "line": 15,
+            "description": "The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,\n  and to set this property. If present, the mixin will automatically use it for things such as capturing stream\n  time.",
+            "itemtype": "property",
+            "name": "recorder",
+            "type": "VideoRecorder",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 23,
             "description": "This mixin automatically injects the video recorder service, making its methods available to your frame",
             "itemtype": "property",
             "name": "videoRecorder",
@@ -1205,11 +1243,35 @@
         },
         {
             "file": "addon/mixins/video-record.js",
-            "line": 21,
+            "line": 29,
             "description": "A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`\n\nThere may be additional prefixes/suffixes added elsewhere in the video recording process. A final video\ncaptured via this mixin might this have a name like:\n  `videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv`",
             "itemtype": "property",
             "name": "videoId",
             "type": "String",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 45,
+            "description": "Extend any base time event capture with information about the recorded video",
+            "itemtype": "method",
+            "name": "makeTimeEvent",
+            "params": [
+                {
+                    "name": "eventName",
+                    "description": ""
+                },
+                {
+                    "name": "extra",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "Event data object",
+                "type": "Object"
+            },
             "class": "VideoRecordMixin",
             "module": "exp-player",
             "submodule": "mixins"

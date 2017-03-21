@@ -13,6 +13,14 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
     /**
+     * The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,
+     *   and to set this property. If present, the mixin will automatically use it for things such as capturing stream
+     *   time.
+     * @property {VideoRecorder} recorder
+     */
+    recorder: null,
+
+    /**
      * This mixin automatically injects the video recorder service, making its methods available to your frame
      * @property videoRecorder
      */
@@ -34,13 +42,21 @@ export default Ember.Mixin.create({
         ].join('_');
     }).volatile(),
 
+    /**
+     * Extend any base time event capture with information about the recorded video
+     * @method makeTimeEvent
+     * @param eventName
+     * @param extra
+     * @return {Object} Event data object
+     */
     makeTimeEvent(eventName, extra) {
-        // All frames using this mixin will add videoID and streamtime to default video actions
+        // All frames using this mixin will add videoId and streamTime to every server event
         let base = this._super(...arguments);
+        const streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
         Ember.merge(base, {
-            videoId: this.get('videoId')
+            videoId: this.get('videoId'),
+            streamTime: streamTime
         });
         return base;
     }
-
 });
