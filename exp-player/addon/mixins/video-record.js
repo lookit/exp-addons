@@ -32,5 +32,15 @@ export default Ember.Mixin.create({
             this.get('id'),
             this.get('session.id')
         ].join('_');
-    }).volatile()
+    }).volatile(),
+
+    makeTimeEvent(eventName, extra) {
+        // All frames using this mixin will add videoID and streamtime to default video actions
+        let base = this._super(...arguments);
+        Ember.merge(base, {
+            videoId: this.get('videoId')
+        });
+        return base;
+    }
+
 });
