@@ -64,12 +64,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     }),
 
     sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
         this.send('setTimeEvent', `exp-physics:${name}`, opts);
     },
 
