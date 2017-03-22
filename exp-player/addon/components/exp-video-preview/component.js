@@ -63,34 +63,20 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         return this.get('videos')[this.get('videoIndex')];
     }),
 
-    sendTimeEvent(name, opts = {}) {
-        this.send('setTimeEvent', `exp-physics:${name}`, opts);
-    },
-
     actions: {
+        setTimeEvent(eventName, extra) {
+            this._super(`exp-physics:${eventName}`, extra);
+        },
         accept() {
             this.set('prompt', false);
             if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-                let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                     hidden: true
                 });
-                recorder.install({
-                    record: true
-                }).then(() => {
-                    this.sendTimeEvent('recorderReady');
+                installPromise.then(() => {
+                    this.send('setTimeEvent', 'recorderReady');
                     this.set('recordingIsReady', true);
                 });
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.sendTimeEvent('hasCamAccess', {
-                        hasCamAccess: hasAccess
-                    });
-                });
-                recorder.on('onConnectionStatus', (status) => {
-                    this.sendTimeEvent('videoStreamConnection', {
-                        status: status
-                    });
-                });
-                this.set('recorder', recorder);
             }
         },
         nextVideo() {
@@ -100,7 +86,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
             this.set('videoIndex', this.get('videoIndex') - 1);
         },
         next() {
-            this.sendTimeEvent('stoppingCapture');
+            this.send('setTimeEvent', 'stoppingCapture');
             if (this.get('recorder')) {
                 this.get('recorder').stop();
             }

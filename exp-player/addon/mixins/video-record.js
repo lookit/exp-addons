@@ -58,5 +58,33 @@ export default Ember.Mixin.create({
             streamTime: streamTime
         });
         return base;
+    },
+
+    /**
+     * Set up a video recorder instance
+     * @method setupRecorder
+     * @param {Node} element A DOM node representing where to mount the recorder
+     * @param {Boolean} record Whether to start the recording immediately
+     * @param {Object} Settings to pass to the newly created VideoRecorder
+     * @return {Promise} A promise representing the result of installing the recorder
+     */
+    setupRecorder(element, record, settings = {}) {
+        const videoId = this.get('videoId');
+        const recorder = this.get('videoRecorder').start(videoId, element, settings);
+        const installPromise = recorder.install({record});
+
+        // Track specific events for all frames that use  VideoRecorder
+        recorder.on('onCamAccess', (hasAccess) => {
+            this.send('setTimeEvent', 'hasCamAccess', {
+                hasCamAccess: hasAccess
+            });
+        });
+        recorder.on('onConnectionStatus', (status) => {
+            this.send('setTimeEvent', 'videoStreamConnection', {
+                status: status
+            });
+        });
+        this.set('recorder', recorder);
+        return installPromise;
     }
 });
