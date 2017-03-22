@@ -122,11 +122,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             'sources': {
                                 type: 'object',
                                 properties: {
-                                'src': {
-                                    type: 'string'
-                                },
-                                'type': {
-                                    type: 'string'
+                                    'src': {
+                                        type: 'string'
+                                    },
+                                    'type': {
+                                        type: 'string'
                                     }
                                 },
                             },
@@ -267,11 +267,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         next() {
             if (this.get('recorder')) {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
+                /**
+                 * Just before stopping webcam video capture
+                 *
+                 * @event stoppingCapture
+                 */
                 this.sendTimeEvent('stoppingCapture');
                 this.get('recorder').stop();
             }

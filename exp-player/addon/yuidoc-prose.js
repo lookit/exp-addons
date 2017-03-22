@@ -17,7 +17,7 @@
  * @main
  */
 
- /**
+/**
  * Reusable randomizers that can be used as part of user-defined experiments.
  * Randomizers allow researchers to specify how to select which frames or
  * sequences of frames to use as part of a particular session of a given

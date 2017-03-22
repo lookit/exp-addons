@@ -576,11 +576,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         next() {
             if (this.get('recorder')) {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
+                /**
+                 * Just before stopping webcam video capture
+                 *
+                 * @event stoppingCapture
+                 */
                 this.sendTimeEvent('stoppingCapture');
                 this.get('recorder').stop();
             }
@@ -591,29 +591,29 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     startIntro() {
         // Allow pausing during intro
-        var frame = this;
+        var _this = this;
         $(document).off('keyup.pauser');
-        $(document).on('keyup.pauser', function(e) {frame.handleSpace(e, frame);});
+        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
 
         /**
          * Just before starting intro segment
          *
          * @event startIntro
          */
-        frame.sendTimeEvent('startIntro');
+        _this.sendTimeEvent('startIntro');
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
         $('#player-audio')[0].play();
-        frame.set('introTimer', window.setTimeout(function(){
-            frame.set('completedAttn', true);
-            frame.notifyPropertyChange('readyToStartCalibration');
-        }, frame.get('attnLength') * 1000));
+        _this.set('introTimer', window.setTimeout(function() {
+            _this.set('completedAttn', true);
+            _this.notifyPropertyChange('readyToStartCalibration');
+        }, _this.get('attnLength') * 1000));
 
     },
 
     startCalibration() {
-        var frame = this;
+        var _this = this;
 
         var calAudio = $('#player-calibration-audio')[0];
         var calVideo = $('#player-calibration-video')[0];
@@ -625,7 +625,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
                 $('#player-calibration-video').hide();
-                frame.endTrial();
+                _this.endTrial();
             } else {
                 var thisLoc = calList.shift();
                 /**
@@ -634,7 +634,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @event startCalibration
                  * @param {String} location location of calibration ball, relative to child: 'left', 'right', or 'center'
                  */
-                frame.sendTimeEvent('startCalibration',
+                _this.sendTimeEvent('startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -644,9 +644,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 calVideo.play();
                 $('#player-calibration-video').removeClass(lastLoc);
                 $('#player-calibration-video').addClass(thisLoc);
-                frame.set('calTimer', window.setTimeout(function(){
+                _this.set('calTimer', window.setTimeout(function() {
                     doCalibrationSegments(calList, thisLoc);
-                }, frame.get('calibrationLength')));
+                }, _this.get('calibrationLength')));
             }
         };
 
@@ -658,28 +658,28 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     startTrial() {
 
-        var frame = this;
+        var _this = this;
 
-        frame.sendTimeEvent('startTestTrial');
+        _this.sendTimeEvent('startTestTrial');
 
-        if (frame.get('isCalibrationFrame')) { // Calibration frame
-            frame.set('currentSegment', 'calibration');
-            frame.startCalibration();
+        if (_this.get('isCalibrationFrame')) { // Calibration frame
+            _this.set('currentSegment', 'calibration');
+            _this.startCalibration();
         } else { // Regular static image preferential looking frame
             $('#allstimuli').show();
-            frame.set('currentSegment', 'test');
+            _this.set('currentSegment', 'test');
 
-            var audioPlayer = $('#player-test-audio');
-            audioPlayer[0].currentTime = 0;
-            audioPlayer[0].play();
+            var $audioPlayer = $('#player-test-audio');
+            $audioPlayer[0].currentTime = 0;
+            $audioPlayer[0].play();
 
             // Now presenting stimuli; stop after trial length.
-            frame.set('stimTimer', window.setTimeout(function() {
-                window.clearTimeout(frame.get('stimTimer'));
-                audioPlayer[0].pause();
-                $('#allstimuli').hide();
-                frame.endTrial();
-                }, frame.trialLength * 1000));
+            _this.set('stimTimer', window.setTimeout(function() {
+                    window.clearTimeout(_this.get('stimTimer'));
+                    $audioPlayer[0].pause();
+                    $('#allstimuli').hide();
+                    _this.endTrial();
+                }, _this.trialLength * 1000));
         }
     },
 
@@ -695,8 +695,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         if (this.get('endAudioSources').length) {
             this.set('currentSegment', 'finalaudio');
             $('#player-endaudio')[0].play();
-        }
-        else {
+        } else {
             this.send('next');
         }
     },
@@ -782,8 +781,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     }
                     this.startIntro();
                     this.set('isPaused', false);
-                }
-                else { // If restarting isn't allowed, end trial now
+                } else { // If restarting isn't allowed, end trial now
                     this.set('isPaused', false);
                     this.endTrial();
                 }

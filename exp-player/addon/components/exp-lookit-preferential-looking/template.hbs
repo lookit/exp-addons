@@ -42,7 +42,7 @@
 
     {{#unless updatedIsFullscreen}}
         <button class="btn btn-success exp-lookit-preferential-looking" id="fsButton" {{ action 'showFullscreen'}} >
-                please return to fullscreen
+            please return to fullscreen
         </button>
     {{/unless}}
 
@@ -50,17 +50,17 @@
     <div id="allstimuli" style="display:none;">
         {{#if leftImage}}
             <div id="left-container">
-                <img id="left-image" src={{leftImage}} class="stim-image"/>
+                <img id="left-image" src={{leftImage}} class="stim-image" alt="left image">
             </div>
         {{/if}}
         {{#if rightImage}}
             <div id="right-container">
-                <img id="right-image" src={{rightImage}} class="stim-image"/>
+                <img id="right-image" src={{rightImage}} class="stim-image" alt="right image">
             </div>
         {{/if}}
         {{#if centerImage}}
             <div id="center-container">
-                <img id="center-image" src={{centerImage}} class="stim-image"/>
+                <img id="center-image" src={{centerImage}} class="stim-image" alt="center image">
             </div>
         {{/if}}
     </div>

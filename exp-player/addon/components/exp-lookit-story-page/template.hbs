@@ -16,9 +16,9 @@
 
     {{#unless updatedIsFullscreen}}
         <button class="btn btn-warning exp-lookit-story-page" id="fsButton" {{ action 'showFullscreen'}} >
-                please return
-                <br>
-                to fullscreen
+            please return
+            <br>
+            to fullscreen
         </button>
     {{/unless}}
 
@@ -38,7 +38,9 @@
             {{exp-text-block block=parentTextBlock}}
         </div>
         {{#unless autoProceed}}
-        <button id="nextbutton" class="btn btn-success right" {{ action 'next' }} > Next</button>
+            <button id="nextbutton" class="btn btn-success right" {{ action 'next' }} >
+                Next
+            </button>
         {{/unless}}
     </div>
 

@@ -306,11 +306,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             'sources': {
                                 type: 'object',
                                 properties: {
-                                'src': {
-                                    type: 'string'
-                                },
-                                'type': {
-                                    type: 'string'
+                                    'src': {
+                                        type: 'string'
+                                    },
+                                    'type': {
+                                        type: 'string'
                                     }
                                 },
                             },
@@ -403,11 +403,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 items: {
                                     type: 'object',
                                     properties: {
-                                    'src': {
-                                        type: 'string'
-                                    },
-                                    'type': {
-                                        type: 'string'
+                                        'src': {
+                                            type: 'string'
+                                        },
+                                        'type': {
+                                            type: 'string'
                                         }
                                     }
                                 }
@@ -452,7 +452,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     }),
 
     actions: {
-
 
         clickSpeaker(imageId) {
             // On a choice frame, highlight this choice
@@ -528,11 +527,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         next() {
             if (this.get('recorder')) {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
+                /**
+                 * Just before stopping webcam video capture
+                 *
+                 * @event stoppingCapture
+                 */
                 this.sendTimeEvent('stoppingCapture');
                 this.get('recorder').stop();
             }
@@ -553,11 +552,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                      * @event completeMainAudio
                      */
                     this.sendTimeEvent('completeMainAudio');
-
                     this.set('completedAudio', true);
                     this.notifyPropertyChange('readyToProceed');
-
-
                 }
             }
         }
@@ -615,13 +611,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 $('#' + im.id).show();
                 $('#' + im.id).css('left', '-20%');
                 $('#' + im.id).animate({
-                  left: im.left + '%'
+                    left: im.left + '%'
                 }, 1500);
             } else if (im.animate === 'flyright') {
                 $('#' + im.id).show();
                 $('#' + im.id).css('left', '100%');
                 $('#' + im.id).animate({
-                  left: im.left + '%'
+                    left: im.left + '%'
                 }, 1500);
             }else {
                 $('#' + im.id).show();
