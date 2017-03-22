@@ -16,6 +16,6 @@ export default {
     prefphys: prefphys,
     prefphyspilot: prefphyspilot,
     'prefphys-calibration': prefPhysCalibration,
-    geometry: geometry
+    geometry: geometry,
     'random-parameter-set': randomParameterSet
 };
