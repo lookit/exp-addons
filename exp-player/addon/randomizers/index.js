@@ -6,6 +6,7 @@ import prefphys from './pref-phys';
 import prefphyspilot from './pref-phys-pilot';
 import prefPhysCalibration from './pref-phys-calibration';
 import geometry from './geometry';
+import randomParameterSet from './random-parameter-set';
 
 export default {
     random: random,
@@ -16,4 +17,5 @@ export default {
     prefphyspilot: prefphyspilot,
     'prefphys-calibration': prefPhysCalibration,
     geometry: geometry
+    'random-parameter-set': randomParameterSet
 };
