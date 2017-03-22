@@ -282,7 +282,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 recorder.show();
                 recorder.on('onCamAccessConfirm', () => {
                     this.send('removeWarning');
-                    this.get('recorder').record();
+                    this.startRecorder();
                 });
             }
         },
@@ -391,9 +391,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             this.send('setTimeEvent', 'stoppingCapture');
-            if (this.get('recorder')) {
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         }
     },
@@ -431,7 +429,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                         this.set('playAnnouncementNow', true);
                     }
                     try {
-                        this.get('recorder').resume();
+                        this.resumeRecorder();
                     } catch (_) {
                         return;
                     }
@@ -441,9 +439,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     this.send('setTimeEvent', 'pauseVideo', {
                         currentTask: this.get('currentTask')
                     });
-                    if (this.get('recorder')) {
-                        this.get('recorder').pause(true);
-                    }
+                    this.pauseRecorder(true);
                     this.set('playAnnouncementNow', false);
                     this.set('isPaused', true);
                 }
@@ -459,9 +455,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
                     // FIXME: This binding does not seem to fire, likely because it is removed in willDestroy, called when exp-player advances to a new frame
-                    if (this.get('recorder')) {
-                        this.get('recorder').stop();
-                    }
+                    this.stopRecorder();
                 }
             }
         });
@@ -479,9 +473,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     },
     willDestroyElement() { // remove event handler
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get('recorder')) {
-            this.get('recorder').hide(); // Hide the webcam config screen
-            this.get('recorder').stop();
+        const recorder = this.get('recorder');
+        if (recorder) {
+            recorder.hide(); // Hide the webcam config screen
+            this.stopRecorder();
         }
 
         this.send('setTimeEvent', 'destroyingElement');

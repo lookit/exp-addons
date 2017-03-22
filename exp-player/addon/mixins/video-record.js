@@ -10,6 +10,27 @@ import Ember from 'ember';
  *
  * @class VideoRecordMixin
  */
+
+/**
+ * @event hasCamAccess
+ */
+
+/**
+ * @event videoStreamConnection
+ */
+
+/**
+ * @event pauseVideo
+ */
+
+/**
+ * @event unpauseVideo
+ */
+
+/**
+ * @event stoppingCapture
+ */
+
 export default Ember.Mixin.create({
 
     /**
@@ -86,5 +107,50 @@ export default Ember.Mixin.create({
         });
         this.set('recorder', recorder);
         return installPromise;
-    }
+    },
+
+    /**
+     * Pause the recorder (and capture timing events)
+     * @method pauseRecorder
+     * @param [skipIfMissing=false] If provided (and true), don't raise an error if recording isn't ready yet.
+     */
+    pauseRecorder(skipIfMissing = false) {
+        const recorder = this.get('recorder');
+        if (recorder) {
+            this.send('setTimeEvent', 'pauseVideo');
+            recorder.pause(skipIfMissing);
+        }
+    },
+
+    /**
+     * @method resumeRecorder
+     * @throws an exception if recorder fails to resume
+     */
+    resumeRecorder() {
+        const recorder = this.get('recorder');
+        if (recorder) {
+            this.send('setTimeEvent', 'unpauseVideo');
+            recorder.resume();
+        }
+    },
+
+    startRecorder() {
+        const recorder = this.get('recorder');
+        if (recorder) {
+            recorder.record();
+        }
+    },
+
+    /**
+     * @return Promise
+     */
+    stopRecorder() {
+        const recorder = this.get('recorder');
+        if (this.get('recorder')) {
+            this.send('setTimeEvent', 'stoppingCapture');
+            return this.get('recorder').stop();
+        } else {
+            return Ember.RSVP.resolve();
+        }
+    },
 });

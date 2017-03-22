@@ -311,13 +311,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            //window.clearInterval(this.get('testTimer'));
-            //this.set('testTime', 0);
-
-            if (this.get('recorder')) {
-                this.send('setTimeEvent', 'stoppingCapture');
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         }
 
@@ -409,10 +403,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // When triangles have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
-        if (this.get('recorder')) {
-            this.send('setTimeEvent', 'stoppingCapture');
-            this.get('recorder').stop();
-        }
+        this.stopRecorder();
         if (this.get('endAudioSources').length) {
             $('#player-endaudio')[0].play();
         } else {
@@ -536,9 +527,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
             // Currently paused: RESUME
             if (wasPaused) {
-                this.send('setTimeEvent', 'unpauseVideo');
                 try {
-                    this.get('recorder').resume();
+                    this.resumeRecorder();
                 } catch (_) {
                     return;
                 }
@@ -546,11 +536,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.set('isPaused', false);
             } else { // Not currently paused: PAUSE
                 window.clearTimeout(this.get('introTimer'));
-                this.send('setTimeEvent', 'pauseVideo');
-                if (this.get('recorder')) {
-                    this.get('recorder').pause(true);
-                }
-
+                this.pauseRecorder();
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
                 } else {
@@ -661,9 +647,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.send('setTimeEvent', 'destroyingElement');
 
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get('recorder')) {
+        const recorder = this.get('recorder');
+        if (recorder) {
             this.get('recorder').hide(); // Hide the webcam config screen
-            this.get('recorder').stop();
+            this.stopRecorder();
         }
         // Remove pause handler
         $(document).off('keyup.pauser');

@@ -65,13 +65,13 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     },
     actions: {
         record() {
-            this.get('recorder').record();
+            this.startRecorder();
             window.setTimeout(() => {
                 this.set('recordingStarted', true);
             }, 2000);
         },
         finish() {
-            this.get('recorder').stop().then(() => {
+            this.stopRecorder().then(() => {
                 this.send('next');
             });
         }

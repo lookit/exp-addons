@@ -87,9 +87,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         },
         next() {
             this.send('setTimeEvent', 'stoppingCapture');
-            if (this.get('recorder')) {
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         }
     },
@@ -197,9 +195,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     },
 
     willDestroyElement() {
-        if (this.get('recorder')) {
-            this.get('recorder').stop();
-        }
+        this.stopRecorder();
         this._super(...arguments);
         Ember.$(document).off('keypress');
     }
