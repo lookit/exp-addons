@@ -309,7 +309,7 @@ export default Ember.Component.extend({
     actions: {
         setTimeEvent(eventName, extra) {
             console.log(&#x60;Timing event captured for ${eventName}&#x60;, extra);
-            let timeEvent = this.makeTimeEvent(eventName, extra);
+            let eventData = this.makeTimeEvent(eventName, extra);
             // Copy timing event into a single dict for this component instance
             let timings = this.get(&#x27;eventTimings&#x27;);
             timings.push(eventData);

@@ -125,6 +125,7 @@
 
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
     </ul>
 
     <div>
@@ -137,6 +138,26 @@
                     <ul class="index-list methods">
                             <li class="index-item method">
                                 <a href="#method_makeTimeEvent">makeTimeEvent</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_pauseRecorder">pauseRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_resumeRecorder">resumeRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_setupRecorder">setupRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_startRecorder">startRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_stopRecorder">stopRecorder</a>
 
                             </li>
                     </ul>
@@ -162,6 +183,32 @@
                 </div>
 
 
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events">
+                            <li class="index-item event">
+                                <a href="#event_hasCamAccess">hasCamAccess</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_pauseVideo">pauseVideo</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_stoppingCapture">stoppingCapture</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_unpauseVideo">unpauseVideo</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_videoStreamConnection">videoStreamConnection</a>
+
+                            </li>
+                    </ul>
+                </div>
         </div>
 
             <div id="methods" class="api-class-tabpanel">
@@ -194,7 +241,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l45"><code>addon&#x2F;mixins&#x2F;video-record.js:45</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l66"><code>addon&#x2F;mixins&#x2F;video-record.js:66</code></a>
         </p>
 
 
@@ -245,6 +292,278 @@
 
 
 </div>
+<div id="method_pauseRecorder" class="method item">
+    <h3 class="name"><code>pauseRecorder</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[skipIfMissing=false]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l112"><code>addon&#x2F;mixins&#x2F;video-record.js:112</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Pause the recorder (and capture timing events)</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[skipIfMissing=false]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <p>If provided (and true), don't raise an error if recording isn't ready yet.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_resumeRecorder" class="method item">
+    <h3 class="name"><code>resumeRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l125"><code>addon&#x2F;mixins&#x2F;video-record.js:125</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Resume a paused recording</p>
+
+    </div>
+
+
+
+        <div class="throws">
+            <h4>Throws:</h4>
+
+            <div class="throws-description">
+                    <p>an exception if recorder fails to resume TODO: Based on existing usage anyway</p>
+
+            </div>
+        </div>
+
+</div>
+<div id="method_setupRecorder" class="method item">
+    <h3 class="name"><code>setupRecorder</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>element</code>
+                </li>
+                <li class="arg">
+                        <code>record</code>
+                </li>
+                <li class="arg">
+                        <code>settings</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l84"><code>addon&#x2F;mixins&#x2F;video-record.js:84</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Set up a video recorder instance</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">element</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node" class="crosslink external" target="_blank">Node</a></span>
+
+
+                    <div class="param-description">
+                        <p>A DOM node representing where to mount the recorder</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">record</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+                    <div class="param-description">
+                        <p>Whether to start the recording immediately</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">settings</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>Config to pass to the newly created VideoRecorder</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" class="crosslink external" target="_blank">Promise</a></span>:
+                    <p>A promise representing the result of installing the recorder</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_startRecorder" class="method item">
+    <h3 class="name"><code>startRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l138"><code>addon&#x2F;mixins&#x2F;video-record.js:138</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Start recording</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>Promise Resolves when recording has started</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_stopRecorder" class="method item">
+    <h3 class="name"><code>stopRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l152"><code>addon&#x2F;mixins&#x2F;video-record.js:152</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Stop the recording</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>Promise A promise that resolves when upload is complete</p>
+
+            </div>
+        </div>
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
@@ -261,7 +580,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l15"><code>addon&#x2F;mixins&#x2F;video-record.js:15</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l36"><code>addon&#x2F;mixins&#x2F;video-record.js:36</code></a>
         </p>
 
 
@@ -288,7 +607,7 @@ time.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l29"><code>addon&#x2F;mixins&#x2F;video-record.js:29</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l50"><code>addon&#x2F;mixins&#x2F;video-record.js:50</code></a>
         </p>
 
 
@@ -316,7 +635,7 @@ captured via this mixin might this have a name like:
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l23"><code>addon&#x2F;mixins&#x2F;video-record.js:23</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l44"><code>addon&#x2F;mixins&#x2F;video-record.js:44</code></a>
         </p>
 
 
@@ -333,6 +652,130 @@ captured via this mixin might this have a name like:
             </div>
 
 
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                    <div id="event_hasCamAccess" class="events item">
+                        <h3 class="name"><code>hasCamAccess</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l14"><code>addon&#x2F;mixins&#x2F;video-record.js:14</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_pauseVideo" class="events item">
+                        <h3 class="name"><code>pauseVideo</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l22"><code>addon&#x2F;mixins&#x2F;video-record.js:22</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_stoppingCapture" class="events item">
+                        <h3 class="name"><code>stoppingCapture</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l30"><code>addon&#x2F;mixins&#x2F;video-record.js:30</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_unpauseVideo" class="events item">
+                        <h3 class="name"><code>unpauseVideo</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l26"><code>addon&#x2F;mixins&#x2F;video-record.js:26</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_videoStreamConnection" class="events item">
+                        <h3 class="name"><code>videoStreamConnection</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l18"><code>addon&#x2F;mixins&#x2F;video-record.js:18</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
     </div>
 </div>
                     </div>

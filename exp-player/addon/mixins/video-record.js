@@ -86,7 +86,7 @@ export default Ember.Mixin.create({
      * @method setupRecorder
      * @param {Node} element A DOM node representing where to mount the recorder
      * @param {Boolean} record Whether to start the recording immediately
-     * @param {Object} Settings to pass to the newly created VideoRecorder
+     * @param {Object} settings Config to pass to the newly created VideoRecorder
      * @return {Promise} A promise representing the result of installing the recorder
      */
     setupRecorder(element, record, settings = {}) {

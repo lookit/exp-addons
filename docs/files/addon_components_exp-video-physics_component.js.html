@@ -361,24 +361,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            this.sendTimeEvent(&#x27;leftFullscreen&#x27;);
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;leftFullscreen&#x27;);
             if (!this.get(&#x27;isPaused&#x27;)) {
                 this.pauseStudy();
             }
         } else {
-            this.sendTimeEvent(&#x27;enteredFullscreen&#x27;);
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;enteredFullscreen&#x27;);
         }
     },
-
-    sendTimeEvent(name, opts = {}) {
-        this.send(&#x27;setTimeEvent&#x27;, &#x60;exp-physics:${name}&#x60;, opts);
+    makeTimeEvent(eventName, extra) {
+        return this._super(&#x60;exp-physics:${eventName}&#x60;, extra);
     },
-
     actions: {
         showWarning() {
             if (!this.get(&#x27;showVideoWarning&#x27;)) {
                 this.set(&#x27;showVideoWarning&#x27;, true);
-                this.sendTimeEvent(&#x27;webcamNotConfigured&#x27;);
+                this.send(&#x27;setTimeEvent&#x27;, &#x27;webcamNotConfigured&#x27;);
 
                 // If webcam error, save the partial frame payload immediately, so that we don&#x27;t lose timing events if
                 // the user is unable to move on.
@@ -389,7 +387,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 recorder.show();
                 recorder.on(&#x27;onCamAccessConfirm&#x27;, () =&gt; {
                     this.send(&#x27;removeWarning&#x27;);
-                    this.get(&#x27;recorder&#x27;).record();
+                    this.startRecorder();
                 });
             }
         },
@@ -408,7 +406,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 this.set(&#x27;_lastTime&#x27;, 0);
                 this.$(&#x27;#player-video&#x27;)[0].play();
             } else {
-                this.sendTimeEvent(&#x27;videoStopped&#x27;, {
+                this.send(&#x27;setTimeEvent&#x27;, &#x27;videoStopped&#x27;, {
                     currentTask
                 });
                 if (this.get(&#x27;autoforwardOnEnd&#x27;)) {
@@ -469,9 +467,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 }
                 $(&#x27;audio#exp-music&#x27;)[0].play();
                 if (this.get(&#x27;useAlternate&#x27;)) {
-                    this.sendTimeEvent(&#x27;startAlternateVideo&#x27;);
+                    this.send(&#x27;setTimeEvent&#x27;, &#x27;startAlternateVideo&#x27;);
                 } else {
-                    this.sendTimeEvent(&#x27;startTestVideo&#x27;);
+                    this.send(&#x27;setTimeEvent&#x27;, &#x27;startTestVideo&#x27;);
                 }
             }
         },
@@ -488,7 +486,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 if (this.isLast) {
                     this.send(&#x27;next&#x27;);
                 } else {
-                    this.sendTimeEvent(&#x27;startIntro&#x27;);
+                    this.send(&#x27;setTimeEvent&#x27;, &#x27;startIntro&#x27;);
                     this.set(&#x27;videosShown&#x27;, [this.get(&#x27;sources&#x27;)[0].src, this.get(&#x27;altSources&#x27;)[0].src]);
                 }
             }
@@ -497,10 +495,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         next() {
             window.clearInterval(this.get(&#x27;testTimer&#x27;));
             this.set(&#x27;testTime&#x27;, 0);
-            this.sendTimeEvent(&#x27;stoppingCapture&#x27;);
-            if (this.get(&#x27;recorder&#x27;)) {
-                this.get(&#x27;recorder&#x27;).stop();
-            }
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;stoppingCapture&#x27;);
+            this.stopRecorder();
             this._super(...arguments);
         }
     },
@@ -538,19 +534,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                         this.set(&#x27;playAnnouncementNow&#x27;, true);
                     }
                     try {
-                        this.get(&#x27;recorder&#x27;).resume();
+                        this.resumeRecorder();
                     } catch (_) {
                         return;
                     }
                 } else if (pause || !wasPaused) { // Not currently paused: pause
                     window.clearInterval(this.get(&#x27;testTimer&#x27;));
                     this.set(&#x27;testTime&#x27;, 0);
-                    this.sendTimeEvent(&#x27;pauseVideo&#x27;, {
+                    this.send(&#x27;setTimeEvent&#x27;, &#x27;pauseVideo&#x27;, {
                         currentTask: this.get(&#x27;currentTask&#x27;)
                     });
-                    if (this.get(&#x27;recorder&#x27;)) {
-                        this.get(&#x27;recorder&#x27;).pause(true);
-                    }
+                    this.pauseRecorder(true);
                     this.set(&#x27;playAnnouncementNow&#x27;, false);
                     this.set(&#x27;isPaused&#x27;, true);
                 }
@@ -566,45 +560,31 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
                     // FIXME: This binding does not seem to fire, likely because it is removed in willDestroy, called when exp-player advances to a new frame
-                    if (this.get(&#x27;recorder&#x27;)) {
-                        this.get(&#x27;recorder&#x27;).stop();
-                    }
+                    this.stopRecorder();
                 }
             }
         });
 
         if (this.get(&#x27;experiment&#x27;) &amp;&amp; this.get(&#x27;id&#x27;) &amp;&amp; this.get(&#x27;session&#x27;) &amp;&amp; !this.get(&#x27;isLast&#x27;)) {
-            let recorder = this.get(&#x27;videoRecorder&#x27;).start(this.get(&#x27;videoId&#x27;), this.$(&#x27;#videoRecorder&#x27;), {
+            const installPromise = this.setupRecorder(this.$(&#x27;#videoRecorder&#x27;), true, {
                 hidden: true
             });
-            recorder.install({
-                record: true
-            }).then(() =&gt; {
-                this.sendTimeEvent(&#x27;recorderReady&#x27;);
+            installPromise.then(() =&gt; {
+                this.send(&#x27;setTimeEvent&#x27;, &#x27;recorderReady&#x27;);
                 this.set(&#x27;recordingIsReady&#x27;, true);
             });
-            recorder.on(&#x27;onCamAccess&#x27;, (hasAccess) =&gt; {
-                this.sendTimeEvent(&#x27;hasCamAccess&#x27;, {
-                    hasCamAccess: hasAccess
-                });
-            });
-            recorder.on(&#x27;onConnectionStatus&#x27;, (status) =&gt; {
-                this.sendTimeEvent(&#x27;videoStreamConnection&#x27;, {
-                    status: status
-                });
-            });
-            this.set(&#x27;recorder&#x27;, recorder);
         }
         this.send(&#x27;showFullscreen&#x27;);
     },
     willDestroyElement() { // remove event handler
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get(&#x27;recorder&#x27;)) {
-            this.get(&#x27;recorder&#x27;).hide(); // Hide the webcam config screen
-            this.get(&#x27;recorder&#x27;).stop();
+        const recorder = this.get(&#x27;recorder&#x27;);
+        if (recorder) {
+            recorder.hide(); // Hide the webcam config screen
+            this.stopRecorder();
         }
 
-        this.sendTimeEvent(&#x27;destroyingElement&#x27;);
+        this.send(&#x27;setTimeEvent&#x27;, &#x27;destroyingElement&#x27;);
         this._super(...arguments);
         // Todo: make removal of event listener more specific (in case a frame comes between the video and the exit survey)
         $(document).off(&#x27;keyup&#x27;);
