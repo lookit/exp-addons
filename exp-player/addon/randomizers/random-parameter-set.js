@@ -40,11 +40,11 @@ function getRandomElement(arr, weights) {
 function replaceValues(obj, rep) {
     for (var property in obj) {
         if (obj.hasOwnProperty(property)) {
-            if (typeof obj[property] == "object") {
+            if (typeof obj[property] === 'object') {
                 obj[property] = replaceValues(obj[property], rep);
             } else {
                 if (rep.hasOwnProperty(obj[property])) {
-                  obj[property] = rep[obj[property]];
+                    obj[property] = rep[obj[property]];
                 }
             }
         }
@@ -166,7 +166,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
     // Select a parameter set to use for this trial.
     if (!(frameConfig.hasOwnProperty('parameterSetWeights'))) {
-        frameConfig.parameterSetWeights = new Array(frameConfig.parameterSets.length).fill(1)
+        frameConfig.parameterSetWeights = new Array(frameConfig.parameterSets.length).fill(1);
     }
 
     var parameterData = getRandomElement(frameConfig.parameterSets, frameConfig.parameterSetWeights);
@@ -191,7 +191,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         thisFrame = replaceValues(thisFrame, parameterSet);
 
         // Assign frame ID
-        thisFrame.id = `${frameId}`
+        thisFrame.id = `${frameId}`;
 
         thisFrame = resolveFrame(null, thisFrame)[0];
         frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.

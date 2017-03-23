@@ -1,9 +1,7 @@
-import Ember from 'ember';
-
 import { module } from 'qunit';
 import test from 'dummy/tests/ember-sinon-qunit/test';
 
-import { getRandomElement, replaceValues, randomizer } from 'exp-player/randomizers/random-parameter-set';
+import { getRandomElement, replaceValues } from 'exp-player/randomizers/random-parameter-set';
 
 module('Unit | Randomizer | random parameter set');
 
@@ -13,7 +11,7 @@ test('Random element selected from weighted list is a possible choice', function
 
     const expectedResult = 6;
 
-    let [index, actualResult] = getRandomElement(arr, weights);
+    let [, actualResult] = getRandomElement(arr, weights);
 
     assert.deepEqual(actualResult, expectedResult,
         'Random element selected should not have probability weight 0'
