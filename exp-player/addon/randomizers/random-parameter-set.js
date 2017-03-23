@@ -174,7 +174,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     var parameterSet = parameterData[1];
 
     var frames = [];
-    var resolvedFrames = [];
     var thisFrame = {};
 
     for (var iFrame = 0; iFrame < frameConfig.frameList.length; iFrame++) {
@@ -182,9 +181,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // Assign parameters common to all frames made by this randomizer
         thisFrame = {};
         Object.assign(thisFrame, frameConfig.commonFrameProperties);
-
-        [thisFrame,] = resolveFrame(null, thisFrame);
-        frames.push(thisFrame);
 
         // Assign parameters specific to this frame (allow to override
         // common parameters assigned above)
@@ -197,11 +193,11 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // Assign frame ID
         thisFrame.id = `${frameId}`
 
-        //frames.push(thisFrame);
-        resolvedFrames.push(resolveFrame(null, thisFrame)[0]);
+        thisFrame = resolveFrame(null, thisFrame)[0];
+        frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.
     }
 
-    return [resolvedFrames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
+    return [frames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
 
 };
 export default randomizer;
