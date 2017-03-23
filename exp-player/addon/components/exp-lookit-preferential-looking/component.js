@@ -646,7 +646,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 $('#player-calibration-video').addClass(thisLoc);
                 _this.set('calTimer', window.setTimeout(function() {
                     doCalibrationSegments(calList, thisLoc);
-                }, _this.get('calibrationLength')));
+                }, 1000 * _this.get('calibrationLength')));
             }
         };
 
