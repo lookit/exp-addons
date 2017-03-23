@@ -62,11 +62,10 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     currentVideo: Ember.computed('videoIndex', function() {
         return this.get('videos')[this.get('videoIndex')];
     }),
-
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-physics:${eventName}`, extra);
+    },
     actions: {
-        setTimeEvent(eventName, extra) {
-            this._super(`exp-physics:${eventName}`, extra);
-        },
         accept() {
             this.set('prompt', false);
             if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {

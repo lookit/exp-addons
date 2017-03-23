@@ -264,10 +264,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-physics:${eventName}`, extra);
+    },
     actions: {
-        setTimeEvent(eventName, extra) {
-            this._super(`exp-physics:${eventName}`, extra);
-        },
         showWarning() {
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);

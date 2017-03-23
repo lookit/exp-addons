@@ -10,6 +10,8 @@ let {
     RSVP
 } = Ember;
 
+// List of hooks and internal flash widget recorder methods:
+//    https://hdfvr.com/video-recording-api
 const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone', 'userHasCamMic', 'onConnectionStatus'];
 
 const ATTRIBUTES = {

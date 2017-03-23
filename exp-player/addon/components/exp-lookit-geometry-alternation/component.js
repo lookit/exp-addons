@@ -300,10 +300,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     }),
 
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-alternation:${eventName}`, extra);
+    },
     actions: {
-        setTimeEvent(eventName, extra) {
-            this._super(`exp-alternation:${eventName}`, extra);
-        },
         // When intro audio is complete
         endAudio() {
             this.set('completedAudio', true);

@@ -123,8 +123,9 @@ export default Ember.Mixin.create({
     },
 
     /**
+     * Resume a paused recording
      * @method resumeRecorder
-     * @throws an exception if recorder fails to resume
+     * @throws an exception if recorder fails to resume TODO: Based on existing usage anyway
      */
     resumeRecorder() {
         const recorder = this.get('recorder');
@@ -134,19 +135,28 @@ export default Ember.Mixin.create({
         }
     },
 
+    /**
+     * Start recording
+     * @method startRecorder
+     * @return Promise Resolves when recording has started
+     */
     startRecorder() {
         const recorder = this.get('recorder');
         if (recorder) {
-            recorder.record();
+            return recorder.record();
+        } else {
+            return Ember.RSVP.resolve();
         }
     },
 
     /**
-     * @return Promise
+     * Stop the recording
+     * @method stopRecorder
+     * @return Promise A promise that resolves when upload is complete
      */
     stopRecorder() {
         const recorder = this.get('recorder');
-        if (this.get('recorder')) {
+        if (recorder) {
             this.send('setTimeEvent', 'stoppingCapture');
             return this.get('recorder').stop();
         } else {
