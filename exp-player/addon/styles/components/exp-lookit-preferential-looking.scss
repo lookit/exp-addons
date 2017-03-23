@@ -94,17 +94,17 @@ $exp-lookit-preferential-looking-picmargin: 2;
 
 .exp-lookit-preferential-looking #left-container {
     @include pic-container($exp-lookit-preferential-looking-picmargin * 1%);
-    border: thin solid blue;
+    //border: thin solid blue;
 }
 
 .exp-lookit-preferential-looking #right-container {
     @include pic-container((100 - $exp-lookit-preferential-looking-picmargin - $exp-lookit-preferential-looking-picwidth) * 1%);
-    border: thin solid red;
+    //border: thin solid red;
 }
 
 .exp-lookit-preferential-looking #center-container {
     @include pic-container(((100 - $exp-lookit-preferential-looking-picwidth) / 2) * 1%);
-    border: thin solid green;
+    //border: thin solid green;
 }
 
 .exp-lookit-preferential-looking img.stim-image {
