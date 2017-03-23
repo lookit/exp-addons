@@ -24,7 +24,7 @@
 * @class randomParameterSet
 */
 
-var getRandomElement = function(arr, weights) {
+function getRandomElement(arr, weights) {
     var totalProb = weights.reduce((a, b) => a + b, 0);
     var randPos = Math.random() * totalProb;
 
@@ -35,13 +35,13 @@ var getRandomElement = function(arr, weights) {
             return [i, arr[i]];
         }
     }
-};
+}
 
 function replaceValues(obj, rep) {
     for (var property in obj) {
         if (obj.hasOwnProperty(property)) {
             if (typeof obj[property] == "object") {
-                obj[property] = replaceValues(obj[property], replace);
+                obj[property] = replaceValues(obj[property], rep);
             } else {
                 if (rep.hasOwnProperty(obj[property])) {
                   obj[property] = rep[obj[property]];
@@ -143,11 +143,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
     /**
      * Array of parameter sets to randomly select from in order to determine
-     * the parameters for each
-     *
-     * (E.g., you could include 'kind': 'normal-frame' in
-     * commmonFrameProperties, but for a single frame in frameList, include
-     * 'kind': 'special-frame'.)
+     * the parameters for each frame in this session.
      *
      * A single element of parameterSets will be applied to a given session.
      *
@@ -169,7 +165,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      */
 
     // Select a parameter set to use for this trial.
-    if !(frameConfig.hasOwnProperty('parameterSetWeights')) {
+    if (!(frameConfig.hasOwnProperty('parameterSetWeights'))) {
         frameConfig.parameterSetWeights = new Array(frameConfig.parameterSets.length).fill(1)
     }
 
@@ -178,6 +174,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     var parameterSet = parameterData[1];
 
     var frames = [];
+    var resolvedFrames = [];
     var thisFrame = {};
 
     for (var iFrame = 0; iFrame < frameConfig.frameList.length; iFrame++) {
@@ -185,6 +182,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // Assign parameters common to all frames made by this randomizer
         thisFrame = {};
         Object.assign(thisFrame, frameConfig.commonFrameProperties);
+
         [thisFrame,] = resolveFrame(null, thisFrame);
         frames.push(thisFrame);
 
@@ -198,12 +196,15 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
         // Assign frame ID
         thisFrame.id = `${frameId}`
+
+        //frames.push(thisFrame);
+        resolvedFrames.push(resolveFrame(null, thisFrame)[0]);
     }
 
-    return [frames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
+    return [resolvedFrames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
 
 };
 export default randomizer;
 
 // Export helper functions to support unit testing
-export { getRandomElement };
+export { getRandomElement, replaceValues};
