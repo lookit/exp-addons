@@ -43,11 +43,11 @@ let {
     "preferential-looking": {
         "isCalibrationFrame": false,
         "allowPausingDuringTest": true,
-        "rightImage": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/fam.jpg",
-        "leftImage":
-        "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/novel.jpg",
-        "centerImage":
-        "https://s3.amazonaws.com/lookitcontents/labelsconcepts/img/0001.jpg",
+        "baseDir": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/",
+        "audioTypes": ["mp3", "ogg"],
+        "videoTypes": ["webm", "mp4"],
+        "rightImage": "fam.jpg",
+        "leftImage": "novel.jpg",
         "pauseAudio": [
             {
                 "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3",
@@ -93,16 +93,7 @@ let {
                 "type": "audio/ogg"
             }
         ],
-        "testAudioSources": [
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/mp3/Familiarization_find_dax_amplified_repeated.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/ogg/Familiarization_find_dax_amplified_repeated.ogg",
-                "type": "audio/ogg"
-            }
-        ],
+        "testAudioSources": "Familiarization_find_dax_amplified_repeated",
         "unpauseAudio": [
             {
                 "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3",
@@ -222,6 +213,83 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'Whether to do calibration instead of a static image display'
                 },
                 /**
+                 * Base directory for where to find stimuli. Any image src
+                 * values that are not full paths will be expanded by prefixing
+                 * with `baseDir` + `img/`. Any audio/video src values that are
+                 * given as strings rather than lists of src/type pairs (see
+                 * e.g. testAudioSources) will be expanded to
+                 * `baseDir/avtype/name.avtype`, where the potential avtypes are
+                 * given by audioTypes and videoTypes.
+                 *
+                 * Note that baseDir SHOULD include a trailing slash
+                 * (e.g., `http://stimuli.org/myexperiment/`, not
+                 * `http://stimuli.org/myexperiment`)
+                 *
+                 * @property {String} baseDir
+                 * @default ''
+                 */
+                baseDir: {
+                    type: 'string',
+                    default: '',
+                    description: 'Base directory for all stimuli'
+                },
+                /**
+                 * List of audio types to expect for any audio specified just
+                 * with a string rather than with a list of src/type pairs.
+                 * If audioTypes is ['typeA', 'typeB'] and an audio source
+                 * (e.g. introAudioSources) is given as 'intro', then
+                 * introAudioSources will be expanded out to
+                 *
+```json
+                 [
+                        {
+                            src: 'baseDir' + 'typeA/intro.typeA',
+                            type: 'audio/typeA'
+                        },
+                        {
+                            src: 'baseDir' + 'typeB/intro.typeB',
+                            type: 'audio/typeB'
+                        }
+                ]
+```
+                 *
+                 * @property {String[]} audioTypes
+                 * @default ['mp3', 'ogg']
+                 */
+                audioTypes: {
+                    type: 'array',
+                    default: ['mp3', 'ogg'],
+                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
+                },
+                /**
+                 * List of video types to expect for any video specified just
+                 * with a string rather than with a list of src/type pairs.
+                 * If video is ['typeA', 'typeB'] and an video source
+                 * (e.g. videoSources) is given as 'attn', then
+                 * videoSources will be expanded out to
+                 *
+```json
+                 [
+                        {
+                            src: 'baseDir' + 'typeA/attn.typeA',
+                            type: 'video/typeA'
+                        },
+                        {
+                            src: 'baseDir' + 'typeB/attn.typeB',
+                            type: 'video/typeB'
+                        }
+                ]
+```
+                 *
+                 * @property {String[]} videoTypes
+                 * @default ['mp3', 'ogg']
+                 */
+                videoTypes: {
+                    type: 'array',
+                    default: ['webm', 'mp4'],
+                    description: 'List of video types to expect for any video sources specified as strings rather than lists of src/type pairs'
+                },
+                /**
                  * Whether to allow user to pause the study during the test
                  * segment and restart from intro; otherwise, user can pause but
                  * this frame will end upon unpausing. Applies to pausing during
@@ -235,7 +303,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
                 },
                 /**
-                 * URL of image to show on left, if any
+                 * URL of image to show on left, if any. Can be a full URL or a
+                 * stub that will be appended to `baseDir` + `img/` (see
+                 * baseDir).
                  *
                  * @property {String} leftImage
                  */
@@ -244,7 +314,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'URL of image to show on left'
                 },
                 /**
-                 * URL of image to show on right, if any
+                 * URL of image to show on right, if any. Can be a full URL or a
+                 * stub that will be appended to `baseDir` + `img/` (see
+                 * baseDir).
                  *
                  * @property {String} right
                  */
@@ -253,7 +325,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'URL of image to show on left'
                 },
                 /**
-                 * URL of image to show at center, if any
+                 * URL of image to show at center, if any. Can be a full URL or
+                 * a stub that will be appended to `baseDir` + `img/` (see
+                 * baseDir).
                  *
                  * @property {String} centerImage
                  */
@@ -304,6 +378,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for audio played during test trial. (Only used if not
                  * isCalibrationFrame.)
                  *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  * @property {Object[]} testAudioSources
                  */
                 testAudioSources: {
@@ -326,6 +404,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for instructions or any other audio during attention-getter
                  * video
+                 *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} introAudioSources
                  */
@@ -351,6 +433,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * use on last trial to let parents know they can open their
                  * eyes)
                  *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  * @property {Object[]} endAudioSources
                  */
                 endAudioSources: {
@@ -373,6 +459,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for calibration audio, played from start during each
                  * calibration segment (only used if isCalibrationFrame)
+                 *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} calibrationAudioSources
                  */
@@ -397,6 +487,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for calibration video, played from start during each
                  * calibration segment (only used if isCalibrationFrame)
                  *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `videoTypes` values; see `videoTypes`.
+                 *
                  * @property {Object[]} calibrationVideoSources
                  */
                 calibrationVideoSources: {
@@ -418,6 +512,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for attention-getter video
+                 *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `videoTypes` values; see `videoTypes`.
                  *
                  * @property {Object[]} videoSources
                  */
@@ -441,6 +539,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played upon pausing study
                  *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  * @property {Object[]} pauseAudio
                  */
                 pauseAudio: {
@@ -463,6 +565,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played upon resuming study
                  *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  * @property {Object[]} unpauseAudio
                  */
                 unpauseAudio: {
@@ -484,6 +590,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played when study is paused due to not being fullscreen
+                 *
+                 * Can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} fsAudio
                  */
@@ -587,6 +697,40 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this._super(...arguments);
         }
 
+    },
+
+    // Utility to expand strings into either full URLs (for images) or
+    // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
+    // Updates this['propertyName'] based on the appropriate type, which should
+    // be 'audio', 'video', or 'image'.
+    expandAsset(propertyName, type) {
+        var asset = this[propertyName];
+        var fullAsset = asset;
+        if (typeof asset === 'string') {
+            if (type === 'image' && !(asset.includes('://'))) {
+                // Image: replace stub with full URL if needed
+                fullAsset = this.baseDir + 'img/' + asset;
+            } else if (type === 'audio') {
+                // Audio: if we have just a string, build the src/type list
+                fullAsset = [];
+                for (var iAudioType = 0; iAudioType < this.audioTypes.length; iAudioType++) {
+                    fullAsset.push({
+                        src: this.baseDir + this.audioTypes[iAudioType] + '/' + asset + '.' + this.audioTypes[iAudioType],
+                        type: 'audio/' + this.audioTypes[iAudioType]
+                    });
+                }
+            } else if (type === 'video') {
+                // Video: if we have just a string, build the src/type list
+                fullAsset = [];
+                for (var iVideoType = 0; iVideoType < this.videoTypes.length; iVideoType++) {
+                    fullAsset.push({
+                        src: this.baseDir + this.videoTypes[iVideoType] + '/' + asset + '.' + this.audioTypes[iVideoType],
+                        type: 'video/' + this.videoTypes[iVideoType]
+                    });
+                }
+            }
+        }
+        this.set(propertyName, fullAsset);
     },
 
     startIntro() {
@@ -816,6 +960,29 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
+        // Expand any stubs given for image, audio, or video sources, based on
+        // baseDir and audioTypes/videoTypes.
+        var _this = this;
+        ['rightImage', 'leftImage', 'centerImage'].forEach(function(prop) {
+            _this.expandAsset(prop, 'image');
+        });
+
+        ['testAudioSources',
+         'introAudioSources',
+         'endAudioSources',
+         'calibrationAudioSources',
+         'pauseAudio',
+         'unpauseAudio',
+         'fsAudio'].forEach(function(prop) {
+            _this.expandAsset(prop, 'audio');
+        });
+
+        ['calibrationVideoSources',
+         'videoSources'].forEach(function(prop) {
+            _this.expandAsset(prop, 'video');
+        });
+
+        // Begin frame. Actual test trial will start once recording is ready.
         this.send('showFullscreen');
         this.startIntro();
 

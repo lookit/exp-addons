@@ -35,47 +35,24 @@ let {
  *
  * This frame extends ExpFrameBaseUnsafe because it is displayed fullscreen
  * and expected to be repeated.
+ *
+ * The examples below show a few expected uses of this frame. In phase-2,
+ * two characters are shown; the protagonist is already present, and speaker1
+ * flies in from the left. Speaker1 has associated audio (dialogue). After
+ * the narrative audio, the user can click on speaker1 to play the audio, and
+ * will then be able to proceed.
+ *
+ * phase-5 is a choice trial, where the user has to click on one of the two
+ * images before proceeding.
 
 ```json
- "frames": {
-         "phase-1": {
-            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
-            "doRecording": true,
-            "autoProceed": false,
-            "parentTextBlock": {
-                "title": "Parents!",
-                "text": "some instructions",
-                "emph": true
-            },
-            "images": [
-                {
-                    "id": "protagonist",
-                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_listener1.png",
-                    "left": "40",
-                    "bottom": "2",
-                    "height": "60"
-                }
-            ],
-            "kind": "exp-lookit-dialogue-page",
-            "id": "phase-1",
-            "audioSources": [
-                {
-                    "audioId": "firstAudio",
-                    "sources": [
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_1intro.mp3",
-                            "type": "audio/mp3"
-                        },
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_1intro.ogg",
-                            "type": "audio/ogg"
-                        }
-                    ]
-                }
-            ]
-        },
+ "frames":
         "phase-2": {
-            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
+            "kind": "exp-lookit-dialogue-page",
+            "id": "phase-2",
+            "baseDir": "https://s3.amazonaws.com/lookitcontents/politeness/",
+            "audioTypes": ["mp3", "ogg"],
+            "backgroundImage": "order1_test1_background.png",
             "doRecording": false,
             "autoProceed": false,
             "parentTextBlock": {
@@ -86,7 +63,7 @@ let {
             "images": [
                 {
                     "id": "protagonist",
-                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_listener1.png",
+                    "src": "order1_test1_listener1.png",
                     "left": "40",
                     "bottom": "2",
                     "height": "60"
@@ -94,44 +71,28 @@ let {
                 {
                     "id": "speaker1",
                     "text": "Click to hear what he said!",
-                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker1.png",
+                    "src": "order1_test1_speaker1.png",
                     "left": "20",
                     "bottom": "2",
                     "height": "60",
                     "animate": "flyleft",
                     "requireAudio": true,
-                    "imageAudio": [
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_2_2speaker1polite.mp3",
-                            "type": "audio/mp3"
-                        },
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_2_2speaker1polite.ogg",
-                            "type": "audio/ogg"
-                        }
-                    ]
+                    "imageAudio": "polcon_example_2_2speaker1polite"
                 }
             ],
-            "kind": "exp-lookit-dialogue-page",
-            "id": "phase-2",
             "audioSources": [
                 {
                     "audioId": "firstAudio",
-                    "sources": [
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_2_1intro.mp3",
-                            "type": "audio/mp3"
-                        },
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_2_1intro.ogg",
-                            "type": "audio/ogg"
-                        }
-                    ]
+                    "sources": "polcon_example_2_1intro"
                 }
             ]
         },
         "phase-5": {
-            "backgroundImage": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_background.png",
+            "kind": "exp-lookit-dialogue-page",
+            "id": "phase-5",
+            "baseDir": "https://s3.amazonaws.com/lookitcontents/politeness/",
+            "audioTypes": ["mp3", "ogg"],
+            "backgroundImage": "order1_test1_background.png",
             "doRecording": false,
             "autoProceed": false,
             "isChoiceFrame": true,
@@ -143,34 +104,23 @@ let {
             "images": [
                 {
                     "id": "speaker1",
-                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker1.png",
+                    "src": "order1_test1_speaker1.png",
                     "left": "20",
                     "bottom": "2",
                     "height": "60"
                 },
                 {
                     "id": "speaker2",
-                    "src": "https://s3.amazonaws.com/lookitcontents/politeness/img/order1_test1_speaker2.png",
+                    "src": "order1_test1_speaker2.png",
                     "left": "60",
                     "bottom": "2",
                     "height": "60"
                 }
             ],
-            "kind": "exp-lookit-dialogue-page",
-            "id": "phase-5",
             "audioSources": [
                 {
                     "audioId": "firstAudio",
-                    "sources": [
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/mp3/polcon_example_5q1.mp3",
-                            "type": "audio/mp3"
-                        },
-                        {
-                            "src": "https://s3.amazonaws.com/lookitcontents/politeness/ogg/polcon_example_5q1.ogg",
-                            "type": "audio/ogg"
-                        }
-                    ]
+                    "sources": "polcon_example_5q1"
                 }
             ]
         }
@@ -261,6 +211,55 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     description: 'Whether this is a frame where the user needs to click to select one of the images before proceeding'
                 },
                 /**
+                 * Base directory for where to find stimuli. Any image src
+                 * values that are not full paths will be expanded by prefixing
+                 * with `baseDir` + `img/`. Any audio src values that are
+                 * given as strings rather than lists of src/type pairs will be
+                 * expanded to
+                 * `baseDir/avtype/name.avtype`, where the potential avtypes are
+                 * given by audioTypes and videoTypes.
+                 *
+                 * Note that baseDir SHOULD include a trailing slash
+                 * (e.g., `http://stimuli.org/myexperiment/`, not
+                 * `http://stimuli.org/myexperiment`)
+                 *
+                 * @property {String} baseDir
+                 * @default ''
+                 */
+                baseDir: {
+                    type: 'string',
+                    default: '',
+                    description: 'Base directory for all stimuli'
+                },
+                /**
+                 * List of audio types to expect for any audio specified just
+                 * with a string rather than with a list of src/type pairs.
+                 * If audioTypes is ['typeA', 'typeB'] and an audio source
+                 * (e.g. audioSources[0]['sources']) is given as 'intro', then
+                 *  audioSources[0]['sources'] will be expanded out to
+                 *
+```json
+                 [
+                        {
+                            src: 'baseDir' + 'typeA/intro.typeA',
+                            type: 'audio/typeA'
+                        },
+                        {
+                            src: 'baseDir' + 'typeB/intro.typeB',
+                            type: 'audio/typeB'
+                        }
+                ]
+```
+                 *
+                 * @property {String[]} audioTypes
+                 * @default ['mp3', 'ogg']
+                 */
+                audioTypes: {
+                    type: 'array',
+                    default: ['mp3', 'ogg'],
+                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
+                },
+                /**
                  * Whether to do webcam recording (will wait for webcam
                  * connection before starting audio if so)
                  *
@@ -288,7 +287,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  *   @param {String} audioId unique string identifying this
                  *      audio segment
                  *   @param {Object[]} sources Array of {src: 'url', type:
-                 *      'MIMEtype'} objects with audio sources for this segment
+                 *      'MIMEtype'} objects with audio sources for this segment.
+                 *
+                 *   This can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  *   @param {Object[]} highlights Array of {'range': [startT,
                  *      endT], 'image': 'imageId'} objects, where the imageId
                  *      values correspond to the ids given in images
@@ -362,7 +366,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  *
                  * @property {Object[]} images
                  *   @param {String} id unique ID for this image. This will be used to refer to the choice made by the user, if any.
-                 *   @param {String} src URL of image source
+                 *   @param {String} src URL of image source (can be full URL, or stub to append to baseDir; see `baseDir`)
                  *   @param {String} left left margin, as percentage of story area width
                  *   @param {String} height image height, as percentage of story area height
                  *   @param {String} bottom bottom margin, as percentage of story area height
@@ -370,6 +374,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  *   @param {String} text text to display above image, e.g. 'Click to hear what he said!' If omitted, no text is shown.
                  *   @param {Object[]} imageAudio sources Array of {src: 'url',
                  * type: 'MIMEtype'} objects with audio sources for audio to play when this image is clicked, if any. (Omit to not associate audio with this image.)
+                 *
+                 *   This can also be given as a single string, which will be
+                 * expanded out to the appropriate array based on `baseDir` and
+                 * `audioTypes` values; see `audioTypes`.
+                 *
                  *   @param {Boolean} requireAudio whether to require the user to click this image and complete the audio associated before proceeding to the next trial. (Incompatible with autoProceed.)
                  */
                 images: {
@@ -560,6 +569,28 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
+    // Utility to expand strings into either full URLs (for images) or
+    // array of {src: 'url', type: 'MIMEtype'} objects (for audio).
+    expandAsset(asset, type) {
+        var fullAsset = asset;
+        if (typeof asset === 'string') {
+            if (type === 'image' && !(asset.includes('://'))) {
+                // Image: replace stub with full URL if needed
+                fullAsset = this.baseDir + 'img/' + asset;
+            } else if (type === 'audio') {
+                // Audio: if we have just a string, build the src/type list
+                fullAsset = [];
+                for (var iAudioType = 0; iAudioType < this.audioTypes.length; iAudioType++) {
+                    fullAsset.push({
+                        src: this.baseDir + this.audioTypes[iAudioType] + '/' + asset + '.' + this.audioTypes[iAudioType],
+                        type: 'audio/' + this.audioTypes[iAudioType]
+                    });
+                }
+            }
+        }
+        return fullAsset;
+    },
+
     // TODO: should this be moved to the recording mixin?
     sendTimeEvent(name, opts = {}) {
         var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
@@ -596,6 +627,26 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
+        // Expand any image src stubs & imageAudio stubs
+        var _this = this;
+        var images = this.get('images');
+        images.forEach(function(im) {
+            Ember.set(im, 'src', _this.expandAsset(im['src'], 'image'));
+            if (im.hasOwnProperty('imageAudio')) {
+                Ember.set(im, 'imageAudio', _this.expandAsset(im['imageAudio'], 'audio'));
+            }
+        });
+        this.set('backgroundImage', _this.expandAsset(this['backgroundImage'], 'image'));
+
+        // Expand any audio src stubs
+        var audioSources = this.get('audioSources');
+        audioSources.forEach(function(aud) {
+           Ember.set(aud, 'sources', _this.expandAsset(aud['sources'], 'audio'));
+        });
+
+        this.set('images', images);
+        this.set('audioSources', audioSources);
+
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
 
@@ -624,52 +675,57 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-        // If we're recording this trial, set up, and rely on audioObserver to
-        // start audio once recording is ready. Otherwise, start audio right
-        // away.
-        if (this.get('doRecording')) {
-            if (this.get('experiment') && this.get('id') && this.get('session')) {
-                let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
-                    hidden: true
-                });
-                recorder.install({
-                    record: true
-                }).then(() => {
-                    this.sendTimeEvent('recorderReady');
-                    this.set('recordingIsReady', true);
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-                // TODO: move handlers that just record events to the VideoRecord mixin?
-                /**
-                 * When recorder detects a change in camera access
-                 *
-                 * @event onCamAccess
-                 * @param {Boolean} hasCamAccess
-                 */
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.sendTimeEvent('hasCamAccess', {
-                        hasCamAccess: hasAccess
+         var buffer = 100; // ms to wait before starting, in order to give audioSources a chance to actually be updated
+
+        window.setTimeout(function() {
+
+            // If we're recording this trial, set up, and rely on audioObserver to
+            // start audio once recording is ready. Otherwise, start audio right
+            // away.
+            if (_this.get('doRecording')) {
+                if (_this.get('experiment') && _this.get('id') && _this.get('session')) {
+                    let recorder = _this.get('videoRecorder').start(_this.get('videoId'), _this.$('#videoRecorder'), {
+                        hidden: true
                     });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-                /**
-                 * When recorder detects a change in video stream connection status
-                 *
-                 * @event videoStreamConnection
-                 * @param {String} status status of video stream connection, e.g.
-                 * 'NetConnection.Connect.Success' if successful
-                 */
-                recorder.on('onConnectionStatus', (status) => {
-                    this.sendTimeEvent('videoStreamConnection', {
-                        status: status
+                    recorder.install({
+                        record: true
+                    }).then(() => {
+                        _this.sendTimeEvent('recorderReady');
+                        _this.set('recordingIsReady', true);
+                        _this.notifyPropertyChange('readyToStartAudio');
                     });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-                this.set('recorder', recorder);
+                    // TODO: move handlers that just record events to the VideoRecord mixin?
+                    /**
+                     * When recorder detects a change in camera access
+                     *
+                     * @event onCamAccess
+                     * @param {Boolean} hasCamAccess
+                     */
+                    recorder.on('onCamAccess', (hasAccess) => {
+                        _this.sendTimeEvent('hasCamAccess', {
+                            hasCamAccess: hasAccess
+                        });
+                        _this.notifyPropertyChange('readyToStartAudio');
+                    });
+                    /**
+                     * When recorder detects a change in video stream connection status
+                     *
+                     * @event videoStreamConnection
+                     * @param {String} status status of video stream connection, e.g.
+                     * 'NetConnection.Connect.Success' if successful
+                     */
+                    recorder.on('onConnectionStatus', (status) => {
+                        _this.sendTimeEvent('videoStreamConnection', {
+                            status: status
+                        });
+                        _this.notifyPropertyChange('readyToStartAudio');
+                    });
+                    _this.set('recorder', recorder);
+                }
+            } else {
+                _this.send('playNextAudioSegment');
             }
-        } else {
-            this.send('playNextAudioSegment');
-        }
+        }, buffer);
 
     },
 
