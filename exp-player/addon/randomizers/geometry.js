@@ -1,14 +1,3 @@
-/*
- NOTE: you will need to manually add an entry for this file in addon/randomizers/index.js, e.g.:
-
-import geometry from './geometry';
-...
-export default {
-    ...
-    geometry: geometry
-}
- */
-
 /**
 * @module exp-player
 * @submodule randomizers
