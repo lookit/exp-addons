@@ -631,17 +631,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var _this = this;
         var images = this.get('images');
         images.forEach(function(im) {
-            Ember.set(im, 'src', _this.expandAsset(im['src'], 'image'));
+            Ember.set(im, 'src', _this.expandAsset(im.src, 'image'));
             if (im.hasOwnProperty('imageAudio')) {
-                Ember.set(im, 'imageAudio', _this.expandAsset(im['imageAudio'], 'audio'));
+                Ember.set(im, 'imageAudio', _this.expandAsset(im.imageAudio, 'audio'));
             }
         });
-        this.set('backgroundImage', _this.expandAsset(this['backgroundImage'], 'image'));
+        this.set('backgroundImage', _this.expandAsset(this.backgroundImage, 'image'));
 
         // Expand any audio src stubs
         var audioSources = this.get('audioSources');
         audioSources.forEach(function(aud) {
-           Ember.set(aud, 'sources', _this.expandAsset(aud['sources'], 'audio'));
+            Ember.set(aud, 'sources', _this.expandAsset(aud.sources, 'audio'));
         });
 
         this.set('images', images);
@@ -675,7 +675,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-         var buffer = 100; // ms to wait before starting, in order to give audioSources a chance to actually be updated
+        var buffer = 100; // ms to wait before starting, in order to give audioSources a chance to actually be updated
 
         window.setTimeout(function() {
 

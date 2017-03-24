@@ -463,14 +463,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var _this = this;
         var images = this.get('images');
         images.forEach(function(im) {
-            Ember.set(im, 'src', _this.expandAsset(im['src'], 'image'));
+            Ember.set(im, 'src', _this.expandAsset(im.src, 'image'));
         });
         this.set('images', images);
 
         // Expand any audio src stubs
         var audioSources = this.get('audioSources');
         audioSources.forEach(function(aud) {
-           Ember.set(aud, 'sources', _this.expandAsset(aud['sources'], 'audio'));
+            Ember.set(aud, 'sources', _this.expandAsset(aud.sources, 'audio'));
         });
         this.set('audioSources', audioSources);
 
