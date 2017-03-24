@@ -896,6 +896,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.pause();
             this.currentTime = 0;
         });
+        $('#player-video')[0].play();
 
         $('#allstimuli').hide();
         $('#player-calibration-video').hide();
