@@ -487,7 +487,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
 
-
         if (_this.get('doRecording')) {
             $('.story-image-container').hide();
             if (_this.get('experiment') && _this.get('id') && _this.get('session')) {

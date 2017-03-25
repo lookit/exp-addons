@@ -733,7 +733,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-
         // If we're recording this trial, set up, and rely on audioObserver to
         // start audio once recording is ready. Otherwise, start audio right
         // away.
