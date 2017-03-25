@@ -203,6 +203,28 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             type: 'object',
             properties: {
                 /**
+                 * Phase number (just included as a convenience & sent to server, to make handling collected data simpler)
+                 *
+                 * @property {Number} nPhase
+                 * @default 0
+                 */
+                nPhase: {
+                    type: 'number',
+                    description: 'Phase number',
+                    default: 0
+                },
+                /**
+                 * Trial number (just included as a convenience & sent to server, to make handling collected data simpler)
+                 *
+                 * @property {Number} nTrial
+                 * @default 0
+                 */
+                nTrial: {
+                    type: 'number',
+                    description: 'Trial number',
+                    default: 0
+                },
+                /**
                  * URL of background image; will be stretched to width of page
                  *
                  * @property {String} backgroundImage
@@ -469,6 +491,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 currentlyHighlighted: {
                     type: 'string'
+                },
+                nTrial: {
+                    type: 'number'
+                },
+                nPhase: {
+                    type: 'number'
                 }
             }
         }

@@ -193,7 +193,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // Assign frame ID
         thisFrame.id = `${frameId}`;
 
-        thisFrame = resolveFrame(null, thisFrame)[0];
+        thisFrame = resolveFrame(thisFrame.id, thisFrame)[0];
         frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.
     }
 
