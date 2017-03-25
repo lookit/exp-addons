@@ -41,6 +41,8 @@ let {
 ```json
  "frames": {
     "preferential-looking": {
+        "kind": "exp-lookit-preferential-looking",
+        "id": "pref-trial",
         "isCalibrationFrame": false,
         "allowPausingDuringTest": true,
         "baseDir": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/",
@@ -60,7 +62,6 @@ let {
             }
         ],
         "trialLength": 10,
-        "kind": "exp-lookit-preferential-looking",
         "fsAudio": [
             {
                 "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/fullscreen.mp3",
@@ -72,7 +73,6 @@ let {
             }
         ],
         "calibrationLength": 3,
-        "id": "pref-trial",
         "attnLength": 1,
         "endAudioSources": [
             {
@@ -94,7 +94,11 @@ let {
                 "type": "audio/ogg"
             }
         ],
-        "testAudioSources": "Familiarization_find_dax_amplified_repeated",
+        "testAudioSources": [
+            {
+                "stub": "Familiarization_find_dax_amplified_repeated"
+            }
+        ],
         "unpauseAudio": [
             {
                 "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3",
@@ -217,11 +221,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 /**
                  * Base directory for where to find stimuli. Any image src
                  * values that are not full paths will be expanded by prefixing
-                 * with `baseDir` + `img/`. Any audio/video src values that are
-                 * given as strings rather than lists of src/type pairs (see
-                 * e.g. testAudioSources) will be expanded to
-                 * `baseDir/avtype/name.avtype`, where the potential avtypes are
-                 * given by audioTypes and videoTypes.
+                 * with `baseDir` + `img/`. Any audio/video src values that give
+                 * a value for 'stub' rather than 'src' and 'type' will be
+                 * expanded out to
+                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
+                 * are given by audioTypes and videoTypes.
                  *
                  * Note that baseDir SHOULD include a trailing slash
                  * (e.g., `http://stimuli.org/myexperiment/`, not
@@ -239,8 +243,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * List of audio types to expect for any audio specified just
                  * with a string rather than with a list of src/type pairs.
                  * If audioTypes is ['typeA', 'typeB'] and an audio source
-                 * (e.g. introAudioSources) is given as 'intro', then
-                 * introAudioSources will be expanded out to
+                 * (e.g. introAudioSources) is given as [{'stub': 'intro'}],
+                 * then introAudioSources will be expanded out to
                  *
 ```json
                  [
@@ -267,8 +271,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * List of video types to expect for any video specified just
                  * with a string rather than with a list of src/type pairs.
                  * If video is ['typeA', 'typeB'] and an video source
-                 * (e.g. videoSources) is given as 'attn', then
-                 * videoSources will be expanded out to
+                 * is given as {['stub': 'attn']}, then
+                 * the video source will be expanded out to
                  *
 ```json
                  [
@@ -380,9 +384,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for audio played during test trial. (Only used if not
                  * isCalibrationFrame.)
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} testAudioSources
                  */
@@ -410,9 +414,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for instructions or any other audio during attention-getter
                  * video
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} introAudioSources
                  */
@@ -441,9 +445,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * use on last trial to let parents know they can open their
                  * eyes)
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} endAudioSources
                  */
@@ -471,9 +475,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for calibration audio, played from start during each
                  * calibration segment (only used if isCalibrationFrame)
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} calibrationAudioSources
                  */
@@ -501,9 +505,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * for calibration video, played from start during each
                  * calibration segment (only used if isCalibrationFrame)
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `videoTypes` values; see `videoTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `videoTypes` values; see `videoTypes`.
                  *
                  * @property {Object[]} calibrationVideoSources
                  */
@@ -530,9 +534,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects
                  * for attention-getter video
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `videoTypes` values; see `videoTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `videoTypes` values; see `videoTypes`.
                  *
                  * @property {Object[]} videoSources
                  */
@@ -559,9 +563,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played upon pausing study
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} pauseAudio
                  */
@@ -588,9 +592,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played upon resuming study
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} unpauseAudio
                  */
@@ -617,9 +621,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played when study is paused due to not being fullscreen
                  *
-                 * Can also be given as a single string, which will be
-                 * expanded out to the appropriate array based on `baseDir` and
-                 * `audioTypes` values; see `audioTypes`.
+                 * Can also give a single element {stub: 'filename'}, which will
+                 * be expanded out to the appropriate array based on `baseDir`
+                 * and `audioTypes` values; see `audioTypes`.
                  *
                  * @property {Object[]} fsAudio
                  */

@@ -8,17 +8,17 @@
         {{#each images as |image|}}
             <div id={{image.id}} class="story-image-container" onclick={{action 'clickSpeaker' image.id}} style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">
                 <p onclick={{action 'clickSpeaker' image.id}} class="image-text {{if (not completedAudio) 'disabled'}}"> {{image.text}} </p>
-                <img src={{image.src}} class="story-image" alt="story illustration">
+                <img src={{image.src_parsed}} class="story-image" alt="story illustration">
 
                 <audio class="speaker-audio" onended={{action 'markAudioCompleted' image.id}}>
-                    {{#each image.imageAudio as |stream|}}
+                    {{#each image.imageAudio_parsed as |stream|}}
                         <source src="{{stream.src}}" type="{{stream.type}}">
                     {{/each}}
                 </audio>
             </div>
         {{/each}}
 
-        <img src={{backgroundImage}} id="background-image" alt="background image">
+        <img src={{backgroundImage_parsed}} id="background-image" alt="background image">
     </div>
 
     {{#unless updatedIsFullscreen}}
@@ -31,7 +31,7 @@
 
     {{#each audioSources as |audioSourceObject|}}
         <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}}>
-            {{#each audioSourceObject.sources as |stream|}}
+            {{#each audioSourceObject.sources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
