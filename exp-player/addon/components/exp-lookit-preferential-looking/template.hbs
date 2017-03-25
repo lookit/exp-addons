@@ -8,25 +8,25 @@
                class="calibration center"
                autoplay
                style="display:none;">
-            {{#each calibrationVideoSources as |stream|}}
+            {{#each calibrationVideoSources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </video>
 
         <audio id="player-calibration-audio">
-            {{#each calibrationAudioSources as |stream|}}
+            {{#each calibrationAudioSources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
 
     {{/if}}
 
-    {{#if (or doingIntro doingFinalAudio)}}
+    {{#if (or doingIntro doingFinalAudio isPaused)}}
         <video id="player-video"
                class="attn"
                autoplay
                loop>
-            {{#each videoSources as |stream|}}
+            {{#each videoSources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </video>
@@ -50,17 +50,17 @@
     <div id="allstimuli" style="display:none;">
         {{#if leftImage}}
             <div id="left-container">
-                <img id="left-image" src={{leftImage}} class="stim-image" alt="left image">
+                <img id="left-image" src={{leftImage_parsed}} class="stim-image" alt="left image">
             </div>
         {{/if}}
         {{#if rightImage}}
             <div id="right-container">
-                <img id="right-image" src={{rightImage}} class="stim-image" alt="right image">
+                <img id="right-image" src={{rightImage_parsed}} class="stim-image" alt="right image">
             </div>
         {{/if}}
         {{#if centerImage}}
             <div id="center-container">
-                <img id="center-image" src={{centerImage}} class="stim-image" alt="center image">
+                <img id="center-image" src={{centerImage_parsed}} class="stim-image" alt="center image">
             </div>
         {{/if}}
     </div>
@@ -68,32 +68,32 @@
     {{#if hasBeenPaused}}
         <audio id="player-audio"
                onended={{action 'completedIntroAudio'}}>
-            {{#each unpauseAudio as |stream|}}
+            {{#each unpauseAudio_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
     {{else}}
         <audio id="player-audio">
-            {{#each introAudioSources as |stream|}}
+            {{#each introAudioSources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>
     {{/if}}
 
     <audio id="player-test-audio">
-        {{#each testAudioSources as |stream|}}
+        {{#each testAudioSources_parsed as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
 
     <audio id="player-pause-audio">
-        {{#each pauseAudio as |stream|}}
+        {{#each pauseAudio_parsed as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
 
     <audio id="player-pause-audio-leftfs">
-        {{#each fsAudio as |stream|}}
+        {{#each fsAudio_parsed as |stream|}}
             <source src="{{stream.src}}" type="{{stream.type}}">
         {{/each}}
     </audio>
@@ -101,7 +101,7 @@
     {{#if endAudioSources}}
         <audio id="player-endaudio"
                onended={{action 'next'}}>
-            {{#each endAudioSources as |stream|}}
+            {{#each endAudioSources_parsed as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>

@@ -48,6 +48,7 @@ let {
         "videoTypes": ["webm", "mp4"],
         "rightImage": "fam.jpg",
         "leftImage": "novel.jpg",
+        "centerImage": "0001.jpg",
         "pauseAudio": [
             {
                 "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3",
@@ -187,6 +188,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     isPaused: false,
     hasBeenPaused: false,
+    skipTest: false,
 
     // Timers for intro & stimuli
     introTimer: null, // minimum length of intro segment
@@ -396,6 +398,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
+                            },
+                            'stub': {
+                                type: 'string'
                             }
                         }
                     }
@@ -422,6 +427,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
+                                type: 'string'
+                            },
+                            'stub': {
                                 type: 'string'
                             }
                         }
@@ -451,6 +459,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
+                            },
+                            'stub': {
+                                type: 'string'
                             }
                         }
                     }
@@ -477,6 +488,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
+                                type: 'string'
+                            },
+                            'stub': {
                                 type: 'string'
                             }
                         }
@@ -505,6 +519,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
+                            },
+                            'stub': {
+                                type: 'string'
                             }
                         }
                     }
@@ -530,6 +547,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
+                                type: 'string'
+                            },
+                            'stub': {
                                 type: 'string'
                             }
                         }
@@ -557,6 +577,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
+                            },
+                            'stub': {
+                                type: 'string'
                             }
                         }
                     }
@@ -583,6 +606,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
+                            },
+                            'stub': {
+                                type: 'string'
                             }
                         }
                     }
@@ -608,6 +634,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
+                                type: 'string'
+                            },
+                            'stub': {
                                 type: 'string'
                             }
                         }
@@ -671,8 +700,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     calObserver: Ember.observer('readyToStartCalibration', function(frame) {
         if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
-            frame.set('currentSegment', 'test');
-            frame.startTrial();
+
+            if (!this.get('skipTest')) {
+                frame.set('currentSegment', 'test');
+                frame.startTrial();
+            } else {
+                frame.endTrial();
+            }
         }
     }),
 
@@ -699,45 +733,56 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    // Utility to expand strings into either full URLs (for images) or
+    // Utility to expand stubs into either full URLs (for images) or
     // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
     // Updates this['propertyName'] based on the appropriate type, which should
     // be 'audio', 'video', or 'image'.
     expandAsset(propertyName, type) {
-        var asset = this[propertyName];
-        var fullAsset = asset;
-        if (typeof asset === 'string') {
-            if (type === 'image' && !(asset.includes('://'))) {
+
+        if (this.hasOwnProperty(propertyName)) {
+
+            var asset = this[propertyName];
+            var fullAsset = asset;
+            var _this = this;
+
+            if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
                 // Image: replace stub with full URL if needed
                 fullAsset = this.baseDir + 'img/' + asset;
-            } else if (type === 'audio') {
-                // Audio: if we have just a string, build the src/type list
+            } else if (type === 'audio' || type === 'video') {
+                // Audio/video: replace any source objects that have a
+                // 'stub' attribute with the appropriate expanded source
+                // objects
                 fullAsset = [];
-                for (var iAudioType = 0; iAudioType < this.audioTypes.length; iAudioType++) {
-                    fullAsset.push({
-                        src: this.baseDir + this.audioTypes[iAudioType] + '/' + asset + '.' + this.audioTypes[iAudioType],
-                        type: 'audio/' + this.audioTypes[iAudioType]
-                    });
+
+                var types = [];
+                if (type === 'audio') {
+                    types = this.audioTypes;
+                } else {
+                    types = this.videoTypes;
                 }
-            } else if (type === 'video') {
-                // Video: if we have just a string, build the src/type list
-                fullAsset = [];
-                for (var iVideoType = 0; iVideoType < this.videoTypes.length; iVideoType++) {
-                    fullAsset.push({
-                        src: this.baseDir + this.videoTypes[iVideoType] + '/' + asset + '.' + this.audioTypes[iVideoType],
-                        type: 'video/' + this.videoTypes[iVideoType]
-                    });
-                }
+
+                asset.forEach(function(srcObj) {
+                    if (srcObj.hasOwnProperty('stub')) {
+                        for (var iType = 0; iType < types.length; iType++) {
+                            fullAsset.push({
+                                src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
+                                type: type + '/' + types[iType]
+                            });
+                        }
+                    } else {
+                        fullAsset.push(srcObj);
+                    }
+                });
             }
+
+            this.set(propertyName + '_parsed', fullAsset);
+
         }
-        this.set(propertyName, fullAsset);
     },
 
     startIntro() {
-        // Allow pausing during intro
+
         var _this = this;
-        $(document).off('keyup.pauser');
-        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
 
         /**
          * Just before starting intro segment
@@ -748,7 +793,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
+        $('#player-audio')[0].currentTime = 0;
         $('#player-audio')[0].play();
+
         _this.set('introTimer', window.setTimeout(function() {
             _this.set('completedAttn', true);
             _this.notifyPropertyChange('readyToStartCalibration');
@@ -892,57 +939,61 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // Pause/unpause study.
     pauseStudy() {
 
-        $('audio, video').each(function() {
-            this.pause();
-            this.currentTime = 0;
-        });
-        $('#player-video')[0].play();
-
-        $('#allstimuli').hide();
-        $('#player-calibration-video').hide();
-
-        this.set('completedAudio', false);
-        this.set('completedAttn', false);
-
         Ember.run.once(this, () => {
+            // Only "count" as pausing if outside of intro segment
+            if (!this.get('allowPausingDuringTest') && (this.get('currentSegment') !== 'intro')) {
+                this.set('skipTest', true);
+            }
+
             this.set('hasBeenPaused', true);
             var wasPaused = this.get('isPaused');
 
-            // Currently paused: RESUME
-            if (wasPaused) {
+            if (wasPaused) { // Currently paused: RESUME
+                $('#player-pause-audio, #player-pause-audio-leftfs').each(function() {
+                    this.pause();
+                    this.currentTime = 0;
+                });
+
                 /**
                  * When unpausing study, immediately before request to resume webcam recording
                  *
                  * @event unpauseVideo
                  */
                 this.sendTimeEvent('unpauseVideo');
-                // Always allow resuming if study was paused during intro; also
-                // allow if designated for this frame
-                if (this.get('allowPausingDuringTest') || this.get('previousSegment') === 'intro') {
-                    try {
-                        this.get('recorder').resume();
-                    } catch (_) {
-                        return;
-                    }
-                    this.startIntro();
-                    this.set('isPaused', false);
-                } else { // If restarting isn't allowed, end trial now
-                    this.set('isPaused', false);
-                    this.endTrial();
+                try {
+                    this.get('recorder').resume();
+                } catch (_) {
+                    return;
                 }
+                this.set('isPaused', false);
+                this.startIntro();
 
             } else { // Not currently paused: PAUSE
+
                 this.set('previousSegment', this.get('currentSegment'));
                 this.set('currentSegment', 'intro');
+
+                $('audio, video:not(#player-video)').each(function() {
+                    this.pause();
+                    this.currentTime = 0;
+                });
+
+                $('#allstimuli').hide();
+                $('#player-calibration-video').hide();
+
+                this.set('completedAudio', false);
+                this.set('completedAttn', false);
 
                 window.clearTimeout(this.get('introTimer'));
                 window.clearTimeout(this.get('stimTimer'));
                 window.clearTimeout(this.get('calTimer'));
+
                 /**
                  * When pausing study, immediately before request to pause webcam recording
                  *
                  * @event pauseVideo
                  */
+
                 this.sendTimeEvent('pauseVideo');
                 if (this.get('recorder')) {
                     this.get('recorder').pause(true);
@@ -985,18 +1036,19 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         // Begin frame. Actual test trial will start once recording is ready.
         this.send('showFullscreen');
+        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
         this.startIntro();
 
         // TODO: move handlers that just record events to the VideoRecord mixin?
-        if (this.get('experiment') && this.get('id') && this.get('session')) {
-            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+        if (_this.get('experiment') && _this.get('id') && _this.get('session')) {
+            let recorder = _this.get('videoRecorder').start(_this.get('videoId'), _this.$('#videoRecorder'), {
                 hidden: true
             });
             recorder.install({
                 record: true
             }).then(() => {
-                this.sendTimeEvent('recorderReady');
-                this.set('recordingIsReady', true);
+                _this.sendTimeEvent('recorderReady');
+                _this.set('recordingIsReady', true);
             });
             /**
              * When recorder detects a change in camera access
@@ -1005,7 +1057,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * @param {Boolean} hasCamAccess
              */
             recorder.on('onCamAccess', (hasAccess) => {
-                this.sendTimeEvent('hasCamAccess', {
+                _this.sendTimeEvent('hasCamAccess', {
                     hasCamAccess: hasAccess
                 });
             });
@@ -1017,11 +1069,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * 'NetConnection.Connect.Success' if successful
              */
             recorder.on('onConnectionStatus', (status) => {
-                this.sendTimeEvent('videoStreamConnection', {
+                _this.sendTimeEvent('videoStreamConnection', {
                     status: status
                 });
             });
-            this.set('recorder', recorder);
+            _this.set('recorder', recorder);
         }
 
     },
