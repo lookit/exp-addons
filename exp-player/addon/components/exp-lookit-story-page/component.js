@@ -227,15 +227,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'sources': {
-                                type: 'object',
-                                properties: {
-                                    'src': {
-                                        type: 'string'
-                                    },
-                                    'type': {
-                                        type: 'string'
-                                    }
-                                },
+                                type: 'string'
                             },
                             'highlights': {
                                 type: 'array',
