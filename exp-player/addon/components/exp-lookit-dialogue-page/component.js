@@ -179,7 +179,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             if (this.get('isChoiceFrame') && !(this.get('currentlyHighlighted'))) {
                 okayToProceed = false;
             } else {
-                var whichAudioCompleted = this.imageAudioCompleted;
+                var whichAudioCompleted = this.get('imageAudioCompleted');
                 this.get('images').forEach(function (im) {
                     if (im.requireAudio && !(whichAudioCompleted.has(im.id))) {
                         okayToProceed = false;
@@ -191,10 +191,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     // Are we ready to start playing the audio? Wait for recording (used if
     // doing a recording frame).
-    readyToStartAudio: Ember.computed('hasCamAccess', 'videoUploadConnected',
-        function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected'));
-        }),
+    readyToStartAudio: Ember.computed.and('hasCamAccess', 'videoUploadConnected'),
 
     meta: {
         name: 'ExpLookitDialoguePage',
@@ -626,18 +623,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
             // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + 'img/' + asset;
+            fullAsset = this.get('baseDir') + 'img/' + asset;
         } else if (type === 'audio') {
             // Audio: replace any source objects that have a
             // 'stub' attribute with the appropriate expanded source
             // objects
             fullAsset = [];
-            var types = this.audioTypes;
+            var types = this.get('audioTypes');
             asset.forEach(function(srcObj) {
                 if (srcObj.hasOwnProperty('stub')) {
                     for (var iType = 0; iType < types.length; iType++) {
                         fullAsset.push({
-                            src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
+                            src: _this.get('baseDir') + types[iType] + '/' + srcObj.stub + '.' + types[iType],
                             type: type + '/' + types[iType]
                         });
                     }
