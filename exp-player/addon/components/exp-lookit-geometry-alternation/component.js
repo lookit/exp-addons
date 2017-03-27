@@ -8,33 +8,135 @@ let {
     $
 } = Ember;
 
-// Events recorded:
-// hasCamAccess
-// onConnectionStatus
-//    status
-// 'stoppingCapture' - immediately before stopping webcam stream
-// 'exp-alternation:startTestTrial' - immediately before starting test trial block
-// 'leftFullscreen'
-// 'enteredFullscreen'
-// 'exp-alternation:clearTriangles'
-// 'exp-alternation:presentTriangles', {
-//                        Lshape: Lshapes[0],
-//                        LX: LX,
-//                        LY: LY,
-//                        LRot: LRot,
-//                        LFlip: LFlip,
-//                        LSize: LSize,
-//                        Rshape: Rshapes[0],
-//                        RX: RX,
-//                        RY: RY,
-//                        RRot: RRot,
-//                        RFlip: RFlip,
-//                        RSize: RSize
-// exp-alternation:startCalibration
-//     location
-// exp-alternation:startIntro
-// pauseVideo (immediately before request to stop recording)
-// unpauseVideo (immediately before request to resume recording)
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * Frame to implement specific test trial structure for geometry alternation
+ * experiment. Includes announcement, calibration, and alternation (test)
+ * phases. During "alternation," two streams of triangles are shown, in
+ * rectangles on the left and right of the screen: one one side both size and
+ * shape change, on the other only size changes. Frame is displayed fullscreen
+ * and video recording is conducted during calibration/test.
+ *
+ * The geometry randomizer generates a series of ExpLookitGeometryAlternation
+ * frames.
+ *
+ * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
+ * and expected to be repeated.
+
+```json
+ "frames": {
+    "alt-trial": {
+        "kind": "exp-lookit-geometry-alternation",
+        "triangleLineWidth": 8,
+        "calibrationVideoSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/webm/attention.webm",
+                "type": "video/webm"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp4/attention.mp4",
+                "type": "video/mp4"
+            }
+        ],
+        "trialLength": 60,
+        "attnLength": 10,
+        "calibrationLength": 3000,
+        "fsAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/fullscreen.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/fullscreen.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "triangleColor": "#056090",
+        "unpauseAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/return_after_pause.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "pauseAudio": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/pause.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "videoSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/webm/attentiongrabber.webm",
+                "type": "video/webm"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/mp4/attentiongrabber.mp4",
+                "type": "video/mp4"
+            }
+        ],
+        "musicSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/happy-stroll.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/happy-stroll.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "calibrationAudioSources": [
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3",
+                "type": "audio/mp3"
+            },
+            {
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg",
+                "type": "audio/ogg"
+            }
+        ],
+        "altOnLeft": true,
+        "context": true,
+        "audioSources": [
+            {
+                "type": "audio/mp3",
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/video_01.mp3"
+            },
+            {
+                "type": "audio/ogg",
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/video_01.ogg"
+            }
+        ],
+        "endAudioSources": [
+            {
+                "type": 'audio/mp3',
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/all_done.mp3"
+            },
+            {
+                "type": "audio/ogg",
+                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/all_done.ogg"
+            }
+        ]
+    }
+ }
+
+ * ```
+ * @class ExpLookitGeometryAlternation
+ * @extends ExpFrameBaseUnsafe
+ * @uses FullScreen
+ * @uses VideoRecord
+ */
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
@@ -84,41 +186,89 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         parameters: {
             type: 'object',
             properties: {
+                /**
+                 * True to use big fat triangle as context figure, or false to use small skinny triangle as context.
+                 *
+                 * @property {Boolean} context
+                 * @default true
+                 */
                 context: {
                     type: 'boolean',
                     description: 'True to use big fat triangle as context, or false to use small skinny triangle as context.',
                     default: true
                 },
+                /**
+                 * Whether to put the shape+size alternating stream on the left (other stream alternates only in size)
+                 *
+                 * @property {Boolean} altOnLeft
+                 * @default true
+                */
                 altOnLeft: {
                     type: 'boolean',
                     description: 'Whether to put the shape+size alternating stream on the left.',
                     default: true
                 },
+                /**
+                 * color of triangle outline (3 or 6 char hex, starting with #)
+                 *
+                 * @property {String} triangleColor
+                 * @default '#056090'
+                 */
                 triangleColor: {
                     type: 'string',
                     description: 'color of triangle outline (3 or 6 char hex, starting with #)',
                     default: '#056090'
                 },
+                /**
+                 * triangle line width in pixels
+                 *
+                 * @property {Integer} triangleLineWidth
+                 * @default 5
+                 */
                 triangleLineWidth: {
                     type: 'integer',
                     description: 'triangle line width in pixels',
                     default: 5
                 },
+                /**
+                 * minimum amount of time to show attention-getter in seconds
+                 *
+                 * @property {Number} attnLength
+                 * @default 5
+                 */
                 attnLength: {
                     type: 'number',
                     description: 'minimum amount of time to show attention-getter in seconds',
                     default: 5
                 },
+                /**
+                 * length of alternation trial in seconds
+                 *
+                 * @property {Number} trialLength
+                 * @default 6
+                 */
                 trialLength: {
                     type: 'number',
                     description: 'length of alternation trial in seconds',
                     default: 6
                 },
+                /**
+                 * length of single calibration segment in ms
+                 *
+                 * @property {Number} calibrationLength
+                 * @default 3000
+                 */
                 calibrationLength: {
                     type: 'number',
                     description: 'length of single calibration segment in ms',
                     default: 3000
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * instructions during attention-getter video
+                 *
+                 * @property {Object[]} audioSources
+                 */
                 audioSources: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for instructions during attention-getter video',
@@ -135,9 +285,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * music during trial
+                 *
+                 * @property {Object[]} musicSources
+                 */
                 musicSources: {
                     type: 'array',
-                    description: 'List of objects specifying audio src and type for music during attention-getter video',
+                    description: 'List of objects specifying audio src and type for music during trial',
                     default: [],
                     items: {
                         type: 'object',
@@ -151,6 +307,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio after completion of trial (optional; used for last
+                 * trial "okay to open your eyes now" announcement)
+                 *
+                 * @property {Object[]} endAudioSources
+                 */
                 endAudioSources: {
                     type: 'array',
                     description: 'Supply this to play audio at the end of the trial; list of objects specifying audio src and type',
@@ -167,6 +330,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * calibration audio (played 4 times during calibration)
+                 *
+                 * @property {Object[]} calibrationAudioSources
+                 */
                 calibrationAudioSources: {
                     type: 'array',
                     description: 'list of objects specifying audio src and type for calibration audio',
@@ -183,6 +352,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * calibration video (played from start 4 times during
+                 * calibration)
+                 *
+                 * @property {Object[]} calibrationVideoSources
+                 */
                 calibrationVideoSources: {
                     type: 'array',
                     description: 'list of objects specifying video src and type for calibration audio',
@@ -199,6 +375,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * attention-getter video (should be loopable)
+                 *
+                 * @property {Object[]} videoSources
+                 */
                 videoSources: {
                     type: 'array',
                     description: 'List of objects specifying video src and type for attention-getter video',
@@ -215,6 +397,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played upon pausing study
+                 *
+                 * @property {Object[]} pauseAudio
+                 */
                 pauseAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study',
@@ -231,6 +419,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played upon unpausing study
+                 *
+                 * @property {Object[]} unpauseAudio
+                 */
                 unpauseAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study',
@@ -247,6 +441,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         }
                     }
                 },
+                /**
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * audio played when study is paused due to not being fullscreen
+                 *
+                 * @property {Object[]} fsAudio
+                 */
                 fsAudio: {
                     type: 'array',
                     description: 'List of objects specifying audio src and type for audio played when pausing study if study is not fullscreen',
@@ -265,9 +465,24 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 }
             }
         },
+
         data: {
+            /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {Boolean} context True to use big fat triangle as context figure, or false to use small skinny triangle as context. [same as passed to this frame]
+             * @param {Boolean} altOnLeft Whether to put the shape+size alternating stream on the left (other stream alternates only in size) [same as passed to this frame]
+             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {Boolean} hasBeenPaused whether this trial was paused
+             * @param {Object} eventTimings
+             * @return {Object} The payload sent to the server
+             */
             type: 'object',
             properties: {
+                context: {
+                    type: 'boolean'
+                },
                 altOnLeft: {
                     type: 'boolean'
                 },
@@ -311,6 +526,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
+            /**
+             * Just before stopping webcam video capture
+             *
+             * @event stoppingCapture
+             */
             this.stopRecorder();
             this._super(...arguments);
         }
@@ -324,6 +544,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
 
         // Start placeholder video right away
+        /**
+         * Immediately before starting intro/announcement segment
+         *
+         * @event startIntro
+         */
         _this.send('setTimeEvent', 'exp-alternation:startIntro');
         $('#player-video')[0].play();
 
@@ -331,6 +556,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $('#player-audio')[0].play();
         _this.set('introTimer', window.setTimeout(function() {
             _this.set('completedAttn', true);
+            _this.notifyPropertyChange('readyToStartCalibration');
         }, _this.get('attnLength') * 1000));
 
     },
@@ -353,7 +579,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 _this.set('currentSegment', 'test');
             } else {
                 var thisLoc = calList.shift();
-                _this.send('setTimeEvent', 'exp-alternation:startCalibration',
+                /**
+                 * Start of EACH calibration segment
+                 *
+                 * @event startCalibration
+                 * @param {String} location location of calibration ball, relative to child: 'left', 'right', or 'center'
+                 */
+                _this.send('setTimeEvent', 'startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -376,8 +608,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     startTrial() {
 
         var _this = this;
-
-        _this.send('setTimeEvent', 'exp-alternation:startTestTrial');
+        /**
+         * Immediately before starting test trial segment
+         *
+         * @event startTestTrial
+         */
+        _this.send('setTimeEvent', 'startTestTrial');
 
         // Begin playing music; fade in and set to fade out at end of trial
         var $musicPlayer = $('#player-music');
@@ -417,8 +653,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
+            /**
+             * When change to non-fullscreen is detected
+             *
+             * @event leftFullscreen
+             */
             this.send('setTimeEvent', 'leftFullscreen');
         } else {
+            /**
+             * When change to fullscreen is detected
+             *
+             * @event enteredFullscreen
+             */
             this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
@@ -432,6 +678,37 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     drawTriangles(Lshape, LX, LY, LRot, LFlip, LSize, Rshape, RX, RY, RRot, RFlip, RSize) {
+        /**
+         * records EACH triangle presentation during test trial
+         *
+         * @event videoStreamConnection
+         * @param {String} Lshape shape of left triangle: 'skinny' or 'fat'
+         * @param {String} Rshape shape of right triangle: 'skinny' or 'fat'
+         * @param {Number} LX Horizontal offset of left triangle from rectangle center, in units where rectangle width = 70; positive = to right
+         * @param {Number} LY Vertical offset of left triangle from rectangle center, in units where rectangle height = 100.8; positive = down
+         * @param {Number} RX Horizontal offset of right triangle from rectangle center, in units where screen width = 200 and rectangle width = 70; positive = to right
+         * @param {Number} RY Vertical offset of right triangle from rectangle center, in units where rectangle height = 100.8; positive = down
+         * @param {Number} LRot rotation of left triangle in degrees. 0 degrees has long side horizontal and 15 degree angle (skinny triangle) or 60 degree angle (fat triangle) on left.
+         * @param {Number} RRot rotation of right triangle in degrees. 0 degrees has long side horizontal and 15 degree angle (skinny triangle) or 60 degree angle (fat triangle) on left.
+         * @param {Number} LFlip whether left triangle is flipped (1 = no, -1 = yes)
+         * @param {Number} RFlip whether right triangle is flipped (1 = no, -1 = yes)
+         * @param {Number} LSize size of left triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
+         * @param {Number} RSize size of right triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
+         */
+        this.sendTimeEvent('presentTriangles', {
+                Lshape: Lshape,
+                LX: LX,
+                LY: LY,
+                LRot: LRot,
+                LFlip: LFlip,
+                LSize: LSize,
+                Rshape: Rshape,
+                RX: RX,
+                RY: RY,
+                RRot: RRot,
+                RFlip: RFlip,
+                RSize: RSize
+            });
 
         var leftTriangle = `${this.triangleBases[Lshape]}
             transform=" translate(${LX}, ${LY})
@@ -447,6 +724,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     clearTriangles() {
+        /**
+         * Records each time triangles are cleared from display
+         *
+         * @event clearTriangles
+        */
+        this.sendTimeEvent('clearTriangles');
         $('#stimuli').html('');
     },
 
@@ -473,23 +756,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                    this.settings.sizeRange[1]) * RsizeBase[0];
 
         var _this = this;
-        _this.send('setTimeEvent', `exp-alternation:clearTriangles`);
         _this.clearTriangles();
         _this.set('stimTimer', window.setTimeout(function() {
-            _this.send('setTimeEvent', `exp-alternation:presentTriangles`, {
-                        Lshape: Lshapes[0],
-                        LX: LX,
-                        LY: LY,
-                        LRot: LRot,
-                        LFlip: LFlip,
-                        LSize: LSize,
-                        Rshape: Rshapes[0],
-                        RX: RX,
-                        RY: RY,
-                        RRot: RRot,
-                        RFlip: RFlip,
-                        RSize: RSize
-                    });
             _this.drawTriangles(Lshapes[0], LX, LY, LRot, LFlip, LSize,
                             Rshapes[0], RX, RY, RRot, RFlip, RSize);
             _this.set('stimTimer', window.setTimeout(function() {
@@ -527,6 +795,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
             // Currently paused: RESUME
             if (wasPaused) {
+
+                /**
+                 * When unpausing study, immediately before request to resume webcam recording
+                 *
+                 * @event unpauseVideo
+                 */
                 try {
                     this.resumeRecorder();
                 } catch (_) {
@@ -536,6 +810,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.set('isPaused', false);
             } else { // Not currently paused: PAUSE
                 window.clearTimeout(this.get('introTimer'));
+                /**
+                 * When pausing study, immediately before request to pause webcam recording
+                 *
+                 * @event pauseVideo
+                 */
                 this.pauseRecorder(true);
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
@@ -633,6 +912,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.startIntro();
 
         if (this.get('experiment') && this.get('id') && this.get('session')) {
+            /**
+             * When recorder detects a change in camera access
+             *
+             * @event onCamAccess
+             * @param {Boolean} hasCamAccess
+             */
+
             const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                 hidden: true
             });

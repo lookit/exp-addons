@@ -24,6 +24,20 @@
  */
 
 /**
+ * Reusable randomizers that can be used as part of user-defined experiments.
+ * Randomizers allow researchers to specify how to select which frames or
+ * sequences of frames to use as part of a particular session of a given
+ * experiment, for instance in order to counterbalance stimuli used across
+ * subjects, assign subjects randomly to different experimental conditions, or
+ * implement a longitudinal design where the frames used in this study depend on
+ * the frames used in the participant's last session.
+ *
+ * @module exp-player
+ * @submodule randomizers
+ * @main
+ */
+
+/**
  * Mixins that can be used to add functionality, eg to a specific frame
  *
  * @module exp-player

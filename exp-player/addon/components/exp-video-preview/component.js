@@ -11,7 +11,7 @@ import VideoRecord from '../../mixins/video-record';
  */
 
 /**
- * A frame that displays a series of videos to preview, without collecting data as a live experiment. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.
+ * A frame that displays a series of videos to preview, without collecting data as a live experiment. User can go through these at their own pace and video controls are shown. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.
  ```json
  "frames": {
     "my-sample-frame": {
@@ -93,7 +93,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     type: 'exp-video-preview',
     meta: {
         name: 'ExpVideoPreview',
-        description: 'TODO: a description of this frame goes here.',
+        description: 'Frame that displays a series of preview videos, self-paced with controls.',
         parameters: {
             type: 'object',
             properties: {

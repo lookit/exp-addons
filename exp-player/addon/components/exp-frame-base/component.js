@@ -172,7 +172,14 @@ export default Ember.Component.extend({
      * This section slightly breaks YUIDoc conventions- rather than being a literal guide to using the code, the
      *   "parameters" here are abstract descriptions of what data is captured.
      *
-     * @param {Object} eventTimings
+     * Each frame that extends ExpFrameBase will send an array `eventTimings`
+     * back to the server upon completion. This array is an ordered list (oldest
+     * to newest) of every EVENT that happened during the frame. Each event is
+     * represented as an object with at least the properties
+     * `{'eventType': EVENTNAME, 'timestamp': TIMESTAMP}`. Frame-specific events
+     * may define additional properties that are sent.
+     *
+     * @param {Array} eventTimings
      * @method serializeContent
      * @return {Object}
      */
@@ -216,6 +223,11 @@ export default Ember.Component.extend({
         },
 
         next() {
+            /**
+             * Move to next frame
+             *
+             * @event nextFrame
+             */
             this.send('setTimeEvent', 'nextFrame');
             // Only advance the form if save succeeded
             this._save()
