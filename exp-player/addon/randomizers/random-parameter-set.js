@@ -4,19 +4,148 @@
 */
 
 /**
-* Randomizer to implement counterbalancing for geometry alternation study.
+* Randomizer to implement flexible condition assignment and counterbalancing by
+* allowing the user to specify an arbitrary sequence of frames to create. A
+* set of parameters is randomly selected from a list of available parameterSets,
+* and these parameters are substituted in to the parameters specified in the
+* list of frames.
+*
 * To use, define a frame with "kind": "choice" and "sampler": "random-parameter-set",
 * as shown below, in addition to the parameters described under 'properties'.
 *
+* This
+*
 ```json
 "frames": {
-     "trials": {
+    "test-trials": {
         "sampler": "random-parameter-set",
         "kind": "choice",
-        "commonFrameProperties": ,
-        "parameterSets": ,
-        "frameList": ,
-        "parameterSetWeights"
+        "id": "test-trials",
+        "commonFrameProperties": {
+            "kind": "exp-lookit-story-page",
+            "baseDir": "https://s3.amazonaws.com/lookitcontents/ingroupobligations/",
+            "audioTypes": ["mp3", "ogg"],
+            "doRecording": true,
+            "autoProceed": false,
+            "parentTextBlock": {
+                "title": "Parents!",
+                "text": "Common instructions across test trials here",
+                "emph": true
+            }
+        },
+        "frameList": [
+            {
+                "images": [
+                    {
+                        "id": "agent",
+                        "src": "AGENTIMG1",
+                        "left": "40",
+                        "width": "20",
+                        "top": "10"
+                    },
+                    {
+                        "id": "left",
+                        "src": "LEFTIMG1",
+                        "left": "10",
+                        "width": "20",
+                        "top": "50"
+                    },
+                    {
+                        "id": "right",
+                        "src": "RIGHTIMG1",
+                        "left": "70",
+                        "width": "20",
+                        "top": "50"
+                    }
+                ],
+                "audioSources": [
+                    {
+                        "audioId": "questionaudio",
+                        "sources": [{"stub": "QUESTION1AUDIO"}],
+                        "highlights": "QUESTION1HIGHLIGHTS"
+                    }
+                ]
+            },
+            {
+                "images": [
+                    {
+                        "id": "agent",
+                        "src": "AGENTIMG2",
+                        "left": "40",
+                        "width": "20",
+                        "top": "10"
+                    },
+                    {
+                        "id": "left",
+                        "src": "LEFTIMG2",
+                        "left": "10",
+                        "width": "20",
+                        "top": "50"
+                    },
+                    {
+                        "id": "right",
+                        "src": "RIGHTIMG2",
+                        "left": "70",
+                        "width": "20",
+                        "top": "50"
+                    }
+                ],
+                "audioSources": [
+                    {
+                        "audioId": "questionaudio",
+                        "sources": [{"stub": "QUESTION2AUDIO"}],
+                        "highlights": "QUESTION2HIGHLIGHTS"
+                    }
+                ]
+            }
+        ],
+        "parameterSets": [
+            {
+                "AGENTIMG1": "flurpagent1.jpg",
+                "LEFTIMG1": "flurpvictim1.jpg",
+                "RIGHTIMG1": "zazzvictim1.jpg",
+                "QUESTION1AUDIO": "flurpleftmean1",
+                "QUESTION1HIGHLIGHTS": [
+                    {"range": [0.399293,	3.617124], "image": "agent"},
+                    {"range": [5.085112,	6.811467], "image": "left"},
+                    {"range": [6.905418,	8.702236], "image": "right"}
+                ],
+                "AGENTIMG2": "flurpagent2.jpg",
+                "LEFTIMG2": "flurpvictim2.jpg",
+                "RIGHTIMG2": "zazzvictim2.jpg",
+                "QUESTION2AUDIO": "flurpleftinduct1",
+                "QUESTION2HIGHLIGHTS": [
+                    {"range": [0.372569,	5.309110], "image": "agent"},
+                    {"range": [5.495395,	7.209213], "image": "left"},
+                    {"range": [5.495395,	7.209213], "image": "right"},
+                    {"range": [9.966225,	11.922212], "image": "left"},
+                    {"range": [12.052612,	14.008600], "image": "right"}
+                ]
+            },
+            {
+                "AGENTIMG1": "zazzagent1.jpg",
+                "LEFTIMG1": "flurpvictim1.jpg",
+                "RIGHTIMG1": "zazzvictim1.jpg",
+                "QUESTION1AUDIO": "zazzrightnice1",
+                "QUESTION1HIGHLIGHTS": [
+                    {"range": [0.348454,	3.736871], "image": "agent"},
+                    {"range": [5.395033,	6.884975], "image": "left"},
+                    {"range": [6.969085,	8.975701], "image": "right"}
+                ],
+                "AGENTIMG2": "zazzagent2.jpg",
+                "LEFTIMG2": "flurpvictim2.jpg",
+                "RIGHTIMG2": "zazzvictim2.jpg",
+                "QUESTION2AUDIO": "zazzrightinduct1",
+                "QUESTION2HIGHLIGHTS": [
+                    {"range": [0.572920,	5.138376], "image": "agent"},
+                    {"range": [5.335317,	7.089884], "image": "left"},
+                    {"range": [5.335317,	7.089884], "image": "right"},
+                    {"range": [9.721735,	11.565821], "image": "left"},
+                    {"range": [11.655340,	13.535233], "image": "right"}
+                ]
+            }
+        ],
+        "parameterSetWeights": [1, 1]
     }
 }
 
@@ -62,6 +191,12 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      * the documentation for the frameType used.
      *
      * @property {Object} commonFrameProperties
+     */
+
+    /**
+     * Unique string identifying this set of frames
+     *
+     * @property {String} id
      */
 
     /**
