@@ -695,7 +695,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          * @param {Number} LSize size of left triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
          * @param {Number} RSize size of right triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
          */
-        this.sendTimeEvent('presentTriangles', {
+        this.send('setTimeEvent', 'presentTriangles', {
                 Lshape: Lshape,
                 LX: LX,
                 LY: LY,
@@ -729,7 +729,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          *
          * @event clearTriangles
         */
-        this.sendTimeEvent('clearTriangles');
+        this.send('setTimeEvent', 'clearTriangles');
         $('#stimuli').html('');
     },
 

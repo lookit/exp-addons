@@ -390,7 +390,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         next() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
-            this.send('setTimeEvent', 'stoppingCapture');
             this.stopRecorder();
             this._super(...arguments);
         }
