@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.0</em>
+            <em>API Docs for: 0.5.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -42,6 +42,15 @@
                                 <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                                <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
+                                <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
+                                <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
+                                <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
+                                <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
+                                <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -53,7 +62,9 @@
                                 <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
                                 <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
+                                <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
                                 <li><a href="../classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
@@ -65,6 +76,7 @@
                                 <li><a href="../modules/exp-player.html">exp-player</a></li>
                                 <li><a href="../modules/frames.html">frames</a></li>
                                 <li><a href="../modules/mixins.html">mixins</a></li>
+                                <li><a href="../modules/randomizers.html">randomizers</a></li>
                                 <li><a href="../modules/services.html">services</a></li>
                             </ul>
                         </div>
@@ -116,7 +128,7 @@ import VideoRecord from &#x27;../../mixins/video-record&#x27;;
  */
 
 /**
- * A frame that displays a series of videos to preview, without collecting data as a live experiment. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.
+ * A frame that displays a series of videos to preview, without collecting data as a live experiment. User can go through these at their own pace and video controls are shown. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.
  &#x60;&#x60;&#x60;json
  &quot;frames&quot;: {
     &quot;my-sample-frame&quot;: {
@@ -221,7 +233,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     type: &#x27;exp-video-preview&#x27;,
     meta: {
         name: &#x27;ExpVideoPreview&#x27;,
-        description: &#x27;TODO: a description of this frame goes here.&#x27;,
+        description: &#x27;Frame that displays a series of preview videos, self-paced with controls.&#x27;,
         parameters: {
             type: &#x27;object&#x27;,
             properties: {
