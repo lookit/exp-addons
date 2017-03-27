@@ -1,0 +1,55 @@
+{{! template-lint-disable invalid-interactive}}
+{{! template-lint-disable style-concatenation}}
+
+<div class="exp-lookit-dialogue-page" id="exp-lookit-dialogue-page-container">
+
+    <div id="story-area">
+
+        {{#each images as |image|}}
+            <div id={{image.id}} class="story-image-container" onclick={{action 'clickSpeaker' image.id}} style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">
+                <p onclick={{action 'clickSpeaker' image.id}} class="image-text {{if (not completedAudio) 'disabled'}}"> {{image.text}} </p>
+                <img src={{image.src_parsed}} class="story-image" alt="story illustration">
+
+                <audio class="speaker-audio" onended={{action 'markAudioCompleted' image.id}}>
+                    {{#each image.imageAudio_parsed as |stream|}}
+                        <source src="{{stream.src}}" type="{{stream.type}}">
+                    {{/each}}
+                </audio>
+            </div>
+        {{/each}}
+
+        <img src={{backgroundImage_parsed}} id="background-image" alt="background image">
+    </div>
+
+    {{#unless updatedIsFullscreen}}
+        <button class="btn btn-warning exp-lookit-dialogue-page" id="fsButton" {{ action 'showFullscreen'}} >
+            please return
+            <br>
+            to fullscreen
+        </button>
+    {{/unless}}
+
+    {{#each audioSources as |audioSourceObject|}}
+        <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}}>
+            {{#each audioSourceObject.sources_parsed as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
+        </audio>
+    {{/each}}
+
+    <div id="story-controls">
+        {{#unless autoProceed}}
+            <button id="replaybutton" class="btn btn-primary left"  {{ action 'replay' }}> Replay</button>
+        {{/unless}}
+        <div id="parenttext">
+            {{exp-text-block block=parentTextBlock}}
+        </div>
+        {{#unless autoProceed}}
+            <button id="nextbutton" class="btn btn-success right" disabled={{not readyToProceed}} {{ action 'next' }} >
+                Next
+            </button>
+        {{/unless}}
+    </div>
+
+
+</div>
