@@ -5,6 +5,15 @@ YUI.add("yuidoc-meta", function(Y) {
         "ExpExitSurveyPilot",
         "ExpFrameBase",
         "ExpFrameBaseUnsafe",
+        "ExpLookitDialoguePage",
+        "ExpLookitExitSurvey",
+        "ExpLookitGeometryAlternation",
+        "ExpLookitInstructions",
+        "ExpLookitMoodQuestionnaire",
+        "ExpLookitPreferentialLooking",
+        "ExpLookitPreviewExplanation",
+        "ExpLookitStoryPage",
+        "ExpLookitText",
         "ExpMoodQuestionnaire",
         "ExpPhysicsIntro",
         "ExpPhysicsPreVideo",
@@ -19,6 +28,8 @@ YUI.add("yuidoc-meta", function(Y) {
         "MediaReload",
         "VideoRecordMixin",
         "VideoRecorderObject",
+        "geometry",
+        "randomParameterSet",
         "videoRecorder"
     ],
     "modules": [
@@ -26,6 +37,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "exp-player",
         "frames",
         "mixins",
+        "randomizers",
         "services"
     ],
     "allModules": [
@@ -47,6 +59,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "mixins",
             "name": "mixins",
             "description": "Mixins that can be used to add functionality, eg to a specific frame"
+        },
+        {
+            "displayName": "randomizers",
+            "name": "randomizers",
+            "description": "Reusable randomizers that can be used as part of user-defined experiments.\nRandomizers allow researchers to specify how to select which frames or\nsequences of frames to use as part of a particular session of a given\nexperiment, for instance in order to counterbalance stimuli used across\nsubjects, assign subjects randomly to different experimental conditions, or\nimplement a longitudinal design where the frames used in this study depend on\nthe frames used in the participant's last session."
         },
         {
             "displayName": "services",

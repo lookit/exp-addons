@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>addon/components/exp-lookit-instructions/component.js - exp-player</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.5.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
+                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
+                                <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
+                                <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                                <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
+                                <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
+                                <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
+                                <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
+                                <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
+                                <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
+                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
+                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
+                                <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
+                                <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
+                                <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
+                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
+                                <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
+                                <li><a href="../classes/FullScreen.html">FullScreen</a></li>
+                                <li><a href="../classes/geometry.html">geometry</a></li>
+                                <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
+                                <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
+                                <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
+                                <li><a href="../classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/components.html">components</a></li>
+                                <li><a href="../modules/exp-player.html">exp-player</a></li>
+                                <li><a href="../modules/frames.html">frames</a></li>
+                                <li><a href="../modules/mixins.html">mixins</a></li>
+                                <li><a href="../modules/randomizers.html">randomizers</a></li>
+                                <li><a href="../modules/services.html">services</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: addon/components/exp-lookit-instructions/component.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+import Ember from &#x27;ember&#x27;;
+
+import layout from &#x27;./template&#x27;;
+import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-unsafe/component&#x27;;
+
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on). This is intended to come immediately before test trials which may be fullscreen, and is therefore an &#x27;unsafe&#x27; frame (allows proceeding even if data isn&#x27;t saved); no user data from this frame is critical.
+
+&#x60;&#x60;&#x60;json
+ &quot;frames&quot;: {
+&quot;final-instructions&quot;: {
+            &quot;mustPlay&quot;: true,
+            &quot;kind&quot;: &quot;exp-lookit-instructions&quot;,
+            &quot;nextButtonText&quot;: &quot;Start the videos! \n (You&#x27;ll have a moment to turn around.)&quot;,
+            &quot;id&quot;: &quot;final-instructions&quot;,
+            &quot;blocks&quot;: [
+                {
+                    &quot;text&quot;: &quot;The video section will take about 6 minutes to complete. After that, you will be able to select a level of privacy for your data.&quot;
+                },
+                {
+                    &quot;title&quot;: &quot;Study overview&quot;,
+                    &quot;listblocks&quot;: [
+                        {
+                            &quot;text&quot;: &quot;There will be four videos, each a little over a minute long. &quot;
+                        },
+                        {
+                            &quot;text&quot;: &quot;You’ll hear spoken updates between videos.&quot;
+                        }
+                    ]
+                },
+                {
+                    &quot;title&quot;: &quot;During the videos&quot;,
+                    &quot;listblocks&quot;: [
+                        {
+                            &quot;text&quot;: &quot;Please face away from the screen, holding your infant so they can look over your shoulder. Please don&#x27;t look at the videos yourself, as we may not be able to use your infant’s data in that case.&quot;,
+                            &quot;image&quot;: {
+                                &quot;src&quot;: &quot;https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg&quot;,
+                                &quot;alt&quot;: &quot;Father holding child looking over his shoulder&quot;
+                            }
+                        },
+                        {
+                            &quot;text&quot;: &quot;Don’t worry if your baby isn’t looking at the screen the entire time! Please just try to keep them facing the screen so they can look if they want to.&quot;
+                        },
+                        {
+                            &quot;text&quot;: &quot;If you’d like, you can direct your infant’s attention to the screen by saying things like, &#x27;What’s happening?&#x27; But don’t talk about specific things that might be happening in the videos.&quot;
+                        }
+                    ]
+                },
+                {
+                    &quot;title&quot;: &quot;Pausing and stopping&quot;,
+                    &quot;listblocks&quot;: [
+                        {
+                            &quot;text&quot;: &quot;If your child gets fussy or distracted, or you need to attend to something else for a moment, you can pause the study during the breaks between videos. &quot;
+                        },
+                        {
+                            &quot;text&quot;: &quot;If you need to end the study early, just close the window or tab. You’ll be prompted to note any technical problems you might be experiencing and to select a privacy level for your videos.&quot;
+                        }
+                    ]
+                }
+            ],
+            &quot;audioBlock&quot;: {
+                &quot;text&quot;: &quot;You should hear &#x27;Ready to go?&#x27;&quot;,
+                &quot;warningText&quot;: &quot;Please try playing the sample audio.&quot;,
+                &quot;title&quot;: &quot;Test your audio&quot;,
+                &quot;sources&quot;: [
+                    {
+                        &quot;src&quot;: &quot;https://s3.amazonaws.com/lookitcontents/ready.mp3&quot;,
+                        &quot;type&quot;: &quot;audio/mp3&quot;
+                    },
+                    {
+                        &quot;src&quot;: &quot;https://s3.amazonaws.com/lookitcontents/ready.ogg&quot;,
+                        &quot;type&quot;: &quot;audio/ogg&quot;
+                    }
+                ]
+            }
+        }
+ }
+
+ * &#x60;&#x60;&#x60;
+ * @class ExpLookitInstructions
+ * @extends ExpFrameBaseUnsafe
+ */
+
+export default ExpFrameBaseUnsafeComponent.extend({
+    // &#x27;Unsafe&#x27; allows this component to come immediately before a full-screen
+    // trial component if needed; no user data from this frame is critical.
+    layout: layout,
+    type: &#x27;exp-lookit-instructions&#x27;,
+    didFinishSound: false,
+    meta: {
+        name: &#x27;ExpLookitInstructions&#x27;,
+        description: &#x27;A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working.&#x27;,
+        parameters: {
+            type: &#x27;object&#x27;,
+            properties: {
+                /**
+                 * A unique identifier for this item
+                 *
+                 * @property {String} id
+                 */
+                id: {
+                    type: &#x27;string&#x27;,
+                    description: &#x27;A unique identifier for this item&#x27;
+                },
+                /**
+                 * Whether the user should be forced to play the audio clip before leaving the page
+                 *
+                 * @property {Boolean} mustPlay
+                 */
+                mustPlay: {
+                    type: &#x27;boolean&#x27;,
+                    description: &#x27;Should the user be forced to play the clip before leaving the page?&#x27;,
+                    default: true
+                },
+                /**
+                 * Object specifying the audio clip to include (optional)
+                 *
+                 * @property {Object} audioBlock
+                 *    @param {String} title Title text to show above audio controls
+                 *    @param {String} text Text to show below audio controls
+                 *    @param {String} warningText Text to show in red if user tries to proceed but hasn&#x27;t played audio; only used if mustPlay is true
+                 *    @param {Object[]} sources Array of {src: &#x27;url&#x27;, type: &#x27;MIMEtype&#x27;} objects specifying audio sources
+                 */
+                audioBlock: {
+                    type: &#x27;object&#x27;,
+                    properties: {
+                        title: {
+                            type: &#x27;string&#x27;,
+                            default: &#x27;Test your audio&#x27;
+                        },
+                        text: {
+                            type: &#x27;string&#x27;,
+                            default: &#x27;You should hear &quot;Ready to go?&quot;&#x27;
+                        },
+                        warningText: {
+                            type: &#x27;string&#x27;,
+                            default: &#x27;Please try playing the sample audio.&#x27;
+                        },
+                        sources: {
+                            type: &#x27;array&#x27;,
+                            items: {
+                                type: &#x27;object&#x27;,
+                                properties: {
+                                    src: {
+                                        type: &#x27;string&#x27;
+                                    },
+                                    type: {
+                                        type: &#x27;string&#x27;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                /**
+                 * Array of objects specifying text/images of instructions to display
+                 *
+                 * @property {Object[]} blocks
+                 *   @param {String} title Title of this section
+                 *   @param {String} text Paragraph text of this section
+                 *   @param {Object[]} listblocks Object specifying bulleted points for this section. Each object is of the form:
+                 *   {text: &#x27;text of bullet point&#x27;, image: {src: &#x27;url&#x27;, alt: &#x27;alt-text&#x27;}}. Images are optional.
+                 */
+                blocks: {
+                    type: &#x27;array&#x27;,
+                    items: {
+                        type: &#x27;object&#x27;,
+                        properties: {
+                            title: {
+                                type: &#x27;string&#x27;
+                            },
+                            text: {
+                                type: &#x27;string&#x27;
+                            },
+                            listblocks: {
+                                type: &#x27;array&#x27;,
+                                items: {
+                                    type: &#x27;object&#x27;,
+                                    properties: {
+                                        text: {
+                                            type: &#x27;string&#x27;
+                                        },
+                                        image: {
+                                            type: &#x27;object&#x27;,
+                                            properties: {
+                                                src: {
+                                                    type: &#x27;string&#x27;
+                                                },
+                                                alt: {
+                                                    type: &#x27;string&#x27;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    default: []
+                },
+                /**
+                 * Whether to show a &#x27;previous&#x27; button
+                 *
+                 * @property {Boolean} showPreviousButton
+                 * @default true
+                 */
+                showPreviousButton: {
+                    type: &#x27;boolean&#x27;,
+                    default: true
+                },
+                /**
+                 * Text to display on the &#x27;next frame&#x27; button
+                 *
+                 * @property {String} nextButtonText
+                 * @default &#x27;Start the videos! \n (You\&#x27;ll have a moment to turn around.)&#x27;
+                 */
+                nextButtonText: {
+                    type: &#x27;string&#x27;,
+                    default: &#x27;Start the videos! \n (You\&#x27;ll have a moment to turn around.)&#x27;
+                }
+            },
+            required: [&#x27;id&#x27;]
+        },
+        data: {
+            /**
+             * Parameters captured and sent to the server
+             *
+             * @method serializeContent
+             * @param {Boolean} showWarning whether the warning about sound being played is currently shown
+             * @param {Boolean} didFinishSound whether the user played the sound clip
+             * @return {Object} The payload sent to the server
+             */
+            type: &#x27;object&#x27;,
+            properties: {
+                didFinishSound: {
+                    type: &#x27;boolean&#x27;,
+                    default: false
+                },
+                showWarning: {
+                    type: &#x27;boolean&#x27;,
+                    default: false
+                }
+            },
+            required: [&#x27;didFinishSound&#x27;, &#x27;showWarning&#x27;]
+        }
+    },
+
+    actions: {
+        soundPlayed() {
+            this.set(&#x27;didFinishSound&#x27;, true);
+            this.set(&#x27;preventNext&#x27;, false);
+            this.set(&#x27;showWarning&#x27;, false);
+        },
+        checkAudioThenNext() {
+            if (this.get(&#x27;preventNext&#x27;)) {
+                this.set(&#x27;showWarning&#x27;, true);
+            } else {
+                this.send(&#x27;next&#x27;);
+            }
+        }
+    },
+
+    preventNext: Ember.computed(&#x27;mustPlay&#x27;, &#x27;didFinishSound&#x27;, function() {
+        if (!this.get(&#x27;mustPlay&#x27;)) {
+            return false;
+        } else {
+            // Optionally force user to listen to clip before continuing
+            return !this.get(&#x27;didFinishSound&#x27;);
+        }
+    })
+});
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
