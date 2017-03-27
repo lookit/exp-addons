@@ -1,6 +1,6 @@
 {
   "name": "exp-player",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "The Experimenter player and associated components",
   "directories": {
     "doc": "docs",
@@ -71,6 +71,7 @@
     "broccoli-merge-trees": "^1.1.1",
     "ember-cli-babel": "^5.1.6",
     "ember-cli-htmlbars": "^1.0.3",
+    "ember-cli-template-lint": "^0.5.2",
     "ember-cp-validations": "2.9.7",
     "git-branch-is": "^0.1.0"
   },
