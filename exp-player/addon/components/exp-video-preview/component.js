@@ -63,7 +63,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         return this.get('videos')[this.get('videoIndex')];
     }),
     makeTimeEvent(eventName, extra) {
-        return this._super(`exp-physics:${eventName}`, extra);
+        return this._super(`exp-video-preview:${eventName}`, extra);
     },
     actions: {
         accept() {

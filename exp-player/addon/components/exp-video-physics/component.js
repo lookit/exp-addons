@@ -286,6 +286,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 });
             }
         },
+
         removeWarning() {
             this.set('showVideoWarning', false);
             this.get('recorder').hide();

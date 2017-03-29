@@ -518,6 +518,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     makeTimeEvent(eventName, extra) {
         return this._super(`exp-alternation:${eventName}`, extra);
     },
+
     actions: {
         // When intro audio is complete
         endAudio() {
@@ -795,12 +796,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
             // Currently paused: RESUME
             if (wasPaused) {
-
-                /**
-                 * When unpausing study, immediately before request to resume webcam recording
-                 *
-                 * @event unpauseVideo
-                 */
                 try {
                     this.resumeRecorder();
                 } catch (_) {
@@ -810,11 +805,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.set('isPaused', false);
             } else { // Not currently paused: PAUSE
                 window.clearTimeout(this.get('introTimer'));
-                /**
-                 * When pausing study, immediately before request to pause webcam recording
-                 *
-                 * @event pauseVideo
-                 */
                 this.pauseRecorder(true);
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
@@ -912,17 +902,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.startIntro();
 
         if (this.get('experiment') && this.get('id') && this.get('session')) {
-            /**
-             * When recorder detects a change in camera access
-             *
-             * @event onCamAccess
-             * @param {Boolean} hasCamAccess
-             */
 
             const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                 hidden: true
             });
             installPromise.then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
                 this.send('setTimeEvent', 'recorderReady');
                 this.set('recordingIsReady', true);
             });
