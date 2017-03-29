@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.0</em>
+            <em>API Docs for: 0.5.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -42,6 +42,15 @@
                                 <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                                <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
+                                <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
+                                <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
+                                <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
+                                <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
+                                <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
+                                <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -53,7 +62,9 @@
                                 <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
                                 <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
+                                <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
                                 <li><a href="../classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
@@ -65,6 +76,7 @@
                                 <li><a href="../modules/exp-player.html">exp-player</a></li>
                                 <li><a href="../modules/frames.html">frames</a></li>
                                 <li><a href="../modules/mixins.html">mixins</a></li>
+                                <li><a href="../modules/randomizers.html">randomizers</a></li>
                                 <li><a href="../modules/services.html">services</a></li>
                             </ul>
                         </div>
@@ -122,7 +134,7 @@
     </div>
 
 <div class="box intro">
-    <p>This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use ExpLookitText or ExpLookitInstructions instead.</p>
+    <p>This is a frame for instructions given immediately before the "Your baby the physicist" video start, with hardcoded text. Use <a href="../classes/ExpLookitText.html" class="crosslink">ExpLookitText</a> or <a href="../classes/ExpLookitInstructions.html" class="crosslink">ExpLookitInstructions</a> instead.</p>
 
 </div>
 
@@ -132,6 +144,7 @@
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
     </ul>
 
     <div>
@@ -155,6 +168,16 @@
 
 
 
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events extends">
+                            <li class="index-item event inherited">
+                                <a href="#event_nextFrame">nextFrame</a>
+
+                            </li>
+                    </ul>
+                </div>
         </div>
 
             <div id="methods" class="api-class-tabpanel">
@@ -187,7 +210,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l186"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:186</code></a>
+        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
         </p>
 
 
@@ -277,6 +300,12 @@ event sent by a particular frame</p>
 timing data. (such as when the user clicks the &quot;next&quot; button)</p>
 <p>This section slightly breaks YUIDoc conventions- rather than being a literal guide to using the code, the
 &quot;parameters&quot; here are abstract descriptions of what data is captured.</p>
+<p>Each frame that extends ExpFrameBase will send an array <code>eventTimings</code>
+back to the server upon completion. This array is an ordered list (oldest
+to newest) of every EVENT that happened during the frame. Each event is
+represented as an object with at least the properties
+<code>{'eventType': EVENTNAME, 'timestamp': TIMESTAMP}</code>. Frame-specific events
+may define additional properties that are sent.</p>
 
     </div>
 
@@ -286,7 +315,7 @@ timing data. (such as when the user clicks the &quot;next&quot; button)</p>
             <ul class="params-list">
                 <li class="param">
                         <code class="param-name">eventTimings</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
                     <div class="param-description">
@@ -311,6 +340,35 @@ timing data. (such as when the user clicks the &quot;next&quot; button)</p>
 
 
 
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                    <div id="event_nextFrame" class="events item inherited">
+                        <h3 class="name"><code>nextFrame</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Move to next frame</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
     </div>
 </div>
                     </div>
