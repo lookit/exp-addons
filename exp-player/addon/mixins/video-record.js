@@ -12,22 +12,35 @@ import Ember from 'ember';
  */
 
 /**
+ * When recorder detects a change in camera access
+ *
  * @event hasCamAccess
+ * @param {Boolean} hasCamAccess
  */
 
 /**
+ * When recorder detects a change in video stream connection status
+ *
  * @event videoStreamConnection
+ * @param {String} status status of video stream connection, e.g.
+ * 'NetConnection.Connect.Success' if successful
  */
 
 /**
+ * When pausing study, immediately before request to pause webcam recording
+ *
  * @event pauseVideo
  */
 
 /**
+ * When unpausing study, immediately before request to resume webcam recording
+ *
  * @event unpauseVideo
  */
 
 /**
+ * Just before stopping webcam video capture
+ *
  * @event stoppingCapture
  */
 

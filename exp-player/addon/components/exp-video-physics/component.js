@@ -37,7 +37,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     fsButtonID: 'fsButton',
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
@@ -256,18 +255,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            this.send('setTimeEvent', 'leftFullscreen');
             if (!this.get('isPaused')) {
                 this.pauseStudy();
             }
-        } else {
-            this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
+
     makeTimeEvent(eventName, extra) {
         return this._super(`exp-physics:${eventName}`, extra);
     },
+
     actions: {
+
         showWarning() {
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);
@@ -286,6 +285,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 });
             }
         },
+
         removeWarning() {
             this.set('showVideoWarning', false);
             this.get('recorder').hide();
@@ -448,12 +448,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
     didInsertElement() {
         this._super(...arguments);
-        $(document).on('keyup', (e) => {
+        $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {
-                if (e.which === 32) { // space
+                if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
-                    // FIXME: This binding does not seem to fire, likely because it is removed in willDestroy, called when exp-player advances to a new frame
                     this.stopRecorder();
                 }
             }
@@ -464,8 +463,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 hidden: true
             });
             installPromise.then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
                 this.send('setTimeEvent', 'recorderReady');
-                this.set('recordingIsReady', true);
             });
         }
         this.send('showFullscreen');
@@ -480,7 +483,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         this.send('setTimeEvent', 'destroyingElement');
         this._super(...arguments);
-        // Todo: make removal of event listener more specific (in case a frame comes between the video and the exit survey)
-        $(document).off('keyup');
+        $(document).off('keyup.pauser');
     }
 });

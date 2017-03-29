@@ -46,7 +46,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
 
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
@@ -63,7 +62,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         return this.get('videos')[this.get('videoIndex')];
     }),
     makeTimeEvent(eventName, extra) {
-        return this._super(`exp-physics:${eventName}`, extra);
+        return this._super(`exp-video-preview:${eventName}`, extra);
     },
     actions: {
         accept() {
@@ -74,7 +73,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                 });
                 installPromise.then(() => {
                     this.send('setTimeEvent', 'recorderReady');
-                    this.set('recordingIsReady', true);
                 });
             }
         },

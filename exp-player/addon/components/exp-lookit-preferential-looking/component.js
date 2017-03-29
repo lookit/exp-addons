@@ -723,11 +723,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
             this.stopRecorder();
             this._super(...arguments);
         }
@@ -893,29 +888,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return this._super(`exp-lookit-preferential-looking:${eventName}`, extra);
     },
 
-    // TODO: should the events here be moved to the fullscreen mixin?
     onFullscreen() {
         if (this.get('isDestroyed')) {
             return;
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.send('setTimeEvent', 'leftFullscreen');
             if (!(this.get('isPaused')) && (this.get('currentSegment') !== 'finalaudio')) {
                 this.pauseStudy();
             }
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
 
@@ -946,11 +927,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     this.currentTime = 0;
                 });
 
-                /**
-                 * When unpausing study, immediately before request to resume webcam recording
-                 *
-                 * @event unpauseVideo
-                 */
                 try {
                     this.resumeRecorder();
                 } catch (_) {
@@ -979,11 +955,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 window.clearTimeout(this.get('stimTimer'));
                 window.clearTimeout(this.get('calTimer'));
 
-                /**
-                 * When pausing study, immediately before request to pause webcam recording
-                 *
-                 * @event pauseVideo
-                 */
                 this.pauseRecorder(true);
 
                 if (this.checkFullscreen()) {
@@ -1027,14 +998,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
         this.startIntro();
 
-        // TODO: move handlers that just record events to the VideoRecord mixin?
         if (this.get('experiment') && this.get('id') && this.get('session')) {
             const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                 hidden: true
             });
             installPromise.then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
                 this.send('setTimeEvent', 'recorderReady');
-                this.set('recordingIsReady', true);
             });
         }
     },

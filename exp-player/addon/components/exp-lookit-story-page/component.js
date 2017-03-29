@@ -375,11 +375,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
             this.stopRecorder();
             this._super(...arguments);
         },
@@ -434,29 +429,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return this._super(`exp-lookit-story-page:${eventName}`, extra);
     },
 
-    // TODO: should the events here be moved to the fullscreen mixin?
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.send('setTimeEvent', 'leftFullscreen');
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.send('setTimeEvent', 'enteredFullscreen');
-        }
-    },
-
     didInsertElement() {
         this._super(...arguments);
 
@@ -483,32 +455,29 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                     hidden: true
                 });
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
                 installPromise.then(() => {
                     this.send('setTimeEvent', 'recorderReady');
-                    this.set('recordingIsReady', true);
                     this.notifyPropertyChange('readyToStartAudio');
                 });
 
-                // TODO: move handlers that just record events to the VideoRecord mixin?
-                /**
-                 * When recorder detects a change in camera access
-                 *
-                 * @event onCamAccess
-                 * @param {Boolean} hasCamAccess
-                 */
-                // Add event handler on top of what the VideoRecordMixin normally does
+                // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
                 const recorder = this.get('recorder');
-                recorder.on('onCamAccess', () => {
+                recorder.on('onCamAccess', (hasAccess) => {
+                    this.send('setTimeEvent', 'hasCamAccess', {
+                        hasCamAccess: hasAccess
+                    });
                     this.notifyPropertyChange('readyToStartAudio');
                 });
-                /**
-                 * When recorder detects a change in video stream connection status
-                 *
-                 * @event videoStreamConnection
-                 * @param {String} status status of video stream connection, e.g.
-                 * 'NetConnection.Connect.Success' if successful
-                 */
+
                 recorder.on('onConnectionStatus', () => {
+                    this.send('setTimeEvent', 'videoStreamConnection', {
+                        status: status
+                    });
                     this.notifyPropertyChange('readyToStartAudio');
                 });
             }
