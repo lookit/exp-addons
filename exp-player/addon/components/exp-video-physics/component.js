@@ -256,18 +256,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            this.send('setTimeEvent', 'leftFullscreen');
             if (!this.get('isPaused')) {
                 this.pauseStudy();
             }
-        } else {
-            this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
+
     makeTimeEvent(eventName, extra) {
         return this._super(`exp-physics:${eventName}`, extra);
     },
+
     actions: {
+
         showWarning() {
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);

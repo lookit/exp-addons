@@ -648,28 +648,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            /**
-             * When change to non-fullscreen is detected
-             *
-             * @event leftFullscreen
-             */
-            this.send('setTimeEvent', 'leftFullscreen');
-        } else {
-            /**
-             * When change to fullscreen is detected
-             *
-             * @event enteredFullscreen
-             */
-            this.send('setTimeEvent', 'enteredFullscreen');
-        }
-    },
-
     getRandomElement(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
     },

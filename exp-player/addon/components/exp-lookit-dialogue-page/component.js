@@ -646,37 +646,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return fullAsset;
     },
 
-    // TODO: should this be moved to the recording mixin?
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-lookit-dialogue-page:${name}`, opts);
-    },
-
-    // TODO: should the events here be moved to the fullscreen mixin?
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.sendTimeEvent('leftFullscreen');
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.sendTimeEvent('enteredFullscreen');
-        }
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-lookit-dialogue-page:${eventName}`, extra);
     },
 
     didInsertElement() {

@@ -888,29 +888,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return this._super(`exp-lookit-preferential-looking:${eventName}`, extra);
     },
 
-    // TODO: should the events here be moved to the fullscreen mixin?
     onFullscreen() {
         if (this.get('isDestroyed')) {
             return;
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.send('setTimeEvent', 'leftFullscreen');
             if (!(this.get('isPaused')) && (this.get('currentSegment') !== 'finalaudio')) {
                 this.pauseStudy();
             }
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.send('setTimeEvent', 'enteredFullscreen');
         }
     },
 
