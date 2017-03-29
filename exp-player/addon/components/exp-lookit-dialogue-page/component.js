@@ -713,7 +713,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
                 // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
                 const recorder = this.get('recorder');
-                recorder.on('onCamAccess', () => {
+                recorder.on('onCamAccess', (hasAccess) => {
                     this.send('setTimeEvent', 'hasCamAccess', {
                         hasCamAccess: hasAccess
                     });
