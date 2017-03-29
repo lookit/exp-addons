@@ -1009,7 +1009,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @event recorderReady
                  */
                 this.send('setTimeEvent', 'recorderReady');
-                this.set('recordingIsReady', true);
             });
         }
     },

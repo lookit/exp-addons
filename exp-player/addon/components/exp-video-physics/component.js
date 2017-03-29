@@ -37,7 +37,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     fsButtonID: 'fsButton',
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
@@ -470,7 +469,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                  * @event recorderReady
                  */
                 this.send('setTimeEvent', 'recorderReady');
-                this.set('recordingIsReady', true);
             });
         }
         this.send('showFullscreen');

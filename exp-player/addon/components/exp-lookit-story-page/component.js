@@ -462,7 +462,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  */
                 installPromise.then(() => {
                     this.send('setTimeEvent', 'recorderReady');
-                    this.set('recordingIsReady', true);
                     this.notifyPropertyChange('readyToStartAudio');
                 });
 
