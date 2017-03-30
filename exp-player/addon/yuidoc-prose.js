@@ -1,6 +1,12 @@
 // Prose for YUIDoc: define text used in module descriptions
 
 /**
+ * Reusable parts of experiments. Includes frame definitions, randomizers, and utilities.
+ * @module exp-player
+ * @main
+ */
+
+/**
  * Reusable components for UI rendering and interactivity
  *
  * @module exp-player

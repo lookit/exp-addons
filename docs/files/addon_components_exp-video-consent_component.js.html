@@ -178,19 +178,17 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     recordingStarted: false,
 
     didInsertElement() {
-        var recorder = this.get(&#x27;videoRecorder&#x27;).start(this.get(&#x27;videoId&#x27;), this.$(&#x27;.recorder&#x27;));
-        recorder.install({record: false});
-        this.set(&#x27;recorder&#x27;, recorder);
+        this.setupRecorder(this.$(&#x27;.recorder&#x27;), false);
     },
     actions: {
         record() {
-            this.get(&#x27;recorder&#x27;).record();
+            this.startRecorder();
             window.setTimeout(() =&gt; {
                 this.set(&#x27;recordingStarted&#x27;, true);
             }, 2000);
         },
         finish() {
-            this.get(&#x27;recorder&#x27;).stop().then(() =&gt; {
+            this.stopRecorder().then(() =&gt; {
                 this.send(&#x27;next&#x27;);
             });
         }

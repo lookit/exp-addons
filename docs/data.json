@@ -315,7 +315,9 @@
         },
         "addon/yuidoc-prose.js": {
             "name": "addon/yuidoc-prose.js",
-            "modules": {},
+            "modules": {
+                "exp-player": 1
+            },
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -366,8 +368,11 @@
             },
             "fors": {},
             "namespaces": {},
+            "tag": "module",
             "file": "addon/services/video-recorder.js",
-            "line": 377
+            "line": 379,
+            "description": "Reusable parts of experiments. Includes frame definitions, randomizers, and utilities.",
+            "itemtype": "main"
         },
         "frames": {
             "name": "frames",
@@ -479,7 +484,7 @@
             "module": "exp-player",
             "namespace": "",
             "file": "addon/services/video-recorder.js",
-            "line": 377,
+            "line": 379,
             "description": "Services used to share data or provide centralized functionality",
             "tag": "main",
             "itemtype": "main"
@@ -995,7 +1000,7 @@
             "submodule": "services",
             "namespace": "",
             "file": "addon/services/video-recorder.js",
-            "line": 40,
+            "line": 42,
             "description": "An instance of a video recorder tied to or used by one specific page. A given experiment may use more than one\n  video recorder depending on the number of video capture frames."
         },
         "videoRecorder": {
@@ -1010,7 +1015,7 @@
             "submodule": "services",
             "namespace": "",
             "file": "addon/services/video-recorder.js",
-            "line": 377,
+            "line": 379,
             "description": "A service designed to facilitate video recording by providing helper methods and managing multiple recorder objects\n Using a persistent service is intended to ensure we destroy recorder elements when the video is done uploading,\n rather than just when the user exits the frame"
         }
     },
@@ -1039,7 +1044,34 @@
         },
         {
             "file": "addon/components/exp-frame-base/component.js",
-            "line": 214,
+            "line": 193,
+            "description": "Create the time event payload for a particular frame / event. This can be overridden to add fields to every\n event sent by a particular frame",
+            "itemtype": "method",
+            "name": "makeTimeEvent",
+            "params": [
+                {
+                    "name": "eventName",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "extra",
+                    "description": "An object with additional properties to be sent to the server",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Event type, time, and any additional metadata provided",
+                "type": "Object"
+            },
+            "class": "ExpFrameBase",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-frame-base/component.js",
+            "line": 226,
             "description": "Move to next frame",
             "itemtype": "event",
             "name": "nextFrame",
@@ -1721,7 +1753,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 527,
+            "line": 529,
             "description": "Just before stopping webcam video capture",
             "itemtype": "event",
             "name": "stoppingCapture",
@@ -1731,7 +1763,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 548,
+            "line": 547,
             "description": "Immediately before starting intro/announcement segment",
             "itemtype": "event",
             "name": "startIntro",
@@ -1741,7 +1773,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 583,
+            "line": 582,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -1758,7 +1790,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 613,
+            "line": 611,
             "description": "Immediately before starting test trial segment",
             "itemtype": "event",
             "name": "startTestTrial",
@@ -1768,7 +1800,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 670,
+            "line": 656,
             "description": "When change to non-fullscreen is detected",
             "itemtype": "event",
             "name": "leftFullscreen",
@@ -1778,7 +1810,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 677,
+            "line": 663,
             "description": "When change to fullscreen is detected",
             "itemtype": "event",
             "name": "enteredFullscreen",
@@ -1788,7 +1820,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 695,
+            "line": 681,
             "description": "records EACH triangle presentation during test trial",
             "itemtype": "event",
             "name": "videoStreamConnection",
@@ -1860,7 +1892,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 741,
+            "line": 727,
             "description": "Records each time triangles are cleared from display",
             "itemtype": "event",
             "name": "clearTriangles",
@@ -1870,7 +1902,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 812,
+            "line": 799,
             "description": "When unpausing study, immediately before request to resume webcam recording",
             "itemtype": "event",
             "name": "unpauseVideo",
@@ -1880,7 +1912,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 827,
+            "line": 813,
             "description": "When pausing study, immediately before request to pause webcam recording",
             "itemtype": "event",
             "name": "pauseVideo",
@@ -1890,7 +1922,7 @@
         },
         {
             "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 942,
+            "line": 915,
             "description": "When recorder detects a change in camera access",
             "itemtype": "event",
             "name": "onCamAccess",
@@ -1899,23 +1931,6 @@
                     "name": "hasCamAccess",
                     "description": "",
                     "type": "Boolean"
-                }
-            ],
-            "class": "ExpLookitGeometryAlternation",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-geometry-alternation/component.js",
-            "line": 953,
-            "description": "When recorder detects a change in video stream connection status",
-            "itemtype": "event",
-            "name": "videoStreamConnection",
-            "params": [
-                {
-                    "name": "status",
-                    "description": "status of video stream connection, e.g.\n'NetConnection.Connect.Success' if successful",
-                    "type": "String"
                 }
             ],
             "class": "ExpLookitGeometryAlternation",
@@ -2454,7 +2469,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 727,
+            "line": 726,
             "description": "Just before stopping webcam video capture",
             "itemtype": "event",
             "name": "stoppingCapture",
@@ -2464,7 +2479,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 791,
+            "line": 788,
             "description": "Just before starting intro segment",
             "itemtype": "event",
             "name": "startIntro",
@@ -2474,7 +2489,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 826,
+            "line": 823,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -2491,7 +2506,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 915,
+            "line": 903,
             "description": "Upon detecting change out of fullscreen mode",
             "itemtype": "event",
             "name": "leftFullscreen",
@@ -2501,7 +2516,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 925,
+            "line": 913,
             "description": "Upon detecting change to fullscreen mode",
             "itemtype": "event",
             "name": "enteredFullscreen",
@@ -2511,7 +2526,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 961,
+            "line": 949,
             "description": "When unpausing study, immediately before request to resume webcam recording",
             "itemtype": "event",
             "name": "unpauseVideo",
@@ -2521,44 +2536,10 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 995,
+            "line": 982,
             "description": "When pausing study, immediately before request to pause webcam recording",
             "itemtype": "event",
             "name": "pauseVideo",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 1057,
-            "description": "When recorder detects a change in camera access",
-            "itemtype": "event",
-            "name": "onCamAccess",
-            "params": [
-                {
-                    "name": "hasCamAccess",
-                    "description": "",
-                    "type": "Boolean"
-                }
-            ],
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 1068,
-            "description": "When recorder detects a change in video stream connection status",
-            "itemtype": "event",
-            "name": "videoStreamConnection",
-            "params": [
-                {
-                    "name": "status",
-                    "description": "status of video stream connection, e.g.\n'NetConnection.Connect.Success' if successful",
-                    "type": "String"
-                }
-            ],
             "class": "ExpLookitPreferentialLooking",
             "module": "exp-player",
             "submodule": "frames"
@@ -2857,7 +2838,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 379,
+            "line": 378,
             "description": "Just before stopping webcam video capture",
             "itemtype": "event",
             "name": "stoppingCapture",
@@ -2867,7 +2848,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 453,
+            "line": 444,
             "description": "Upon detecting change out of fullscreen mode",
             "itemtype": "event",
             "name": "leftFullscreen",
@@ -2877,7 +2858,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 460,
+            "line": 451,
             "description": "Upon detecting change to fullscreen mode",
             "itemtype": "event",
             "name": "enteredFullscreen",
@@ -2887,7 +2868,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 504,
+            "line": 493,
             "description": "When recorder detects a change in camera access",
             "itemtype": "event",
             "name": "onCamAccess",
@@ -2904,7 +2885,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 516,
+            "line": 504,
             "description": "When recorder detects a change in video stream connection status",
             "itemtype": "event",
             "name": "videoStreamConnection",
@@ -3026,7 +3007,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 88,
+            "line": 86,
             "description": "A unique identifier for this item",
             "itemtype": "property",
             "name": "id",
@@ -3037,7 +3018,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 97,
+            "line": 95,
             "description": "Title of the consent document",
             "itemtype": "property",
             "name": "title",
@@ -3049,7 +3030,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 107,
+            "line": 105,
             "description": "Array of paragraphs of the consent document, each with title and text.",
             "itemtype": "property",
             "name": "blocks",
@@ -3073,7 +3054,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 130,
+            "line": 128,
             "description": "Text the user is asked to read aloud to consent",
             "itemtype": "property",
             "name": "prompt",
@@ -3085,7 +3066,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 142,
+            "line": 140,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3350,7 +3331,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 127,
+            "line": 104,
             "description": "A series of preview videos to display within a single frame, defined as an array of objects.",
             "itemtype": "property",
             "name": "videos",
@@ -3378,7 +3359,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 169,
+            "line": 146,
             "description": "Text on the button prompt asking the user to continue to the videos",
             "itemtype": "property",
             "name": "prompt",
@@ -3389,7 +3370,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 187,
+            "line": 164,
             "description": "Informational text to display to the user before videos are shown, along with button to continue",
             "itemtype": "property",
             "name": "text",
@@ -3400,7 +3381,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 202,
+            "line": 179,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3468,7 +3449,63 @@
         },
         {
             "file": "addon/mixins/video-record.js",
-            "line": 15,
+            "line": 14,
+            "itemtype": "event",
+            "name": "hasCamAccess",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 18,
+            "itemtype": "event",
+            "name": "videoStreamConnection",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 22,
+            "itemtype": "event",
+            "name": "pauseVideo",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 26,
+            "itemtype": "event",
+            "name": "unpauseVideo",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 30,
+            "itemtype": "event",
+            "name": "stoppingCapture",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 36,
+            "description": "The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,\n  and to set this property. If present, the mixin will automatically use it for things such as capturing stream\n  time.",
+            "itemtype": "property",
+            "name": "recorder",
+            "type": "VideoRecorder",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 44,
             "description": "This mixin automatically injects the video recorder service, making its methods available to your frame",
             "itemtype": "property",
             "name": "videoRecorder",
@@ -3478,11 +3515,123 @@
         },
         {
             "file": "addon/mixins/video-record.js",
-            "line": 21,
+            "line": 50,
             "description": "A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`\n\nThere may be additional prefixes/suffixes added elsewhere in the video recording process. A final video\ncaptured via this mixin might this have a name like:\n  `videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv`",
             "itemtype": "property",
             "name": "videoId",
             "type": "String",
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 66,
+            "description": "Extend any base time event capture with information about the recorded video",
+            "itemtype": "method",
+            "name": "makeTimeEvent",
+            "params": [
+                {
+                    "name": "eventName",
+                    "description": ""
+                },
+                {
+                    "name": "extra",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "Event data object",
+                "type": "Object"
+            },
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 84,
+            "description": "Set up a video recorder instance",
+            "itemtype": "method",
+            "name": "setupRecorder",
+            "params": [
+                {
+                    "name": "element",
+                    "description": "A DOM node representing where to mount the recorder",
+                    "type": "Node"
+                },
+                {
+                    "name": "record",
+                    "description": "Whether to start the recording immediately",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "settings",
+                    "description": "Config to pass to the newly created VideoRecorder",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "A promise representing the result of installing the recorder",
+                "type": "Promise"
+            },
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 112,
+            "description": "Pause the recorder (and capture timing events)",
+            "itemtype": "method",
+            "name": "pauseRecorder",
+            "params": [
+                {
+                    "name": "skipIfMissing",
+                    "description": "If provided (and true), don't raise an error if recording isn't ready yet.",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 125,
+            "description": "Resume a paused recording",
+            "itemtype": "method",
+            "name": "resumeRecorder",
+            "throws": {
+                "description": "an exception if recorder fails to resume TODO: Based on existing usage anyway"
+            },
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 138,
+            "description": "Start recording",
+            "itemtype": "method",
+            "name": "startRecorder",
+            "return": {
+                "description": "Promise Resolves when recording has started"
+            },
+            "class": "VideoRecordMixin",
+            "module": "exp-player",
+            "submodule": "mixins"
+        },
+        {
+            "file": "addon/mixins/video-record.js",
+            "line": 152,
+            "description": "Stop the recording",
+            "itemtype": "method",
+            "name": "stopRecorder",
+            "return": {
+                "description": "Promise A promise that resolves when upload is complete"
+            },
             "class": "VideoRecordMixin",
             "module": "exp-player",
             "submodule": "mixins"
@@ -3629,7 +3778,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 82,
+            "line": 84,
             "description": "Install a recorder onto the page and optionally begin recording immediately.",
             "itemtype": "method",
             "name": "install",
@@ -3649,7 +3798,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 170,
+            "line": 172,
             "description": "Start recording a video, and allow the state of the recording to be accessed for later usage",
             "itemtype": "method",
             "name": "record",
@@ -3663,7 +3812,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 204,
+            "line": 206,
             "description": "Pause the recorder. If optional skipIfMissing argument is provided (and\n  true), don't raise an error if recording isn't ready yet.",
             "itemtype": "method",
             "name": "pause",
@@ -3679,7 +3828,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 219,
+            "line": 221,
             "description": "Resume the recording",
             "itemtype": "method",
             "name": "resume",
@@ -3689,7 +3838,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 232,
+            "line": 234,
             "description": "Get a timestamp based on the current recording position. Useful to ensure that tracked timing events\n line up with the video.",
             "itemtype": "method",
             "name": "getTime",
@@ -3703,7 +3852,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 246,
+            "line": 248,
             "description": "Stop recording and save the video to the server",
             "itemtype": "method",
             "name": "stop",
@@ -3719,7 +3868,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 282,
+            "line": 284,
             "description": "Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to\n  distract the user.",
             "itemtype": "method",
             "name": "hide",
@@ -3729,7 +3878,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 292,
+            "line": 294,
             "description": "Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix\n  a problem with video capture settings",
             "itemtype": "method",
             "name": "show",
@@ -3743,7 +3892,7 @@
         },
         {
             "file": "addon/services/video-recorder.js",
-            "line": 304,
+            "line": 306,
             "description": "Uninstall the video recorder from the page",
             "itemtype": "method",
             "name": "destroy",

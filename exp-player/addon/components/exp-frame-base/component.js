@@ -80,9 +80,9 @@ export default Ember.Component.extend({
     // see https://github.com/emberjs/ember.js/issues/3908. Moved
     // to init because we were losing the first event per instance of a frame
     // when it was in didReceiveAttrs.
-    setTimings: function () {
+    setTimings: Ember.on('init', function () {
         this.set('eventTimings', []);
-    }.on('init'),
+    }),
 
     loadData: function (frameData) { // jshint ignore:line
         return null;
@@ -190,18 +190,30 @@ export default Ember.Component.extend({
         return serialized;
     },
 
+    /**
+     * Create the time event payload for a particular frame / event. This can be overridden to add fields to every
+     *  event sent by a particular frame
+     * @method makeTimeEvent
+     * @param {String} eventName
+     * @param {Object} [extra] An object with additional properties to be sent to the server
+     * @return {Object} Event type, time, and any additional metadata provided
+     */
+    makeTimeEvent(eventName, extra) {
+        const curTime = new Date();
+        const eventData = {
+            eventType: eventName,
+            timestamp: curTime.toISOString()
+        };
+        Ember.merge(eventData, extra);
+        return eventData;
+    },
+
     actions: {
         setTimeEvent(eventName, extra) {
             console.log(`Timing event captured for ${eventName}`, extra);
-            // Track a particular timing event
-            var curTime = new Date();
-            var eventData = {
-                eventType: eventName,
-                timestamp: curTime.toISOString()
-            };
-            Ember.merge(eventData, extra || {});
-            // Copy timing event into parent dict; TODO is there a more elegant way?
-            var timings = this.get('eventTimings');
+            let eventData = this.makeTimeEvent(eventName, extra);
+            // Copy timing event into a single dict for this component instance
+            let timings = this.get('eventTimings');
             timings.push(eventData);
             this.set('eventTimings', timings);
         },
