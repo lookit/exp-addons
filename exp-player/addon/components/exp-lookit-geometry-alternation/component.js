@@ -550,12 +550,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          *
          * @event startIntro
          */
-        _this.send('setTimeEvent', 'exp-alternation:startIntro');
+        this.send('setTimeEvent', 'startIntro');
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
         $('#player-audio')[0].play();
-        _this.set('introTimer', window.setTimeout(function() {
+        this.set('introTimer', window.setTimeout(function() {
             _this.set('completedAttn', true);
             _this.notifyPropertyChange('readyToStartCalibration');
         }, _this.get('attnLength') * 1000));
