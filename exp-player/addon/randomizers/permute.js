@@ -100,11 +100,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         array[j] = temp;
     }
 
-    var resolvedConfigs = [];
-    array.forEach((frameId) => {
-        resolvedConfigs.push(...resolveFrame(frameId));
-    });
-
     var thisFrame = {};
     var frames = [];
     for (var iFrame = 0; iFrame < array.length; iFrame++) {
