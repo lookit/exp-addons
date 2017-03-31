@@ -347,16 +347,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    parentTextStyle: Ember.computed('parentTextBlock', function() {
-        var parentTextBlock = this.get('parentTextBlock') || {};
-        var css = parentTextBlock.css || {};
-        var cssString = '';
-        $.each(css, function(propName, value) {
-            cssString += new Ember.Handlebars.SafeString(`${propName}:  ${value};`);
-        });
-        return cssString;
-    }),
-
     audioObserver: Ember.observer('readyToStartAudio', function(frame) {
         if (frame.get('readyToStartAudio')) {
             $('#waitForVideo').hide();
@@ -466,6 +456,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             Ember.set(aud, 'sources_parsed', this.expandAsset(aud.sources, 'audio'));
         });
         this.set('audioSources', audioSources);
+
+        var parentTextBlock = this.get('parentTextBlock') || {};
+        var css = parentTextBlock.css || {};
+        $('#parenttext').css(css);
 
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);

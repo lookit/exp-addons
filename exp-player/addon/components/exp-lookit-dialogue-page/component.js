@@ -618,16 +618,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    parentTextStyle: Ember.computed('parentTextBlock', function() {
-        var parentTextBlock = this.get('parentTextBlock') || {};
-        var css = parentTextBlock.css || {};
-        var cssString = '';
-        $.each(css, function(propName, value) {
-            cssString += new Ember.Handlebars.SafeString(`${propName}:  ${value};`);
-        });
-        return cssString;
-    }),
-
     // Utility to expand stubs into either full URLs (for images) or
     // array of {src: 'url', type: 'MIMEtype'} objects (for audio).
     expandAsset(asset, type) {
@@ -685,6 +675,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         this.set('images', images);
         this.set('audioSources', audioSources);
+
+        var parentTextBlock = this.get('parentTextBlock') || {};
+        var css = parentTextBlock.css || {};
+        $('#parenttext').css(css);
 
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
