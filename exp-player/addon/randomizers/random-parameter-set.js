@@ -332,6 +332,14 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.
     }
 
+    /**
+     * Parameters captured and sent to the server
+     *
+     * @method conditions
+     * @param {Number} conditionNum the index of the parameterSet chosen
+     * @param {Object} parameterSet the parameterSet chosen
+     */
+
     return [frames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
 
 };

@@ -45,7 +45,11 @@ let {
             "parentTextBlock": {
                 "title": "Parents!",
                 "text": "some instructions",
-                "emph": true
+                "emph": true,
+                "css": {
+                    "color": "red",
+                    "font-size": "12px"
+                }
             },
             "images": [
                 {
@@ -259,12 +263,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     }
                 },
                 /**
-                 * Text block to display to parent.
+                 * Text block to display to parent.  (Each field is optional)
                  *
                  * @property {Object} parentTextBlock
                  *   @param {String} title title to display
                  *   @param {String} text paragraph of text
                  *   @param {Boolean} emph whether to bold this paragraph
+                 *   @param {Object} css object specifying any css properties
+                 *      to apply to this section, and their values - e.g.
+                 *      {'color': 'red', 'font-size': '12px'}
                  */
                 parentTextBlock: {
                     type: 'object',
@@ -277,9 +284,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         },
                         emph: {
                             type: 'boolean'
+                        },
+                        css: {
+                            type: 'object',
+                            default: {}
                         }
                     },
-                    default: []
+                    default: {}
                 },
                 /**
                  * Array of images to display and information about their placement
@@ -445,6 +456,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             Ember.set(aud, 'sources_parsed', this.expandAsset(aud.sources, 'audio'));
         });
         this.set('audioSources', audioSources);
+
+        var parentTextBlock = this.get('parentTextBlock') || {};
+        var css = parentTextBlock.css || {};
+        $('#parenttext').css(css);
 
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
