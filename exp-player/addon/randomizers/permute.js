@@ -11,13 +11,15 @@
 * To use, define a frame with "kind": "choice" and "sampler": "permute",
 * as shown below, in addition to the parameters described under 'properties'.
 *
-*
 ```json
 "frames": {
     "test-trials": {
         "sampler": "permute",
         "kind": "choice",
         "id": "test-trials",
+        "commonFrameProperties": {
+            "showPreviousButton": false
+        },
         "frameOptions": [
             {
                 "blocks": [
@@ -30,7 +32,6 @@
                         "text": "Some more about hippos..."
                     }
                 ],
-                "showPreviousButton": false,
                 "kind": "exp-lookit-text"
             },
             {
@@ -41,17 +42,15 @@
                         "title": "dolphins!"
                     }
                 ],
-                "showPreviousButton": false,
                 "kind": "exp-lookit-text"
-            },
+            }
         ]
     }
 }
-
+*
 * ```
 * @class permute
 */
-
 
 var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
@@ -78,15 +77,13 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      * @property {Object[]} frameOptions
      */
 
-     /**
+    /**
      * Object describing common parameters to use in EVERY frame created
      * by this randomizer. Parameter names and values are as described in
      * the documentation for the frameType used.
      *
      * @property {Object} commonFrameProperties
      */
-
-    // jscs:disable
 
     /*
      * Randomize array element order in-place.
@@ -114,6 +111,13 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         thisFrame = resolveFrame(frameId, thisFrame)[0];
         frames.push(...thisFrame);
     }
+
+    /**
+     * Parameters captured and sent to the server
+     *
+     * @method conditions
+     * @param {Object[]} frameList the list of frames used, in the final shuffled order
+     */
     return [frames, {'frameList': array}];
 };
 export default randomizer;

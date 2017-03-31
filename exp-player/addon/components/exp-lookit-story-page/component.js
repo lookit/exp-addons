@@ -349,7 +349,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     parentTextStyle: Ember.computed('parentTextBlock', function() {
         var parentTextBlock = this.get('parentTextBlock') || {};
-        var css = parentTextBlock['css'] || {};
+        var css = parentTextBlock.css || {};
         var cssString = '';
         $.each(css, function(propName, value) {
             cssString += new Ember.Handlebars.SafeString(`${propName}:  ${value};`);
