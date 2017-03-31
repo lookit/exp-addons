@@ -58,7 +58,11 @@ let {
             "parentTextBlock": {
                 "title": "Parents!",
                 "text": "some instructions",
-                "emph": true
+                "emph": true,
+                "css": {
+                    "color": "red",
+                    "font-size": "12px"
+                }
             },
             "images": [
                 {
@@ -376,12 +380,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     }
                 },
                 /**
-                 * Text block to display to parent.
+                 * Text block to display to parent. (Each field is optional)
                  *
                  * @property {Object} parentTextBlock
                  *   @param {String} title title to display
                  *   @param {String} text paragraph of text
                  *   @param {Boolean} emph whether to bold this paragraph
+                 *   @param {Object} css object specifying any css properties
+                 *      to apply to this section, and their values - e.g.
+                 *      {'color': 'red', 'font-size': '12px'}.
                  */
                 parentTextBlock: {
                     type: 'object',
@@ -394,6 +401,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         },
                         emph: {
                             type: 'boolean'
+                        },
+                        css: {
+                            type: 'object',
+                            default: {}
                         }
                     },
                     default: []
@@ -606,6 +617,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
 
     },
+
+    parentTextStyle: Ember.computed('parentTextBlock', function() {
+        var parentTextBlock = this.get('parentTextBlock') || {};
+        var css = parentTextBlock['css'] || {};
+        var cssString = '';
+        $.each(css, function(propName, value) {
+            cssString += new Ember.Handlebars.SafeString(`${propName}:  ${value};`);
+        });
+        return cssString;
+    }),
 
     // Utility to expand stubs into either full URLs (for images) or
     // array of {src: 'url', type: 'MIMEtype'} objects (for audio).

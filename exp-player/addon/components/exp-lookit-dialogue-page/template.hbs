@@ -41,7 +41,7 @@
         {{#unless autoProceed}}
             <button id="replaybutton" class="btn btn-primary left"  {{ action 'replay' }}> Replay</button>
         {{/unless}}
-        <div id="parenttext">
+        <div id="parenttext" style={{parentTextStyle}}>
             {{exp-text-block block=parentTextBlock}}
         </div>
         {{#unless autoProceed}}
