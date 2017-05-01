@@ -2,6 +2,9 @@
 
 A shared home for all of our shared addons
 
+**For historical reasons, all PRs targeted to ISP must be aimed at the "ISP" branch**.
+
+
 # Installation
 
 Before beginning, you will need to install [Yarn](https://yarnpkg.com/en/docs/install), a package manager (like npm). 
