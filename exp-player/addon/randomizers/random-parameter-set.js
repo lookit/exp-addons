@@ -313,13 +313,16 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
     for (var iFrame = 0; iFrame < frameConfig.frameList.length; iFrame++) {
 
-        // Assign parameters common to all frames made by this randomizer
+        // Assign parameters common to all frames made by this randomizer.
+        // Use deep copies to make sure that substitutions (replaceValues)
+        // don't affect the original frameConfig values if they're objects
+        // themselves!!
         thisFrame = {};
-        Object.assign(thisFrame, frameConfig.commonFrameProperties);
+        $.extend(true, thisFrame, frameConfig.commonFrameProperties);
 
         // Assign parameters specific to this frame (allow to override
         // common parameters assigned above)
-        Object.assign(thisFrame, frameConfig.frameList[iFrame]);
+        $.extend(true, thisFrame, frameConfig.frameList[iFrame]);
 
         // Substitute any properties that can be replaced based on
         // the parameter set.
