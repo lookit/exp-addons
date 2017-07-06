@@ -3,6 +3,8 @@
 * @submodule randomizers
 */
 
+import Ember from 'ember';
+
 /**
 * Randomizer to implement flexible condition assignment and counterbalancing by
 * allowing the user to specify an arbitrary sequence of frames to create. A
@@ -318,11 +320,11 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // don't affect the original frameConfig values if they're objects
         // themselves!!
         thisFrame = {};
-        $.extend(true, thisFrame, frameConfig.commonFrameProperties);
+        Ember.$.extend(true, thisFrame, frameConfig.commonFrameProperties);
 
         // Assign parameters specific to this frame (allow to override
         // common parameters assigned above)
-        $.extend(true, thisFrame, frameConfig.frameList[iFrame]);
+        Ember.$.extend(true, thisFrame, frameConfig.frameList[iFrame]);
 
         // Substitute any properties that can be replaced based on
         // the parameter set.
