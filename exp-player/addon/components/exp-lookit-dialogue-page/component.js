@@ -512,6 +512,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     audioObserver: Ember.observer('readyToStartAudio', function(frame) {
         if (frame.get('readyToStartAudio')) {
+            $('#waitForVideo').hide();
             frame.set('currentAudioIndex', -1);
             frame.send('playNextAudioSegment');
         }
