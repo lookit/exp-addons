@@ -144,4 +144,12 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
     font-size: x-large;
 }
 
+.exp-lookit-dialogue-page #waitForVideo, #experiment-player.player-fullscreen .exp-lookit-dialogue-page #waitForVideo {
+    font-size: x-large;
+    margin-top: 10%;
+    width: 400px;
+    margin-left: -200px;
+    left: 50%;
+    position: fixed;
+}
 
