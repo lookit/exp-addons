@@ -61,10 +61,10 @@ function getConditions(lastSession, frameId) {
     if (!lastFrameConditions) {
         startType = Math.floor(Math.random() * cb.conceptOrderRotation.length);
         showStay = Math.floor(Math.random() * cb.useFallRotation.length);
-        var whichObjectG = Math.floor(Math.random() * 6);
-        var whichObjectI = Math.floor(Math.random() * 6);
-        var whichObjectS = Math.floor(Math.random() * 6);
-        var whichObjectC = Math.floor(Math.random() * 6);
+        var whichObjectG = Math.floor(Math.random() * cb.objectRotations[0].length);
+        var whichObjectI = Math.floor(Math.random() * cb.objectRotations[1].length);
+        var whichObjectS = Math.floor(Math.random() * cb.objectRotations[2].length);
+        var whichObjectC = Math.floor(Math.random() * cb.objectRotations[3].length);
         whichObjects = [whichObjectG, whichObjectI, whichObjectS, whichObjectC];
     } else {
 
