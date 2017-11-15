@@ -122,42 +122,32 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
             this.send('next');
         }
     },
-    currentSessionStatus: Ember.computed('frameContext', function() {
-        // Count all sessions
-        //var pastSessions = this.get('frameContext.pastSessions');
-        //if (pastSessions) {
-        //    return pastSessions.get('length') || 1;
-        //}
 
-        // Count only sessions with at least minVideos pref-phys-videos frames
-        var expData = this.get('frameContext.pastSessions').map((session) => session.get('expData'));
-        var expDates = this.get('frameContext.pastSessions').map((session) => moment(session.get('createdOn')));
-        var nSessions = 0;
-        var sessionDates = [];
-        for (var iSess = 0; iSess < expData.length; iSess++) {
-            var keys = Object.keys(expData[iSess]);
-            var nVideos = 0;
-            for (let i = 0; i < keys.length; i++) {
-                var frameKeyName = keys[i];
-                if (frameKeyName.indexOf('pref-phys-videos') !== -1) {
+    currentSessionStatus: Ember.computed('frameContext.pastSessions', function() {
+        let nSessions = 0;
+        const sessionDates = [];
+        this.get('frameContext.pastSessions').forEach(session => {
+            let nVideos = 0;
+            Object.keys(session.get('expData')).forEach(frameKeyName => {
+                if (frameKeyName.includes('pref-phys-videos')) {
                     nVideos++;
                 }
-            }
+            });
+            // Count only sessions with at least minVideos pref-phys-videos frames
             if (nVideos >= this.get('minVideosToCountSession')) {
                 nSessions++;
-                sessionDates.push(expDates[iSess]);
+                sessionDates.pushObject(moment(session.get('createdOn')));
             }
-        }
-        var minDate = moment.min(sessionDates);
-        var maxDate = moment.max(sessionDates);
-        return [nSessions, maxDate.diff(minDate, 'days') + 1];
+        });
+        return {'nSessions': nSessions, 'daysSessionsCompleted': moment.max(sessionDates).diff(moment.min(sessionDates), 'days') + 1 };
     }),
+
     currentSessionsCompleted: Ember.computed('currentSessionStatus', function()    {
-        return this.get('currentSessionStatus')[0];
+        return this.get('currentSessionStatus.nSessions');
     }),
 
     currentDaysSessionsCompleted: Ember.computed('currentSessionStatus', function() {
-        return this.get('currentSessionStatus')[1];
+        return this.get('currentSessionStatus.daysSessionsCompleted');
     }),
 
     progressValue: Ember.computed('currentSessionsCompleted', 'idealSessionsCompleted', function() {
