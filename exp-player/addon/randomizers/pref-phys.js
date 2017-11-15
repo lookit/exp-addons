@@ -41,7 +41,7 @@ function getLastSession(pastSessions) {
 
 function getConditions(lastSession, frameId) {
     var startType, showStay, whichObjects;
-    var cb = counterbalancingLists();
+    const cb = counterbalancingLists();
     // The last session payload refers to the frame we want by number (#-frameName), but frames aren't numbered until the sequence
     //   has been resolved (eg until we expand pref-phys-videos into a series of video frames, we won't know how many
     //   frames there are or in what order)
@@ -58,15 +58,36 @@ function getConditions(lastSession, frameId) {
         }
     });
 
+    // If there are no conditions from previous sessions, just choose randomly!
     if (!lastFrameConditions) {
+        // Select counterbalancing conditions from the pseudorandom lists
+        // defined in counterbalancingLists. startType and showStay are
+        // indices into conceptOrderRotation and useFallRotation respectively.
+        // This is very clunky but preserved to ensure functionality is
+        // consistent.
+
+        // startType defines the order in which to rotate through concepts.
         startType = Math.floor(Math.random() * cb.conceptOrderRotation.length);
+        // showStay (historical name) says which support comparisons we should
+        //    use 'fall' rather than 'stay' videos for.
         showStay = Math.floor(Math.random() * cb.useFallRotation.length);
-        var whichObjectG = Math.floor(Math.random() * cb.objectRotations[0].length);
-        var whichObjectI = Math.floor(Math.random() * cb.objectRotations[1].length);
-        var whichObjectS = Math.floor(Math.random() * cb.objectRotations[2].length);
-        var whichObjectC = Math.floor(Math.random() * cb.objectRotations[3].length);
+
+        // the whichObjects[X] variables select comparison-object pairings to
+        // use for [concepts] - G = gravity, I = inertia, S = support,
+        // C = control. (E.g., pair 'lotion' with 'down-up ramp' comparison,
+        // 'cup' with 'down-up toss' comparison, etc.) Choose random indices
+        // into each respective pseudorandom list of possible pairings. (Note
+        // that the lists are not simply all permutations, because in a few
+        // cases we don't have particular objects for comparisons.)
+        const whichObjectG = Math.floor(Math.random() * cb.objectRotations[0].length);
+        const whichObjectI = Math.floor(Math.random() * cb.objectRotations[1].length);
+        const whichObjectS = Math.floor(Math.random() * cb.objectRotations[2].length);
+        const whichObjectC = Math.floor(Math.random() * cb.objectRotations[3].length);
+        // Store the indices into the comparison-object mapping lists as one
+        // array, gravity/inertia/support/control.
         whichObjects = [whichObjectG, whichObjectI, whichObjectS, whichObjectC];
-    } else {
+    } else { // Otherwise, increment each condition, which is actually an index
+    // into a predefined pseudorandom list of conditions to loop through.
 
         startType = lastFrameConditions.startType;
         startType++;
@@ -1271,7 +1292,7 @@ function assignVideos(startType, showStay, whichObjects) {
     var cb = counterbalancingLists();
 
     // Types of comparisons for each event type.
-    // Format [event, outcome1, outcome2]
+    // Format [event, outcome1, outcome2].
     var comparisonsGravity = [
         ['table', 'down', 'continue'],
         ['table', 'down', 'up'],
