@@ -37,7 +37,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     fsButtonID: 'fsButton',
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
@@ -256,30 +255,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            this.sendTimeEvent('leftFullscreen');
             if (!this.get('isPaused')) {
                 this.pauseStudy();
             }
-        } else {
-            this.sendTimeEvent('enteredFullscreen');
         }
     },
 
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-physics:${name}`, opts);
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-physics:${eventName}`, extra);
     },
 
     actions: {
+
         showWarning() {
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);
-                this.sendTimeEvent('webcamNotConfigured');
+                this.send('setTimeEvent', 'webcamNotConfigured');
 
                 // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
                 // the user is unable to move on.
@@ -290,10 +281,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 recorder.show();
                 recorder.on('onCamAccessConfirm', () => {
                     this.send('removeWarning');
-                    this.get('recorder').record();
+                    this.startRecorder();
                 });
             }
         },
+
         removeWarning() {
             this.set('showVideoWarning', false);
             this.get('recorder').hide();
@@ -309,7 +301,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 this.set('_lastTime', 0);
                 this.$('#player-video')[0].play();
             } else {
-                this.sendTimeEvent('videoStopped', {
+                this.send('setTimeEvent', 'videoStopped', {
                     currentTask
                 });
                 if (this.get('autoforwardOnEnd')) {
@@ -370,9 +362,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 }
                 $('audio#exp-music')[0].play();
                 if (this.get('useAlternate')) {
-                    this.sendTimeEvent('startAlternateVideo');
+                    this.send('setTimeEvent', 'startAlternateVideo');
                 } else {
-                    this.sendTimeEvent('startTestVideo');
+                    this.send('setTimeEvent', 'startTestVideo');
                 }
             }
         },
@@ -389,7 +381,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 if (this.isLast) {
                     this.send('next');
                 } else {
-                    this.sendTimeEvent('startIntro');
+                    this.send('setTimeEvent', 'startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
                 }
             }
@@ -398,10 +390,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         next() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
-            this.sendTimeEvent('stoppingCapture');
-            if (this.get('recorder')) {
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         }
     },
@@ -439,19 +428,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                         this.set('playAnnouncementNow', true);
                     }
                     try {
-                        this.get('recorder').resume();
+                        this.resumeRecorder();
                     } catch (_) {
                         return;
                     }
                 } else if (pause || !wasPaused) { // Not currently paused: pause
                     window.clearInterval(this.get('testTimer'));
                     this.set('testTime', 0);
-                    this.sendTimeEvent('pauseVideo', {
+                    this.send('setTimeEvent', 'pauseVideo', {
                         currentTask: this.get('currentTask')
                     });
-                    if (this.get('recorder')) {
-                        this.get('recorder').pause(true);
-                    }
+                    this.pauseRecorder(true);
                     this.set('playAnnouncementNow', false);
                     this.set('isPaused', true);
                 }
@@ -461,53 +448,41 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
     didInsertElement() {
         this._super(...arguments);
-        $(document).on('keyup', (e) => {
+        $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {
-                if (e.which === 32) { // space
+                if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
-                    // FIXME: This binding does not seem to fire, likely because it is removed in willDestroy, called when exp-player advances to a new frame
-                    if (this.get('recorder')) {
-                        this.get('recorder').stop();
-                    }
+                    this.stopRecorder();
                 }
             }
         });
 
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+            const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                 hidden: true
             });
-            recorder.install({
-                record: true
-            }).then(() => {
-                this.sendTimeEvent('recorderReady');
-                this.set('recordingIsReady', true);
+            installPromise.then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
+                this.send('setTimeEvent', 'recorderReady');
             });
-            recorder.on('onCamAccess', (hasAccess) => {
-                this.sendTimeEvent('hasCamAccess', {
-                    hasCamAccess: hasAccess
-                });
-            });
-            recorder.on('onConnectionStatus', (status) => {
-                this.sendTimeEvent('videoStreamConnection', {
-                    status: status
-                });
-            });
-            this.set('recorder', recorder);
         }
         this.send('showFullscreen');
     },
     willDestroyElement() { // remove event handler
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get('recorder')) {
-            this.get('recorder').hide(); // Hide the webcam config screen
-            this.get('recorder').stop();
+        const recorder = this.get('recorder');
+        if (recorder) {
+            recorder.hide(); // Hide the webcam config screen
+            this.stopRecorder();
         }
 
-        this.sendTimeEvent('destroyingElement');
+        this.send('setTimeEvent', 'destroyingElement');
         this._super(...arguments);
-        // Todo: make removal of event listener more specific (in case a frame comes between the video and the exit survey)
-        $(document).off('keyup');
+        $(document).off('keyup.pauser');
     }
 });

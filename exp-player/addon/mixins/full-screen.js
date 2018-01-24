@@ -65,17 +65,27 @@ export default Ember.Mixin.create({
 
         var $button = $(`#${this.get('fsButtonID')}`);
         if (isFS) {
-            // alert('went fs');
             $element.addClass('player-fullscreen');
             if (this.displayFullscreen && this.fsButtonID) {
                 $button.hide();
             }
+            /**
+             * Upon detecting change to fullscreen mode
+             *
+             * @event enteredFullscreen
+            */
+            this.send('setTimeEvent', 'enteredFullscreen');
         } else {
-            //alert('left fs');
             $element.removeClass('player-fullscreen');
             if (this.displayFullscreen && this.fsButtonID) {
                 $button.show();
             }
+            /**
+             * Upon detecting change out of fullscreen mode
+             *
+             * @event leftFullscreen
+            */
+            this.send('setTimeEvent', 'leftFullscreen');
         }
     },
 

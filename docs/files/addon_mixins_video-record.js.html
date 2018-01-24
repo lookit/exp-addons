@@ -127,7 +127,36 @@ import Ember from &#x27;ember&#x27;;
  *
  * @class VideoRecordMixin
  */
+
+/**
+ * @event hasCamAccess
+ */
+
+/**
+ * @event videoStreamConnection
+ */
+
+/**
+ * @event pauseVideo
+ */
+
+/**
+ * @event unpauseVideo
+ */
+
+/**
+ * @event stoppingCapture
+ */
+
 export default Ember.Mixin.create({
+
+    /**
+     * The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,
+     *   and to set this property. If present, the mixin will automatically use it for things such as capturing stream
+     *   time.
+     * @property {VideoRecorder} recorder
+     */
+    recorder: null,
 
     /**
      * This mixin automatically injects the video recorder service, making its methods available to your frame
@@ -149,7 +178,108 @@ export default Ember.Mixin.create({
             this.get(&#x27;id&#x27;),
             this.get(&#x27;session.id&#x27;)
         ].join(&#x27;_&#x27;);
-    }).volatile()
+    }).volatile(),
+
+    /**
+     * Extend any base time event capture with information about the recorded video
+     * @method makeTimeEvent
+     * @param eventName
+     * @param extra
+     * @return {Object} Event data object
+     */
+    makeTimeEvent(eventName, extra) {
+        // All frames using this mixin will add videoId and streamTime to every server event
+        let base = this._super(eventName, extra);
+        const streamTime = this.get(&#x27;recorder&#x27;) ? this.get(&#x27;recorder&#x27;).getTime() : null;
+        Ember.merge(base, {
+            videoId: this.get(&#x27;videoId&#x27;),
+            streamTime: streamTime
+        });
+        return base;
+    },
+
+    /**
+     * Set up a video recorder instance
+     * @method setupRecorder
+     * @param {Node} element A DOM node representing where to mount the recorder
+     * @param {Boolean} record Whether to start the recording immediately
+     * @param {Object} settings Config to pass to the newly created VideoRecorder
+     * @return {Promise} A promise representing the result of installing the recorder
+     */
+    setupRecorder(element, record, settings = {}) {
+        const videoId = this.get(&#x27;videoId&#x27;);
+        const recorder = this.get(&#x27;videoRecorder&#x27;).start(videoId, element, settings);
+        const installPromise = recorder.install({record});
+
+        // Track specific events for all frames that use  VideoRecorder
+        recorder.on(&#x27;onCamAccess&#x27;, (hasAccess) =&gt; {
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;hasCamAccess&#x27;, {
+                hasCamAccess: hasAccess
+            });
+        });
+        recorder.on(&#x27;onConnectionStatus&#x27;, (status) =&gt; {
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;videoStreamConnection&#x27;, {
+                status: status
+            });
+        });
+        this.set(&#x27;recorder&#x27;, recorder);
+        return installPromise;
+    },
+
+    /**
+     * Pause the recorder (and capture timing events)
+     * @method pauseRecorder
+     * @param [skipIfMissing=false] If provided (and true), don&#x27;t raise an error if recording isn&#x27;t ready yet.
+     */
+    pauseRecorder(skipIfMissing = false) {
+        const recorder = this.get(&#x27;recorder&#x27;);
+        if (recorder) {
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;pauseVideo&#x27;);
+            recorder.pause(skipIfMissing);
+        }
+    },
+
+    /**
+     * Resume a paused recording
+     * @method resumeRecorder
+     * @throws an exception if recorder fails to resume TODO: Based on existing usage anyway
+     */
+    resumeRecorder() {
+        const recorder = this.get(&#x27;recorder&#x27;);
+        if (recorder) {
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;unpauseVideo&#x27;);
+            recorder.resume();
+        }
+    },
+
+    /**
+     * Start recording
+     * @method startRecorder
+     * @return Promise Resolves when recording has started
+     */
+    startRecorder() {
+        const recorder = this.get(&#x27;recorder&#x27;);
+        if (recorder) {
+            return recorder.record();
+        } else {
+            return Ember.RSVP.resolve();
+        }
+    },
+
+    /**
+     * Stop the recording
+     * @method stopRecorder
+     * @return Promise A promise that resolves when upload is complete
+     */
+    stopRecorder() {
+        const recorder = this.get(&#x27;recorder&#x27;);
+        if (recorder) {
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;stoppingCapture&#x27;);
+            return this.get(&#x27;recorder&#x27;).stop();
+        } else {
+            return Ember.RSVP.resolve();
+        }
+    },
 });
 
     </pre>

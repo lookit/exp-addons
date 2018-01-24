@@ -45,7 +45,11 @@ let {
             "parentTextBlock": {
                 "title": "Parents!",
                 "text": "some instructions",
-                "emph": true
+                "emph": true,
+                "css": {
+                    "color": "red",
+                    "font-size": "12px"
+                }
             },
             "images": [
                 {
@@ -259,12 +263,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     }
                 },
                 /**
-                 * Text block to display to parent.
+                 * Text block to display to parent.  (Each field is optional)
                  *
                  * @property {Object} parentTextBlock
                  *   @param {String} title title to display
                  *   @param {String} text paragraph of text
                  *   @param {Boolean} emph whether to bold this paragraph
+                 *   @param {Object} css object specifying any css properties
+                 *      to apply to this section, and their values - e.g.
+                 *      {'color': 'red', 'font-size': '12px'}
                  */
                 parentTextBlock: {
                     type: 'object',
@@ -277,9 +284,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                         },
                         emph: {
                             type: 'boolean'
+                        },
+                        css: {
+                            type: 'object',
+                            default: {}
                         }
                     },
-                    default: []
+                    default: {}
                 },
                 /**
                  * Array of images to display and information about their placement
@@ -375,15 +386,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            if (this.get('recorder')) {
-                /**
-                 * Just before stopping webcam video capture
-                 *
-                 * @event stoppingCapture
-                 */
-                this.sendTimeEvent('stoppingCapture');
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         },
 
@@ -433,114 +436,80 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return fullAsset;
     },
 
-    // TODO: should this be moved to the recording mixin?
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-lookit-story-page:${name}`, opts);
-    },
-
-    // TODO: should the events here be moved to the fullscreen mixin?
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.sendTimeEvent('leftFullscreen');
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.sendTimeEvent('enteredFullscreen');
-        }
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-lookit-story-page:${eventName}`, extra);
     },
 
     didInsertElement() {
         this._super(...arguments);
 
         // Expand any image src stubs
-        var _this = this;
         var images = this.get('images');
-        images.forEach(function(im) {
-            Ember.set(im, 'src', _this.expandAsset(im.src, 'image'));
+        images.forEach((im) => {
+            Ember.set(im, 'src', this.expandAsset(im.src, 'image'));
         });
         this.set('images_parsed', images);
 
         // Expand any audio src stubs
         var audioSources = this.get('audioSources');
-        audioSources.forEach(function(aud) {
-            Ember.set(aud, 'sources_parsed', _this.expandAsset(aud.sources, 'audio'));
+        audioSources.forEach((aud) => {
+            Ember.set(aud, 'sources_parsed', this.expandAsset(aud.sources, 'audio'));
         });
         this.set('audioSources', audioSources);
+
+        var parentTextBlock = this.get('parentTextBlock') || {};
+        var css = parentTextBlock.css || {};
+        $('#parenttext').css(css);
 
         this.send('showFullscreen');
         $('#nextbutton').prop('disabled', true);
 
-        if (_this.get('doRecording')) {
+        if (this.get('doRecording')) {
             $('.story-image-container').hide();
-            if (_this.get('experiment') && _this.get('id') && _this.get('session')) {
-                let recorder = _this.get('videoRecorder').start(_this.get('videoId'), _this.$('#videoRecorder'), {
+            if (this.get('experiment') && this.get('id') && this.get('session')) {
+                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                     hidden: true
                 });
-                recorder.install({
-                    record: true
-                }).then(() => {
-                    _this.sendTimeEvent('recorderReady');
-                    _this.set('recordingIsReady', true);
-                    _this.notifyPropertyChange('readyToStartAudio');
-                });
-                // TODO: move handlers that just record events to the VideoRecord mixin?
                 /**
-                 * When recorder detects a change in camera access
+                 * When video recorder has been installed
                  *
-                 * @event onCamAccess
-                 * @param {Boolean} hasCamAccess
+                 * @event recorderReady
                  */
+                installPromise.then(() => {
+                    this.send('setTimeEvent', 'recorderReady');
+                    this.notifyPropertyChange('readyToStartAudio');
+                });
+
+                // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
+                const recorder = this.get('recorder');
                 recorder.on('onCamAccess', (hasAccess) => {
-                    _this.sendTimeEvent('hasCamAccess', {
+                    this.send('setTimeEvent', 'hasCamAccess', {
                         hasCamAccess: hasAccess
                     });
-                    _this.notifyPropertyChange('readyToStartAudio');
+                    this.notifyPropertyChange('readyToStartAudio');
                 });
-                /**
-                 * When recorder detects a change in video stream connection status
-                 *
-                 * @event videoStreamConnection
-                 * @param {String} status status of video stream connection, e.g.
-                 * 'NetConnection.Connect.Success' if successful
-                 */
-                recorder.on('onConnectionStatus', (status) => {
-                    _this.sendTimeEvent('videoStreamConnection', {
+
+                recorder.on('onConnectionStatus', () => {
+                    this.send('setTimeEvent', 'videoStreamConnection', {
                         status: status
                     });
-                    _this.notifyPropertyChange('readyToStartAudio');
+                    this.notifyPropertyChange('readyToStartAudio');
                 });
-                _this.set('recorder', recorder);
             }
         } else {
-            _this.send('playNextAudioSegment');
+            this.send('playNextAudioSegment');
         }
 
     },
 
     willDestroyElement() {
-        this.sendTimeEvent('destroyingElement');
+        this.send('setTimeEvent', 'destroyingElement');
 
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get('recorder')) {
-            this.get('recorder').hide(); // Hide the webcam config screen
-            this.get('recorder').stop();
+        const recorder = this.get('recorder');
+        if (recorder) {
+            recorder.hide(); // Hide the webcam config screen
+            this.stopRecorder();
         }
 
         this._super(...arguments);

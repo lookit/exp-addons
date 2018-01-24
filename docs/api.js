@@ -48,7 +48,8 @@ YUI.add("yuidoc-meta", function(Y) {
         },
         {
             "displayName": "exp-player",
-            "name": "exp-player"
+            "name": "exp-player",
+            "description": "Reusable parts of experiments. Includes frame definitions, randomizers, and utilities."
         },
         {
             "displayName": "frames",

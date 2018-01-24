@@ -46,7 +46,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
 
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    recordingIsReady: false,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
@@ -62,41 +61,19 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     currentVideo: Ember.computed('videoIndex', function() {
         return this.get('videos')[this.get('videoIndex')];
     }),
-
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-physics:${name}`, opts);
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-video-preview:${eventName}`, extra);
     },
-
     actions: {
         accept() {
             this.set('prompt', false);
             if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-                let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                     hidden: true
                 });
-                recorder.install({
-                    record: true
-                }).then(() => {
-                    this.sendTimeEvent('recorderReady');
-                    this.set('recordingIsReady', true);
+                installPromise.then(() => {
+                    this.send('setTimeEvent', 'recorderReady');
                 });
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.sendTimeEvent('hasCamAccess', {
-                        hasCamAccess: hasAccess
-                    });
-                });
-                recorder.on('onConnectionStatus', (status) => {
-                    this.sendTimeEvent('videoStreamConnection', {
-                        status: status
-                    });
-                });
-                this.set('recorder', recorder);
             }
         },
         nextVideo() {
@@ -106,10 +83,8 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
             this.set('videoIndex', this.get('videoIndex') - 1);
         },
         next() {
-            this.sendTimeEvent('stoppingCapture');
-            if (this.get('recorder')) {
-                this.get('recorder').stop();
-            }
+            this.send('setTimeEvent', 'stoppingCapture');
+            this.stopRecorder();
             this._super(...arguments);
         }
     },
@@ -217,9 +192,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     },
 
     willDestroyElement() {
-        if (this.get('recorder')) {
-            this.get('recorder').stop();
-        }
+        this.stopRecorder();
         this._super(...arguments);
         Ember.$(document).off('keypress');
     }

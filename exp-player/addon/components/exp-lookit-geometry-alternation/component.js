@@ -515,8 +515,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     }),
 
-    actions: {
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-alternation:${eventName}`, extra);
+    },
 
+    actions: {
         // When intro audio is complete
         endAudio() {
             this.set('completedAudio', true);
@@ -529,10 +532,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              *
              * @event stoppingCapture
              */
-            if (this.get('recorder')) {
-                this.sendTimeEvent('stoppingCapture');
-                this.get('recorder').stop();
-            }
+            this.stopRecorder();
             this._super(...arguments);
         }
 
@@ -550,12 +550,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          *
          * @event startIntro
          */
-        _this.sendTimeEvent('startIntro');
+        this.send('setTimeEvent', 'startIntro');
         $('#player-video')[0].play();
 
         // Set a timer for the minimum length for the intro/break
         $('#player-audio')[0].play();
-        _this.set('introTimer', window.setTimeout(function() {
+        this.set('introTimer', window.setTimeout(function() {
             _this.set('completedAttn', true);
             _this.notifyPropertyChange('readyToStartCalibration');
         }, _this.get('attnLength') * 1000));
@@ -586,7 +586,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @event startCalibration
                  * @param {String} location location of calibration ball, relative to child: 'left', 'right', or 'center'
                  */
-                _this.sendTimeEvent('startCalibration',
+                _this.send('setTimeEvent', 'startCalibration',
                     {location: thisLoc});
                 calAudio.pause();
                 calAudio.currentTime = 0;
@@ -609,13 +609,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     startTrial() {
 
         var _this = this;
-
         /**
          * Immediately before starting test trial segment
          *
          * @event startTestTrial
          */
-        _this.sendTimeEvent('startTestTrial');
+        _this.send('setTimeEvent', 'startTestTrial');
 
         // Begin playing music; fade in and set to fade out at end of trial
         var $musicPlayer = $('#player-music');
@@ -641,45 +640,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // When triangles have been shown for time indicated: play end-audio if
     // present, or just move on.
     endTrial() {
-        if (this.get('recorder')) {
-            this.sendTimeEvent('stoppingCapture');
-            this.get('recorder').stop();
-        }
+        this.stopRecorder();
         if (this.get('endAudioSources').length) {
             $('#player-endaudio')[0].play();
         } else {
             this.send('next');
-        }
-    },
-
-    sendTimeEvent(name, opts = {}) {
-        var streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
-        Ember.merge(opts, {
-            streamTime: streamTime,
-            videoId: this.get('videoId')
-        });
-        this.send('setTimeEvent', `exp-alternation:${name}`, opts);
-    },
-
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            /**
-             * When change to non-fullscreen is detected
-             *
-             * @event leftFullscreen
-             */
-            this.sendTimeEvent('leftFullscreen');
-        } else {
-            /**
-             * When change to fullscreen is detected
-             *
-             * @event enteredFullscreen
-             */
-            this.sendTimeEvent('enteredFullscreen');
         }
     },
 
@@ -709,7 +674,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          * @param {Number} LSize size of left triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
          * @param {Number} RSize size of right triangle, relative to standard ('standard' sizes are set so that areas of skinny & fat triangles are equal), in terms of side length (e.g. for a rectangle, 2 would mean take a 1x3 rectangle and make it a 2x6 rectangle, quadrupling the area)
          */
-        this.sendTimeEvent('presentTriangles', {
+        this.send('setTimeEvent', 'presentTriangles', {
                 Lshape: Lshape,
                 LX: LX,
                 LY: LY,
@@ -743,7 +708,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
          *
          * @event clearTriangles
         */
-        this.sendTimeEvent('clearTriangles');
+        this.send('setTimeEvent', 'clearTriangles');
         $('#stimuli').html('');
     },
 
@@ -809,14 +774,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
             // Currently paused: RESUME
             if (wasPaused) {
-                /**
-                 * When unpausing study, immediately before request to resume webcam recording
-                 *
-                 * @event unpauseVideo
-                 */
-                this.sendTimeEvent('unpauseVideo');
                 try {
-                    this.get('recorder').resume();
+                    this.resumeRecorder();
                 } catch (_) {
                     return;
                 }
@@ -824,16 +783,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 this.set('isPaused', false);
             } else { // Not currently paused: PAUSE
                 window.clearTimeout(this.get('introTimer'));
-                /**
-                 * When pausing study, immediately before request to pause webcam recording
-                 *
-                 * @event pauseVideo
-                 */
-                this.sendTimeEvent('pauseVideo');
-                if (this.get('recorder')) {
-                    this.get('recorder').pause(true);
-                }
-
+                this.pauseRecorder(true);
                 if (this.checkFullscreen()) {
                     $('#player-pause-audio')[0].play();
                 } else {
@@ -930,50 +880,29 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         this.startIntro();
 
         if (this.get('experiment') && this.get('id') && this.get('session')) {
-            let recorder = this.get('videoRecorder').start(this.get('videoId'), this.$('#videoRecorder'), {
+
+            const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
                 hidden: true
             });
-            recorder.install({
-                record: true
-            }).then(() => {
-                this.sendTimeEvent('recorderReady');
-                this.set('recordingIsReady', true);
+            installPromise.then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
+                this.send('setTimeEvent', 'recorderReady');
             });
-            /**
-             * When recorder detects a change in camera access
-             *
-             * @event onCamAccess
-             * @param {Boolean} hasCamAccess
-             */
-            recorder.on('onCamAccess', (hasAccess) => {
-                this.sendTimeEvent('hasCamAccess', {
-                    hasCamAccess: hasAccess
-                });
-            });
-            /**
-             * When recorder detects a change in video stream connection status
-             *
-             * @event videoStreamConnection
-             * @param {String} status status of video stream connection, e.g.
-             * 'NetConnection.Connect.Success' if successful
-             */
-            recorder.on('onConnectionStatus', (status) => {
-                this.sendTimeEvent('videoStreamConnection', {
-                    status: status
-                });
-            });
-            this.set('recorder', recorder);
         }
-
     },
 
     willDestroyElement() {
-        this.sendTimeEvent('destroyingElement');
+        this.send('setTimeEvent', 'destroyingElement');
 
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        if (this.get('recorder')) {
+        const recorder = this.get('recorder');
+        if (recorder) {
             this.get('recorder').hide(); // Hide the webcam config screen
-            this.get('recorder').stop();
+            this.stopRecorder();
         }
         // Remove pause handler
         $(document).off('keyup.pauser');

@@ -28,7 +28,7 @@
         {{#if showWebCamWarning }}
             <h4 class="text-warning">
                 We couldn't connect to your webcam. Please make sure you have a webcam connected
-                and <button class="btn btn-default" {{action 'reloadRecorder'}}>reload</button>
+                and <button class="btn btn-default" {{action 'reloadRecorder'}}>click here to detect</button>
             </h4>
         {{/if}}
 
@@ -44,8 +44,8 @@
 
                 <li>
                     <p>
-                        To check that your privacy settings are working, click
-                        <button class="btn btn-primary" {{action 'reloadRecorder'}}>reload</button>
+                        To check that your privacy settings are working, click this button:
+                        <button class="btn btn-primary" {{action 'reloadRecorder'}}>check settings</button>
                         . You should see your webcam view again in a moment, <em>without</em> having to click "Allow."
                         If you were prompted again, this time make sure to also click the "Remember" box," and try
                         reloading again.
@@ -67,7 +67,7 @@
 
         {{#if showWarning}}
             <div class="reload-warning">
-                * Please try reloading the webcam view to check your privacy settings are working.
+                * Please click 'check settings' above to make sure your privacy settings are set correctly. You should see your webcam view again in a moment, without having to click "Allow" again (see step 2).
             </div>
         {{/if}}
 
