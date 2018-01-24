@@ -95,7 +95,3 @@ Within the `exp-player` folder, we provide a simple convenience command for hand
 
 This command handles incrementing the version number, verifying tests pass, and updating the documentation build. You 
   will be responsible for committing the changes before handling the actual release (using a process such as git flow).
-
-### COS is Hiring!
-
-Want to help save science? Want to get paid to develop free, open source software? [Check out our openings!](http://cos.io/jobs)
