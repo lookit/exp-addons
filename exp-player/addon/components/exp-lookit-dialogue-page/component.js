@@ -415,7 +415,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @property {Object[]} images
                  *   @param {String} id unique ID for this image. This will be used to refer to the choice made by the user, if any.
                  *   @param {String} src URL of image source (can be full URL, or stub to append to baseDir; see `baseDir`)
-                 *   @param {String} left left margin, as percentage of story area width
+                 *   @param {String} left distance from left of story area to image center, as percentage of story area width
                  *   @param {String} height image height, as percentage of story area height
                  *   @param {String} bottom bottom margin, as percentage of story area height
                  *   @param {String} animate animation to use at start of trial on this image, if any. If not provided, image is shown throughout trial. Options are 'fadein', 'fadeout', 'flyleft' (fly from left), and 'flyright'.
