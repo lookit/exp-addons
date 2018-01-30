@@ -167,7 +167,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
     // Track state of experiment
     completedAudio: false, // for main narration audio
-    imageAudioCompleted: new Set(),
+    imageAudioPlayed: new Set(),
     currentlyHighlighted: null, // id for image currently selected
 
     currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
@@ -176,14 +176,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // have played. For a choice frame, require that one of the images is
     // selected; for other frames, require that any required image-audio has
     // completed.
-    readyToProceed: Ember.computed('completedAudio', 'imageAudioCompleted', 'currentlyHighlighted',
+    readyToProceed: Ember.computed('completedAudio', 'imageAudioPlayed', 'currentlyHighlighted',
         function() {
             var okayToProceed = this.get('completedAudio');
 
             if (this.get('isChoiceFrame') && !(this.get('currentlyHighlighted'))) {
                 okayToProceed = false;
             } else {
-                var whichAudioCompleted = this.get('imageAudioCompleted');
+                var whichAudioCompleted = this.get('imageAudioPlayed');
                 this.get('images').forEach(function (im) {
                     if (im.requireAudio && !(whichAudioCompleted.has(im.id))) {
                         okayToProceed = false;
@@ -415,7 +415,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @property {Object[]} images
                  *   @param {String} id unique ID for this image. This will be used to refer to the choice made by the user, if any.
                  *   @param {String} src URL of image source (can be full URL, or stub to append to baseDir; see `baseDir`)
-                 *   @param {String} left left margin, as percentage of story area width
+                 *   @param {String} left distance from left of story area to image center, as percentage of story area width
                  *   @param {String} height image height, as percentage of story area height
                  *   @param {String} bottom bottom margin, as percentage of story area height
                  *   @param {String} animate animation to use at start of trial on this image, if any. If not provided, image is shown throughout trial. Options are 'fadein', 'fadeout', 'flyleft' (fly from left), and 'flyright'.
@@ -564,19 +564,19 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         },
 
-        markAudioCompleted(imageId) {
+        markAudioPlayed(imageId) {
 
             /**
-             * When image audio is completed (not recorded if interrupted)
+             * When image audio is played (recorded even if not completed)
              *
-             * @event completeSpeakerAudio
+             * @event playSpeakerAudio
              * @param {String} imageId
              */
-            this.send('setTimeEvent', 'completeSpeakerAudio', {
+            this.send('setTimeEvent', 'playSpeakerAudio', {
                 imageId: imageId
             });
 
-            this.imageAudioCompleted.add(imageId);
+            this.imageAudioPlayed.add(imageId);
             this.notifyPropertyChange('readyToProceed');
         },
 
@@ -674,6 +674,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             Ember.set(aud, 'sources_parsed', _this.expandAsset(aud.sources, 'audio'));
         });
 
+        this.set('imageAudioPlayed', new Set()); // Otherwise persists across frames
         this.set('images', images);
         this.set('audioSources', audioSources);
 

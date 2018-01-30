@@ -36,23 +36,33 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
     left:0;right:0; /* horizontal center */
 }
 
-.exp-lookit-dialogue-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
+// this is what we place in position
+.exp-lookit-dialogue-page div.story-image-positioner,  #experiment-player.player-fullscreen div.story-image-positioner {
     position: absolute;
     display: block;
     //height: auto;
-    padding: 10px;
-    border-radius: 15px;
-    border:5px solid transparent; // to avoid rearranging upon adding the highlight
     width: auto;
 }
 
+// this is what we click on
+.exp-lookit-dialogue-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
+    width: max-content;
+    height:100%;
+    padding: 10px;
+    border-radius: 15px;
+    border:5px solid transparent; // to avoid rearranging upon adding the highlight
+    margin-left:-50%;
+    position: relative;
+}
+
+// this is the actual image
 .exp-lookit-dialogue-page img.story-image,  #experiment-player.player-fullscreen  .exp-lookit-dialogue-page img.story-image {
     max-width: 100%;
     max-height: 100%;
     vertical-align: center;
     margin: auto;
     height:100%;
-    cursor: pointer !important;
+    cursor: pointer;
 }
 
 .exp-lookit-dialogue-page p.image-text, #experiment-player.player-fullscreen .exp-lookit-dialogue-page p.image-text {
