@@ -686,7 +686,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $('#nextbutton').prop('disabled', true);
 
         // Any animations as images are displayed at start of this phase
-        $('.story-image-container').hide();
+        $('.story-image-positioner').hide();
         this.get('images').forEach(function (im) {
             if (im.animate === 'fadein') {
                 $('#' + im.id).fadeIn(1000);
