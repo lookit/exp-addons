@@ -14,7 +14,7 @@
                 <p onclick={{action 'clickSpeaker' image.id}} class="image-text {{if (not completedAudio) 'disabled'}}"> {{image.text}} </p>
                 <img src={{image.src_parsed}} class="story-image" alt="story illustration">
 
-                <audio class="speaker-audio" onended={{action 'markAudioCompleted' image.id}}>
+                <audio class="speaker-audio" onplay={{action 'markAudioPlayed' image.id}}>
                     {{#each image.imageAudio_parsed as |stream|}}
                         <source src="{{stream.src}}" type="{{stream.type}}">
                     {{/each}}
