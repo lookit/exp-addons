@@ -79,113 +79,134 @@
 
 </div>
 
-<br>
-<div class="row exp-controls exp-video-config">
+
+<div class="row exp-video-config">
     <div class="col-md-10 col-md-offset-1">
+
         <h2> Troubleshooting tips </h2>
         <hr>
-
-        <h3>Adjusting microphone settings</h3>
-
-
+        <h4> Thanks for bearing with us...</h4>
         <p>
-            If the microphone icon in your video screen shows red bars like this <img src="assets/noSound.png" alt="No sound">, you may
-            not be recording sound. To adjust your microphone settings, right-click on the webcam view and choose
-            "Settings":
+            We currently still use Adobe Flash to handle webcam access and recording.
+            Because of recent changes in how web browsers handle
+            Flash, some families are having trouble initially getting their webcams to
+            show up here. We're sorry, and we're working on it! In the meantime, these
+            instructions should fix most problems.
+        </p>
+        <p>
+            If these steps don't work, please let us know to help us figure out what we still
+            need to fix! Email us at lookit-tech@mit.edu with a short
+            description of what's happening. Please include the web browser you're using (Firefox, Chrome, IE, Safari, etc.)
+            and what steps you've tried so far.
         </p>
 
-        <img class="screenshot" src="assets/flash_setting_select.png" alt="Access flash settings">
+        {{#bs-accordion selected=selected collapsed=collapsed}}
+            {{#bs-accordion-item value="camera" title="Can't see your camera at all?"}}
+                <ul>
+                    <li>
+                        Make sure you're able to view the webcam video outside of Lookit. (For example, on a Mac, try Photobooth.)
+                    </li>
 
-        <p>
-            Click on the microphone tab to choose which microphone to use (you may have both a built-in and an external
-            microphone to choose from) and adjust the volume. If you speak or clap near the microphone, you should see
-            the green bar on the left rise and fall:
-        </p>
+                    <li>
+                        Make sure you have the latest version of Flash installed and that it's enabled in your web browser.
+                        <a href="https://helpx.adobe.com/flash-player.html" target="_blank" rel="noopener">Click here</a> to go to an Adobe
+                        website which guides you through this process.
+                    </li>
 
-        <img class="screenshot" src="assets/flash_microphone.png" alt="Microphone settings">
+                    <li>
+                        <h4> Using Chrome? </h4>
+                        <ol>
+                            <li>Make sure you're not using an Incognito window - you won't be able to save and use settings throughout the study.</li>
+                            <li>Go to your Chrome settings for lookit.mit.edu here:
+                                <a href="chrome://settings/content/siteDetails?site=https://lookit.mit.edu" target="_blank" rel="noopener">chrome://settings/content/siteDetails?site=https://lookit.mit.edu</a>.
+                                Set "Camera," "Microphone," and "Flash" permissions to "Allow" like this:
+                                <img class="screenshot" src="assets/chrome_settings.png" alt="Chrome Lookit permissions settings">
+                            </li>
+                            <li>Still not working? Try the other steps Chrome suggests here: <a href="https://support.google.com/chrome/answer/6258784" target="_blank" rel="noopener">https://support.google.com/chrome/answer/6258784</a></li>
+                        </ol>
+                    </li>
 
-        <h3>First steps if you're not seeing your webcam at all...</h3>
+                    <li>
+                        <h4> Using Firefox? </h4>
+                        <ol>
+                            <li>
+                                Find the website address bar at the top. There should be an “i” with a circle around it, then a grey Lego-like icon, then a security icon, like this:
+                                <img class="screenshot" src="assets/firefox_lego.png" alt="Firefox address bar">
+                            </li>
+                            <li>
+                                Click on the Lego icon, and a window should pop up asking permission to use Adobe Flash on this site. Check the "Remember" box and click Allow:
+                                <img class="screenshot" src="assets/firefox_lego_allow.png" alt="Firefox address bar with Flash permissions request">
+                            </li>
+                            <li>
+                                Still not working? The following may work on some versions of Firefox. Go to "Firefox" on the menu bar, then "Preferences."
+                                <img class="screenshot" src="assets/firefox_menu.png" alt="Firefox menu bar">
+                                Find "Privacy & Security" on the left menu. Scroll down to "Permissions."
+                                Click on "Camera" and enter https://lookit.mit.edu/ as an allowed site. Do the same for "Microphone."
+                            </li>
+                        </ol>
 
-        <ul>
-            <li>Quit any other applications that may be accessing your webcam (e.g. Skype, Google Hangouts.)</li>
+                    </li>
 
-            <li>
-                Make sure you're able to view the webcam video outside of Lookit. (E.g., on a Mac, try Photobooth.)
-            </li>
+                </ul>
+            {{/bs-accordion-item}}
 
-            <li>
-                Make sure you have the latest version of Flash installed and that it's enabled in your web browser.
-                <a href="https://helpx.adobe.com/flash-player.html" target="_blank" rel="noopener">Click here</a> to go to an Adobe
-                website which guides you through this process.
-            </li>
+            {{#bs-accordion-item value="microphone" title="Can't see your microphone volume bar moving?"}}
+                <p>
+                    If the microphone icon in your video screen shows red bars like this <img src="assets/noSound.png" alt="No sound">, you may
+                    not be recording sound. To adjust your microphone settings, right-click on the webcam view and choose
+                    "Settings":
+                </p>
 
-            <li>
-                If all else fails, try using a different browser. Lookit is primarily tested on Firefox and Chrome; on
-                some computers one of these works when the other doesn't. (We aspire to have everything work perfectly,
-                but dealing with webcam video in a browser is still pretty new--Google Hangouts doesn't always work for
-                us either!)
-            </li>
-        </ul>
-
-        <h3>Trouble with privacy settings or getting "reload" to work?</h3>
-        <ul>
-
-            <li>
-                When you see the prompt below, make sure to select "Allow" and "Remember" as shown:
-
-                <img class="screenshot" src="assets/flash_prompt.png" alt="Flash configuration prompt">
-
-                You can check that Flash is not blocking all sites (or Lookit specifically) from webcam access by
-                looking at the "global settings." To check these, right-click on the camera view above and click "global
-                settings":
-
-                <img class="screenshot" src="assets/global_settings.png" alt="How to open settings panel">
-
-                In most browsers, that will open a window. Go to the "Camera and Mic" tab and make sure you have
-                selected "Ask me when a site wants to use the camera or microphone" rather than "Block all sites from
-                using the camera and microphone." Then click "Camera and Microphone Settings by Site..." to check that
-                lookit.mit.edu isn't blocked.
-
-                <img class="screenshot" src="assets/global_settings_main.png" alt="The settings panel">
-
-                In Chrome, you'll need to use the
-                <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager02.html" target="_blank" rel="noopener">online Flash panel</a>
-                to do the same thing. In the first panel, click "Always Ask" to make sure you have set Flash to ask
-                for permission to access the webcam, rather than automatically deny requests. Then go to the privacy
-                tab (shown below) and remove any entry for lookit.mit.edu.
-
-                <img class="screenshot" src="assets/global_settings_chrome.png" alt="The settings page (in Google Chrome)">
-
-            </li>
-
-            <li>
-                Check that Flash is allowed to store data: right-click on the webcam view, choose "Settings," and in the
-                "Storage" tab, click "Allow":
-
-                <img class="screenshot" src="assets/flash_storage.png" alt="Flash storage settings">
-
-            </li>
-
-            <li>
-                For Chrome users: You may need to allow webcam access both in your browser and in the Flash app itself
-                (the webcam view you see on this page). If you're using Chrome, you'll need to click "Allow" in a prompt
-                that looks like this:
-
-                <img class="screenshot" src="assets/chrome_prompt.png" alt="Chrome webcam access prompt">
+                <img class="screenshot" src="assets/flash_setting_select.png" alt="Access flash settings">
 
                 <p>
-                    If you previously blocked webcam access in Chrome, that setting might be stored. You can edit
-                    settings for lookit.mit.edu by following the "Change camera and microphone permissions" directions
+                    Click on the microphone tab to choose which microphone to use (you may have both a built-in and an external
+                    microphone to choose from) and adjust the volume. If you speak or clap near the microphone, you should see
+                    the green bar on the left rise and fall:
+                </p>
+
+                <img class="screenshot" src="assets/flash_microphone.png" alt="Microphone settings">
+
+                <p>
+                    Chrome-specific directions for troubleshooting microphone problems are available
                     <a href="https://support.google.com/chrome/answer/2693767?hl=en" target="_blank" rel="noopener">here</a>.
                 </p>
-            </li>
+            {{/bs-accordion-item}}
+
+            {{#bs-accordion-item value="remember" title="Have to re-allow after clicking 'check settings'?"}}
+                <li>
+                    Right-click on your webcam view and select "Settings." Make sure to select "Allow" and "Remember" as shown:
+
+                    <img class="screenshot" src="assets/flash_prompt.png" alt="Flash configuration prompt">
+
+                    You can check that Flash is not blocking all sites (or Lookit specifically) from webcam access by
+                    looking at the "global settings"
+                    <a href="https://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager06.html" target="_blank" rel="noopener">here</a>.
+
+                    Go to the "Camera and Mic" tab and make sure you have
+                    selected "Ask me when a site wants to use the camera or microphone" rather than "Block all sites from
+                    using the camera and microphone." Then click "Camera and Microphone Settings by Site..." to make sure that
+                    if https://lookit.mit.edu is listed there, it says "Allow."
+
+                    <img class="screenshot" src="assets/global_settings_chrome.png" alt="Flash settings panel">
+
+                    Note that you may need to enable Flash access even to use this global settings panel in the browser! In Chrome,
+                    click the green lock next to the website address, then click "Settings" and allow Flash. In Firefox, click the
+                    gray Lego next to the website address and click "Allow."
 
 
-        </ul>
+                </li>
 
-        Feel free to let us know about problems you're running into! Just email us at lookit-tech@mit.edu with a short
-        description of what's happening, including the web browser you're using (Firefox, Chrome, Safari, etc.), your
-        username, and anything you've tried from the above list.
+                <li>
+                    Check that Flash is allowed to store data: right-click on the webcam view, choose "Settings," and in the
+                    "Storage" tab, click "Allow":
+
+                    <img class="screenshot" src="assets/flash_storage.png" alt="Flash storage settings">
+
+                </li>
+            {{/bs-accordion-item}}
+        {{/bs-accordion}}
 
     </div>
+
 </div>
