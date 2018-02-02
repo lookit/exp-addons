@@ -1,0 +1,58 @@
+div.exp-lookit-observation {
+	min-height: 100vh;
+    position: absolute;
+}
+
+.exp-lookit-observation .instructionspic {
+    float: right;
+    max-height: 180px;
+    border-radius: 10%;
+    border: thin solid black;
+}
+
+.exp-lookit-observation li {
+    margin-bottom: 20px;
+}
+
+.exp-lookit-observation #recordingControls > * {
+	font-size:large;
+}
+
+.exp-lookit-observation .recorder-container {
+	width:100%;
+	height:50vh;
+	margin: 0px;
+}
+
+.exp-lookit-observation .recorder {
+	padding: 0px;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	background-color: #ccc;
+	width: 110%;
+	height:100%;
+	min-width:450px;
+	margin-left:-10%;
+	clear:both !important;
+}
+
+.exp-lookit-observation #webcamToggleButton {
+	font-size: 80%;
+}
+
+.exp-lookit-observation .Blink {
+  animation: exp-lookit-observation-blinker 1.0s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+  float:left;
+  font-size:large;
+  margin-right: .5em;
+}
+@keyframes exp-lookit-observation-blinker {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.exp-lookit-observation .exp-lookit-observation-controls {
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+}
