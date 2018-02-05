@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{formSchema.schema.title}}</h1>
+
+
+        Current status: this loads w/o the following line, but not with. Working on ensuring dynamic-form actually
+        installed properly via ember install ember-cli-dynamic-forms in ember-lookit-frameplayer, also yarn add
+
+
+    </div>
+</div>
+
+
+
+<div class="row exp-controls">
+    {{#if showPreviousButton}}
+        <button class="btn btn-default pull-left" {{ action 'previous' }}>
+            Previous
+        </button>
+    {{/if}}
+
+    <button class="btn btn-success pull-right" {{ action 'next' }}>
+       {{exp-format nextButtonText}}
+    </button>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{formSchema.schema.title}}</h1>
+
+
+        Current status: this loads w/o the following line, but not with. Working on ensuring dynamic-form actually
+        installed properly via ember install ember-cli-dynamic-forms in ember-lookit-frameplayer, also yarn add
+
+    {{dynamic-form schema=formSchema}}
+
+    </div>
+</div>
+
+
+
+<div class="row exp-controls">
+    {{#if showPreviousButton}}
+        <button class="btn btn-default pull-left" {{ action 'previous' }}>
+            Previous
+        </button>
+    {{/if}}
+
+    <button class="btn btn-success pull-right" {{ action 'next' }}>
+       {{exp-format nextButtonText}}
+    </button>
+</div>
+
