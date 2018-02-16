@@ -534,7 +534,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     imageId: imageId
                 });
 
-                $('.story-image-container').removeClass('highlight');
+                $('.story-image-positioner').removeClass('highlight');
                 $('#' + imageId).addClass('highlight');
                 this.set('currentlyHighlighted', imageId);
                 this.notifyPropertyChange('readyToProceed');

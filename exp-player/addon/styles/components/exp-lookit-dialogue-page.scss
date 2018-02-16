@@ -82,7 +82,7 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
     cursor: not-allowed !important;
 }
 
-.exp-lookit-dialogue-page .story-image-container.highlight,  #experiment-player.player-fullscreen .exp-lookit-dialogue-page .story-image-container.highlight  {
+.exp-lookit-dialogue-page .highlight .story-image-container,  #experiment-player.player-fullscreen .exp-lookit-dialogue-page .highlight .story-image-container  {
     border: 5px solid green;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.6);
 }
@@ -140,6 +140,7 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
     background-color: $exp-lookit-dialogue-page-parent-text-color;
     color: black;
     border-radius: 15px;
+    padding: 10px;
 }
 
 .exp-lookit-dialogue-page #fsButton {
