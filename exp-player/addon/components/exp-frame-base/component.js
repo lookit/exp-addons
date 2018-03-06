@@ -243,6 +243,12 @@ export default Ember.Component.extend({
         },
 
         previous() {
+            /**
+             * Move to previous frame
+             *
+             * @event previousFrame
+             */
+            this.send('setTimeEvent', 'previousFrame');
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');
