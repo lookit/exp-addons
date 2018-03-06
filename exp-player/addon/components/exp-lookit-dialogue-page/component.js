@@ -518,6 +518,23 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     }),
 
+    // Move an image up and down until the isSpeaking class is removed.
+    // Yes, this could much more naturally be done by using a CSS animation property
+    // on isSpeaking, but despite animations getting applied properly to the element,
+    // I haven't been able to get that working - because of the possibility of ember-
+    // specific problems here, I'm going with something that *works* even if it's less
+    // elegent.
+    wiggle(imageId) {
+        var _this = this;
+        if ($('#' + imageId).hasClass('isSpeaking')) {
+            $('#' + imageId).animate({'margin-bottom': '.3%'}, 250, function() {
+                $('#' + imageId).animate({'margin-bottom': '0%'}, 250, function() {
+                        _this.wiggle(imageId);
+                    })
+                });
+        }
+    },
+
     actions: {
 
         clickSpeaker(imageId) {
@@ -534,7 +551,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     imageId: imageId
                 });
 
-                $('.story-image-container').removeClass('highlight');
+                $('.story-image-positioner').removeClass('highlight');
                 $('#' + imageId).addClass('highlight');
                 this.set('currentlyHighlighted', imageId);
                 this.notifyPropertyChange('readyToProceed');
@@ -544,12 +561,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 // Only allow playing image audio once main narration finishes
                 if (this.get('completedAudio')) {
                     // pause any current audio, and set times to 0
+                    $('.story-image-positioner').removeClass('isSpeaking');
                     $('audio').each(function() {
                         this.pause();
                         this.currentTime = 0;
                     });
                     // play this image's associated audio
                     $('#' + imageId + ' audio')[0].play();
+                    // animate the image while audio is playing
+                    $('#' + imageId).addClass('isSpeaking');
+                    this.wiggle(imageId);
+
 
                     /**
                      * When image audio is started
@@ -562,6 +584,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     });
                 }
             }
+        },
+
+        endSpeakerAudio(imageId) {
+            $('#' + imageId).removeClass('isSpeaking');
         },
 
         markAudioPlayed(imageId) {
@@ -582,6 +608,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
 
         replay() {
             // pause any current audio, and set times to 0
+            $('.story-image-positioner').removeClass('isSpeaking');
             $('audio').each(function() {
                 this.pause();
                 this.currentTime = 0;
@@ -593,6 +620,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
+            $('.story-image-positioner').removeClass('isSpeaking');
             this.stopRecorder();
             this._super(...arguments);
         },
