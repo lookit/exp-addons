@@ -77,7 +77,18 @@ export default ExpFrameBaseComponent.extend({
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
+                },
+                /**
+                Text to show as the introduction to the troubleshooting tips section
+                @property {String} troubleshootingIntro
+                @default "Some families are having trouble initially getting their webcams to work on Lookit. We're sorry, and we're working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems."
+                */
+                troubleshootingIntro: {
+                    type: 'string',
+                    description: 'Text to show as introduction to troubleshooting tips section',
+                    default: "Some families are having trouble initially getting their webcams to work on Lookit. We're sorry, and we're working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems."
                 }
+
             },
             required: ['id']
         },
