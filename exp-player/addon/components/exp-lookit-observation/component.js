@@ -5,9 +5,10 @@ import layout from './template';
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     type: 'exp-lookit-observation',
     layout: layout,
+
     meta: {
         name: 'ExpLookitObservation',
-        description: 'TODO: a description of this frame goes here.',
+        description: 'This frame allows the participant to record an event, intended for observational studies.',
         parameters: {
             type: 'object',
             properties: {
@@ -58,6 +59,37 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     default: []
                 },
                 /**
+                 * Number of seconds to record for before automatically pausing. Use
+                 * 0 for no limit.
+                 *
+                 * @property {String} recordSegmentLength
+                 * @default 300
+                 */
+                recordSegmentLength: {
+                    type: 'number',
+                    default: 300
+                },
+                /**
+                 * Whether to automatically begin recording upon frame load
+                 *
+                 * @property {Boolean} startRecordingAutomatically
+                 * @default false
+                 */
+                startRecordingAutomatically: {
+                    type: 'boolean',
+                    default: false
+                },
+                /**
+                 * Text to display on the 'next frame' button
+                 *
+                 * @property {String} nextButtonText
+                 * @default 'Next'
+                 */
+                nextButtonText: {
+                    type: 'string',
+                    default: 'Next'
+                },
+                /**
                  * Whether to show a 'previous' button
                  *
                  * @property {Boolean} showPreviousButton
@@ -90,35 +122,142 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     videoRecorder: Em.inject.service(),
     recorder: null,
     hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
+    videoUploadConnected: Ember.computed.alias('recorder.connected'),
     disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function () {
         return !this.get('hasCamAccess') || this.get('recorder.recording');
     }),
+    readyObserver: Ember.observer('hasCamAccess', function(frame) {
+        if (frame.get('hasCamAccess')) {
+            if (frame.get('startRecordingAutomatically')) {
+                frame.send('record');
+            } else {
+                $('#recordButton').show();
+                $('#recordingText').text('Not recording yet');
+            }
+        }
+    }),
     recordingStarted: false,
+    warning: null,
+    showVideoWarning: false,
+    toggling: false,
+    hidden: false,
 
-    didInsertElement() {
-        this.setupRecorder(this.$('.recorder'), false);
+    makeTimeEvent(eventName, extra) {
+        return this._super(`exp-lookit-observation:${eventName}`, extra);
     },
+
+    showWarning() {
+        if (!this.get('showVideoWarning')) {
+                this.set('showVideoWarning', true);
+                this.send('setTimeEvent', 'webcamNotConfigured');
+
+                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+                // the user is unable to move on.
+                this.send('save');
+
+                var recorder = this.get('recorder');
+                recorder.show();
+                recorder.on('onCamAccessConfirm', () => {
+                    this.send('removeWarning');
+                    this.startRecorder();
+                });
+        }
+    },
+
+    removeWarning() {
+        this.set('showVideoWarning', false);
+    },
+
+   didInsertElement() { // Immediately try to set up
+
+        var _this = this;
+        $('#hiddenWebcamMessage').hide();
+        $('#recordButton').hide();
+        $('#pauseButton').hide();
+        $('#recordingIndicator').hide();
+        $('#recordingText').text('');
+        $('#recordButtonText').text('Record');
+        if (this.get('experiment') && this.get('id') && this.get('session')) {
+            // Start recorder and start recording immediately
+            const installPromise = this.setupRecorder(this.$('.recorder'), false, {
+                hidden: false
+            });
+        }
+
+        this._super(...arguments);
+    },
+
+    willDestroyElement() {
+        // Whenever the component is destroyed, make sure that video recorder is stopped
+        const recorder = this.get('recorder');
+        if (recorder) {
+            recorder.hide();
+            this.stopRecorder();
+        }
+        this.send('setTimeEvent', 'destroyingElement');
+        this._super(...arguments);
+    },
+
+    recordingTimer: null,
+    hasStartedRecording: false,
 
     actions: {
         record() {
-            this.startRecorder();
-            window.setTimeout(() => {
-                this.set('recordingStarted', true);
-            }, 2000);
+            if (this.get('hasStartedRecording')) {
+                this.resumeRecorder();
+            } else {
+                this.set('hasStartedRecording', true);
+                this.startRecorder();
+            }
+
+            var _this = this;
+            if (this.get('recordSegmentLength')) { // no timer if 0
+                this.set('recordingTimer', window.setTimeout(function() {
+                    /**
+                     * Video recording automatically paused upon reaching time limit
+                     *
+                     * @event recorderReady
+                     */
+                    _this.send('setTimeEvent', 'recorderTimeout');
+                    _this.send('pause');
+                }, _this.get('recordSegmentLength') * 1000));
+            }
+            $('#pauseButton').show();
+            $('#recordButton').hide();
+            $('#recordingIndicator').show();
+            $('#recordingText').text('Recording...');
+            $('#recordButtonText').text('Resume');
         },
         finish() {
             this.stopRecorder().then(() => {
                 this.send('next');
             });
         },
+        pause() {
+            this.pauseRecorder(true);
+            $('#pauseButton').hide();
+            $('#recordButton').show();
+            $('#recordingIndicator').hide();
+            $('#recordingText').text('Paused');
+        },
         toggleWebcamButton() {
-            $('.recorder div').fadeToggle(400, "swing", function(){
-                if($('.recorder div').css('display') === "none") {
+            var _this = this;
+            if (!this.toggling) {
+                this.set('toggling', true);
+                var recorder = this.get('recorder');
+                if (!this.get('hidden')) {
                     $('#webcamToggleButton').html('Show');
+                    $('#hiddenWebcamMessage').show();
+                    $('.recorder div').addClass('exp-lookit-observation-hidevideo');
+                    this.set('hidden', true);
                 } else {
                     $('#webcamToggleButton').html('Hide');
-                };
-            });
+                    $('#hiddenWebcamMessage').hide();
+                    $('.recorder div').removeClass('exp-lookit-observation-hidevideo');
+                    this.set('hidden', false);
+                }
+                this.set('toggling', false);
+            }
         }
     }
 });

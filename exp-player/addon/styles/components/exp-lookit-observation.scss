@@ -1,6 +1,11 @@
-div.exp-lookit-observation {
-	min-height: 100vh;
-    position: absolute;
+
+
+.exp-lookit-observation .exp-lookit-observation-main {
+    height: 80vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    padding: 0;
+    overflow-y: scroll;
 }
 
 .exp-lookit-observation .instructionspic {
@@ -24,6 +29,13 @@ div.exp-lookit-observation {
 	margin: 0px;
 }
 
+.exp-lookit-observation .recorder div.exp-lookit-observation-hidevideo :not(#hiddenWebcamMessage) {
+    top: -10000px;
+    left: -10000px;
+    z-index: -1;
+    position: absolute;
+}
+
 .exp-lookit-observation .recorder {
 	padding: 0px;
 	margin-bottom: 1em;
@@ -34,6 +46,14 @@ div.exp-lookit-observation {
 	min-width:450px;
 	margin-left:-10%;
 	clear:both !important;
+	position: relative;
+}
+
+.exp-lookit-observation #hiddenWebcamMessage {
+    position: absolute;
+    font-size: 2em;
+    text-align: center;
+    padding: 30%;
 }
 
 .exp-lookit-observation #webcamToggleButton {
@@ -52,7 +72,7 @@ div.exp-lookit-observation {
 }
 
 .exp-lookit-observation .exp-lookit-observation-controls {
-    bottom: 0;
+    padding: 0;
+    margin: 0;
     width: 100%;
-    position: absolute;
 }
