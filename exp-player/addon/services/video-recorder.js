@@ -11,32 +11,35 @@ let {
 } = Ember;
 
 // List of hooks and internal flash widget recorder methods:
-//    https://hdfvr.com/video-recording-api
-const HOOKS = ['onRecordingStarted', 'onCamAccess', 'onFlashReady', 'onUploadDone', 'userHasCamMic', 'onConnectionStatus'];
+//    https://addpipe.com/docs#javascript-events-api
+//    New events available in HTML5: onRecorderInit, onRecorderReady, onConnectionClosed,
+//     onMicActivityLevel, onSaveOk
+const HOOKS = [ 'onRecordingStarted',
+                'onCamAccess',
+                'onRecorderReady',
+                'onUploadDone',
+                'userHasCamMic',
+                'onConnectionStatus'];
 
 const ATTRIBUTES = {
     align: 'middle',
-    id: 'VideoRecorder',
+    id: 'hdfvr-content',
     name: 'VideoRecorder'
 };
 
 const FLASHVARS = {
-    authenticity_token: '',
-    lstext: 'Loading...',
-    mrt: '120',
-    qualityurl: 'audio_video_quality_profiles/320x240x30x90.xml',
     recorderId: '123',
-    sscode: 'php',
-    userId: 'XXY'
-};
-
-const PARAMS = {
-    quality: 'high',
-    bgcolor: '#dfdfdf',
-    play: 'true',
-    loop: 'false',
-    allowscriptaccess: 'sameDomain',
-    wmode: 'transparent'
+    qualityurl: "avq/480p.xml",
+    accountHash: "daad899f51576eff62be94f2ec1b1952",
+    eid: 1, // environment
+    showMenu: "false", // show recording button menu
+    mrt: 100000000, // max recording time in seconds (don't use)
+    sis: 1, // skip initial screen
+    asv: 1, // autosave recordings
+    mv: 0,
+    dpv: 0,
+    ao: 0, // audio-only
+    dup: 0 // allow file uploads
 };
 
 /**
@@ -55,7 +58,6 @@ const VideoRecorder = Ember.Object.extend({
     flashVars: {},
 
     divId: Ember.computed.alias('attributes.id'),
-    sscode: Ember.computed.alias('flashVars.sscode'),
     videoId: Ember.computed.alias('flashVars.userId'),
     recorderId: Ember.computed.alias('flashVars.recorderId'),
 
@@ -63,7 +65,7 @@ const VideoRecorder = Ember.Object.extend({
     hasCamAccess: false,
     hasWebCam: false,
     recording: Ember.computed.alias('_recording').readOnly(),
-    flashReady: Ember.computed.alias('_flashReady').readOnly(),
+    flashReady: Ember.computed.alias('_recorderReady').readOnly(),
     connected: false,
 
     debug: true,
@@ -71,14 +73,17 @@ const VideoRecorder = Ember.Object.extend({
     _started: false,
     _camAccess: false,
     _recording: false,
-    _flashReady: false,
+    _recorderReady: false,
     _SWFId: null,
 
     _recordPromise: null,
     _stopPromise: null,
 
+    //recorder: null,
+
     recorder: Ember.computed(function () {
-        return window.swfobject.getObjectById(this.get('_SWFId'));
+        //return $('#' + this.get('_SWFId'))[0];
+        return document.VideoRecorder;
     }).volatile(),
 
     /**
@@ -89,6 +94,7 @@ const VideoRecorder = Ember.Object.extend({
      * @return {Promise} Indicate whether widget was successfully installed and started
      */
     install({record: record} = {record: false}) {
+        let origDivId = this.get('divId');
         this.set('divId', `${this.get('divId')}-${this.get('recorderId')}`);
 
         var $element = $(this.get('element'));
@@ -108,7 +114,7 @@ const VideoRecorder = Ember.Object.extend({
             }
         });
         this.set('$container', $container);
-        if (hidden) {
+        if (hidden) { // Showing this upon 'hidden' has some unexpected side effects.
             $container.append(
                 `
 <div class="col-md-12">
@@ -123,10 +129,9 @@ const VideoRecorder = Ember.Object.extend({
 `
             );
         }
-
-        $container.append(`<div id="${divId}"></div>`);
+        $container.append($('<div>', {id: origDivId})); // TODO: remove magic text
         $element.append($container);
-        if (hidden) {
+        if (hidden) { // TODO: is there a way to link this to something other than 'hidden'?
             $container.append(
                 $('<div>').addClass('row').append(
                     $('<div>').addClass('col-md-12').append(
@@ -142,30 +147,26 @@ const VideoRecorder = Ember.Object.extend({
         }
 
         return new RSVP.Promise((resolve, reject) => {
-            window.swfobject.embedSWF(
-                'VideoRecorder.swf',
-                document.getElementById(divId),
-                this.get('width'),
-                this.get('height'),
-                '10.3.0',
-                '',
-                this.get('flashVars'),
-                this.get('params'),
-                this.get('attributes'),
-                vr => {
-                    if (!vr.success) {
-                        return reject(new Error('Install failed'));
-                    }
-                    this.set('_started', true);
-                    this.set('_SWFId', vr.id);
-                    $('#' + vr.id).css('height', '100%');
-                    console.log('Install success');
-                    if (record) {
-                        return this.record();
-                    } else {
-                        return resolve();
-                    }
-                });
+            window.size = { // just display size. Not actually used by us, but needs to
+            // be defined globally for Pipe.
+                width: 420,
+                height: 315
+            };
+            // Make flashvars available globally for Pipe.
+            window.flashvars = Ember.copy(FLASHVARS, true);
+
+            console.log('trying to set up the video recorder...');
+            $.getScript('https://cdn.addpipe.com/1.3/pipe.js');
+
+            // set _started true
+            this.set('_started', true);
+            this.set('_SWFId', 'hdfvr-content'); // TODO - should this be divId?
+
+            if (record) {
+                return this.record();
+            } else {
+                return resolve();
+            }
         });
     },
 
@@ -358,8 +359,8 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onFlashReady() {
-        this.set('_flashReady', true);
+    _onRecorderReady() {
+        this.set('_recorderReady', true);
     },
 
     _userHasCamMic(hasCam) {
@@ -386,13 +387,12 @@ const VideoRecorder = Ember.Object.extend({
 export default Ember.Service.extend({
     _recorders: {},
 
-    //Initial setup, installs flash hooks into the page
+    //Initial setup, installs webcam hooks into the page
     init() {
         var runHandler = function (recorder, hookName, args) {
             if (recorder.get('debug')) {
                 console.log(hookName, args);
             }
-
             if (recorder.get('_' + hookName)) {
                 recorder.get('_' + hookName).apply(recorder, args);
             }
@@ -410,7 +410,11 @@ export default Ember.Service.extend({
                     recorder = _this.get(`_recorders.${args[3]}`);
                 } else {
                     var recorderId = args.pop();
-                    recorder = _this.get(`_recorders.${recorderId}`);
+                    // Make sure this recorder ID is actually in _recorders;
+                    // otherwise fails by returning all of _recorders in this case.
+                    if (_this._recorders.hasOwnProperty(recorderId)) {
+                        recorder = _this.get(`_recorders.${recorderId}`);
+                    }
                 }
                 if (!recorder) {
                     Object.keys(_this.get('_recorders')).forEach((id) => {
@@ -437,13 +441,10 @@ export default Ember.Service.extend({
         Ember.merge(defaults, settings);
 
         var props = {
-            params: Ember.copy(PARAMS, true),
             flashVars: Ember.copy(FLASHVARS, true),
             attributes: Ember.copy(ATTRIBUTES, true),
             manager: this
         };
-        props.flashVars.sscode = defaults.config ? 'asp' : 'php';
-        props.flashVars.userId = videoId;
         props.flashVars.recorderId = (new Date().getTime() + '');
         props.element = element;
         props.hidden = defaults.hidden;

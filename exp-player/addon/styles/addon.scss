@@ -95,3 +95,11 @@
     z-index: -1;
     position: absolute;
 }
+
+p#pipeClickPowered {
+    display:none;
+}
+
+#hdfvr-content, #hdfvr-content #pipeVrec, #hdfvr-content #pipeVideoInput {
+    height: 100% !important;
+}
