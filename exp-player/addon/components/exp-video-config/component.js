@@ -28,7 +28,6 @@ export default ExpFrameBaseComponent.extend({
     layout,
     videoRecorder: Ember.inject.service(),
     recorder: null,
-    didReload: false,
     showWarning: false,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
@@ -47,19 +46,6 @@ export default ExpFrameBaseComponent.extend({
         next() {
             this.get('recorder').stop({destroy: true});
             this._super(...arguments);
-        },
-        reloadRecorder() {
-            this.set('showWarning', false);
-            this.set('didReload', true);
-            this.get('recorder').destroy();
-            this._setupRecorder();
-        },
-        checkReloadedThenNext() {
-            if (!this.get('didReload')) {
-                this.set('showWarning', true);
-            } else {
-                this.send('next');
-            }
         }
     },
 

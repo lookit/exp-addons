@@ -40,10 +40,6 @@
                     Check that your microphone is working: Right-click on the camera image, choose "Settings," and click the microphone tab. If you clap your hands, you should see the green volume bar go up.
                 </li>
 
-                <li>
-                    Click this button and make sure you see your webcam view again, <em>without</em> having to click "Allow": <button id="checkSettings" class="btn btn-primary" {{action 'reloadRecorder'}}>check settings</button>
-                </li>
-
             </ol>
 
         {{/unless}}
@@ -55,7 +51,7 @@
             </div>
         {{/if}}
 
-        <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'checkReloadedThenNext' }} >
+        <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'next' }} >
             Next
         </button>
     </div>
