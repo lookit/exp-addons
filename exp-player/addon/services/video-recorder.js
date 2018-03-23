@@ -74,7 +74,6 @@ const VideoRecorder = Ember.Object.extend({
     _camAccess: false,
     _recording: false,
     _recorderReady: false,
-    _SWFId: null,
 
     _recordPromise: null,
     _stopPromise: null,
@@ -82,7 +81,6 @@ const VideoRecorder = Ember.Object.extend({
     //recorder: null,
 
     recorder: Ember.computed(function () {
-        //return $('#' + this.get('_SWFId'))[0];
         return document.VideoRecorder;
     }).volatile(),
 
@@ -160,7 +158,6 @@ const VideoRecorder = Ember.Object.extend({
 
             // set _started true
             this.set('_started', true);
-            this.set('_SWFId', 'hdfvr-content'); // TODO - should this be divId?
 
             if (record) {
                 return this.record();
@@ -312,16 +309,8 @@ const VideoRecorder = Ember.Object.extend({
     destroy() {
         console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
         $(`#${this.get('divId')}-container`).remove();
-        this.set('_SWFId', null);
+        removePipeRecorder(); // TODO: this may destroy ALL recorders, not just this one.
         this.set('_recording', false);
-        window.swfobject.removeSWF(this.get('_SWFId'));
-    },
-
-    finish() {
-        return new Ember.RSVP.Promise((resolve) => {
-            // todo
-            resolve();
-        });
     },
 
     on(eName, func) {
