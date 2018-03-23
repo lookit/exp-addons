@@ -37,7 +37,7 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
 }
 
 // this is what we place in position
-.exp-lookit-dialogue-page div.story-image-positioner,  #experiment-player.player-fullscreen div.story-image-positioner {
+.exp-lookit-dialogue-page div.story-image-positioner,  #experiment-player.player-fullscreen .exp-lookit-dialogue-page div.story-image-positioner {
     position: absolute;
     display: block;
     //height: auto;
@@ -45,7 +45,7 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
 }
 
 // this is what we click on
-.exp-lookit-dialogue-page div.story-image-container,  #experiment-player.player-fullscreen div.story-image-container {
+.exp-lookit-dialogue-page div.story-image-container,  #experiment-player.player-fullscreen .exp-lookit-dialogue-page div.story-image-container {
     width: max-content;
     height:100%;
     padding: 10px;
@@ -120,7 +120,7 @@ $exp-lookit-dialogue-page-height: (100 - $exp-lookit-dialogue-page-top-margin - 
     cursor: not-allowed !important;
 }
 
-.exp-lookit-dialogue-page #background-image, #experiment-player.player-fullscreen #background-image {
+.exp-lookit-dialogue-page #background-image, #experiment-player.player-fullscreen .exp-lookit-dialogue-page #background-image {
     width: 100%;
     height:auto;
     max-width: 100%;
