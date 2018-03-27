@@ -1,0 +1,90 @@
+<div class="exp-lookit-observation">
+
+    <div class="row exp-lookit-observation-main">
+
+        <div class="col-sm-6 exp-text">
+
+            {{#each blocks as |block|}}
+
+                {{#if block.title}}
+                    <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
+                {{/if}}
+
+                {{#if block.text}}
+                    <p>
+                        {{exp-format block.text}}
+                    </p>
+                {{/if}}
+
+                {{#if block.listblocks}}
+                    <ul>
+                        {{#each block.listblocks as |listitem|}}
+                            <li>
+                                {{exp-format listitem.text}}
+
+                                {{#if listitem.image}}
+                                    <img class="instructionspic"
+                                        src={{listitem.image.src}}
+                                        alt={{listitem.image.alt}} >
+                                {{/if}}
+
+                            </li>
+                        {{/each}}
+                    </ul>
+
+                {{/if}}
+
+            {{/each}}
+
+        </div>
+
+        <div class="col-sm-5 col-sm-offset-1">
+
+            <button class="btn btn-default pull-right" id="webcamToggleButton" {{action 'toggleWebcamButton'}}>
+                Hide
+            </button>
+
+
+            <div class="row recorder-container">
+
+                <div class="recorder col-xs-12"><div id="hiddenWebcamMessage"> Webcam feed <br>not displayed </div></div>
+            </div>
+
+            <div id="recordingControls">
+
+                <span id="recordingStatus">
+                    <i class="fa fa-circle text-danger Blink" id="recordingIndicator"></i>
+                    <span id="recordingText"> Recording... </span>
+                </span>
+
+                <button class="btn btn-default pull-right" id="pauseButton" {{action 'pause'}}>
+                    <i class="fa fa-pause" id="pauseButtonIcon"></i>
+                    <span id="pauseButtonText">Pause</span>
+                </button>
+
+                <button class="btn btn-default pull-right" id="recordButton" {{action 'record'}}>
+                    <i class="fa fa-play" id="recordButtonIcon"></i>
+                    <span id="recordButtonText">Resume</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row exp-lookit-observation-controls">
+        <div class="col-sm-12 pull-down">
+            {{#if showPreviousButton}}
+                <button class="btn btn-default pull-left" {{ action 'previous' }}>
+                    Previous
+                </button>
+            {{/if}}
+
+            <button class="btn btn-success pull-right" {{ action 'next' }}>
+                {{exp-format nextButtonText}}
+            </button>
+
+        </div>
+    </div>
+</div>
+
+
