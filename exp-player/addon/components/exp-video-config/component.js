@@ -29,6 +29,7 @@ export default ExpFrameBaseComponent.extend({
     videoRecorder: Ember.inject.service(),
     recorder: null,
     showWarning: false,
+    micChecked: Em.computed.alias('recorder.micChecked'),
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
     showWebCamWarning: Ember.computed.not('hasWebCam'),
@@ -46,7 +47,15 @@ export default ExpFrameBaseComponent.extend({
         next() {
             this.get('recorder').stop({destroy: true});
             this._super(...arguments);
+        },
+        checkAudioThenNext() {
+            if (!this.get('micChecked')) {
+                this.set('showWarning', true);
+            } else {
+                this.send('next');
+            }
         }
+
     },
 
     type: 'exp-videoconfig',
@@ -72,7 +81,7 @@ export default ExpFrameBaseComponent.extend({
                 troubleshootingIntro: {
                     type: 'string',
                     description: 'Text to show as introduction to troubleshooting tips section',
-                    default: "Some families are having trouble initially getting their webcams to work on Lookit. We're sorry, and we're working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems."
+                    default: "We're just getting started with a new method for video recording! If you're having trouble and the instructions below don't fix it, we're sorry - and we'd love to hear from you so we can improve the system."
                 }
 
             },

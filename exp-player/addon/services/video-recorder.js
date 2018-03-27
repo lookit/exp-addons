@@ -19,13 +19,16 @@ const HOOKS = [ 'onRecordingStarted',
                 'onRecorderReady',
                 'onUploadDone',
                 'userHasCamMic',
-                'onConnectionStatus'];
+                'onConnectionStatus',
+                'onMicActivityLevel'];
 
 const ATTRIBUTES = {
     align: 'middle',
     id: 'hdfvr-content',
     name: 'VideoRecorder'
 };
+
+const MIN_VOLUME = 5;
 
 const FLASHVARS = {
     recorderId: '123',
@@ -77,6 +80,8 @@ const VideoRecorder = Ember.Object.extend({
 
     _recordPromise: null,
     _stopPromise: null,
+
+    micChecked: false,
 
     //recorder: null,
 
@@ -145,18 +150,16 @@ const VideoRecorder = Ember.Object.extend({
         }
 
         return new RSVP.Promise((resolve, reject) => {
-            window.size = { // just display size. Not actually used by us, but needs to
-            // be defined globally for Pipe.
-                width: 420,
-                height: 315
+            window.size = { // just display size when showing to user. We override css.
+                width: 320,
+                height: 240
             };
             // Make flashvars available globally for Pipe.
             window.flashvars = Ember.copy(FLASHVARS, true);
 
-            console.log('trying to set up the video recorder...');
+            // TODO: can we put this elsewhere instead of loading here?
             $.getScript('https://cdn.addpipe.com/1.3/pipe.js');
 
-            // set _started true
             this.set('_started', true);
 
             if (record) {
@@ -362,6 +365,12 @@ const VideoRecorder = Ember.Object.extend({
         } else {
             this.set('connected', false);
         }
+    },
+
+    _onMicActivityLevel(activityLevel) {
+        if (activityLevel > MIN_VOLUME) {
+            this.set('micChecked', true);
+        }
     }
     // End Flash hooks
 });
@@ -398,7 +407,7 @@ export default Ember.Service.extend({
                 if (hookName === 'onUploadDone') {
                     recorder = _this.get(`_recorders.${args[3]}`);
                 } else {
-                    var recorderId = args.pop();
+                    var recorderId = args.shift();
                     // Make sure this recorder ID is actually in _recorders;
                     // otherwise fails by returning all of _recorders in this case.
                     if (_this._recorders.hasOwnProperty(recorderId)) {

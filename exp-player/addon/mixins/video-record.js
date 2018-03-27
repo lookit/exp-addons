@@ -175,5 +175,5 @@ export default Ember.Mixin.create({
         } else {
             return Ember.RSVP.resolve();
         }
-    },
+    }
 });

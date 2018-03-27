@@ -178,8 +178,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         $('#recordingText').text('');
         $('#recordButtonText').text('Record');
         if (this.get('experiment') && this.get('id') && this.get('session')) {
-            // Start recorder and start recording immediately
-            const installPromise = this.setupRecorder(this.$('.recorder'), false, {
+            // Start recorder
+            this.setupRecorder(this.$('.recorder'), false, {
                 hidden: false
             });
         }

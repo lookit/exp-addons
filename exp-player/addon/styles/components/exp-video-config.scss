@@ -62,4 +62,16 @@ div.exp-video-config {
     margin-left: 3em;
 }
 
+.exp-video-config #soundCheckBox {
+    border: medium solid gray;
+    width: 50%;
+    margin-left: 25%;
+    text-align: center;
+    padding: 1px;
+    margin-top: 5px;
+    border-radius: 2px;
+}
 
+.exp-video-config .soundCheckComplete {
+    background-color: #d4efdf;
+}
