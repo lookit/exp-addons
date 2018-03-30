@@ -132,7 +132,7 @@ const VideoRecorder = Ember.Object.extend({
 `
             );
         }
-        $container.append($('<div>', {id: origDivId})); // TODO: remove magic text
+        $container.append($('<div>', {id: origDivId}));
         $element.append($container);
         if (hidden) { // TODO: is there a way to link this to something other than 'hidden'?
             $container.append(
@@ -252,13 +252,16 @@ const VideoRecorder = Ember.Object.extend({
      * @param destroy
      */
     stop({destroy: destroy} = {destroy: false}) {
-        // Force at least 1.5 seconds of video to be recorded. Otherwise upload is never called
-        // We optimistically start the connection before checking for camera access. For now, let recorder stop
-        // immediately if recorder never had camera access- the video would be meaningless anyway
-        if (this.get('hasCamAccess') && (1.5 - this.getTime() > 0)) {
-            window.setTimeout(this.stop.bind(this, {
-                destroy: destroy
-            }), 1.5 - this.getTime());
+        // Force at least 3 seconds of video to be recorded to ensure upload is called.
+        if (this.get('hasCamAccess') && (3 - this.getTime() > 0)) {
+            // sleep time expects milliseconds
+            function sleep (time) {
+              return new Promise((resolve) => setTimeout(resolve, time));
+            }
+            // Usage!
+            return sleep((3 - this.getTime()) * 1000).then(() => {
+                return this.stop();
+            });
         } else {
             var recorder = this.get('recorder');
             if (recorder) {
@@ -272,14 +275,15 @@ const VideoRecorder = Ember.Object.extend({
                     this.set('_recording', false);
                 });
             }
-        }
-        var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
-            this.set('_stopPromise', {
-                resolve: resolve,
-                reject: reject
+
+            var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
+                this.set('_stopPromise', {
+                    resolve: resolve,
+                    reject: reject
+                });
             });
-        });
-        return _stopPromise;
+            return _stopPromise;
+        }
     },
 
     /**
@@ -305,14 +309,24 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     /**
-     * Uninstall the video recorder from the page
+     * Destroy video recorder and remove from list of recorders. Use this to remove
+     * the video recorder when destroying a frame, if not triggered via upload.
      *
      * @method destroy
      */
     destroy() {
+        this.get('manager').destroy(this);
+    },
+
+    /**
+     * Uninstall the video recorder from the page
+     *
+     * @method uninstall
+     */
+    uninstall() {
         console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
+        removePipeRecorder(); // TODO: this may affect ALL recorders, not just this one.
         $(`#${this.get('divId')}-container`).remove();
-        removePipeRecorder(); // TODO: this may destroy ALL recorders, not just this one.
         this.set('_recording', false);
     },
 
@@ -331,13 +345,17 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     _onUploadDone(streamName, streamDuration, userId, recorderId) { // jshint ignore:line
-        this.get('manager').destroy(this);
+        this.destroy();
         if (this.get('_stopPromise')) {
+            console.log('Resolving stop promise...');
+            console.log(streamName);
             this.get('_stopPromise').resolve();
         }
     },
 
-    _onCamAccess(allowed) { // jshint ignore:line
+    _onCamAccess(allowed, recorderId) { // jshint ignore:line
+        console.log('onCamAccess: ' + recorderId);
+        console.log(this);
         this.set('hasCamAccess', allowed);
         if (this.get('hidden')) {
             this.get('$container').find('button').removeClass('disabled').on(
@@ -351,24 +369,24 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onRecorderReady() {
+    _onRecorderReady(recorderId, recorderType) {
         this.set('_recorderReady', true);
     },
 
-    _userHasCamMic(hasCam) {
-        this.set('hasWebCam', Boolean(hasCam));
+    _userHasCamMic(cam_number,mic_number, recorderId) {
+        this.set('hasWebCam', Boolean(cam_number));
     },
 
-    _onConnectionStatus(status) {
-        if (status === 'NetConnection.Connect.Success') {
+    _onConnectionStatus(status, recorderId) {
+        if (status === 'connected') {
             this.set('connected', true);
         } else {
             this.set('connected', false);
         }
     },
 
-    _onMicActivityLevel(activityLevel) {
-        if (activityLevel > MIN_VOLUME) {
+    _onMicActivityLevel(recorderId, currentActivityLevel) {
+        if (currentActivityLevel > MIN_VOLUME) {
             this.set('micChecked', true);
         }
     }
@@ -389,7 +407,7 @@ export default Ember.Service.extend({
     init() {
         var runHandler = function (recorder, hookName, args) {
             if (recorder.get('debug')) {
-                console.log(hookName, args);
+                //console.log(hookName, args);
             }
             if (recorder.get('_' + hookName)) {
                 recorder.get('_' + hookName).apply(recorder, args);
@@ -404,15 +422,20 @@ export default Ember.Service.extend({
             window[hookName] = function () {
                 var args = Array.prototype.slice.call(arguments);
                 var recorder;
-                if (hookName === 'onUploadDone') {
-                    recorder = _this.get(`_recorders.${args[3]}`);
-                } else {
-                    var recorderId = args.shift();
-                    // Make sure this recorder ID is actually in _recorders;
-                    // otherwise fails by returning all of _recorders in this case.
-                    if (_this._recorders.hasOwnProperty(recorderId)) {
-                        recorder = _this.get(`_recorders.${recorderId}`);
-                    }
+                var recorderIdPositions = {
+                    'onUploadDone': 3,
+                    'userHasCamMic': 2,
+                    'onCamAccess': 1,
+                    'onConnectionStatus': 1,
+                    'onSaveOk': 5
+                };
+                var recorderIdPos = recorderIdPositions[hookName] || 0;
+                var recorderId = args[recorderIdPos];
+
+                // Make sure this recorder ID is actually in _recorders;
+                // otherwise fails by returning all of _recorders in this case.
+                if (_this._recorders.hasOwnProperty(recorderId)) {
+                    recorder = _this.get(`_recorders.${recorderId}`);
                 }
                 if (!recorder) {
                     Object.keys(_this.get('_recorders')).forEach((id) => {
@@ -426,8 +449,7 @@ export default Ember.Service.extend({
         });
     },
 
-    //Insert the recorder and start recording
-    //IE a user might not have granted access to their webcam
+    //Insert the recorder
     start(videoId, element, settings = {}) {
         if (typeof (videoId) !== 'string') {
             throw new Error('videoId must be a string');
@@ -448,12 +470,13 @@ export default Ember.Service.extend({
         props.hidden = defaults.hidden;
         let handle = new VideoRecorder(props);
         this.set(`_recorders.${props.flashVars.recorderId}`, handle);
+        console.log('created new video recorder ' + props.flashVars.recorderId);
         return handle;
     },
     destroy(recorder) {
         var recorders = this.get('_recorders');
-        delete recorders[recorder.get('videoId')];
+        delete recorders[recorder.get('recorderId')];
         this.set('_recorders', recorders);
-        recorder.destroy();
+        recorder.uninstall();
     }
 });

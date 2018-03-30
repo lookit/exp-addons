@@ -386,8 +386,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            this.stopRecorder();
-            this._super(...arguments);
+            if (this.get('recorder')) {
+                this.stopRecorder().then(() => {
+                    this._super(...arguments);
+                });
+            } else {
+                this._super(...arguments);
+            }
         },
 
         playNextAudioSegment() {

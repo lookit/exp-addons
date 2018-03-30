@@ -179,9 +179,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         $('#recordButtonText').text('Record');
         if (this.get('experiment') && this.get('id') && this.get('session')) {
             // Start recorder
-            this.setupRecorder(this.$('.recorder'), false, {
-                hidden: false
-            });
+            this.setupRecorder(this.$('.recorder'), false);
         }
 
         this._super(...arguments);
@@ -189,6 +187,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
 
     willDestroyElement() {
         // Whenever the component is destroyed, make sure that video recorder is stopped
+        console.log('destroying the observation frame!');
         const recorder = this.get('recorder');
         if (recorder) {
             recorder.hide();
@@ -229,12 +228,12 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             $('#recordButtonText').text('Resume');
         },
         finish() {
-            this.stopRecorder().then(() => {
+            this.stopRecorder({destroy: true}).then(() => {
                 this.send('next');
             });
         },
         pause() {
-            this.pauseRecorder(true);
+            this.stopRecorder();
             $('#pauseButton').hide();
             $('#recordButton').show();
             $('#recordingIndicator').hide();

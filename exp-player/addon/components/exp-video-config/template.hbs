@@ -18,7 +18,17 @@
     <div class="col-md-5 col-md-offset-1">
         <div class="row exp-video-config" style="height: 30vh">
             <div id="recorder" class="col-md-12" style="height:100%"></div>
+
         </div>
+        <div class="select">
+                <label for="videoSource">Video source: </label>
+                <select id="videoSource"></select>
+        </div>
+        <div class="select">
+                <label for="audioSource">Audio source: </label>
+                <select id="audioSource"></select>
+        </div>
+        <button class="btn btn-outline-secondary pull-right" {{ action 'getSources' }} >Refresh sources </button>
     </div>
 
     <div class="col-md-5">

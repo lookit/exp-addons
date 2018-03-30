@@ -175,5 +175,19 @@ export default Ember.Mixin.create({
         } else {
             return Ember.RSVP.resolve();
         }
+    },
+
+     /**
+     * Destroy recorder and stop accessing webcam
+     * @method destroyRecorder
+     */
+    destroyRecorder() {
+        const recorder = this.get('recorder');
+        if (recorder) {
+            this.send('setTimeEvent', 'destroyingRecorder');
+            recorder.destroy();
+        }
     }
+
+
 });
