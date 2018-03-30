@@ -685,6 +685,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
+        $(document).on('keyup.pauser', (e) => {
+            if (this.get('readyToProceed')) {
+                if (e.which === 13) { // enter/return
+                    this.send('next');
+                }
+            }
+        });
+
         // Expand any image src stubs & imageAudio stubs
         var _this = this;
         var images = this.get('images');
@@ -787,6 +795,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             recorder.hide(); // Hide the webcam config screen
             this.stopRecorder();
         }
+        $(document).off('keyup.pauser');
 
         this._super(...arguments);
     }
