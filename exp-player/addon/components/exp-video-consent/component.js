@@ -59,21 +59,24 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         return !this.get('hasCamAccess') || this.get('recorder.recording');
     }),
     recordingStarted: false,
+    recordingStopped: false,
 
     didInsertElement() {
         this.setupRecorder(this.$('.recorder'), false);
     },
     actions: {
         record() {
-            this.startRecorder();
-            window.setTimeout(() => {
+            this.startRecorder().then(() => {
                 this.set('recordingStarted', true);
-            }, 2000);
+            });
         },
         finish() {
-            this.stopRecorder().then(() => {
-                this.send('next');
-            });
+            if (!this.get('recordingStopped')) {
+                this.set('recordingStopped', true);
+                this.stopRecorder().then(() => {
+                    this.send('next');
+                });
+            }
         }
     },
 
