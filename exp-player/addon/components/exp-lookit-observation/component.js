@@ -233,7 +233,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             });
         },
         pause() {
-            this.stopRecorder();
+            this.pauseRecorder();
             $('#pauseButton').hide();
             $('#recordButton').show();
             $('#recordingIndicator').hide();
