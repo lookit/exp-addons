@@ -325,9 +325,16 @@ const VideoRecorder = Ember.Object.extend({
      */
     uninstall() {
         console.log(`Destroying the videoRecorder: ${this.get('divId')}`);
-        removePipeRecorder(); // TODO: this may affect ALL recorders, not just this one.
+        //removePipeRecorder(); // TODO: this may affect ALL recorders, not just this one.
         $(`#${this.get('divId')}-container`).remove();
         this.set('_recording', false);
+    },
+
+    finish() {
+        return new Ember.RSVP.Promise((resolve) => {
+            // todo
+            resolve();
+        });
     },
 
     on(eName, func) {
