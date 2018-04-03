@@ -177,7 +177,7 @@ export default Ember.Mixin.create({
      */
     stopRecorder() {
         const recorder = this.get('recorder');
-        if (recorder) {
+        if (recorder && recorder.get('recording')) {
             this.send('setTimeEvent', 'stoppingCapture');
             return this.get('recorder').stop();
         } else {
