@@ -50,7 +50,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     actions: {
 
         next() {
-            this.stopRecorder(); // Don't wait for promise to resolve since we're not uploading
             this.destroyRecorder();
             this._super(...arguments);
         },
