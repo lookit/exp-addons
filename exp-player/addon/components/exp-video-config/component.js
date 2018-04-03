@@ -42,29 +42,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this.set('recorder', recorder);
     },
 
-    applyAudioSourceChange() {
-        this.get('recorder').set('micChecked', false);
-        this.applySourceSelections();
-    },
-
-    applySourceSelections() {
-        function setSource(stream) {
-            $('#pipeVideoInput')[0].srcObject = stream;
-        }
-        var audioSource = $('select#audioSource')[0].value;
-        var videoSource = $('select#videoSource')[0].value;
-        var constraints = {
-            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-        };
-        console.log(constraints);
-
-        navigator.mediaDevices.getUserMedia(constraints).then(setSource);
-    },
-
     didInsertElement() {
         this._setupRecorder();
-        this.send('getSources');
         this._super(...arguments);
     },
 
@@ -82,38 +61,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             } else {
                 this.send('next');
             }
-        },
-
-        getSources() {
-            var _this = this;
-            function gotDevices(deviceInfos) {
-                var audioSelect = $('select#audioSource');
-                var videoSelect = $('select#videoSource');
-
-                audioSelect.empty();
-                videoSelect.empty();
-
-                for (var i = 0; i !== deviceInfos.length; ++i) {
-                    var deviceInfo = deviceInfos[i];
-                    var option = document.createElement('option');
-                    option.value = deviceInfo.deviceId;
-                    if (deviceInfo.kind === 'audioinput') {
-                        option.text = deviceInfo.label ||
-                            'microphone ' + (audioInputSelect.length + 1);
-                        audioSelect.append(option);
-                    } else if (deviceInfo.kind === 'videoinput') {
-                        option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-                        videoSelect.append(option);
-                    }
-                }
-              audioSelect.off('change');
-              videoSelect.off('change');
-              audioSelect.on('change', _this.applyAudioSourceChange.bind(_this));
-              videoSelect.on('change', _this.applySourceSelections.bind(_this));
-            }
-            // TODO: save current selections when refreshing; error handling
-            // TODO: error handling
-            navigator.mediaDevices.enumerateDevices().then(gotDevices);
         }
     },
 
