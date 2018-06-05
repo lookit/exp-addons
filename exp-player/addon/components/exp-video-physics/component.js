@@ -27,6 +27,9 @@ let {
     $
 } = Ember;
 
+// CURRENT STATE: trying to get recording to start at all. See video-recorder.js,
+// video-record.js.
+
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
@@ -35,11 +38,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
+    //videoRecorder: Ember.inject.service(),
     recorder: null,
     warning: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
+
+    readyToStart: false,
+
+    startRecordingWhenPossible: function () {
+        var _this = this;
+        if (this.get('hasCamAccess') && this.get('readyToStart')) {
+            this.startRecorder().then(() => {
+                _this.set('readyToStart', false);
+            });
+        }
+    }.observes('hasCamAccess', 'readyToStart'),
 
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
@@ -274,14 +288,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
                 // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
                 // the user is unable to move on.
-                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
                 this.send('save');
 
-                var recorder = this.get('recorder');
+                var recorder = this.get('recorder'); // TODO
                 recorder.show();
-                recorder.on('onCamAccessConfirm', () => {
-                    this.send('removeWarning');
-                    this.startRecorder();
+                recorder.on('onCamAccess', (hasAccess) => {
+                    if (hasAccess) {
+                        this.send('removeWarning');
+                        this.startRecorder();
+                    }
                 });
             }
         },
@@ -390,7 +405,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         next() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
-            this.stopRecorder();
+            var _this = this;
+            this.stopRecorder().then(() => {
+                _this.destroyRecorder();
+            });
             this._super(...arguments);
         }
     },
@@ -453,36 +471,35 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
-                    this.stopRecorder();
+                    //this.stopRecorder(); TODO: should be covered by WillDestroyElement
                 }
             }
         });
 
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-            const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                hidden: true
-            });
-            installPromise.then(() => {
+            this.setupRecorder(this.$('.recorder'), false).then(() => {
                 /**
                  * When video recorder has been installed
                  *
                  * @event recorderReady
                  */
                 this.send('setTimeEvent', 'recorderReady');
+                this.set('readyToStart', true);
+                this.startRecordingWhenPossible(); // make sure this fires
             });
+
         }
         this.send('showFullscreen');
     },
     willDestroyElement() { // remove event handler
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
+
+        if (this.get('recorder')) {
             this.stopRecorder();
+            this.destroyRecorder();
         }
 
         this.send('setTimeEvent', 'destroyingElement');
-        this._super(...arguments);
         $(document).off('keyup.pauser');
+        this._super(...arguments);
     }
 });

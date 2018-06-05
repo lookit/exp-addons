@@ -145,6 +145,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
@@ -152,6 +153,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             properties: {
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             required: ['videoId']

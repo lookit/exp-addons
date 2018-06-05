@@ -60,7 +60,15 @@ export default Ember.Mixin.create({
      */
     videoRecorder: Ember.inject.service(),
 
+
     /**
+     * A list of all video IDs used in this mixing (a new one is created for each recording).
+     * @property {List} videoList
+     */
+    videoList: null,
+
+    /**
+     * TODO: UPDATE DOC
      * A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`
      *
      * There may be additional prefixes/suffixes added elsewhere in the video recording process. A final video
@@ -68,13 +76,18 @@ export default Ember.Mixin.create({
      *   `videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv`
      * @property {String} videoId
      */
-    videoId: Ember.computed('session', 'id', 'experiment', function() {
+    videoId: '',
+
+    _generateVideoId() {
         return [
+            'pipe',
             this.get('experiment.id'),
             this.get('id'),
-            this.get('session.id')
+            this.get('session.id'),
+            + Date.now(), // Timestamp in ms
+            Math.floor(Math.random() * 1000)
         ].join('_');
-    }).volatile(),
+    },
 
     /**
      * Extend any base time event capture with information about the recorded video
@@ -89,6 +102,7 @@ export default Ember.Mixin.create({
         const streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
         Ember.merge(base, {
             videoId: this.get('videoId'),
+            pipeId: this.get('recorder').get('pipeVideoName'),
             streamTime: streamTime
         });
         return base;
@@ -103,9 +117,11 @@ export default Ember.Mixin.create({
      * @return {Promise} A promise representing the result of installing the recorder
      */
     setupRecorder(element, record, settings = {}) {
-        const videoId = this.get('videoId');
+        const videoId = this._generateVideoId();
+        this.set('videoId', videoId);
         const recorder = this.get('videoRecorder').start(videoId, element, settings);
-        const installPromise = recorder.install({record});
+        const pipeLoc = this.container.lookupFactory('config:environment')['pipeLoc'];
+        const installPromise = recorder.install({record}, this.get('videoId'), pipeLoc);
 
         // Track specific events for all frames that use  VideoRecorder
         recorder.on('onCamAccess', (hasAccess) => {
@@ -125,14 +141,16 @@ export default Ember.Mixin.create({
     /**
      * Pause the recorder (and capture timing events). For webRTC recorder, this is
      * just a placeholder and doesn't actually pause the recording. If webRTC used,
-     * includes extra data actuallyPaused: false.
+     * includes extra data actuallyPaused: false. This is for backwards compatibility
+     * with frames that pause/resume recording, and should not be used going forward -
+     * instead stop/start and make separate clips if needed.
      * @method pauseRecorder
      * @param [skipIfMissing=false] If provided (and true), don't raise an error if recording isn't ready yet.
      */
     pauseRecorder(skipIfMissing = false) {
         const recorder = this.get('recorder');
         if (recorder) {
-            this.send('setTimeEvent', 'pauseVideo', {
+            this.send('setTimeEvent', 'pauseCapture', {
                 actuallyPaused: false
             });
             //recorder.pause(skipIfMissing);
@@ -142,14 +160,16 @@ export default Ember.Mixin.create({
     /**
      * Resume a paused recording. For webRTC recorder, this is just a placeholder and
      * doesn't actually pause the recording. If webRTC used, includes extra data
-     * wasActuallyPaused: false.
+     * wasActuallyPaused: false. This is for backwards compatibility
+     * with frames that pause/resume recording, and should not be used going forward -
+     * instead stop/start and make separate clips if needed.
      * @method resumeRecorder
      * @throws an exception if recorder fails to resume TODO: Based on existing usage anyway
      */
     resumeRecorder() {
         const recorder = this.get('recorder');
         if (recorder) {
-            this.send('setTimeEvent', 'unpauseVideo', {
+            this.send('setTimeEvent', 'unpauseCapture', {
                 wasActuallyPaused: false
             });
             //recorder.resume();
@@ -164,7 +184,14 @@ export default Ember.Mixin.create({
     startRecorder() {
         const recorder = this.get('recorder');
         if (recorder) {
-            return recorder.record();
+            return recorder.record().then(() => {
+                this.send('setTimeEvent', 'startRecording');
+                if (this.get('videoList') == null) {
+                    this.set('videoList', [this.get('videoId')]);
+                } else {
+                    this.set('videoList', this.get('videoList').concat([this.get('videoId')]))
+                }
+            });
         } else {
             return Ember.RSVP.resolve();
         }
@@ -181,7 +208,7 @@ export default Ember.Mixin.create({
             this.send('setTimeEvent', 'stoppingCapture');
             return this.get('recorder').stop();
         } else {
-            return Ember.RSVP.resolve();
+            return Ember.RSVP.resolve(1);
         }
     },
 
