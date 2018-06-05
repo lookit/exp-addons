@@ -107,6 +107,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
@@ -114,6 +115,10 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             properties: {
                 videoId: {
                     type: 'string'
+
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             required: ['videoId']
@@ -168,8 +173,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this.set('showVideoWarning', false);
     },
 
-   didInsertElement() { // Immediately try to set up
-
+    didInsertElement() { // Immediately try to set up
         var _this = this;
         $('#hiddenWebcamMessage').hide();
         $('#recordButton').hide();
@@ -185,32 +189,17 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this._super(...arguments);
     },
 
-    willDestroyElement() {
-        // Whenever the component is destroyed, make sure that video recorder is stopped
-        console.log('destroying the observation frame!');
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide();
-            this.stopRecorder();
-        }
-        this.send('setTimeEvent', 'destroyingElement');
-        this._super(...arguments);
-    },
-
     recordingTimer: null,
     hasStartedRecording: false,
 
     actions: {
         record() {
-            if (this.get('hasStartedRecording')) {
-                this.resumeRecorder();
-            } else {
-                this.set('hasStartedRecording', true);
-                this.startRecorder();
-            }
+
+            this.startRecorder();
 
             var _this = this;
             if (this.get('recordSegmentLength')) { // no timer if 0
+                window.clearTimeout(this.get('recordingTimer')); // as a precaution in case still running
                 this.set('recordingTimer', window.setTimeout(function() {
                     /**
                      * Video recording automatically paused upon reaching time limit
@@ -227,17 +216,22 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             $('#recordingText').text('Recording...');
             $('#recordButtonText').text('Resume');
         },
-        finish() {
-            this.stopRecorder({destroy: true}).then(() => {
+
+        proceed() {
+            this.stopRecorder().then(() => {
+                this.destroyRecorder();
                 this.send('next');
             });
         },
         pause() {
-            this.pauseRecorder();
-            $('#pauseButton').hide();
-            $('#recordButton').show();
-            $('#recordingIndicator').hide();
-            $('#recordingText').text('Paused');
+            window.clearTimeout(this.get('recordingTimer')); // no need for current timer
+            this.stopRecorder().then(() => {
+                $('#pauseButton').hide();
+                $('#recordButton').show();
+                $('#recordingIndicator').hide();
+                $('#recordingText').text('Paused');
+                this.setupRecorder(this.$('.recorder'), false);
+            });
         },
         toggleWebcamButton() {
             var _this = this;
