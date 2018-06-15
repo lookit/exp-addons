@@ -102,7 +102,7 @@ export default Ember.Mixin.create({
         const streamTime = this.get('recorder') ? this.get('recorder').getTime() : null;
         Ember.merge(base, {
             videoId: this.get('videoId'),
-            pipeId: this.get('recorder').get('pipeVideoName'),
+            pipeId: this.get('recorder') ? this.get('recorder').get('pipeVideoName') : null,
             streamTime: streamTime
         });
         return base;

@@ -71,6 +71,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
     isPaused: false,
+    stoppedRecording: false,
 
     showVideoWarning: false,
 
@@ -329,12 +330,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             if (this.get('currentTask') === 'intro') {
                 this.set('currentTask', 'test');
             } else {
-                this.send('next'); // moving to intro video
+                this.send('finish'); // moving to intro video
             }
         },
 
         _afterTest() {
-            window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             $('audio#exp-music')[0].pause();
             this.send('playNext');
@@ -346,18 +346,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             this.set('_lastTime', 0);
 
             var testLength = this.get('testLength');
+            var _this = this;
 
             this.set('testTimer', window.setInterval(() => {
-                var videoTime = this.$('#player-video')[0].currentTime;
-                var lastTime = this.get('_lastTime');
+                var videoTime = _this.$('#player-video')[0].currentTime;
+                var lastTime = _this.get('_lastTime');
                 var diff = videoTime - lastTime;
-                this.set('_lastTime', videoTime);
+                _this.set('_lastTime', videoTime);
 
-                var testTime = this.get('testTime');
+                var testTime = _this.get('testTime');
                 if ((testTime + diff) >= (testLength - 0.02)) {
-                    this.send('_afterTest');
+                    window.clearInterval(this.get('testTimer'));
+                    _this.send('_afterTest');
                 } else {
-                    this.set('testTime', testTime + diff);
+                    _this.set('testTime', testTime + diff);
                 }
             }, 100));
         },
@@ -385,7 +387,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
         startIntro() {
             if (this.get('skip')) {
-                this.send('next');
+                this.send('finish');
                 return;
             }
 
@@ -394,7 +396,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
             if (!this.get('isPaused')) {
                 if (this.isLast) {
-                    this.send('next');
+                    this.send('finish');
                 } else {
                     this.send('setTimeEvent', 'startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
@@ -402,14 +404,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             }
         },
 
-        next() {
+        finish() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             var _this = this;
             this.stopRecorder().then(() => {
-                _this.destroyRecorder();
+                _this.set('stoppedRecording', true);
+                _this.send('next');
+            }, () => {
+                _this.send('next');
             });
-            this._super(...arguments);
         }
     },
 
@@ -471,10 +475,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
                 } else if (e.which === 112) { // F1: exit the study early
-                    //this.stopRecorder(); TODO: should be covered by WillDestroyElement
+                    this.stopRecorder().then(() => {
+                        this.set('stoppedRecording', true);
+                    });
                 }
             }
         });
+        window.clearInterval(this.get('testTimer'));
 
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
             this.setupRecorder(this.$('.recorder'), false).then(() => {
@@ -493,9 +500,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     },
     willDestroyElement() { // remove event handler
 
+        window.clearInterval(this.get('testTimer'));
+
         if (this.get('recorder')) {
-            this.stopRecorder();
-            this.destroyRecorder();
+            if (this.get('stoppedRecording')) {
+                this.set('stoppedRecording', true);
+                this.destroyRecorder();
+            } else {
+                this.stopRecorder().then(() => {
+                    this.destroyRecorder();
+                })
+            }
         }
 
         this.send('setTimeEvent', 'destroyingElement');
