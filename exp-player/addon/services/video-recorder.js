@@ -268,7 +268,6 @@ const VideoRecorder = Ember.Object.extend({
      * @method hide
      */
     hide() {
-        this.get('$container').removeClass('video-recorder-visible');
         this.get('$container').addClass('video-recorder-hidden');
     },
 
@@ -280,7 +279,6 @@ const VideoRecorder = Ember.Object.extend({
      */
     show() {
         this.get('$container').removeClass('video-recorder-hidden');
-        this.get('$container').addClass('video-recorder-visible');
         return true;
     },
 

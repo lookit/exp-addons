@@ -62,8 +62,24 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     recordingStopped: false,
 
     didInsertElement() {
-        this.setupRecorder(this.$('.recorder'), false);
+        this.setupRecorder(this.$('#recorder'), false);
+        this._super(...arguments);
     },
+
+    willDestroyElement() {
+        if (this.get('recorder')) {
+            if (this.get('stoppedRecording')) {
+                this.destroyRecorder();
+            } else {
+                this.stopRecorder().then(() => {
+                    this.set('stoppedRecording', true);
+                    this.destroyRecorder();
+                })
+            }
+        }
+        this._super(...arguments);
+    },
+
     actions: {
         record() {
             this.startRecorder().then(() => {
@@ -72,8 +88,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         },
         finish() {
             if (!this.get('recordingStopped')) {
-                this.set('recordingStopped', true);
                 this.stopRecorder().then(() => {
+                    this.set('recordingStopped', true);
                     this.send('next');
                 });
             }

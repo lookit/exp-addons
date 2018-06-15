@@ -27,9 +27,6 @@ let {
     $
 } = Ember;
 
-// CURRENT STATE: trying to get recording to start at all. See video-recorder.js,
-// video-record.js.
-
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
@@ -225,6 +222,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
              * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
              * @param {Object} eventTimings
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @return {Object} The payload sent to the server
              */
             properties: {
@@ -234,6 +232,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             // No fields are required
@@ -422,8 +423,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             return;
         }
 
-        // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
-        // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
             if (!this.get('isLast')) {
                 try {
@@ -484,7 +483,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         window.clearInterval(this.get('testTimer'));
 
         if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-            this.setupRecorder(this.$('.recorder'), false).then(() => {
+            this.setupRecorder(this.$('#recorder'), false).then(() => {
                 /**
                  * When video recorder has been installed
                  *
@@ -504,10 +503,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         if (this.get('recorder')) {
             if (this.get('stoppedRecording')) {
-                this.set('stoppedRecording', true);
                 this.destroyRecorder();
             } else {
                 this.stopRecorder().then(() => {
+                    this.set('stoppedRecording', true);
                     this.destroyRecorder();
                 })
             }

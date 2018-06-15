@@ -34,11 +34,14 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     micChecked: Em.computed.alias('recorder.micChecked'),
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-    showWebCamWarning: Ember.computed.not('hasWebCam'),
-
 
     didInsertElement() {
         this.setupRecorder(this.$('#recorder'), false);
+        this._super(...arguments);
+    },
+
+    willDestroyElement() {
+        this.destroyRecorder();
         this._super(...arguments);
     },
 

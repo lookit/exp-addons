@@ -80,22 +80,7 @@
   white-space: pre-line;
 }
 
-.video-recorder-visible {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    padding: 150px;
-    background: white;
-    height: 80% !important;
-}
-.video-recorder-hidden {
-    top: -10000px;
-    left: -10000px;
-    z-index: -1;
-    position: absolute;
-}
+
 
 // Don't show the 'powered by Pipe' link on video recorder
 p#pipeClickPowered {
@@ -114,4 +99,21 @@ p#pipeClickPowered {
 #hdfvr-content #pipeVrec #pipeMicContainer {
     background-color: gray;
     padding: 2px;
+}
+
+// Pipe video recorder div formatting
+.recorder-container {
+    height: 30vh;
+    margin: 0px;
+}
+
+.recorder-container #recorder {
+    height: 100%;
+}
+
+.video-recorder-hidden {
+    top: -10000px;
+    left: -10000px;
+    z-index: -1;
+    position: absolute;
 }
