@@ -112,7 +112,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     videoRecorder: Ember.inject.service(),
     recorder: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
     readyToStart: false,
     stoppedRecording: false,
 
@@ -350,17 +349,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              * Parameters captured and sent to the server
              *
              * @method serializeContent
-             * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
              * @param {Object} eventTimings
              * @param {String} videoID The ID of any webcam video recorded during this frame
              * @param {List} videoList a list of webcam video IDs in case there are >1
              * @return {Object} The payload sent to the server
              */
             properties: {
-                videosShown: {
-                    type: 'string',
-                    default: []
-                },
                 videoId: {
                     type: 'string'
                 },
@@ -508,7 +502,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     willDestroyElement() {
-
         var _this = this;
         if (_this.get('recorder')) {
             if (_this.get('stoppedRecording')) {
