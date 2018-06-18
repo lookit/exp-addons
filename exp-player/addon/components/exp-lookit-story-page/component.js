@@ -4,6 +4,11 @@ import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
 
+// CURRENT STATUS: trying to get this to record smoothly across consecutive frames.
+// The first frame records correctly but subsequent ones are running into issues with
+// objects having been deleted.
+
+
 let {
     $
 } = Ember;
@@ -108,6 +113,21 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     recorder: null,
     hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
     videoUploadConnected: Ember.computed.alias('recorder.connected'),
+    readyToStart: false,
+    stoppedRecording: false,
+
+    startRecordingWhenPossible: function () {
+        var _this = this;
+        if (this.get('hasCamAccess') && this.get('readyToStart')) {
+            this.startRecorder().then(() => {
+                _this.set('readyToStart', false);
+                $('#waitForVideo').hide();
+                $('.story-image-container').show();
+                _this.set('currentAudioIndex', -1);
+                _this.send('playNextAudioSegment');
+            });
+        }
+    }.observes('hasCamAccess', 'readyToStart'),
 
     // Track state of experiment
     completedAudio: false,
@@ -116,11 +136,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     previousSegment: 'intro', // used when pausing/unpausing - refers to segment that study was paused during
 
     currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
-
-    readyToStartAudio: Ember.computed('hasCamAccess', 'videoUploadConnected',
-        function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected'));
-        }),
 
     meta: {
         name: 'ExpLookitStoryPage',
@@ -330,31 +345,33 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         },
         data: {
+            type: 'object',
             /**
              * Parameters captured and sent to the server
              *
              * @method serializeContent
-             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
              * @param {Object} eventTimings
+             * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @return {Object} The payload sent to the server
              */
-            type: 'object',
             properties: {
+                videosShown: {
+                    type: 'string',
+                    default: []
+                },
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
-            }
+            },
         }
     },
 
-    audioObserver: Ember.observer('readyToStartAudio', function(frame) {
-        if (frame.get('readyToStartAudio')) {
-            $('#waitForVideo').hide();
-            $('.story-image-container').show();
-            frame.set('currentAudioIndex', -1);
-            frame.send('playNextAudioSegment');
-        }
-    }),
+
 
     actions: {
 
@@ -385,14 +402,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.send('playNextAudioSegment');
         },
 
-        next() {
-            if (this.get('recorder')) {
-                this.stopRecorder().then(() => {
-                    this._super(...arguments);
-                });
-            } else {
-                this._super(...arguments);
-            }
+        finish() {
+            var _this = this;
+            this.stopRecorder().then(() => {
+                _this.set('stoppedRecording', true);
+                _this.send('next');
+            }, () => {
+                _this.send('next');
+            });
         },
 
         playNextAudioSegment() {
@@ -401,7 +418,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 $('#' + this.get('audioSources')[this.currentAudioIndex].audioId)[0].play();
             } else {
                 if (this.get('autoProceed')) {
-                    this.send('next');
+                    this.send('finish');
                 } else {
                     $('#nextbutton').prop('disabled', false);
                 }
@@ -472,34 +489,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         if (this.get('doRecording')) {
             $('.story-image-container').hide();
             if (this.get('experiment') && this.get('id') && this.get('session')) {
-                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                    hidden: true
-                });
+                this.setupRecorder(this.$('#recorder'), false).then(() => {
                 /**
                  * When video recorder has been installed
                  *
                  * @event recorderReady
                  */
-                installPromise.then(() => {
-                    this.send('setTimeEvent', 'recorderReady');
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
+                this.send('setTimeEvent', 'recorderReady');
+                this.set('readyToStart', true);
+                this.startRecordingWhenPossible(); // make sure this fires
+            });
 
-                // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
-                const recorder = this.get('recorder');
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.send('setTimeEvent', 'hasCamAccess', {
-                        hasCamAccess: hasAccess
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-
-                recorder.on('onConnectionStatus', () => {
-                    this.send('setTimeEvent', 'videoStreamConnection', {
-                        status: status
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
             }
         } else {
             this.send('playNextAudioSegment');
@@ -508,16 +508,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     willDestroyElement() {
-        this.send('setTimeEvent', 'destroyingElement');
 
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
-            this.stopRecorder();
+        var _this = this;
+        if (_this.get('recorder')) {
+            if (_this.get('stoppedRecording')) {
+                _this.destroyRecorder();
+            } else {
+                _this.stopRecorder().then(() => {
+                    _this.set('stoppedRecording', true);
+                    _this.destroyRecorder();
+                })
+            }
         }
-
-        this._super(...arguments);
+        _this.send('setTimeEvent', 'destroyingElement');
+        _this._super(...arguments);
     }
 
 });
