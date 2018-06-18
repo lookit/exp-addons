@@ -328,7 +328,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     _onUploadDone(streamName, streamDuration, userId, recorderId) { // jshint ignore:line
-        this.destroy();
+        //this.destroy();
         if (this.get('_stopPromise')) {
             console.log('Resolving stop promise...');
             console.log(streamName);
