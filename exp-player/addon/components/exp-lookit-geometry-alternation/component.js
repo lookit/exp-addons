@@ -11,9 +11,12 @@ let {
 /**
  * @module exp-player
  * @submodule frames
+ * @deprecated
  */
 
 /**
+ * Deprecated: not yet adapted for use with webrtc recorder.
+ *
  * Frame to implement specific test trial structure for geometry alternation
  * experiment. Includes announcement, calibration, and alternation (test)
  * phases. During "alternation," two streams of triangles are shown, in
