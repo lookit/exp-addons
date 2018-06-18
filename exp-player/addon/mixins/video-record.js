@@ -68,6 +68,13 @@ export default Ember.Mixin.create({
     videoList: null,
 
     /**
+     * Whether recording is stopped already, meaning it doesn't need to be re-stopped when
+     * destroying frame
+     * @property {Boolean} stoppedRecording
+     */
+     stoppedRecording: false,
+
+    /**
      * TODO: UPDATE DOC
      * A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`
      *
@@ -145,15 +152,15 @@ export default Ember.Mixin.create({
      * with frames that pause/resume recording, and should not be used going forward -
      * instead stop/start and make separate clips if needed.
      * @method pauseRecorder
-     * @param [skipIfMissing=false] If provided (and true), don't raise an error if recording isn't ready yet.
+     * @param [skipIfMissing=false] If provided (and true), don't raise an error if recording isn't ready yet. Not actually used for WebRTC.
      */
-    pauseRecorder(skipIfMissing = false) {
+    pauseRecorder(skipIfMissing = false) { // leave param for backwards compatibility
         const recorder = this.get('recorder');
         if (recorder) {
             this.send('setTimeEvent', 'pauseCapture', {
                 actuallyPaused: false
             });
-            //recorder.pause(skipIfMissing);
+            // Would pause here!
         }
     },
 
@@ -164,7 +171,6 @@ export default Ember.Mixin.create({
      * with frames that pause/resume recording, and should not be used going forward -
      * instead stop/start and make separate clips if needed.
      * @method resumeRecorder
-     * @throws an exception if recorder fails to resume TODO: Based on existing usage anyway
      */
     resumeRecorder() {
         const recorder = this.get('recorder');
@@ -172,7 +178,7 @@ export default Ember.Mixin.create({
             this.send('setTimeEvent', 'unpauseCapture', {
                 wasActuallyPaused: false
             });
-            //recorder.resume();
+            // Would resume here!
         }
     },
 
@@ -222,7 +228,22 @@ export default Ember.Mixin.create({
             this.send('setTimeEvent', 'destroyingRecorder');
             recorder.destroy();
         }
-    }
+    },
 
+    willDestroyElement() {
+        var _this = this;
+        if (_this.get('recorder')) {
+            if (_this.get('stoppedRecording')) {
+                _this.destroyRecorder();
+            } else {
+                _this.stopRecorder().then(() => {
+                    _this.set('stoppedRecording', true);
+                    _this.destroyRecorder();
+                })
+            }
+        }
+        _this.send('setTimeEvent', 'destroyingElement');
+        _this._super(...arguments);
+    }
 
 });

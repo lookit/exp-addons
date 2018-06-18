@@ -40,11 +40,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this._super(...arguments);
     },
 
-    willDestroyElement() {
-        this.destroyRecorder();
-        this._super(...arguments);
-    },
-
     actions: {
         next() {
             this.destroyRecorder();

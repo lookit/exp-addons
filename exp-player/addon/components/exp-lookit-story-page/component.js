@@ -499,22 +499,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.send('playNextAudioSegment');
         }
 
-    },
-
-    willDestroyElement() {
-        var _this = this;
-        if (_this.get('recorder')) {
-            if (_this.get('stoppedRecording')) {
-                _this.destroyRecorder();
-            } else {
-                _this.stopRecorder().then(() => {
-                    _this.set('stoppedRecording', true);
-                    _this.destroyRecorder();
-                })
-            }
-        }
-        _this.send('setTimeEvent', 'destroyingElement');
-        _this._super(...arguments);
     }
 
 });

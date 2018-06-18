@@ -66,20 +66,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this._super(...arguments);
     },
 
-    willDestroyElement() {
-        if (this.get('recorder')) {
-            if (this.get('stoppedRecording')) {
-                this.destroyRecorder();
-            } else {
-                this.stopRecorder().then(() => {
-                    this.set('stoppedRecording', true);
-                    this.destroyRecorder();
-                })
-            }
-        }
-        this._super(...arguments);
-    },
-
     actions: {
         record() {
             this.startRecorder().then(() => {

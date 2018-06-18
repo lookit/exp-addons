@@ -786,21 +786,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     willDestroyElement() {
-        var _this = this;
-        if (_this.get('recorder')) {
-            if (_this.get('stoppedRecording')) {
-                _this.destroyRecorder();
-            } else {
-                _this.stopRecorder().then(() => {
-                    _this.set('stoppedRecording', true);
-                    _this.destroyRecorder();
-                })
-            }
-        }
-
         $(document).off('keyup.nexter');
-        _this.send('setTimeEvent', 'destroyingElement');
-        _this._super(...arguments);
+        this._super(...arguments);
     }
 
 });

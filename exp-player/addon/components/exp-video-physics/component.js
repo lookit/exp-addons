@@ -497,22 +497,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
         this.send('showFullscreen');
     },
+
     willDestroyElement() { // remove event handler
-
         window.clearInterval(this.get('testTimer'));
-
-        if (this.get('recorder')) {
-            if (this.get('stoppedRecording')) {
-                this.destroyRecorder();
-            } else {
-                this.stopRecorder().then(() => {
-                    this.set('stoppedRecording', true);
-                    this.destroyRecorder();
-                })
-            }
-        }
-
-        this.send('setTimeEvent', 'destroyingElement');
         $(document).off('keyup.pauser');
         this._super(...arguments);
     }
