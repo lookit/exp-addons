@@ -1,7 +1,5 @@
-// Shared across platform
+// Exp and Lookit
 @import "components/exp-player";
-
-// Lookit-specific
 @import "components/exp-video-consent";
 @import "components/exp-video-config";
 @import "components/exp-video-config-quality";
@@ -17,6 +15,7 @@
 @import "components/exp-lookit-story-page";
 @import "components/exp-lookit-dialogue-page";
 
+// Physics study only
 @import "components/exp-physics-info";
 @import "components/exp-mood-questionnaire";
 @import "components/exp-physics-preview-exp";
@@ -25,20 +24,6 @@
 @import "components/exp-video-physics";
 @import "components/exp-lookit-survey";
 @import "components/exp-lookit-observation";
-
-// ISP-specific
-@import "components/radio-group";
-@import "components/isp-radio-group";
-@import "components/exp-overview";
-@import "components/exp-free-response";
-@import "components/exp-card-sort";
-@import "components/exp-rating-form";
-@import "components/exp-thank-you";
-@import "components/page-number";
-
-// Unused??
-@import "components/exp-video-setup";
-
 
 .exp-text-large {
     font-size: 2em;

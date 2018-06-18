@@ -11,9 +11,11 @@ let {
 /**
  * @module exp-player
  * @submodule frames
+ * @deprecated
  */
 
 /**
+ * NOT YET ADAPTED FOR WEBRTC RECORDER.
  * Frame to implement a basic preferential looking trial, with static images
  * displayed in the center or at left and right of the screen. Trial proceeds
  * in segments:
