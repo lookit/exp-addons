@@ -54,11 +54,11 @@ export default Ember.Mixin.create({
     },
 
     onFullscreen: function ($element) {
-        this.set('counter', this.get('counter') + 1);
         if (this.get('isDestroyed')) {
             // Short-circuit if object is destroyed (eg we leave fullscreen because a video frame ended)
             return false;
         }
+        this.set('counter', this.get('counter') + 1);
 
         var isFS = this.checkFullscreen();
         this.set('isFullscreen', isFS);
