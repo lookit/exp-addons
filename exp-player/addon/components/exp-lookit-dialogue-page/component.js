@@ -701,6 +701,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     didInsertElement() {
         this._super(...arguments);
 
+        // Make 'Enter' == next button
+        $(document).on('keyup.nexter', (e) => {
+            if (this.get('readyToProceed')) {
+                if (e.which === 13) { // enter/return
+                    this.send('finish');
+                }
+            }
+        });
+
+
         // Expand any image src stubs & imageAudio stubs
         var _this = this;
         var images = this.get('images');
@@ -787,6 +797,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 })
             }
         }
+
+        $(document).off('keyup.nexter');
         _this.send('setTimeEvent', 'destroyingElement');
         _this._super(...arguments);
     }
