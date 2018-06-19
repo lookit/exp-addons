@@ -61,6 +61,10 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         record() {
             this.startRecorder().then(() => {
                 this.set('startedRecording', true);
+                // Require at least 3 s recording
+                setTimeout(function() {
+                    $('#submitbutton').prop( "disabled", false);
+                }, 3000);
             });
         },
         finish() {

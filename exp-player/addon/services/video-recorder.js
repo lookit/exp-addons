@@ -231,12 +231,14 @@ const VideoRecorder = Ember.Object.extend({
      */
     stop() {
         // Force at least 3 seconds of video to be recorded to ensure upload is called.
-        if (this.get('hasCamAccess') && (3 - this.getTime() > 0)) {
+        // Not thoroughly tested that this is still necessary w webRTC recorder.
+        var timeLeft = 3 - this.getTime();
+        if (this.get('hasCamAccess') && (timeLeft > 0)) {
             // sleep time expects milliseconds
             function sleep (time) {
               return new Promise((resolve) => setTimeout(resolve, time));
             }
-            return sleep((3 - this.getTime()) * 1000).then(() => {
+            return sleep(timeLeft * 1000).then(() => {
                 return this.stop();
             });
         } else {
