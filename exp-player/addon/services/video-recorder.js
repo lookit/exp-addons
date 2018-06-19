@@ -73,7 +73,6 @@ const VideoRecorder = Ember.Object.extend({
     connected: false,
 
     debug: true,
-    hidden: false,
     _started: false,
     _camAccess: false,
     _recording: false,
@@ -119,37 +118,8 @@ const VideoRecorder = Ember.Object.extend({
             }
         });
         this.set('$container', $container);
-        if (hidden) { // Showing this upon 'hidden' has some unexpected side effects.
-            $container.append(
-                `
-<div class="col-md-12">
-    <h3> Please make sure your webcam is configured correctly </h3>
-    <div class="row">
-	<div class="col-md-12">
-	    <p>There was a problem connecting to your webcam! Please try selecting your webcam again below and clicking "allow" and "remember", like you did at the start of the study. If that doesn't work, you can end the study early by pressing F1. </p>
-	    <p class="pull-right"><em>* Please note: we are <strong>not</strong> recording any video during setup.</em></p>
-	</div>
-    </div>
-</div>
-`
-            );
-        }
         $container.append($('<div>', {id: origDivId}));
         $element.append($container);
-        if (hidden) { // TODO: is there a way to link this to something other than 'hidden'?
-            $container.append(
-                $('<div>').addClass('row').append(
-                    $('<div>').addClass('col-md-12').append(
-                        ['<br>',
-                            $('<button>', {
-                                text: 'Continue'
-                            }).addClass('btn btn-success pull-right disabled')
-                        ]
-                    )
-                )
-            );
-            this.hide();
-        }
 
         return new RSVP.Promise((resolve, reject) => {
             window.size = { // just display size when showing to user. We override css.
@@ -341,18 +311,7 @@ const VideoRecorder = Ember.Object.extend({
 
     _onCamAccess(allowed, recorderId) { // jshint ignore:line
         console.log('onCamAccess: ' + recorderId);
-        console.log(this);
         this.set('hasCamAccess', allowed);
-        if (this.get('hidden')) {
-            this.get('$container').find('button').removeClass('disabled').on(
-                'click',
-                () => {
-                    if (this.get('onCamAccessConfirm')) {
-                        this.get('onCamAccessConfirm').call(this);
-                    }
-                }
-            );
-        }
     },
 
     _onRecorderReady(recorderId, recorderType) {
