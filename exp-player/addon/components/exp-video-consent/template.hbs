@@ -63,7 +63,7 @@
             <span class="video-consent-number">4.</span>
             <span class="video-consent-direction">
                 Click to
-                {{#if recordingStarted }}
+                {{#if startedRecording }}
                     <button class="btn btn-success pull-right" {{ action 'finish' }}>submit</button>
                 {{else}}
                     <button disabled="disabled" class="btn btn-success pull-right" {{ action 'finish' }}>submit!</button>

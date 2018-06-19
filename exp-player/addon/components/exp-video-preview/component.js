@@ -44,10 +44,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
     videoIndex: 0,
 
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
     recordingStopped: false,
     recordingStarted: false,
 
@@ -62,6 +58,11 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     currentVideo: Ember.computed('videoIndex', function() {
         return this.get('videos')[this.get('videoIndex')];
     }),
+
+    disableRecord: Ember.computed('recorder.hasCamAccess', 'recorderReady', function() {
+        return !(this.get('recorder.hasCamAccess') && this.get('recorderReady'));
+    }),
+
 
     actions: {
         accept() {
@@ -193,25 +194,5 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
             },
             // No fields are required
         }
-    },
-
-    didInsertElement() {
-        this.setupRecorder(this.$('#recorder'), false);
-        this._super(...arguments);
-    },
-
-    willDestroyElement() { // Make sure recording is stopped & recorder destroyed
-
-        if (this.get('recorder')) {
-            if (this.get('stoppedRecording')) {
-                this.destroyRecorder();
-            } else {
-                this.stopRecorder().then(() => {
-                    this.set('stoppedRecording', true);
-                    this.destroyRecorder();
-                })
-            }
-        }
-        this._super(...arguments);
     }
 });

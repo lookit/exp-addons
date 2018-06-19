@@ -6,6 +6,15 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     type: 'exp-lookit-observation',
     layout: layout,
 
+    recordingTimer: null,
+    hasStartedRecording: false,
+    recorder: null,
+    recordingStarted: false,
+    warning: null,
+    showVideoWarning: false,
+    toggling: false,
+    hidden: false,
+
     meta: {
         name: 'ExpLookitObservation',
         description: 'This frame allows the participant to record an event, intended for observational studies.',
@@ -124,29 +133,25 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             required: ['videoId']
         }
     },
-    videoRecorder: Em.inject.service(),
-    recorder: null,
-    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
-    disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function () {
-        return !this.get('hasCamAccess') || this.get('recorder.recording');
-    }),
-    readyObserver: Ember.observer('hasCamAccess', function(frame) {
-        if (frame.get('hasCamAccess')) {
-            if (frame.get('startRecordingAutomatically')) {
-                frame.send('record');
-            } else {
-                $('#recordButton').show();
-                $('#recordingText').text('Not recording yet');
-            }
-        }
-    }),
-    recordingStarted: false,
-    warning: null,
-    showVideoWarning: false,
-    toggling: false,
-    hidden: false,
 
+    disableRecord: Em.computed('recorder.recording', 'recorder.hasCamAccess', function () {
+        return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
+    }),
+
+    // Override to deal with whether or not recording is starting automatically
+    whenPossibleToRecord: function() {
+    	if (this.get('startRecordingAutomatically')) {
+    		var _this = this;
+			if (this.get('hasCamAccess') && this.get('recorderReady')) {
+				this.startRecorder().then(() => {
+					_this.set('recorderReady', false);
+				});
+			}
+    	} else {
+    	    $('#recordButton').show();
+            $('#recordingText').text('Not recording yet');
+    	}
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     showWarning() {
         if (!this.get('showVideoWarning')) {
@@ -170,7 +175,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         this.set('showVideoWarning', false);
     },
 
-    didInsertElement() { // Immediately try to set up
+    didInsertElement() { // initial state of all buttons/text
         var _this = this;
         $('#hiddenWebcamMessage').hide();
         $('#recordButton').hide();
@@ -178,21 +183,13 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         $('#recordingIndicator').hide();
         $('#recordingText').text('');
         $('#recordButtonText').text('Record');
-        if (this.get('experiment') && this.get('id') && this.get('session')) {
-            // Start recorder
-            this.setupRecorder(this.$('.recorder'), false);
-        }
-
         this._super(...arguments);
     },
-
-    recordingTimer: null,
-    hasStartedRecording: false,
 
     actions: {
         record() {
 
-            this.startRecorder();
+            this.startRecorder(); // TODO: use then
 
             var _this = this;
             if (this.get('recordSegmentLength')) { // no timer if 0

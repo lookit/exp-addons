@@ -29,16 +29,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    showWarning: false,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-
-    didInsertElement() {
-        this.setupRecorder(this.$('#recorder'), false);
-        this._super(...arguments);
-    },
 
     actions: {
         next() {

@@ -160,23 +160,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    readyToStart: false,
-    stoppedRecording: false,
 
-    startRecordingWhenPossible: function () {
-        var _this = this;
-        if (this.get('hasCamAccess') && this.get('readyToStart')) {
-            this.startRecorder().then(() => {
-                _this.set('readyToStart', false);
-                $('#waitForVideo').hide();
-                _this.set('currentAudioIndex', -1);
-                _this.send('playNextAudioSegment');
-            });
-        }
-    }.observes('hasCamAccess', 'readyToStart'),
+    // Override setting in VideoRecord mixin - only use camera if doing recording
+    doUseCamera: Ember.computed.alias('doRecording'),
+    // Don't need to override startRecordingAutomatically as we override the observer
+    // whenPossibleToRecord directly.
 
     // Track state of experiment
     completedAudio: false, // for main narration audio
@@ -206,13 +194,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             return okayToProceed;
         }),
 
-    // Are we ready to start playing the audio? Wait for recording (used if
-    // doing a recording frame).
-    readyToStartAudio: Ember.computed.and('hasCamAccess', 'videoUploadConnected'),
+    // Override to do a bit extra when starting recording
+    whenPossibleToRecord: function() {
+        var _this = this;
+        if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+            this.startRecorder().then(() => {
+                _this.set('recorderReady', false);
+                $('#waitForVideo').hide();
+                _this.set('currentAudioIndex', -1);
+                _this.send('playNextAudioSegment');
+            });
+        }
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     meta: {
         name: 'ExpLookitDialoguePage',
-        description: 'Frame to [TODO]',
+        description: 'Frame for a storybook page with dialogue spoken by characters',
         parameters: {
             type: 'object',
             properties: {
@@ -695,7 +692,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     },
 
     didInsertElement() {
-        this._super(...arguments);
 
         // Make 'Enter' == next button
         $(document).on('keyup.nexter', (e) => {
@@ -705,7 +701,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 }
             }
         });
-
 
         // Expand any image src stubs & imageAudio stubs
         var _this = this;
@@ -760,24 +755,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-        if (this.get('doRecording')) {
-            //$('.story-image-container').hide();
-            if (this.get('experiment') && this.get('id') && this.get('session')) {
-                this.setupRecorder(this.$('#recorder'), false).then(() => {
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                _this.send('setTimeEvent', 'recorderReady');
-                _this.set('readyToStart', true);
-                _this.startRecordingWhenPossible(); // make sure this fires
-            });
-
-            }
-        } else {
+        // If not waiting for recording to start, just go ahead with audio now
+        if (!this.get('doUseCamera')) {
             this.send('playNextAudioSegment');
         }
+
+        this._super(...arguments);
 
     },
 

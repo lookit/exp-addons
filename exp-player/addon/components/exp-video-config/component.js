@@ -28,17 +28,9 @@ Video configuration frame guiding user through making sure permissions are set a
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
     showWarning: false,
     micChecked: Em.computed.alias('recorder.micChecked'),
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-
-    didInsertElement() {
-        this.setupRecorder(this.$('#recorder'), false);
-        this._super(...arguments);
-    },
+    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
 
     actions: {
 
@@ -59,7 +51,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     type: 'exp-videoconfig',
     meta: {
         name: 'Video Recorder Configuration',
-        description: 'TODO: a description of this frame goes here.',
+        description: 'Frame guiding the user through setting up webcam, with no recording.',
         parameters: {
             type: 'object',
             properties: {

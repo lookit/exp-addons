@@ -31,44 +31,27 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
     layout: layout,
-
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    //videoRecorder: Ember.inject.service(),
-    recorder: null,
-    warning: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
-    readyToStart: false,
-
-    startRecordingWhenPossible: function () {
-        var _this = this;
-        if (this.get('hasCamAccess') && this.get('readyToStart')) {
-            this.startRecorder().then(() => {
-                _this.set('readyToStart', false);
-            });
-        }
-    }.observes('hasCamAccess', 'readyToStart'),
+    startRecordingAutomatically: true,
+    doUseCamera: Ember.computed.not('isLast'),
 
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
     }),
     playAnnouncementNow: true,
-
     doingTest: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'test');
     }),
     testTimer: null,
     testTime: 0,
-
     skip: false,
     hasBeenPaused: false,
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
     isPaused: false,
-    stoppedRecording: false,
 
     showVideoWarning: false,
 
@@ -279,7 +262,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
     actions: {
 
-        showWarning() {
+        showWarning() { // TODO
             if (!this.get('showVideoWarning')) {
                 this.set('showVideoWarning', true);
                 this.send('setTimeEvent', 'webcamNotConfigured');
@@ -288,7 +271,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 // the user is unable to move on.
                 this.send('save');
 
-                var recorder = this.get('recorder'); // TODO
+                var recorder = this.get('recorder');
                 recorder.show();
                 recorder.on('onCamAccess', (hasAccess) => {
                     if (hasAccess) {
@@ -363,7 +346,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         startVideo() {
             if (this.get('doingTest')) {
-                if (!this.get('hasCamAccess')) {
+                if (!this.get('recorder.hasCamAccess')) {
                     this.pauseStudy(true);
                     this.send('exitFullscreen');
                     this.send('showWarning');
@@ -469,28 +452,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
-                } else if (e.which === 112) { // F1: exit the study early
-                    this.stopRecorder().then(() => {
-                        this.set('stoppedRecording', true);
-                    });
                 }
             }
         });
         window.clearInterval(this.get('testTimer'));
-
-        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-            this.setupRecorder(this.$('#recorder'), false).then(() => {
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                this.send('setTimeEvent', 'recorderReady');
-                this.set('readyToStart', true);
-                this.startRecordingWhenPossible(); // make sure this fires
-            });
-
-        }
         this.send('showFullscreen');
     },
 

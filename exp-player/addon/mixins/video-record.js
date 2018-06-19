@@ -47,22 +47,21 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
     /**
-     * The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,
-     *   and to set this property. If present, the mixin will automatically use it for things such as capturing stream
-     *   time.
+     * The recorder object, accessible to the consuming frame. Includes properties
+     * recorder.hasWebCam, recorder.hasCamAccess, recorder.micChecked, recorder.connected.
      * @property {VideoRecorder} recorder
      */
     recorder: null,
 
     /**
-     * This mixin automatically injects the video recorder service, making its methods available to your frame
+     * This mixin automatically injects the video recorder service.
      * @property videoRecorder
      */
-    videoRecorder: Ember.inject.service(),
-
+    videoRecorder: Ember.inject.service(), // equiv to passing 'video-recorder'
 
     /**
      * A list of all video IDs used in this mixing (a new one is created for each recording).
+     * Accessible to consuming frame.
      * @property {List} videoList
      */
     videoList: null,
@@ -72,15 +71,40 @@ export default Ember.Mixin.create({
      * destroying frame
      * @property {Boolean} stoppedRecording
      */
-     stoppedRecording: false,
+    stoppedRecording: false,
 
     /**
-     * TODO: UPDATE DOC
-     * A video ID to use for this recording. Defaults to the format `<experimentId>_<frameId>_<sessionId>_`
+     * JQuery string to identify the recorder element.
+     * @property {String} [recorderElement='#recorder']
+     */
+     recorderElement: '#recorder',
+
+     /**
+     * Whether recorder has been set up yet. Automatically set when doing setup.
+     * Accessible to consuming frame.
+     * @property {Boolean} recorderReady
+     */
+     recorderReady: false,
+
+     /**
+     * Whether to use the camera in this frame. Consuming frame should set this property
+     * to override if needed.
+     * @property {Boolean} [doUseCamera=true]
+     */
+     doUseCamera: true,
+
+     /**
+     * Whether to start recording ASAP (only applies if doUseCamera). Consuming frame
+     * should set to override if needed.
+     * @property {Boolean} [startRecordingAutomatically=false]
+     */
+     startRecordingAutomatically: false,
+
+    /**
+     * A video ID to use for the current recording. Format is
+     * `pipe_<experimentId>_<frameId>_<sessionId>_timestampMS_RRR`
+     * where RRR are random numeric digits.
      *
-     * There may be additional prefixes/suffixes added elsewhere in the video recording process. A final video
-     * captured via this mixin might this have a name like:
-     *   `videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv`
      * @property {String} videoId
      */
     videoId: '',
@@ -132,7 +156,7 @@ export default Ember.Mixin.create({
 
         // Track specific events for all frames that use  VideoRecorder
         recorder.on('onCamAccess', (hasAccess) => {
-            this.send('setTimeEvent', 'hasCamAccess', {
+            this.send('setTimeEvent', 'recorder.hasCamAccess', {
                 hasCamAccess: hasAccess
             });
         });
@@ -239,11 +263,51 @@ export default Ember.Mixin.create({
                 _this.stopRecorder().then(() => {
                     _this.set('stoppedRecording', true);
                     _this.destroyRecorder();
+                }, () => {
+                    _this.destroyRecorder();
                 })
             }
         }
         _this.send('setTimeEvent', 'destroyingElement');
         _this._super(...arguments);
+    },
+
+    didInsertElement() {
+    	if (this.get('doUseCamera')) {
+    		var _this = this;
+    	    this.setupRecorder(this.$(this.get('recorderElement')), false).then(() => {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
+                _this.send('setTimeEvent', 'recorderReady');
+                _this.set('recorderReady', true);
+                _this.whenPossibleToRecord(); // make sure this fires
+            });
+    	}
+    	this._super(...arguments);
+    },
+
+     /**
+     * Observer that starts recording once recorder is ready. Override to do additional
+     * stuff at this point!
+     * @method whenPossibleToRecord
+     */
+    whenPossibleToRecord: function() {
+    	if (this.get('doUseCamera') && this.get('startRecordingAutomatically')) {
+    		var _this = this;
+			if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+				this.startRecorder().then(() => {
+					_this.set('recorderReady', false);
+				});
+			}
+    	}
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
+
+    init() {
+        this._super(...arguments);
+        this.set('videoList', []);
     }
 
 });

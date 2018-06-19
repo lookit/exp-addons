@@ -52,30 +52,21 @@ Video consent frame for Lookit studies, with consent document displayed at left 
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Em.inject.service(),
-    recorder: null,
-    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
-    disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function () {
-        return !this.get('hasCamAccess') || this.get('recorder.recording');
+    disableRecord: Em.computed('recorder.recording', 'recorder.hasCamAccess', function () {
+        return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
     }),
-    recordingStarted: false,
-    recordingStopped: false,
-
-    didInsertElement() {
-        this.setupRecorder(this.$('#recorder'), false);
-        this._super(...arguments);
-    },
+    startedRecording: false,
 
     actions: {
         record() {
             this.startRecorder().then(() => {
-                this.set('recordingStarted', true);
+                this.set('startedRecording', true);
             });
         },
         finish() {
-            if (!this.get('recordingStopped')) {
+            if (!this.get('stoppedRecording')) {
                 this.stopRecorder().then(() => {
-                    this.set('recordingStopped', true);
+                    this.set('stoppedRecording', true);
                     this.send('next');
                 });
             }
