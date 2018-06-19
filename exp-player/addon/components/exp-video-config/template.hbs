@@ -60,7 +60,7 @@
             </div>
         {{/if}}
 
-        <button disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'checkAudioThenNext' }} >
+        <button id="nextbutton" disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'checkAudioThenNext' }} >
             Next
         </button>
     </div>

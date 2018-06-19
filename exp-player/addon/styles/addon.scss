@@ -66,7 +66,10 @@
   white-space: pre-line;
 }
 
-
+// Pad next button so it's not awkwardly flush at bottom of page
+#nextbutton {
+    margin-bottom: 3em;
+}
 
 // Don't show the 'powered by Pipe' link on video recorder
 p#pipeClickPowered {

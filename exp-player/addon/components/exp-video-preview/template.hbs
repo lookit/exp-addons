@@ -15,7 +15,7 @@
             {{else}}
                 {{text}}
                 <br> <br>
-                <button class="btn btn-success btn-block" {{action 'accept'}}>{{prompt}}</button>
+                <button class="btn btn-success btn-block" disabled={{disableRecord}} {{action 'accept'}}>{{prompt}}</button>
                 <hr>
             {{/unless}}
         </div>
