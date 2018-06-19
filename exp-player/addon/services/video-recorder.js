@@ -34,10 +34,11 @@ const FLASHVARS = {
     recorderId: '123',
     qualityurl: "avq/480p.xml",
     eid: 1, // environment
-    showMenu: "false", // show recording button menu
+    showMenu: "false", // show recording button menu. Yes, STRING "true"/"false" sigh.
     mrt: 100000000, // max recording time in seconds (don't use)
     sis: 1, // skip initial screen
     asv: 1, // autosave recordings
+    st: 0, // don't show timer
     mv: 0,
     dpv: 0,
     ao: 0, // audio-only
