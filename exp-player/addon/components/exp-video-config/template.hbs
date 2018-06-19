@@ -34,12 +34,24 @@
             <ol>
                 <li>
                     Make sure you can see yourself to the left! You will need to click to allow lookit.mit.edu to access your webcam and microphone.
+
+                    {{#if hasWebCam}}
+                        <div id="camCheckBox" class={{if hasWebCam 'checkComplete'}}>
+                            Looks good!
+                        </div>
+                    {{else}}
+                        <div id="camCheckBox" class={{if hasWebCam 'checkComplete'}}>
+                            We're not detecting a webcam yet. <button id="reloadButton" class="btn btn-default" {{action 'reloadRecorder'}}>Retry <i class="fa fa-refresh"></i></button>
+                        </div>
+
+                    {{/if}}
+
                 </li>
 
                 <li>
                     Make sure we'll be able to hear you! This box will be filled in once we hear a loud enough sound:
 
-                    <div id="soundCheckBox" class={{if micChecked 'soundCheckComplete'}}>
+                    <div id="soundCheckBox" class={{if micChecked 'checkComplete'}}>
                         {{#if micChecked}}
                             Sounds good!
                         {{else}}
@@ -60,7 +72,7 @@
             </div>
         {{/if}}
 
-        <button id="nextbutton" disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (not hasCamAccess) 'disabled' ''}}" {{ action 'checkAudioThenNext' }} >
+        <button id="nextbutton" disabled={{if (not hasCamAccess) true false}} class="btn btn-success pull-right {{if (or (not hasCamAccess) (not hasWebCam)) 'disabled' ''}}" {{ action 'checkAudioThenNext' }} >
             Next
         </button>
     </div>

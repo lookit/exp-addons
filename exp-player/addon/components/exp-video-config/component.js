@@ -31,6 +31,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     showWarning: false,
     micChecked: Em.computed.alias('recorder.micChecked'),
     hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
+    hasWebCam: Em.computed.alias('recorder.hasWebCam'),
 
     actions: {
 
@@ -42,10 +43,16 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         checkAudioThenNext() {
             if (!this.get('micChecked')) {
                 this.set('showWarning', true);
-            } else {
+            } else if (this.get('hasWebCam')) {
                 this.send('next');
             }
-        }
+        },
+
+        reloadRecorder() {
+            this.set('showWarning', false);
+            this.destroyRecorder();
+            this.setupRecorder(this.$(this.get('recorderElement')), false);
+        },
     },
 
     type: 'exp-videoconfig',
