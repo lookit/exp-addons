@@ -277,10 +277,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-physics:${eventName}`, extra);
-    },
-
     actions: {
 
         showWarning() {

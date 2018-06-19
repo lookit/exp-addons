@@ -886,10 +886,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-lookit-preferential-looking:${eventName}`, extra);
-    },
-
     onFullscreen() {
         if (this.get('isDestroyed')) {
             return;

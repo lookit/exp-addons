@@ -452,10 +452,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return fullAsset;
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-lookit-story-page:${eventName}`, extra);
-    },
-
     didInsertElement() {
         this._super(...arguments);
 

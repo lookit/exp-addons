@@ -201,7 +201,7 @@ export default Ember.Component.extend({
     makeTimeEvent(eventName, extra) {
         const curTime = new Date();
         const eventData = {
-            eventType: eventName,
+            eventType: `${this.get('kind', 'unknown-frame')}:${eventName}`,
             timestamp: curTime.toISOString()
         };
         Ember.merge(eventData, extra);

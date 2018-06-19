@@ -147,9 +147,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     toggling: false,
     hidden: false,
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-lookit-observation:${eventName}`, extra);
-    },
 
     showWarning() {
         if (!this.get('showVideoWarning')) {

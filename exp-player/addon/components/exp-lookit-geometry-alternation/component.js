@@ -518,10 +518,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     }),
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-alternation:${eventName}`, extra);
-    },
-
     actions: {
         // When intro audio is complete
         endAudio() {
