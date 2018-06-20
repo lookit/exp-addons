@@ -33,7 +33,7 @@ div.exp-video-config {
     padding: 0;
 }
 
-.exp-video-config ol li {
+.exp-video-config ol > li {
     display: inline-block;
     margin-top: 1em;
     line-height: 1.8;
@@ -43,7 +43,7 @@ div.exp-video-config {
     padding: 1px;
 }
 
-.exp-video-config ol li:before {
+.exp-video-config ol > li:before {
   display: inline;
   content: counter(item) ". ";
   counter-increment: item;
