@@ -33,7 +33,6 @@ const MIN_VOLUME = 5;
 const FLASHVARS = {
     recorderId: '123',
     qualityurl: "avq/480p.xml",
-    eid: 1, // environment
     showMenu: "false", // show recording button menu. Yes, STRING "true"/"false" sigh.
     mrt: 100000000, // max recording time in seconds (don't use)
     sis: 1, // skip initial screen
@@ -95,7 +94,7 @@ const VideoRecorder = Ember.Object.extend({
      * @return {Promise} Indicate whether widget was successfully installed and started
      */
 
-    install({record: record} = {record: false}, videoFilename = '', pipeKey = '') {
+    install({record: record} = {record: false}, videoFilename = '', pipeKey = '', pipeEnv = 1) {
 
         let origDivId = this.get('divId');
 
@@ -131,6 +130,7 @@ const VideoRecorder = Ember.Object.extend({
             var fv = Ember.copy(FLASHVARS, true);
             fv.payload = videoFilename;
             fv.accountHash = pipeKey;
+            fv.eid = pipeEnv;
             window.flashvars = fv;
 
             // TODO: can we put this elsewhere instead of loading here?
