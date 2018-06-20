@@ -8,6 +8,39 @@ import Ember from 'ember';
 /**
  * A mixin that can be used to add basic support for video recording to a particular experiment frame
  *
+ * By default, the recorder will be installed when this frame loads, but recording
+ * will not start automatically. To override either of these settings, set
+ * the properties `doUseCamera` and/or `startRecordingAutomatically` in the consuming
+ * frame.
+ *
+ * You will also need to set `recorderElement` if the recorder is to be housed other than
+ * in an element identified by the ID `recorder`.
+ *
+ * The properties `recorder`, `videoList`, `stoppedRecording`, `recorderReady`, and
+ * `videoId` become available to the consuming frame. The recorder object has fields
+ * that give information about its state: `hasWebCam`, 'hasCamAccess`, `recording`,
+ * `connected`, and `micChecked` - for details, see services/video-recorder.js. These
+ * can be accessed from the consuming frame as e.g. `this.get('recorder').get('hasWebCam')`.
+ *
+ * If starting recording automatically, the function `whenPossibleToRecord` will be called
+ * once recording is possible, and will start recording. If you want to do other things
+ * at this point, like proceeding to a test trial, you can override this function in your
+ * frame.
+ *
+ * See 'methods' for the functions you can use on a frame that extends VideoRecord.
+ *
+ * Events recorded in a frame that extends VideoRecord will automatically have additional
+ * fields videoId (video filename), pipeId (temporary filename initially assigned by
+ * the recording service),
+ * and streamTime (when in the video they happened, in s).
+ *
+ * Setting up the camera is handled in didInsertElement, and making sure recording is
+ * stopped is handled in willDestroyElement (Ember hooks that fire during the component
+ * lifecycle). It is very important (in general, but especially when using this mixin)
+ * that you call `this._super(...arguments);` in any functions where your frame overrides
+ * hooks like this, so that the mixin's functions get called too!
+ *
+ *
  * @class VideoRecordMixin
  */
 
@@ -53,10 +86,6 @@ export default Ember.Mixin.create({
      */
     recorder: null,
 
-    /**
-     * This mixin automatically injects the video recorder service.
-     * @property videoRecorder
-     */
     videoRecorder: Ember.inject.service(), // equiv to passing 'video-recorder'
 
     /**
@@ -68,7 +97,8 @@ export default Ember.Mixin.create({
 
     /**
      * Whether recording is stopped already, meaning it doesn't need to be re-stopped when
-     * destroying frame
+     * destroying frame. This should be set to true by the consuming frame when video is
+     * stopped.
      * @property {Boolean} stoppedRecording
      */
     stoppedRecording: false,
