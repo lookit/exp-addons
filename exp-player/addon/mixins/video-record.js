@@ -305,6 +305,24 @@ export default Ember.Mixin.create({
     	}
     }.observes('recorder.hasCamAccess', 'recorderReady'),
 
+    /**
+     * Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
+     *   distract the user.
+     * @method hideRecorder
+     */
+    hideRecorder() {
+        $(this.get('recorderElement')).parent().addClass('video-recorder-hidden');
+    },
+
+    /**
+     * Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
+     *   a problem with video capture settings
+     * @method showRecorder
+     */
+     showRecorder() {
+        $(this.get('recorderElement')).parent().removeClass('video-recorder-hidden');
+     },
+
     init() {
         this._super(...arguments);
         this.set('videoList', []);

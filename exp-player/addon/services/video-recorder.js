@@ -236,26 +236,6 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     /**
-     * Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
-     *   distract the user.
-     * @method hide
-     */
-    hide() {
-        this.get('$container').addClass('video-recorder-hidden');
-    },
-
-    /**
-     * Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
-     *   a problem with video capture settings
-     * @method show
-     * @return {boolean}
-     */
-    show() {
-        this.get('$container').removeClass('video-recorder-hidden');
-        return true;
-    },
-
-    /**
      * Destroy video recorder and remove from list of recorders. Use this to remove
      * the video recorder when destroying a frame, if not triggered via upload.
      *
