@@ -38,6 +38,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     startRecordingAutomatically: true,
     doUseCamera: Ember.computed.not('isLast'),
 
+    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
+
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
     }),
@@ -54,6 +56,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     isPaused: false,
 
     showVideoWarning: false,
+    alreadyPlayedWarning: false,
 
     meta: {
         name: 'Video player',
@@ -260,33 +263,45 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
     },
 
+    showWarning() {
+        // Note: simply playing the videoWarningAudio here is tricky because it gets
+        // interrupted by the pause call in the MediaReload mixin. Instead it's on autoplay
+        // and gets removed when it's done, which is a little weird but works.
+        window.clearInterval(this.get('testTimer'));
+        this.set('testTime', 0);
+        this.send('setTimeEvent', 'pauseVideo', {
+            currentTask: this.get('currentTask')
+        });
+        this.set('playAnnouncementNow', false);
+        this.set('isPaused', true);
+        this.set('hasBeenPaused', true);
+        this.set('showVideoWarning', true);
+        this.send('exitFullscreen');
+        this.send('setTimeEvent', 'webcamNotConfigured');
+
+        // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+        // the user is unable to move on.
+        this.send('save');
+
+        this.showRecorder();
+    },
+
+
     actions: {
 
-        showWarning() { // TODO
-            if (!this.get('showVideoWarning')) {
-                this.set('showVideoWarning', true);
-                this.send('setTimeEvent', 'webcamNotConfigured');
-
-                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-                // the user is unable to move on.
-                this.send('save');
-
-                var recorder = this.get('recorder');
-                recorder.show();
-                recorder.on('onCamAccess', (hasAccess) => {
-                    if (hasAccess) {
-                        this.send('removeWarning');
-                        this.startRecorder();
-                    }
-                });
-            }
-        },
-
         removeWarning() {
+            this.set('recorderReady', true);
+            this.whenPossibleToRecord(); // make sure this fires
             this.set('showVideoWarning', false);
-            this.get('recorder').hide();
+            this.hideRecorder();
             this.send('showFullscreen');
             this.pauseStudy();
+        },
+
+
+        reloadRecorder() {
+            this.destroyRecorder();
+            this.setupRecorder(this.$(this.get('recorderElement')), false);
         },
 
         stopVideo() {
@@ -308,7 +323,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         playNext() {
             if (this.get('currentTask') === 'intro') {
-                this.set('currentTask', 'test');
+                // TODO: once there's better support for MediaDevices.ondevicechange event,
+                // use that globally instead of just checking here.
+                if (!this.get('recorder.hasCamAccess') || !this.get('recorder.hasWebCam')) {
+                    this.showWarning();
+                }
+                else {
+                    this.set('currentTask', 'test');
+                }
             } else {
                 this.send('finish'); // moving to intro video
             }
@@ -345,15 +367,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         startVideo() {
-            if (this.get('doingTest')) {
-                if (!this.get('recorder.hasCamAccess')) {
-                    this.pauseStudy(true);
-                    this.send('exitFullscreen');
-                    this.send('showWarning');
-                    $('#videoWarningAudio')[0].play();
-                }
-            }
-            if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
+            if (this.get('doingTest') && !this.get('isPaused')) {
                 if (this.get('testTime') === 0) {
                     this.send('setTestTimer');
                 }
@@ -394,15 +408,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             }, () => {
                 _this.send('next');
             });
+        },
+
+        finishedWarningAudio() {
+            $('#videoWarningAudio').remove();
         }
     },
 
     pauseStudy(pause) { // only called in FS mode
-        if (this.get('showVideoWarning')) {
-            return;
-        }
 
         Ember.run.once(this, () => {
+
+
             if (!this.get('isLast')) {
                 try {
                     this.set('hasBeenPaused', true);
