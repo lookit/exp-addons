@@ -132,7 +132,7 @@ export default Ember.Mixin.create({
 
     /**
      * A video ID to use for the current recording. Format is
-     * `pipe_<experimentId>_<frameId>_<sessionId>_timestampMS_RRR`
+     * `videoStream_<experimentId>_<frameId>_<sessionId>_timestampMS_RRR`
      * where RRR are random numeric digits.
      *
      * @property {String} videoId
@@ -141,7 +141,7 @@ export default Ember.Mixin.create({
 
     _generateVideoId() {
         return [
-            'pipe',
+            'videoStream',
             this.get('experiment.id'),
             this.get('id'),
             this.get('session.id'),
