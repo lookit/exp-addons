@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -126,7 +127,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l16"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:16</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l17"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:17</code></a>
         </div>
 
             Module: <a href="../modules/frames.html">frames</a><br>
@@ -136,7 +137,8 @@
 
 
 <div class="box intro">
-    <p>Frame to implement a basic preferential looking trial, with static images
+    <p>NOT YET ADAPTED FOR WEBRTC RECORDER.
+Frame to implement a basic preferential looking trial, with static images
 displayed in the center or at left and right of the screen. Trial proceeds
 in segments:</p>
 <ul>
@@ -298,6 +300,10 @@ and is expected to be repeated.</p>
                                 <a href="#method_serializeContent">serializeContent</a>
 
                             </li>
+                            <li class="index-item method">
+                                <a href="#method_serializeContent">serializeContent</a>
+
+                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_showFullscreen">showFullscreen</a>
 
@@ -323,6 +329,10 @@ and is expected to be repeated.</p>
                             </li>
                             <li class="index-item property">
                                 <a href="#property_baseDir">baseDir</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_blocks">blocks</a>
 
                             </li>
                             <li class="index-item property">
@@ -370,11 +380,27 @@ and is expected to be repeated.</p>
 
                             </li>
                             <li class="index-item property">
+                                <a href="#property_nextButtonText">nextButtonText</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_pauseAudio">pauseAudio</a>
 
                             </li>
                             <li class="index-item property">
+                                <a href="#property_recordSegmentLength">recordSegmentLength</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_right">right</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_showPreviousButton">showPreviousButton</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_startRecordingAutomatically">startRecordingAutomatically</a>
 
                             </li>
                             <li class="index-item property">
@@ -405,11 +431,11 @@ and is expected to be repeated.</p>
                     <h3>Events</h3>
 
                     <ul class="index-list events extends">
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_enteredFullscreen">enteredFullscreen</a>
 
                             </li>
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_leftFullscreen">leftFullscreen</a>
 
                             </li>
@@ -417,8 +443,16 @@ and is expected to be repeated.</p>
                                 <a href="#event_nextFrame">nextFrame</a>
 
                             </li>
+                            <li class="index-item event inherited">
+                                <a href="#event_previousFrame">previousFrame</a>
+
+                            </li>
                             <li class="index-item event">
-                                <a href="#event_pauseVideo">pauseVideo</a>
+                                <a href="#event_recorderReady">recorderReady</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_recorderReady">recorderReady</a>
 
                             </li>
                             <li class="index-item event">
@@ -427,14 +461,6 @@ and is expected to be repeated.</p>
                             </li>
                             <li class="index-item event">
                                 <a href="#event_startIntro">startIntro</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_stoppingCapture">stoppingCapture</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_unpauseVideo">unpauseVideo</a>
 
                             </li>
                     </ul>
@@ -459,7 +485,7 @@ and is expected to be repeated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l127"><code>addon&#x2F;mixins&#x2F;full-screen.js:127</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
         </p>
 
 
@@ -564,6 +590,102 @@ event sent by a particular frame</p>
                         <code>videoID</code>
                 </li>
                 <li class="arg">
+                        <code>videoList</code>
+                </li>
+                <li class="arg">
+                        <code>eventTimings</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/ExpFrameBase.html#method_serializeContent">
+                ExpFrameBase
+            </a>
+            but overwritten in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l114"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:114</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Parameters captured and sent to the server</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">videoID</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The ID of any webcam video recorded during this frame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoList</code>
+                        <span class="type">List</span>
+
+
+                    <div class="param-description">
+                        <p>a list of webcam video IDs in case there are &gt;1</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">eventTimings</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    <p>The payload sent to the server</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_serializeContent" class="method item">
+    <h3 class="name"><code>serializeContent</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>videoID</code>
+                </li>
+                <li class="arg">
                         <code>hasBeenPaused</code>
                 </li>
                 <li class="arg">
@@ -607,12 +729,9 @@ event sent by a particular frame</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpFrameBase.html#method_serializeContent">
-                ExpFrameBase
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l652"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:652</code></a>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l654"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:654</code></a>
         </p>
 
 
@@ -778,7 +897,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l89"><code>addon&#x2F;mixins&#x2F;full-screen.js:89</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
         </p>
 
 
@@ -809,7 +928,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l298"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:298</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l300"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:300</code></a>
         </p>
 
 
@@ -838,7 +957,7 @@ always allowed during the intro.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l344"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:344</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l346"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:346</code></a>
         </p>
 
 
@@ -867,7 +986,7 @@ webcam connection is established.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l242"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:242</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l244"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:244</code></a>
         </p>
 
 
@@ -908,7 +1027,7 @@ then introAudioSources will be expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l221"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:221</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l223"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:223</code></a>
         </p>
 
 
@@ -932,6 +1051,67 @@ are given by audioTypes and videoTypes.</p>
 
 
 </div>
+<div id="property_blocks" class="property item">
+    <h3 class="name"><code>blocks</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l24"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:24</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying text/images of instructions to display</p>
+
+    </div>
+
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">title</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                    <p>Title of this section</p>
+
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">text</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                    <p>Paragraph text of this section</p>
+
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">listblocks</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+
+                <div class="param-description">
+                    <p>Object specifying bulleted points for this section. Each object is of the form:
+{text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.</p>
+
+                </div>
+
+            </li>
+        </ul>
+</div>
 <div id="property_calibrationAudioSources" class="property item">
     <h3 class="name"><code>calibrationAudioSources</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -943,7 +1123,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l473"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:473</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l475"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:475</code></a>
         </p>
 
 
@@ -973,7 +1153,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l370"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:370</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l372"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:372</code></a>
         </p>
 
 
@@ -1000,7 +1180,7 @@ if isCalibrationFrame)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l503"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:503</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l505"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:505</code></a>
         </p>
 
 
@@ -1030,7 +1210,7 @@ and <code>videoTypes</code> values; see <code>videoTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l333"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:333</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l335"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:335</code></a>
         </p>
 
 
@@ -1057,7 +1237,7 @@ baseDir).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l442"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:442</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l444"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:444</code></a>
         </p>
 
 
@@ -1088,7 +1268,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l620"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:620</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l622"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:622</code></a>
         </p>
 
 
@@ -1165,7 +1345,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l412"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:412</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l414"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:414</code></a>
         </p>
 
 
@@ -1195,7 +1375,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l208"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:208</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l210"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:210</code></a>
         </p>
 
 
@@ -1223,7 +1403,7 @@ calibrationAudioSources, and calibrationVideoSources as well.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l311"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:311</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l313"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:313</code></a>
         </p>
 
 
@@ -1239,6 +1419,33 @@ baseDir).</p>
 
 
 </div>
+<div id="property_nextButtonText" class="property item">
+    <h3 class="name"><code>nextButtonText</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l91"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:91</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Text to display on the 'next frame' button</p>
+
+    </div>
+
+        <p><strong>Default:</strong> &#x27;Next&#x27;</p>
+
+
+</div>
 <div id="property_pauseAudio" class="property item">
     <h3 class="name"><code>pauseAudio</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -1250,7 +1457,7 @@ baseDir).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l562"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:562</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l564"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:564</code></a>
         </p>
 
 
@@ -1268,6 +1475,34 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
 
 
 </div>
+<div id="property_recordSegmentLength" class="property item">
+    <h3 class="name"><code>recordSegmentLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l70"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:70</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Number of seconds to record for before automatically pausing. Use
+0 for no limit.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 300</p>
+
+
+</div>
 <div id="property_right" class="property item">
     <h3 class="name"><code>right</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
@@ -1279,7 +1514,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l322"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:322</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l324"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:324</code></a>
         </p>
 
 
@@ -1295,6 +1530,60 @@ baseDir).</p>
 
 
 </div>
+<div id="property_showPreviousButton" class="property item">
+    <h3 class="name"><code>showPreviousButton</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l101"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:101</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to show a 'previous' button</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_startRecordingAutomatically" class="property item">
+    <h3 class="name"><code>startRecordingAutomatically</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l81"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:81</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to automatically begin recording upon frame load</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
 <div id="property_testAudioSources" class="property item">
     <h3 class="name"><code>testAudioSources</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -1306,7 +1595,7 @@ baseDir).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l382"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:382</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l384"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:384</code></a>
         </p>
 
 
@@ -1336,7 +1625,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l358"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:358</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l360"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:360</code></a>
         </p>
 
 
@@ -1363,7 +1652,7 @@ if not isCalibrationFrame.)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l591"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:591</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l593"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:593</code></a>
         </p>
 
 
@@ -1392,7 +1681,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l533"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:533</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l535"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:535</code></a>
         </p>
 
 
@@ -1421,7 +1710,7 @@ and <code>videoTypes</code> values; see <code>videoTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l270"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:270</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l272"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:272</code></a>
         </p>
 
 
@@ -1457,7 +1746,7 @@ the video source will be expanded out to</p>
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
-                    <div id="event_enteredFullscreen" class="events item">
+                    <div id="event_enteredFullscreen" class="events item inherited">
                         <h3 class="name"><code>enteredFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -1466,23 +1755,22 @@ the video source will be expanded out to</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l913"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:913</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change to fullscreen mode</p>
-                    
+                            Upon detecting change to fullscreen mode
                         </div>
                     
                     
                     
                     </div>
-                    <div id="event_leftFullscreen" class="events item">
+                    <div id="event_leftFullscreen" class="events item inherited">
                         <h3 class="name"><code>leftFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -1491,17 +1779,16 @@ the video source will be expanded out to</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l903"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:903</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change out of fullscreen mode</p>
-                    
+                            Upon detecting change out of fullscreen mode
                         </div>
                     
                     
@@ -1532,8 +1819,59 @@ the video source will be expanded out to</p>
                     
                     
                     </div>
-                    <div id="event_pauseVideo" class="events item">
-                        <h3 class="name"><code>pauseVideo</code></h3>
+                    <div id="event_previousFrame" class="events item inherited">
+                        <h3 class="name"><code>previousFrame</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Move to previous frame</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_recorderReady" class="events item">
+                        <h3 class="name"><code>recorderReady</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                        <p>Provided by the <a href="../modules/exp-player.html">exp-player</a> module.</p>
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:198</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Video recording automatically paused upon reaching time limit</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_recorderReady" class="events item">
+                        <h3 class="name"><code>recorderReady</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1543,14 +1881,14 @@ the video source will be expanded out to</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l982"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:982</code></a>
+                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l1004"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:1004</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>When pausing study, immediately before request to pause webcam recording</p>
+                            <p>When video recorder has been installed</p>
                     
                         </div>
                     
@@ -1568,7 +1906,7 @@ the video source will be expanded out to</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l823"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:823</code></a>
+                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l820"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:820</code></a>
                             </p>
                     
                     
@@ -1610,7 +1948,7 @@ the video source will be expanded out to</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l788"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:788</code></a>
+                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l785"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:785</code></a>
                             </p>
                     
                     
@@ -1618,56 +1956,6 @@ the video source will be expanded out to</p>
                     
                         <div class="description">
                             <p>Just before starting intro segment</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="event_stoppingCapture" class="events item">
-                        <h3 class="name"><code>stoppingCapture</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l726"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:726</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Just before stopping webcam video capture</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="event_unpauseVideo" class="events item">
-                        <h3 class="name"><code>unpauseVideo</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l949"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:949</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>When unpausing study, immediately before request to resume webcam recording</p>
                     
                         </div>
                     

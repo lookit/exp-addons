@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -161,12 +162,8 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
     videoIndex: 0,
 
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    recordingIsReady: false,
-    warning: null,
-    hasCamAccess: Ember.computed.alias(&#x27;recorder.hasCamAccess&#x27;),
-    videoUploadConnected: Ember.computed.alias(&#x27;recorder.connected&#x27;),
+    recordingStopped: false,
+    recordingStarted: false,
 
     noNext: function() {
         return this.get(&#x27;videoIndex&#x27;) &gt;= this.get(&#x27;videos.length&#x27;) - 1;
@@ -179,19 +176,18 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     currentVideo: Ember.computed(&#x27;videoIndex&#x27;, function() {
         return this.get(&#x27;videos&#x27;)[this.get(&#x27;videoIndex&#x27;)];
     }),
-    makeTimeEvent(eventName, extra) {
-        return this._super(&#x60;exp-physics:${eventName}&#x60;, extra);
-    },
+
+    disableRecord: Ember.computed(&#x27;recorder.hasCamAccess&#x27;, &#x27;recorderReady&#x27;, function() {
+        return !(this.get(&#x27;recorder.hasCamAccess&#x27;) &amp;&amp; this.get(&#x27;recorderReady&#x27;));
+    }),
+
+
     actions: {
         accept() {
             this.set(&#x27;prompt&#x27;, false);
             if (this.get(&#x27;experiment&#x27;) &amp;&amp; this.get(&#x27;id&#x27;) &amp;&amp; this.get(&#x27;session&#x27;) &amp;&amp; !this.get(&#x27;isLast&#x27;)) {
-                const installPromise = this.setupRecorder(this.$(&#x27;#videoRecorder&#x27;), true, {
-                    hidden: true
-                });
-                installPromise.then(() =&gt; {
-                    this.send(&#x27;setTimeEvent&#x27;, &#x27;recorderReady&#x27;);
-                    this.set(&#x27;recordingIsReady&#x27;, true);
+                this.startRecorder().then(() =&gt; {
+                    this.set(&#x27;recordingStarted&#x27;, true);
                 });
             }
         },
@@ -201,10 +197,14 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         previousVideo() {
             this.set(&#x27;videoIndex&#x27;, this.get(&#x27;videoIndex&#x27;) - 1);
         },
-        next() {
-            this.send(&#x27;setTimeEvent&#x27;, &#x27;stoppingCapture&#x27;);
-            this.stopRecorder();
-            this._super(...arguments);
+        finish() {
+            if (!this.get(&#x27;recordingStopped&#x27;)) {
+                this.set(&#x27;recordingStopped&#x27;, true);
+                this.stopRecorder().then(() =&gt; {
+                    this.set(&#x27;stoppedRecording&#x27;, true);
+                    this.send(&#x27;next&#x27;);
+                });
+            }
         }
     },
     type: &#x27;exp-video-preview&#x27;,
@@ -297,23 +297,21 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
              * Parameters captured and sent to the server
              *
              * @method serializeContent
-             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are &gt;1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
             properties: {
                 videoId: {
                     type: &#x27;string&#x27;
+                },
+                videoList: {
+                    type: &#x27;list&#x27;
                 }
             },
             // No fields are required
         }
-    },
-
-    willDestroyElement() {
-        this.stopRecorder();
-        this._super(...arguments);
-        Ember.$(document).off(&#x27;keypress&#x27;);
     }
 });
 

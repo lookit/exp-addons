@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -169,28 +170,28 @@ Video consent frame for Lookit studies, with consent document displayed at left 
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Em.inject.service(),
-    recorder: null,
-    hasCamAccess: Em.computed.alias(&#x27;recorder.hasCamAccess&#x27;),
-    disableRecord: Em.computed(&#x27;recorder.recording&#x27;, &#x27;hasCamAccess&#x27;, function () {
-        return !this.get(&#x27;hasCamAccess&#x27;) || this.get(&#x27;recorder.recording&#x27;);
+    disableRecord: Em.computed(&#x27;recorder.recording&#x27;, &#x27;recorder.hasCamAccess&#x27;, function () {
+        return !this.get(&#x27;recorder.hasCamAccess&#x27;) || this.get(&#x27;recorder.recording&#x27;);
     }),
-    recordingStarted: false,
+    startedRecording: false,
 
-    didInsertElement() {
-        this.setupRecorder(this.$(&#x27;.recorder&#x27;), false);
-    },
     actions: {
         record() {
-            this.startRecorder();
-            window.setTimeout(() =&gt; {
-                this.set(&#x27;recordingStarted&#x27;, true);
-            }, 2000);
+            this.startRecorder().then(() =&gt; {
+                this.set(&#x27;startedRecording&#x27;, true);
+                // Require at least 3 s recording
+                setTimeout(function() {
+                    $(&#x27;#submitbutton&#x27;).prop( &quot;disabled&quot;, false);
+                }, 3000);
+            });
         },
         finish() {
-            this.stopRecorder().then(() =&gt; {
-                this.send(&#x27;next&#x27;);
-            });
+            if (!this.get(&#x27;stoppedRecording&#x27;)) {
+                this.stopRecorder().then(() =&gt; {
+                    this.set(&#x27;stoppedRecording&#x27;, true);
+                    this.send(&#x27;next&#x27;);
+                });
+            }
         }
     },
 
@@ -259,6 +260,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are &gt;1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
@@ -266,6 +268,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             properties: {
                 videoId: {
                     type: &#x27;string&#x27;
+                },
+                videoList: {
+                    type: &#x27;list&#x27;
                 }
             },
             required: [&#x27;videoId&#x27;]

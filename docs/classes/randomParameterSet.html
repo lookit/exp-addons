@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -116,7 +117,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_randomizers_random-parameter-set.js.html#l6"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:6</code></a>
+            Defined in: <a href="../files/addon_randomizers_random-parameter-set.js.html#l8"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:8</code></a>
         </div>
 
             Module: <a href="../modules/randomizers.html">randomizers</a><br>
@@ -289,6 +290,10 @@ as shown below, in addition to the parameters described under 'properties'.</p>
 
                     <ul class="index-list methods">
                             <li class="index-item method">
+                                <a href="#method_conditions">conditions</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_getLastSession">getLastSession</a>
 
                             </li>
@@ -332,6 +337,74 @@ as shown below, in addition to the parameters described under 'properties'.</p>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_conditions" class="method item">
+    <h3 class="name"><code>conditions</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>conditionNum</code>
+                </li>
+                <li class="arg">
+                        <code>parameterSet</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l340"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:340</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Parameters captured and sent to the server</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">conditionNum</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+
+                    <div class="param-description">
+                        <p>the index of the parameterSet chosen</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">parameterSet</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                        <p>the parameterSet chosen</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_getLastSession" class="method item">
     <h3 class="name"><code>getLastSession</code></h3>
 
@@ -482,7 +555,7 @@ as shown below, in addition to the parameters described under 'properties'.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_random-parameter-set.js.html#l188"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:188</code></a>
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l190"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:190</code></a>
         </p>
 
 
@@ -509,7 +582,7 @@ the documentation for the frameType used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_random-parameter-set.js.html#l202"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:202</code></a>
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l204"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:204</code></a>
         </p>
 
 
@@ -591,7 +664,7 @@ will still be replaced.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_random-parameter-set.js.html#l196"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:196</code></a>
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l198"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:198</code></a>
         </p>
 
 
@@ -616,7 +689,7 @@ will still be replaced.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_random-parameter-set.js.html#l279"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:279</code></a>
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l281"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:281</code></a>
         </p>
 
 
@@ -643,7 +716,7 @@ the parameters for each frame in this session.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_random-parameter-set.js.html#l288"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:288</code></a>
+        <a href="../files/addon_randomizers_random-parameter-set.js.html#l290"><code>addon&#x2F;randomizers&#x2F;random-parameter-set.js:290</code></a>
         </p>
 
 

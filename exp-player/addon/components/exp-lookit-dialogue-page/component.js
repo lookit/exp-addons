@@ -160,14 +160,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
+
+    // Override setting in VideoRecord mixin - only use camera if doing recording
+    doUseCamera: Ember.computed.alias('doRecording'),
+    // Don't need to override startRecordingAutomatically as we override the observer
+    // whenPossibleToRecord directly.
 
     // Track state of experiment
     completedAudio: false, // for main narration audio
-    imageAudioCompleted: new Set(),
+    imageAudioPlayed: new Set(),
     currentlyHighlighted: null, // id for image currently selected
 
     currentAudioIndex: -1, // during initial sequential audio, holds an index into audioSources
@@ -176,14 +177,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     // have played. For a choice frame, require that one of the images is
     // selected; for other frames, require that any required image-audio has
     // completed.
-    readyToProceed: Ember.computed('completedAudio', 'imageAudioCompleted', 'currentlyHighlighted',
+    readyToProceed: Ember.computed('completedAudio', 'imageAudioPlayed', 'currentlyHighlighted',
         function() {
             var okayToProceed = this.get('completedAudio');
 
             if (this.get('isChoiceFrame') && !(this.get('currentlyHighlighted'))) {
                 okayToProceed = false;
             } else {
-                var whichAudioCompleted = this.get('imageAudioCompleted');
+                var whichAudioCompleted = this.get('imageAudioPlayed');
                 this.get('images').forEach(function (im) {
                     if (im.requireAudio && !(whichAudioCompleted.has(im.id))) {
                         okayToProceed = false;
@@ -193,13 +194,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             return okayToProceed;
         }),
 
-    // Are we ready to start playing the audio? Wait for recording (used if
-    // doing a recording frame).
-    readyToStartAudio: Ember.computed.and('hasCamAccess', 'videoUploadConnected'),
+    // Override to do a bit extra when starting recording
+    whenPossibleToRecord: function() {
+        var _this = this;
+        if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+            this.startRecorder().then(() => {
+                _this.set('recorderReady', false);
+                $('#waitForVideo').hide();
+                _this.set('currentAudioIndex', -1);
+                _this.send('playNextAudioSegment');
+            });
+        }
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     meta: {
         name: 'ExpLookitDialoguePage',
-        description: 'Frame to [TODO]',
+        description: 'Frame for a storybook page with dialogue spoken by characters',
         parameters: {
             type: 'object',
             properties: {
@@ -415,7 +425,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * @property {Object[]} images
                  *   @param {String} id unique ID for this image. This will be used to refer to the choice made by the user, if any.
                  *   @param {String} src URL of image source (can be full URL, or stub to append to baseDir; see `baseDir`)
-                 *   @param {String} left left margin, as percentage of story area width
+                 *   @param {String} left distance from left of story area to image center, as percentage of story area width
                  *   @param {String} height image height, as percentage of story area height
                  *   @param {String} bottom bottom margin, as percentage of story area height
                  *   @param {String} animate animation to use at start of trial on this image, if any. If not provided, image is shown throughout trial. Options are 'fadein', 'fadeout', 'flyleft' (fly from left), and 'flyright'.
@@ -486,6 +496,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @param {String} currentlyHighlighted which image is selected at
              *   the end of the trial, or null if none is. This indicates the
@@ -505,18 +516,32 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 nPhase: {
                     type: 'number'
+                },
+                videoList: {
+                    type: 'list'
                 }
             }
         }
     },
 
-    audioObserver: Ember.observer('readyToStartAudio', function(frame) {
-        if (frame.get('readyToStartAudio')) {
-            $('#waitForVideo').hide();
-            frame.set('currentAudioIndex', -1);
-            frame.send('playNextAudioSegment');
+
+
+    // Move an image up and down until the isSpeaking class is removed.
+    // Yes, this could much more naturally be done by using a CSS animation property
+    // on isSpeaking, but despite animations getting applied properly to the element,
+    // I haven't been able to get that working - because of the possibility of ember-
+    // specific problems here, I'm going with something that *works* even if it's less
+    // elegent.
+    wiggle(imageId) {
+        var _this = this;
+        if ($('#' + imageId).hasClass('isSpeaking')) {
+            $('#' + imageId).animate({'margin-bottom': '.3%'}, 250, function() {
+                $('#' + imageId).animate({'margin-bottom': '0%'}, 250, function() {
+                        _this.wiggle(imageId);
+                    })
+                });
         }
-    }),
+    },
 
     actions: {
 
@@ -534,7 +559,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     imageId: imageId
                 });
 
-                $('.story-image-container').removeClass('highlight');
+                $('.story-image-positioner').removeClass('highlight');
                 $('#' + imageId).addClass('highlight');
                 this.set('currentlyHighlighted', imageId);
                 this.notifyPropertyChange('readyToProceed');
@@ -544,12 +569,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 // Only allow playing image audio once main narration finishes
                 if (this.get('completedAudio')) {
                     // pause any current audio, and set times to 0
+                    $('.story-image-positioner').removeClass('isSpeaking');
                     $('audio').each(function() {
                         this.pause();
                         this.currentTime = 0;
                     });
                     // play this image's associated audio
                     $('#' + imageId + ' audio')[0].play();
+                    // animate the image while audio is playing
+                    $('#' + imageId).addClass('isSpeaking');
+                    this.wiggle(imageId);
+
 
                     /**
                      * When image audio is started
@@ -564,24 +594,29 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         },
 
-        markAudioCompleted(imageId) {
+        endSpeakerAudio(imageId) {
+            $('#' + imageId).removeClass('isSpeaking');
+        },
+
+        markAudioPlayed(imageId) {
 
             /**
-             * When image audio is completed (not recorded if interrupted)
+             * When image audio is played (recorded even if not completed)
              *
-             * @event completeSpeakerAudio
+             * @event playSpeakerAudio
              * @param {String} imageId
              */
-            this.send('setTimeEvent', 'completeSpeakerAudio', {
+            this.send('setTimeEvent', 'playSpeakerAudio', {
                 imageId: imageId
             });
 
-            this.imageAudioCompleted.add(imageId);
+            this.imageAudioPlayed.add(imageId);
             this.notifyPropertyChange('readyToProceed');
         },
 
         replay() {
             // pause any current audio, and set times to 0
+            $('.story-image-positioner').removeClass('isSpeaking');
             $('audio').each(function() {
                 this.pause();
                 this.currentTime = 0;
@@ -592,9 +627,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.send('playNextAudioSegment');
         },
 
-        next() {
-            this.stopRecorder();
-            this._super(...arguments);
+        finish() {
+            var _this = this;
+            $('.story-image-positioner').removeClass('isSpeaking');
+            this.stopRecorder().then(() => {
+                _this.set('stoppedRecording', true);
+                _this.send('next');
+            }, () => {
+                _this.send('next');
+            });
         },
 
         playNextAudioSegment() {
@@ -603,7 +644,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 $('#' + this.get('audioSources')[this.currentAudioIndex].audioId)[0].play();
             } else {
                 if (this.get('autoProceed')) {
-                    this.send('next');
+                    this.send('finish');
                 } else {
                     /**
                      * When narration audio is completed
@@ -650,12 +691,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return fullAsset;
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-lookit-dialogue-page:${eventName}`, extra);
-    },
-
     didInsertElement() {
-        this._super(...arguments);
+
+        // Make 'Enter' == next button
+        $(document).on('keyup.nexter', (e) => {
+            if (this.get('readyToProceed')) {
+                if (e.which === 13) { // enter/return
+                    this.send('finish');
+                }
+            }
+        });
 
         // Expand any image src stubs & imageAudio stubs
         var _this = this;
@@ -674,6 +719,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             Ember.set(aud, 'sources_parsed', _this.expandAsset(aud.sources, 'audio'));
         });
 
+        this.set('imageAudioPlayed', new Set()); // Otherwise persists across frames
         this.set('images', images);
         this.set('audioSources', audioSources);
 
@@ -685,7 +731,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $('#nextbutton').prop('disabled', true);
 
         // Any animations as images are displayed at start of this phase
-        $('.story-image-container').hide();
+        $('.story-image-positioner').hide();
         this.get('images').forEach(function (im) {
             if (im.animate === 'fadein') {
                 $('#' + im.id).fadeIn(1000);
@@ -709,56 +755,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-        // If we're recording this trial, set up, and rely on audioObserver to
-        // start audio once recording is ready. Otherwise, start audio right
-        // away.
-        if (_this.get('doRecording')) {
-            if (this.get('experiment') && this.get('id') && this.get('session')) {
-                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                    hidden: true
-                });
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                installPromise.then(() => {
-                    this.send('setTimeEvent', 'recorderReady');
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-
-                // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
-                const recorder = this.get('recorder');
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.send('setTimeEvent', 'hasCamAccess', {
-                        hasCamAccess: hasAccess
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-
-                recorder.on('onConnectionStatus', () => {
-                    this.send('setTimeEvent', 'videoStreamConnection', {
-                        status: status
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-            }
-        } else {
-            _this.send('playNextAudioSegment');
+        // If not waiting for recording to start, just go ahead with audio now
+        if (!this.get('doUseCamera')) {
+            this.send('playNextAudioSegment');
         }
+
+        this._super(...arguments);
 
     },
 
     willDestroyElement() {
-        this.send('setTimeEvent', 'destroyingElement');
-
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
-            this.stopRecorder();
-        }
-
+        $(document).off('keyup.nexter');
         this._super(...arguments);
     }
 

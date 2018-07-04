@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -318,7 +319,7 @@ export default Ember.Component.extend({
     makeTimeEvent(eventName, extra) {
         const curTime = new Date();
         const eventData = {
-            eventType: eventName,
+            eventType: &#x60;${this.get(&#x27;kind&#x27;, &#x27;unknown-frame&#x27;)}:${eventName}&#x60;,
             timestamp: curTime.toISOString()
         };
         Ember.merge(eventData, extra);
@@ -327,8 +328,8 @@ export default Ember.Component.extend({
 
     actions: {
         setTimeEvent(eventName, extra) {
-            console.log(&#x60;Timing event captured for ${eventName}&#x60;, extra);
             let eventData = this.makeTimeEvent(eventName, extra);
+            console.log(&#x60;Timing event captured for ${eventName}&#x60;, eventData);
             // Copy timing event into a single dict for this component instance
             let timings = this.get(&#x27;eventTimings&#x27;);
             timings.push(eventData);
@@ -360,6 +361,12 @@ export default Ember.Component.extend({
         },
 
         previous() {
+            /**
+             * Move to previous frame
+             *
+             * @event previousFrame
+             */
+            this.send(&#x27;setTimeEvent&#x27;, &#x27;previousFrame&#x27;);
             var frameId = &#x60;${this.get(&#x27;frameIndex&#x27;)}-${this.get(&#x27;id&#x27;)}&#x60;;
             console.log(&#x60;Previous: Leaving frame ID ${frameId}&#x60;);
             this.sendAction(&#x27;previous&#x27;);

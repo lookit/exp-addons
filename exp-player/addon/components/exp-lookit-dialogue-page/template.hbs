@@ -3,22 +3,28 @@
 
 <div class="exp-lookit-dialogue-page" id="exp-lookit-dialogue-page-container">
 
+    <div class="row recorder-container video-recorder-hidden">
+        <div id="recorder" class="col-xs-12">
+        </div>
+    </div>
+
     <div id="story-area">
         {{#if doRecording}}
             <p id='waitForVideo'> establishing video connection <br> please wait... </p>
         {{/if}}
 
-
         {{#each images as |image|}}
-            <div id={{image.id}} class="story-image-container" onclick={{action 'clickSpeaker' image.id}} style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">
-                <p onclick={{action 'clickSpeaker' image.id}} class="image-text {{if (not completedAudio) 'disabled'}}"> {{image.text}} </p>
-                <img src={{image.src_parsed}} class="story-image" alt="story illustration">
+            <div id={{image.id}} class="story-image-positioner" style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">
+                <div class="story-image-container" onclick={{action 'clickSpeaker' image.id}} >
+                    <p onclick={{action 'clickSpeaker' image.id}} class="image-text {{if (not completedAudio) 'disabled'}}"> {{image.text}} </p>
+                    <img src={{image.src_parsed}} class="story-image" alt="story character">
 
-                <audio class="speaker-audio" onended={{action 'markAudioCompleted' image.id}}>
-                    {{#each image.imageAudio_parsed as |stream|}}
-                        <source src="{{stream.src}}" type="{{stream.type}}">
-                    {{/each}}
-                </audio>
+                    <audio class="speaker-audio" onplay={{action 'markAudioPlayed' image.id}} onended={{action 'endSpeakerAudio' image.id}}>
+                        {{#each image.imageAudio_parsed as |stream|}}
+                            <source src="{{stream.src}}" type="{{stream.type}}">
+                        {{/each}}
+                    </audio>
+                </div>
             </div>
         {{/each}}
 
@@ -49,8 +55,8 @@
             {{exp-text-block block=parentTextBlock}}
         </div>
         {{#unless autoProceed}}
-            <button id="nextbutton" class="btn btn-success right" disabled={{not readyToProceed}} {{ action 'next' }} >
-                Next
+            <button id="nextbutton" class="btn btn-success right" disabled={{not readyToProceed}} {{ action 'finish' }} >
+                Next <br> (or press Enter)
             </button>
         {{/unless}}
     </div>

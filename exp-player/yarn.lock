@@ -1757,6 +1757,12 @@ ember-cli-dependency-checker@^1.2.0:
     is-git-url "0.2.0"
     semver "^4.1.0"
 
+ember-cli-dynamic-forms@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-dynamic-forms/-/ember-cli-dynamic-forms-0.4.0.tgz#a8c127dc113335668a9d74177ecda85d3c5b25c9"
+  dependencies:
+    ember-cli-babel "^5.1.6"
+
 ember-cli-get-component-path-option@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ember-cli-get-component-path-option/-/ember-cli-get-component-path-option-1.0.0.tgz#0d7b595559e2f9050abed804f1d8eff1b08bc771"
@@ -2142,6 +2148,12 @@ ember-i18n@4.2.2:
   dependencies:
     ember-cli-babel "^5.0.0"
     ember-getowner-polyfill "^1.0.0"
+
+ember-inflector@1.9.5:
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/ember-inflector/-/ember-inflector-1.9.5.tgz#6a0bddf6824baa795e30d45125022accaaeba52c"
+  dependencies:
+    ember-cli-babel "^5.1.6"
 
 ember-inflector@^1.9.4:
   version "1.11.0"
@@ -6293,6 +6305,10 @@ type-is@~1.6.10, type-is@~1.6.13:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typescript@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.0.0.tgz#14795f9c39e06022597a2a09eb733adabef9b08c"
 
 uc.micro@^1.0.0, uc.micro@^1.0.1:
   version "1.0.3"

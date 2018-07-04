@@ -1,7 +1,5 @@
-// Shared across platform
+// Exp and Lookit
 @import "components/exp-player";
-
-// Lookit-specific
 @import "components/exp-video-consent";
 @import "components/exp-video-config";
 @import "components/exp-video-config-quality";
@@ -16,27 +14,17 @@
 @import "components/exp-lookit-preferential-looking";
 @import "components/exp-lookit-story-page";
 @import "components/exp-lookit-dialogue-page";
+@import "components/radio-group";
 
+// Physics study only
 @import "components/exp-physics-info";
 @import "components/exp-mood-questionnaire";
 @import "components/exp-physics-preview-exp";
 @import "components/exp-physics-pre-video";
 @import "components/exp-exit-survey";
 @import "components/exp-video-physics";
-
-// ISP-specific
-@import "components/radio-group";
-@import "components/isp-radio-group";
-@import "components/exp-overview";
-@import "components/exp-free-response";
-@import "components/exp-card-sort";
-@import "components/exp-rating-form";
-@import "components/exp-thank-you";
-@import "components/page-number";
-
-// Unused??
-@import "components/exp-video-setup";
-
+@import "components/exp-lookit-survey";
+@import "components/exp-lookit-observation";
 
 .exp-text-large {
     font-size: 2em;
@@ -78,16 +66,40 @@
   white-space: pre-line;
 }
 
-.video-recorder-visible {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    padding: 150px;
-    background: white;
-    height: 80% !important;
+// Pad next button so it's not awkwardly flush at bottom of page
+#nextbutton {
+    margin-bottom: 3em;
 }
+
+// Don't show the 'powered by Pipe' link on video recorder
+p#pipeClickPowered {
+    display:none;
+}
+
+// Size the Pipe video ourselves, don't rely on fixed size that needs to be
+// handed to it
+#hdfvr-content, #hdfvr-content #pipeVrec, #hdfvr-content #pipeVideoInput {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+// Make sure the microphone symbol and meter show up even if aspect ratio is such that
+// bottom border of area is black
+#hdfvr-content #pipeVrec #pipeMicContainer {
+    background-color: gray;
+    padding: 2px;
+}
+
+// Pipe video recorder div formatting
+.recorder-container {
+    height: 30vh;
+    margin: 0px;
+}
+
+.recorder-container #recorder {
+    height: 100%;
+}
+
 .video-recorder-hidden {
     top: -10000px;
     left: -10000px;

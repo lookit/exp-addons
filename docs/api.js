@@ -2,7 +2,6 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
         "ExpExitSurvey",
-        "ExpExitSurveyPilot",
         "ExpFrameBase",
         "ExpFrameBaseUnsafe",
         "ExpLookitDialoguePage",
@@ -13,6 +12,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ExpLookitPreferentialLooking",
         "ExpLookitPreviewExplanation",
         "ExpLookitStoryPage",
+        "ExpLookitSurvey",
         "ExpLookitText",
         "ExpMoodQuestionnaire",
         "ExpPhysicsIntro",
@@ -29,6 +29,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "VideoRecordMixin",
         "VideoRecorderObject",
         "geometry",
+        "permute",
         "randomParameterSet",
         "videoRecorder"
     ],

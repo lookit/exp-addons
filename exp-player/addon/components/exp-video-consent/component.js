@@ -52,28 +52,28 @@ Video consent frame for Lookit studies, with consent document displayed at left 
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Em.inject.service(),
-    recorder: null,
-    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
-    disableRecord: Em.computed('recorder.recording', 'hasCamAccess', function () {
-        return !this.get('hasCamAccess') || this.get('recorder.recording');
+    disableRecord: Em.computed('recorder.recording', 'recorder.hasCamAccess', function () {
+        return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
     }),
-    recordingStarted: false,
+    startedRecording: false,
 
-    didInsertElement() {
-        this.setupRecorder(this.$('.recorder'), false);
-    },
     actions: {
         record() {
-            this.startRecorder();
-            window.setTimeout(() => {
-                this.set('recordingStarted', true);
-            }, 2000);
+            this.startRecorder().then(() => {
+                this.set('startedRecording', true);
+                // Require at least 3 s recording
+                setTimeout(function() {
+                    $('#submitbutton').prop( "disabled", false);
+                }, 3000);
+            });
         },
         finish() {
-            this.stopRecorder().then(() => {
-                this.send('next');
-            });
+            if (!this.get('stoppedRecording')) {
+                this.stopRecorder().then(() => {
+                    this.set('stoppedRecording', true);
+                    this.send('next');
+                });
+            }
         }
     },
 
@@ -142,6 +142,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
@@ -149,6 +150,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             properties: {
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             required: ['videoId']

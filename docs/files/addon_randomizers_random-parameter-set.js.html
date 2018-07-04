@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -119,6 +120,8 @@
 * @module exp-player
 * @submodule randomizers
 */
+
+import Ember from &#x27;ember&#x27;;
 
 /**
 * Randomizer to implement flexible condition assignment and counterbalancing by
@@ -430,13 +433,16 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
     for (var iFrame = 0; iFrame &lt; frameConfig.frameList.length; iFrame++) {
 
-        // Assign parameters common to all frames made by this randomizer
+        // Assign parameters common to all frames made by this randomizer.
+        // Use deep copies to make sure that substitutions (replaceValues)
+        // don&#x27;t affect the original frameConfig values if they&#x27;re objects
+        // themselves!!
         thisFrame = {};
-        Object.assign(thisFrame, frameConfig.commonFrameProperties);
+        Ember.$.extend(true, thisFrame, frameConfig.commonFrameProperties);
 
         // Assign parameters specific to this frame (allow to override
         // common parameters assigned above)
-        Object.assign(thisFrame, frameConfig.frameList[iFrame]);
+        Ember.$.extend(true, thisFrame, frameConfig.frameList[iFrame]);
 
         // Substitute any properties that can be replaced based on
         // the parameter set.
@@ -448,6 +454,14 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         thisFrame = resolveFrame(thisFrame.id, thisFrame)[0];
         frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.
     }
+
+    /**
+     * Parameters captured and sent to the server
+     *
+     * @method conditions
+     * @param {Number} conditionNum the index of the parameterSet chosen
+     * @param {Object} parameterSet the parameterSet chosen
+     */
 
     return [frames, {&#x27;conditionNum&#x27;: parameterSetIndex, &#x27;parameterSet&#x27;: parameterSet}];
 

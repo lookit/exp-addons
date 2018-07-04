@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import VideoRecord from '../../mixins/video-record';
 
 /**
  * @module exp-player
@@ -22,51 +23,42 @@ Video configuration frame guiding user through making sure permissions are set a
 
 @class ExpVideoConfig
 @extends ExpFrameBase
+@extends VideoRecord
 */
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    didReload: false,
     showWarning: false,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-    showWebCamWarning: Ember.computed.not('hasWebCam'),
-
-    _setupRecorder() {
-        var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
-        recorder.install();
-        this.set('recorder', recorder);
-    },
-    didInsertElement() {
-        this._setupRecorder();
-    },
+    micChecked: Em.computed.alias('recorder.micChecked'),
+    hasCamAccess: Em.computed.alias('recorder.hasCamAccess'),
+    hasWebCam: Em.computed.alias('recorder.hasWebCam'),
 
     actions: {
+
         next() {
-            this.get('recorder').stop({destroy: true});
+            this.destroyRecorder();
             this._super(...arguments);
         },
-        reloadRecorder() {
-            this.set('showWarning', false);
-            this.set('didReload', true);
-            this.get('recorder').destroy();
-            this._setupRecorder();
-        },
-        checkReloadedThenNext() {
-            if (!this.get('didReload')) {
+
+        checkAudioThenNext() {
+            if (!this.get('micChecked')) {
                 this.set('showWarning', true);
-            } else {
+            } else if (this.get('hasWebCam')) {
                 this.send('next');
             }
-        }
+        },
+
+        reloadRecorder() {
+            this.set('showWarning', false);
+            this.destroyRecorder();
+            this.setupRecorder(this.$(this.get('recorderElement')), false);
+        },
     },
 
     type: 'exp-videoconfig',
     meta: {
         name: 'Video Recorder Configuration',
-        description: 'TODO: a description of this frame goes here.',
+        description: 'Frame guiding the user through setting up webcam, with no recording.',
         parameters: {
             type: 'object',
             properties: {
@@ -77,7 +69,18 @@ export default ExpFrameBaseComponent.extend({
                 id: {
                     type: 'string',
                     description: 'A unique identifier for this item'
+                },
+                /**
+                Text to show as the introduction to the troubleshooting tips section
+                @property {String} troubleshootingIntro
+                @default "Some families are having trouble initially getting their webcams to work on Lookit. We're sorry, and we're working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems."
+                */
+                troubleshootingIntro: {
+                    type: 'string',
+                    description: 'Text to show as introduction to troubleshooting tips section',
+                    default: "We're just getting started with a new method for video recording! If you're having trouble and the instructions below don't fix it, we're sorry - and we'd love to hear from you so we can improve the system."
                 }
+
             },
             required: ['id']
         },

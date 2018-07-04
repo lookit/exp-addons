@@ -44,11 +44,8 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     layout,
     videoIndex: 0,
 
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    warning: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
+    recordingStopped: false,
+    recordingStarted: false,
 
     noNext: function() {
         return this.get('videoIndex') >= this.get('videos.length') - 1;
@@ -61,18 +58,18 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     currentVideo: Ember.computed('videoIndex', function() {
         return this.get('videos')[this.get('videoIndex')];
     }),
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-video-preview:${eventName}`, extra);
-    },
+
+    disableRecord: Ember.computed('recorder.hasCamAccess', 'recorderReady', function() {
+        return !(this.get('recorder.hasCamAccess') && this.get('recorderReady'));
+    }),
+
+
     actions: {
         accept() {
             this.set('prompt', false);
             if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                    hidden: true
-                });
-                installPromise.then(() => {
-                    this.send('setTimeEvent', 'recorderReady');
+                this.startRecorder().then(() => {
+                    this.set('recordingStarted', true);
                 });
             }
         },
@@ -82,10 +79,14 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         previousVideo() {
             this.set('videoIndex', this.get('videoIndex') - 1);
         },
-        next() {
-            this.send('setTimeEvent', 'stoppingCapture');
-            this.stopRecorder();
-            this._super(...arguments);
+        finish() {
+            if (!this.get('recordingStopped')) {
+                this.set('recordingStopped', true);
+                this.stopRecorder().then(() => {
+                    this.set('stoppedRecording', true);
+                    this.send('next');
+                });
+            }
         }
     },
     type: 'exp-video-preview',
@@ -178,22 +179,20 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
              * Parameters captured and sent to the server
              *
              * @method serializeContent
-             * @param {String} videoID The ID of any video recorded during this frame
+             * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @return {Object} The payload sent to the server
              */
             properties: {
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             // No fields are required
         }
-    },
-
-    willDestroyElement() {
-        this.stopRecorder();
-        this._super(...arguments);
-        Ember.$(document).off('keypress');
     }
 });

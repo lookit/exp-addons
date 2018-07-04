@@ -201,7 +201,7 @@ export default Ember.Component.extend({
     makeTimeEvent(eventName, extra) {
         const curTime = new Date();
         const eventData = {
-            eventType: eventName,
+            eventType: `${this.get('kind', 'unknown-frame')}:${eventName}`,
             timestamp: curTime.toISOString()
         };
         Ember.merge(eventData, extra);
@@ -210,8 +210,8 @@ export default Ember.Component.extend({
 
     actions: {
         setTimeEvent(eventName, extra) {
-            console.log(`Timing event captured for ${eventName}`, extra);
             let eventData = this.makeTimeEvent(eventName, extra);
+            console.log(`Timing event captured for ${eventName}`, eventData);
             // Copy timing event into a single dict for this component instance
             let timings = this.get('eventTimings');
             timings.push(eventData);
@@ -243,6 +243,12 @@ export default Ember.Component.extend({
         },
 
         previous() {
+            /**
+             * Move to previous frame
+             *
+             * @event previousFrame
+             */
+            this.send('setTimeEvent', 'previousFrame');
             var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
             console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');

@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import VideoRecord from '../../mixins/video-record';
 
 /**
  * @module exp-player
@@ -22,44 +23,17 @@ Video configuration frame showing webcam view at right and instructions for chec
 
 @class ExpVideoConfigQuality
 @extends ExpFrameBase
+@extends VideoRecord
 
 */
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    didReload: false,
-    showWarning: false,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
-
-    _setupRecorder() {
-        var recorder = this.get('videoRecorder').start('', this.$('#recorder'), {config: true});
-        recorder.install();
-        this.set('recorder', recorder);
-    },
-    didInsertElement() {
-        this._setupRecorder();
-    },
 
     actions: {
         next() {
-            this.get('recorder').stop({destroy: true});
+            this.destroyRecorder();
             this._super(...arguments);
-        },
-        reloadRecorder() {
-            this.set('showWarning', false);
-            this.set('didReload', true);
-            this.get('recorder').destroy();
-            this._setupRecorder();
-        },
-        checkReloadedThenNext() {
-            if (!this.get('didReload')) {
-                this.set('showWarning', true);
-            } else {
-                this.send('next');
-            }
         }
     },
 

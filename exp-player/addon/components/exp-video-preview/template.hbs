@@ -2,6 +2,12 @@
     <div class="vertical-pad"></div>
 
     <div class="row exp-text" id="exp-lookit-preview-container">
+
+        <div class="row recorder-container video-recorder-hidden">
+            <div id="recorder" class="col-xs-12">
+            </div>
+        </div>
+
         <div class="col-md-8 col-md-offset-2">
             {{#unless prompt}}
                 {{currentVideo.caption}}
@@ -9,7 +15,7 @@
             {{else}}
                 {{text}}
                 <br> <br>
-                <button class="btn btn-success btn-block" {{action 'accept'}}>{{prompt}}</button>
+                <button class="btn btn-success btn-block" disabled={{disableRecord}} {{action 'accept'}}>{{prompt}}</button>
                 <hr>
             {{/unless}}
         </div>
@@ -48,7 +54,7 @@
                     Previous video
                 </button>
                 {{#if noNext}}
-                    <button {{action 'next'}} class="btn btn-success pull-right"> Continue</button>
+                    <button {{action 'finish'}} class="btn btn-success pull-right"> Continue</button>
                 {{else}}
                     <button {{action 'nextVideo'}} class="btn btn-success pull-right"> Next video</button>
                 {{/if}}
