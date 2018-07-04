@@ -3,6 +3,11 @@
 
 <div class="exp-lookit-story-page" id="exp-lookit-story-page-container">
 
+    <div class="row recorder-container video-recorder-hidden">
+        <div id="recorder" class="col-xs-12">
+        </div>
+    </div>
+
     <div id="story-area">
         {{#if doRecording}}
             <p id='waitForVideo'> establishing video connection <br> please wait... </p>
@@ -39,7 +44,7 @@
             {{exp-text-block block=parentTextBlock}}
         </div>
         {{#unless autoProceed}}
-            <button id="nextbutton" class="btn btn-success right" {{ action 'next' }} >
+            <button id="nextbutton" class="btn btn-success right" {{ action 'finish' }} >
                 Next
             </button>
         {{/unless}}

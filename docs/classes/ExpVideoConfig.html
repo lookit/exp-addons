@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -115,11 +116,11 @@
 <div class="box meta">
 
         <div class="extends">
-            Extends <a href="../classes/ExpFrameBase.html" class="crosslink">ExpFrameBase</a>
+            Extends VideoRecord
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-video-config_component.js.html#l11"><code>addon&#x2F;components&#x2F;exp-video-config&#x2F;component.js:11</code></a>
+            Defined in: <a href="../files/addon_components_exp-video-config_component.js.html#l12"><code>addon&#x2F;components&#x2F;exp-video-config&#x2F;component.js:12</code></a>
         </div>
 
             Module: <a href="../modules/frames.html">frames</a><br>
@@ -145,29 +146,13 @@
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-            <li class="api-class-tab events"><a href="#events">Events</a></li>
     </ul>
 
     <div>
         <div id="index" class="api-class-tabpanel index">
             <h2 class="off-left">Item Index</h2>
 
-                <div class="index-section methods">
-                    <h3>Methods</h3>
-
-                    <ul class="index-list methods extends">
-                            <li class="index-item method inherited">
-                                <a href="#method_makeTimeEvent">makeTimeEvent</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_serializeContent">serializeContent</a>
-
-                            </li>
-                    </ul>
-                </div>
 
                 <div class="index-section properties">
                     <h3>Properties</h3>
@@ -177,185 +162,47 @@
                                 <a href="#property_id">id</a>
 
                             </li>
-                    </ul>
-                </div>
-
-
-                <div class="index-section events">
-                    <h3>Events</h3>
-
-                    <ul class="index-list events extends">
-                            <li class="index-item event inherited">
-                                <a href="#event_nextFrame">nextFrame</a>
+                            <li class="index-item property">
+                                <a href="#property_troubleshootingIntro">troubleshootingIntro</a>
 
                             </li>
                     </ul>
                 </div>
+
+
         </div>
 
-            <div id="methods" class="api-class-tabpanel">
-                <h2 class="off-left">Methods</h2>
-
-<div id="method_makeTimeEvent" class="method item inherited">
-    <h3 class="name"><code>makeTimeEvent</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>eventName</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[extra]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Create the time event payload for a particular frame / event. This can be overridden to add fields to every
-event sent by a particular frame</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">eventName</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[extra]</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <p>An object with additional properties to be sent to the server</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
-                    <p>Event type, time, and any additional metadata provided</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_serializeContent" class="method item inherited">
-    <h3 class="name"><code>serializeContent</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>eventTimings</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/ExpFrameBase.html#method_serializeContent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l168"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:168</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>The base class does not define any data to save to the server. It does, however, capture some basic event
-timing data. (such as when the user clicks the &quot;next&quot; button)</p>
-<p>This section slightly breaks YUIDoc conventions- rather than being a literal guide to using the code, the
-&quot;parameters&quot; here are abstract descriptions of what data is captured.</p>
-<p>Each frame that extends ExpFrameBase will send an array <code>eventTimings</code>
-back to the server upon completion. This array is an ordered list (oldest
-to newest) of every EVENT that happened during the frame. Each event is
-represented as an object with at least the properties
-<code>{'eventType': EVENTNAME, 'timestamp': TIMESTAMP}</code>. Frame-specific events
-may define additional properties that are sent.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">eventTimings</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
-            </div>
-        </div>
-
-
-</div>
-            </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
 <div id="property_id" class="property item">
     <h3 class="name"><code>id</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-video-config_component.js.html#l65"><code>addon&#x2F;components&#x2F;exp-video-config&#x2F;component.js:65</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A unique identifier for this item</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_troubleshootingIntro" class="property item">
+    <h3 class="name"><code>troubleshootingIntro</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
@@ -372,45 +219,17 @@ may define additional properties that are sent.</p>
     </div>
 
     <div class="description">
-        <p>A unique identifier for this item</p>
+        <p>Text to show as the introduction to the troubleshooting tips section</p>
 
     </div>
 
+        <p><strong>Default:</strong> &quot;Some families are having trouble initially getting their webcams to work on Lookit. We&#x27;re sorry, and we&#x27;re working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems.&quot;</p>
 
 
 </div>
             </div>
 
 
-            <div id="events" class="api-class-tabpanel">
-                <h2 class="off-left">Events</h2>
-
-                    <div id="event_nextFrame" class="events item inherited">
-                        <h3 class="name"><code>nextFrame</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Move to next frame</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-            </div>
     </div>
 </div>
                     </div>

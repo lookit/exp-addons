@@ -160,10 +160,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
+
+    // Override setting in VideoRecord mixin - only use camera if doing recording
+    doUseCamera: Ember.computed.alias('doRecording'),
+    // Don't need to override startRecordingAutomatically as we override the observer
+    // whenPossibleToRecord directly.
 
     // Track state of experiment
     completedAudio: false, // for main narration audio
@@ -193,13 +194,22 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             return okayToProceed;
         }),
 
-    // Are we ready to start playing the audio? Wait for recording (used if
-    // doing a recording frame).
-    readyToStartAudio: Ember.computed.and('hasCamAccess', 'videoUploadConnected'),
+    // Override to do a bit extra when starting recording
+    whenPossibleToRecord: function() {
+        var _this = this;
+        if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+            this.startRecorder().then(() => {
+                _this.set('recorderReady', false);
+                $('#waitForVideo').hide();
+                _this.set('currentAudioIndex', -1);
+                _this.send('playNextAudioSegment');
+            });
+        }
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     meta: {
         name: 'ExpLookitDialoguePage',
-        description: 'Frame to [TODO]',
+        description: 'Frame for a storybook page with dialogue spoken by characters',
         parameters: {
             type: 'object',
             properties: {
@@ -486,6 +496,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
              *
              * @method serializeContent
              * @param {String} videoID The ID of any video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
              * @param {String} currentlyHighlighted which image is selected at
              *   the end of the trial, or null if none is. This indicates the
@@ -505,18 +516,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 },
                 nPhase: {
                     type: 'number'
+                },
+                videoList: {
+                    type: 'list'
                 }
             }
         }
     },
 
-    audioObserver: Ember.observer('readyToStartAudio', function(frame) {
-        if (frame.get('readyToStartAudio')) {
-            $('#waitForVideo').hide();
-            frame.set('currentAudioIndex', -1);
-            frame.send('playNextAudioSegment');
-        }
-    }),
+
 
     // Move an image up and down until the isSpeaking class is removed.
     // Yes, this could much more naturally be done by using a CSS animation property
@@ -619,10 +627,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             this.send('playNextAudioSegment');
         },
 
-        next() {
+        finish() {
+            var _this = this;
             $('.story-image-positioner').removeClass('isSpeaking');
-            this.stopRecorder();
-            this._super(...arguments);
+            this.stopRecorder().then(() => {
+                _this.set('stoppedRecording', true);
+                _this.send('next');
+            }, () => {
+                _this.send('next');
+            });
         },
 
         playNextAudioSegment() {
@@ -631,7 +644,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 $('#' + this.get('audioSources')[this.currentAudioIndex].audioId)[0].play();
             } else {
                 if (this.get('autoProceed')) {
-                    this.send('next');
+                    this.send('finish');
                 } else {
                     /**
                      * When narration audio is completed
@@ -678,17 +691,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         return fullAsset;
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-lookit-dialogue-page:${eventName}`, extra);
-    },
-
     didInsertElement() {
-        this._super(...arguments);
 
-        $(document).on('keyup.pauser', (e) => {
+        // Make 'Enter' == next button
+        $(document).on('keyup.nexter', (e) => {
             if (this.get('readyToProceed')) {
                 if (e.which === 13) { // enter/return
-                    this.send('next');
+                    this.send('finish');
                 }
             }
         });
@@ -746,57 +755,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             }
         });
 
-        // If we're recording this trial, set up, and rely on audioObserver to
-        // start audio once recording is ready. Otherwise, start audio right
-        // away.
-        if (_this.get('doRecording')) {
-            if (this.get('experiment') && this.get('id') && this.get('session')) {
-                const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                    hidden: true
-                });
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                installPromise.then(() => {
-                    this.send('setTimeEvent', 'recorderReady');
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-
-                // Add event handlers on top of what the VideoRecordMixin normally does - TODO: would ideally extend functionality of mixin handlers rather than replacing
-                const recorder = this.get('recorder');
-                recorder.on('onCamAccess', (hasAccess) => {
-                    this.send('setTimeEvent', 'hasCamAccess', {
-                        hasCamAccess: hasAccess
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-
-                recorder.on('onConnectionStatus', () => {
-                    this.send('setTimeEvent', 'videoStreamConnection', {
-                        status: status
-                    });
-                    this.notifyPropertyChange('readyToStartAudio');
-                });
-            }
-        } else {
-            _this.send('playNextAudioSegment');
+        // If not waiting for recording to start, just go ahead with audio now
+        if (!this.get('doUseCamera')) {
+            this.send('playNextAudioSegment');
         }
+
+        this._super(...arguments);
 
     },
 
     willDestroyElement() {
-        this.send('setTimeEvent', 'destroyingElement');
-
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
-            this.stopRecorder();
-        }
-        $(document).off('keyup.pauser');
-
+        $(document).off('keyup.nexter');
         this._super(...arguments);
     }
 

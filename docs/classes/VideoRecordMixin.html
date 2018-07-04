@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -127,6 +128,29 @@
 
 <div class="box intro">
     <p>A mixin that can be used to add basic support for video recording to a particular experiment frame</p>
+<p>By default, the recorder will be installed when this frame loads, but recording
+will not start automatically. To override either of these settings, set
+the properties <code>doUseCamera</code> and/or <code>startRecordingAutomatically</code> in the consuming
+frame.</p>
+<p>You will also need to set <code>recorderElement</code> if the recorder is to be housed other than
+in an element identified by the ID <code>recorder</code>.</p>
+<p>The properties <code>recorder</code>, <code>videoList</code>, <code>stoppedRecording</code>, <code>recorderReady</code>, and
+<code>videoId</code> become available to the consuming frame. The recorder object has fields
+that give information about its state: <code>hasWebCam</code>, 'hasCamAccess<code>,</code>recording<code>,</code>connected<code>, and</code>micChecked<code>- for details, see services/video-recorder.js. These can be accessed from the consuming frame as e.g.</code>this.get('recorder').get('hasWebCam')`.</p>
+<p>If starting recording automatically, the function <code>whenPossibleToRecord</code> will be called
+once recording is possible, and will start recording. If you want to do other things
+at this point, like proceeding to a test trial, you can override this function in your
+frame.</p>
+<p>See 'methods' for the functions you can use on a frame that extends VideoRecord.</p>
+<p>Events recorded in a frame that extends VideoRecord will automatically have additional
+fields videoId (video filename), pipeId (temporary filename initially assigned by
+the recording service),
+and streamTime (when in the video they happened, in s).</p>
+<p>Setting up the camera is handled in didInsertElement, and making sure recording is
+stopped is handled in willDestroyElement (Ember hooks that fire during the component
+lifecycle). It is very important (in general, but especially when using this mixin)
+that you call <code>this._super(...arguments);</code> in any functions where your frame overrides
+hooks like this, so that the mixin's functions get called too!</p>
 
 </div>
 
@@ -149,6 +173,14 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
+                                <a href="#method_destroyRecorder">destroyRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hideRecorder">hideRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_makeTimeEvent">makeTimeEvent</a>
 
                             </li>
@@ -165,11 +197,19 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_showRecorder">showRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_startRecorder">startRecorder</a>
 
                             </li>
                             <li class="index-item method">
                                 <a href="#method_stopRecorder">stopRecorder</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_whenPossibleToRecord">whenPossibleToRecord</a>
 
                             </li>
                     </ul>
@@ -180,7 +220,27 @@
 
                     <ul class="index-list properties">
                             <li class="index-item property">
+                                <a href="#property_[doUseCamera=true]">[doUseCamera=true]</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_[recorderElement=&#x27;#recorder&#x27;]">[recorderElement=&#x27;#recorder&#x27;]</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_[startRecordingAutomatically=false]">[startRecordingAutomatically=false]</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_recorder">recorder</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_recorderReady">recorderReady</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_stoppedRecording">stoppedRecording</a>
 
                             </li>
                             <li class="index-item property">
@@ -188,7 +248,7 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_videoRecorder">videoRecorder</a>
+                                <a href="#property_videoList">videoList</a>
 
                             </li>
                     </ul>
@@ -205,6 +265,10 @@
                             </li>
                             <li class="index-item event">
                                 <a href="#event_pauseVideo">pauseVideo</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_recorderReady">recorderReady</a>
 
                             </li>
                             <li class="index-item event">
@@ -226,6 +290,69 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_destroyRecorder" class="method item">
+    <h3 class="name"><code>destroyRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l276"><code>addon&#x2F;mixins&#x2F;video-record.js:276</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Destroy recorder and stop accessing webcam</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_hideRecorder" class="method item">
+    <h3 class="name"><code>hideRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l339"><code>addon&#x2F;mixins&#x2F;video-record.js:339</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
+distract the user.</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_makeTimeEvent" class="method item">
     <h3 class="name"><code>makeTimeEvent</code></h3>
 
@@ -253,7 +380,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l66"><code>addon&#x2F;mixins&#x2F;video-record.js:66</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l153"><code>addon&#x2F;mixins&#x2F;video-record.js:153</code></a>
         </p>
 
 
@@ -325,7 +452,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l112"><code>addon&#x2F;mixins&#x2F;video-record.js:112</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l203"><code>addon&#x2F;mixins&#x2F;video-record.js:203</code></a>
         </p>
 
 
@@ -333,7 +460,11 @@
     </div>
 
     <div class="description">
-        <p>Pause the recorder (and capture timing events)</p>
+        <p>Pause the recorder (and capture timing events). For webRTC recorder, this is
+just a placeholder and doesn't actually pause the recording. If webRTC used,
+includes extra data actuallyPaused: false. This is for backwards compatibility
+with frames that pause/resume recording, and should not be used going forward -
+instead stop/start and make separate clips if needed.</p>
 
     </div>
 
@@ -348,7 +479,7 @@
 
 
                     <div class="param-description">
-                        <p>If provided (and true), don't raise an error if recording isn't ready yet.</p>
+                        <p>If provided (and true), don't raise an error if recording isn't ready yet. Not actually used for WebRTC.</p>
 
                     </div>
 
@@ -374,7 +505,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l125"><code>addon&#x2F;mixins&#x2F;video-record.js:125</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l222"><code>addon&#x2F;mixins&#x2F;video-record.js:222</code></a>
         </p>
 
 
@@ -382,20 +513,16 @@
     </div>
 
     <div class="description">
-        <p>Resume a paused recording</p>
+        <p>Resume a paused recording. For webRTC recorder, this is just a placeholder and
+doesn't actually pause the recording. If webRTC used, includes extra data
+wasActuallyPaused: false. This is for backwards compatibility
+with frames that pause/resume recording, and should not be used going forward -
+instead stop/start and make separate clips if needed.</p>
 
     </div>
 
 
 
-        <div class="throws">
-            <h4>Throws:</h4>
-
-            <div class="throws-description">
-                    <p>an exception if recorder fails to resume TODO: Based on existing usage anyway</p>
-
-            </div>
-        </div>
 
 </div>
 <div id="method_setupRecorder" class="method item">
@@ -428,7 +555,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l84"><code>addon&#x2F;mixins&#x2F;video-record.js:84</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l172"><code>addon&#x2F;mixins&#x2F;video-record.js:172</code></a>
         </p>
 
 
@@ -492,6 +619,38 @@
 
 
 </div>
+<div id="method_showRecorder" class="method item">
+    <h3 class="name"><code>showRecorder</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l348"><code>addon&#x2F;mixins&#x2F;video-record.js:348</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
+a problem with video capture settings</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_startRecorder" class="method item">
     <h3 class="name"><code>startRecorder</code></h3>
 
@@ -510,7 +669,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l138"><code>addon&#x2F;mixins&#x2F;video-record.js:138</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l240"><code>addon&#x2F;mixins&#x2F;video-record.js:240</code></a>
         </p>
 
 
@@ -552,7 +711,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l152"><code>addon&#x2F;mixins&#x2F;video-record.js:152</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l261"><code>addon&#x2F;mixins&#x2F;video-record.js:261</code></a>
         </p>
 
 
@@ -576,11 +735,120 @@
 
 
 </div>
+<div id="method_whenPossibleToRecord" class="method item">
+    <h3 class="name"><code>whenPossibleToRecord</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l323"><code>addon&#x2F;mixins&#x2F;video-record.js:323</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Observer that starts recording once recorder is ready. Override to do additional
+stuff at this point!</p>
+
+    </div>
+
+
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_[doUseCamera=true]" class="property item">
+    <h3 class="name"><code>[doUseCamera=true]</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l119"><code>addon&#x2F;mixins&#x2F;video-record.js:119</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to use the camera in this frame. Consuming frame should set this property
+to override if needed.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_[recorderElement=&#x27;#recorder&#x27;]" class="property item">
+    <h3 class="name"><code>[recorderElement=&#x27;#recorder&#x27;]</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l106"><code>addon&#x2F;mixins&#x2F;video-record.js:106</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>JQuery string to identify the recorder element.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_[startRecordingAutomatically=false]" class="property item">
+    <h3 class="name"><code>[startRecordingAutomatically=false]</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l126"><code>addon&#x2F;mixins&#x2F;video-record.js:126</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to start recording ASAP (only applies if doUseCamera). Consuming frame
+should set to override if needed.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_recorder" class="property item">
     <h3 class="name"><code>recorder</code></h3>
     <span class="type">VideoRecorder</span>
@@ -592,16 +860,68 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l36"><code>addon&#x2F;mixins&#x2F;video-record.js:36</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l82"><code>addon&#x2F;mixins&#x2F;video-record.js:82</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The recorder object. It is the responsibility of the consuming frame to set up the recorder when appropriate,
-and to set this property. If present, the mixin will automatically use it for things such as capturing stream
-time.</p>
+        <p>The recorder object, accessible to the consuming frame. Includes properties
+recorder.hasWebCam, recorder.hasCamAccess, recorder.micChecked, recorder.connected.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_recorderReady" class="property item">
+    <h3 class="name"><code>recorderReady</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l112"><code>addon&#x2F;mixins&#x2F;video-record.js:112</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether recorder has been set up yet. Automatically set when doing setup.
+Accessible to consuming frame.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_stoppedRecording" class="property item">
+    <h3 class="name"><code>stoppedRecording</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_mixins_video-record.js.html#l98"><code>addon&#x2F;mixins&#x2F;video-record.js:98</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether recording is stopped already, meaning it doesn't need to be re-stopped when
+destroying frame. This should be set to true by the consuming frame when video is
+stopped.</p>
 
     </div>
 
@@ -619,26 +939,25 @@ time.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l50"><code>addon&#x2F;mixins&#x2F;video-record.js:50</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l133"><code>addon&#x2F;mixins&#x2F;video-record.js:133</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A video ID to use for this recording. Defaults to the format <code>&lt;experimentId&gt;_&lt;frameId&gt;_&lt;sessionId&gt;_</code></p>
-<p>There may be additional prefixes/suffixes added elsewhere in the video recording process. A final video
-captured via this mixin might this have a name like:
-<code>videoStream_123mcGee_4-phys_eieio5_utctimestamp_random999.flv</code></p>
+        <p>A video ID to use for the current recording. Format is
+<code>videoStream_&lt;experimentId&gt;_&lt;frameId&gt;_&lt;sessionId&gt;_timestampMS_RRR</code>
+where RRR are random numeric digits.</p>
 
     </div>
 
 
 
 </div>
-<div id="property_videoRecorder" class="property item">
-    <h3 class="name"><code>videoRecorder</code></h3>
-    <span class="type">Unknown</span>
+<div id="property_videoList" class="property item">
+    <h3 class="name"><code>videoList</code></h3>
+    <span class="type">List</span>
 
 
 
@@ -647,14 +966,15 @@ captured via this mixin might this have a name like:
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_mixins_video-record.js.html#l44"><code>addon&#x2F;mixins&#x2F;video-record.js:44</code></a>
+        <a href="../files/addon_mixins_video-record.js.html#l91"><code>addon&#x2F;mixins&#x2F;video-record.js:91</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>This mixin automatically injects the video recorder service, making its methods available to your frame</p>
+        <p>A list of all video IDs used in this mixing (a new one is created for each recording).
+Accessible to consuming frame.</p>
 
     </div>
 
@@ -678,16 +998,33 @@ captured via this mixin might this have a name like:
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_mixins_video-record.js.html#l14"><code>addon&#x2F;mixins&#x2F;video-record.js:14</code></a>
+                            <a href="../files/addon_mixins_video-record.js.html#l47"><code>addon&#x2F;mixins&#x2F;video-record.js:47</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            
+                            <p>When recorder detects a change in camera access</p>
+                    
                         </div>
                     
+                            <div class="params">
+                                <h4>Event Payload:</h4>
+                    
+                                <ul class="params-list">
+                                    <li class="param">
+                                            <code class="param-name">hasCamAccess</code>
+                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+                    
+                                        <div class="param-description">
+                                             
+                                        </div>
+                    
+                                    </li>
+                                </ul>
+                            </div>
                     
                     
                     </div>
@@ -702,14 +1039,40 @@ captured via this mixin might this have a name like:
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_mixins_video-record.js.html#l22"><code>addon&#x2F;mixins&#x2F;video-record.js:22</code></a>
+                            <a href="../files/addon_mixins_video-record.js.html#l62"><code>addon&#x2F;mixins&#x2F;video-record.js:62</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            
+                            <p>When pausing study, immediately before request to pause webcam recording</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_recorderReady" class="events item">
+                        <h3 class="name"><code>recorderReady</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_mixins_video-record.js.html#l310"><code>addon&#x2F;mixins&#x2F;video-record.js:310</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>When video recorder has been installed</p>
+                    
                         </div>
                     
                     
@@ -726,14 +1089,15 @@ captured via this mixin might this have a name like:
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_mixins_video-record.js.html#l30"><code>addon&#x2F;mixins&#x2F;video-record.js:30</code></a>
+                            <a href="../files/addon_mixins_video-record.js.html#l74"><code>addon&#x2F;mixins&#x2F;video-record.js:74</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            
+                            <p>Just before stopping webcam video capture</p>
+                    
                         </div>
                     
                     
@@ -750,14 +1114,15 @@ captured via this mixin might this have a name like:
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_mixins_video-record.js.html#l26"><code>addon&#x2F;mixins&#x2F;video-record.js:26</code></a>
+                            <a href="../files/addon_mixins_video-record.js.html#l68"><code>addon&#x2F;mixins&#x2F;video-record.js:68</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            
+                            <p>When unpausing study, immediately before request to resume webcam recording</p>
+                    
                         </div>
                     
                     
@@ -774,16 +1139,35 @@ captured via this mixin might this have a name like:
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_mixins_video-record.js.html#l18"><code>addon&#x2F;mixins&#x2F;video-record.js:18</code></a>
+                            <a href="../files/addon_mixins_video-record.js.html#l54"><code>addon&#x2F;mixins&#x2F;video-record.js:54</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            
+                            <p>When recorder detects a change in video stream connection status</p>
+                    
                         </div>
                     
+                            <div class="params">
+                                <h4>Event Payload:</h4>
+                    
+                                <ul class="params-list">
+                                    <li class="param">
+                                            <code class="param-name">status</code>
+                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+                    
+                                        <div class="param-description">
+                                            <p>status of video stream connection, e.g.
+                    'NetConnection.Connect.Success' if successful</p>
+                    
+                                        </div>
+                    
+                                    </li>
+                                </ul>
+                            </div>
                     
                     
                     </div>

@@ -3,11 +3,15 @@
 
 <div class="exp-lookit-dialogue-page" id="exp-lookit-dialogue-page-container">
 
+    <div class="row recorder-container video-recorder-hidden">
+        <div id="recorder" class="col-xs-12">
+        </div>
+    </div>
+
     <div id="story-area">
         {{#if doRecording}}
             <p id='waitForVideo'> establishing video connection <br> please wait... </p>
         {{/if}}
-
 
         {{#each images as |image|}}
             <div id={{image.id}} class="story-image-positioner" style="left:{{image.left}}%; height:{{image.height}}%; bottom:{{image.bottom}}%;">
@@ -51,7 +55,7 @@
             {{exp-text-block block=parentTextBlock}}
         </div>
         {{#unless autoProceed}}
-            <button id="nextbutton" class="btn btn-success right" disabled={{not readyToProceed}} {{ action 'next' }} >
+            <button id="nextbutton" class="btn btn-success right" disabled={{not readyToProceed}} {{ action 'finish' }} >
                 Next <br> (or press Enter)
             </button>
         {{/unless}}

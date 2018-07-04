@@ -33,7 +33,7 @@ div.exp-video-config {
     padding: 0;
 }
 
-.exp-video-config ol li {
+.exp-video-config ol > li {
     display: inline-block;
     margin-top: 1em;
     line-height: 1.8;
@@ -43,7 +43,7 @@ div.exp-video-config {
     padding: 1px;
 }
 
-.exp-video-config ol li:before {
+.exp-video-config ol > li:before {
   display: inline;
   content: counter(item) ". ";
   counter-increment: item;
@@ -62,4 +62,19 @@ div.exp-video-config {
     margin-left: 3em;
 }
 
+.exp-video-config #soundCheckBox, .exp-video-config #camCheckBox {
+    border: medium solid gray;
+    width: 50%;
+    margin-left: 25%;
+    text-align: center;
+    padding: 2px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
 
+.exp-video-config .checkComplete {
+    background-color: #d4efdf;
+}
+
+.exp-video-config #reloadButton {
+}

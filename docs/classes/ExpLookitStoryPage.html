@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -160,7 +161,11 @@ and expected to be repeated.</p>
            &quot;parentTextBlock&quot;: {
                &quot;title&quot;: &quot;Parents!&quot;,
                &quot;text&quot;: &quot;some instructions&quot;,
-               &quot;emph&quot;: true
+               &quot;emph&quot;: true,
+               &quot;css&quot;: {
+                   &quot;color&quot;: &quot;red&quot;,
+                   &quot;font-size&quot;: &quot;12px&quot;
+               }
            },
            &quot;images&quot;: [
                {
@@ -286,11 +291,11 @@ and expected to be repeated.</p>
                     <h3>Events</h3>
 
                     <ul class="index-list events extends">
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_enteredFullscreen">enteredFullscreen</a>
 
                             </li>
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_leftFullscreen">leftFullscreen</a>
 
                             </li>
@@ -298,16 +303,8 @@ and expected to be repeated.</p>
                                 <a href="#event_nextFrame">nextFrame</a>
 
                             </li>
-                            <li class="index-item event">
-                                <a href="#event_onCamAccess">onCamAccess</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_stoppingCapture">stoppingCapture</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_videoStreamConnection">videoStreamConnection</a>
+                            <li class="index-item event inherited">
+                                <a href="#event_previousFrame">previousFrame</a>
 
                             </li>
                     </ul>
@@ -332,7 +329,7 @@ and expected to be repeated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l127"><code>addon&#x2F;mixins&#x2F;full-screen.js:127</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
         </p>
 
 
@@ -434,10 +431,13 @@ event sent by a particular frame</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
+                        <code>eventTimings</code>
+                </li>
+                <li class="arg">
                         <code>videoID</code>
                 </li>
                 <li class="arg">
-                        <code>eventTimings</code>
+                        <code>videoList</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -458,7 +458,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l322"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:322</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l330"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:330</code></a>
         </p>
 
 
@@ -475,23 +475,34 @@ event sent by a particular frame</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">videoID</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-                    <div class="param-description">
-                        <p>The ID of any video recorded during this frame</p>
-
-                    </div>
-
-                </li>
-                <li class="param">
                         <code class="param-name">eventTimings</code>
                         <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
 
 
                     <div class="param-description">
                          
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoID</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>The ID of any webcam video recorded during this frame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoList</code>
+                        <span class="type">List</span>
+
+
+                    <div class="param-description">
+                        <p>a list of webcam video IDs in case there are &gt;1</p>
+
                     </div>
 
                 </li>
@@ -525,7 +536,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l89"><code>addon&#x2F;mixins&#x2F;full-screen.js:89</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
         </p>
 
 
@@ -799,7 +810,7 @@ connection before starting audio if so)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l284"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:284</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l291"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:291</code></a>
         </p>
 
 
@@ -886,7 +897,7 @@ URL, or relative to baseDir (see baseDir).</p>
     </div>
 
     <div class="description">
-        <p>Text block to display to parent.</p>
+        <p>Text block to display to parent.  (Each field is optional)</p>
 
     </div>
 
@@ -925,6 +936,18 @@ URL, or relative to baseDir (see baseDir).</p>
                 </div>
 
             </li>
+            <li class="param">
+                    <code class="param-name">css</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+                <div class="param-description">
+                    <p>object specifying any css properties
+to apply to this section, and their values - e.g.
+{'color': 'red', 'font-size': '12px'}</p>
+
+                </div>
+
+            </li>
         </ul>
 </div>
             </div>
@@ -933,7 +956,7 @@ URL, or relative to baseDir (see baseDir).</p>
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
-                    <div id="event_enteredFullscreen" class="events item">
+                    <div id="event_enteredFullscreen" class="events item inherited">
                         <h3 class="name"><code>enteredFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -942,23 +965,22 @@ URL, or relative to baseDir (see baseDir).</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l451"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:451</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change to fullscreen mode</p>
-                    
+                            Upon detecting change to fullscreen mode
                         </div>
                     
                     
                     
                     </div>
-                    <div id="event_leftFullscreen" class="events item">
+                    <div id="event_leftFullscreen" class="events item inherited">
                         <h3 class="name"><code>leftFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -967,17 +989,16 @@ URL, or relative to baseDir (see baseDir).</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l444"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:444</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change out of fullscreen mode</p>
-                    
+                            Upon detecting change out of fullscreen mode
                         </div>
                     
                     
@@ -1008,8 +1029,8 @@ URL, or relative to baseDir (see baseDir).</p>
                     
                     
                     </div>
-                    <div id="event_onCamAccess" class="events item">
-                        <h3 class="name"><code>onCamAccess</code></h3>
+                    <div id="event_previousFrame" class="events item inherited">
+                        <h3 class="name"><code>previousFrame</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1017,103 +1038,19 @@ URL, or relative to baseDir (see baseDir).</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l493"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:493</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>When recorder detects a change in camera access</p>
+                            <p>Move to previous frame</p>
                     
                         </div>
                     
-                            <div class="params">
-                                <h4>Event Payload:</h4>
-                    
-                                <ul class="params-list">
-                                    <li class="param">
-                                            <code class="param-name">hasCamAccess</code>
-                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-                    
-                    
-                                        <div class="param-description">
-                                             
-                                        </div>
-                    
-                                    </li>
-                                </ul>
-                            </div>
-                    
-                    
-                    </div>
-                    <div id="event_stoppingCapture" class="events item">
-                        <h3 class="name"><code>stoppingCapture</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l378"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:378</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Just before stopping webcam video capture</p>
-                    
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="event_videoStreamConnection" class="events item">
-                        <h3 class="name"><code>videoStreamConnection</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l504"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:504</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>When recorder detects a change in video stream connection status</p>
-                    
-                        </div>
-                    
-                            <div class="params">
-                                <h4>Event Payload:</h4>
-                    
-                                <ul class="params-list">
-                                    <li class="param">
-                                            <code class="param-name">status</code>
-                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-                    
-                                        <div class="param-description">
-                                            <p>status of video stream connection, e.g.
-                    'NetConnection.Connect.Success' if successful</p>
-                    
-                                        </div>
-                    
-                                    </li>
-                                </ul>
-                            </div>
                     
                     
                     </div>

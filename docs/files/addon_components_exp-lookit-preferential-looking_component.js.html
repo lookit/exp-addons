@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -128,9 +129,11 @@ let {
 /**
  * @module exp-player
  * @submodule frames
+ * @deprecated
  */
 
 /**
+ * NOT YET ADAPTED FOR WEBRTC RECORDER.
  * Frame to implement a basic preferential looking trial, with static images
  * displayed in the center or at left and right of the screen. Trial proceeds
  * in segments:
@@ -840,11 +843,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         },
 
         next() {
-            /**
-             * Just before stopping webcam video capture
-             *
-             * @event stoppingCapture
-             */
             this.stopRecorder();
             this._super(...arguments);
         }
@@ -1006,33 +1004,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(&#x60;exp-lookit-preferential-looking:${eventName}&#x60;, extra);
-    },
-
-    // TODO: should the events here be moved to the fullscreen mixin?
     onFullscreen() {
         if (this.get(&#x27;isDestroyed&#x27;)) {
             return;
         }
         this._super(...arguments);
         if (!this.checkFullscreen()) {
-            /**
-             * Upon detecting change out of fullscreen mode
-             *
-             * @event leftFullscreen
-            */
-            this.send(&#x27;setTimeEvent&#x27;, &#x27;leftFullscreen&#x27;);
             if (!(this.get(&#x27;isPaused&#x27;)) &amp;&amp; (this.get(&#x27;currentSegment&#x27;) !== &#x27;finalaudio&#x27;)) {
                 this.pauseStudy();
             }
-        } else {
-            /**
-             * Upon detecting change to fullscreen mode
-             *
-             * @event enteredFullscreen
-            */
-            this.send(&#x27;setTimeEvent&#x27;, &#x27;enteredFullscreen&#x27;);
         }
     },
 
@@ -1063,11 +1043,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     this.currentTime = 0;
                 });
 
-                /**
-                 * When unpausing study, immediately before request to resume webcam recording
-                 *
-                 * @event unpauseVideo
-                 */
                 try {
                     this.resumeRecorder();
                 } catch (_) {
@@ -1096,11 +1071,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 window.clearTimeout(this.get(&#x27;stimTimer&#x27;));
                 window.clearTimeout(this.get(&#x27;calTimer&#x27;));
 
-                /**
-                 * When pausing study, immediately before request to pause webcam recording
-                 *
-                 * @event pauseVideo
-                 */
                 this.pauseRecorder(true);
 
                 if (this.checkFullscreen()) {
@@ -1144,14 +1114,17 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         $(document).on(&#x27;keyup.pauser&#x27;, function(e) {_this.handleSpace(e, _this);});
         this.startIntro();
 
-        // TODO: move handlers that just record events to the VideoRecord mixin?
         if (this.get(&#x27;experiment&#x27;) &amp;&amp; this.get(&#x27;id&#x27;) &amp;&amp; this.get(&#x27;session&#x27;)) {
             const installPromise = this.setupRecorder(this.$(&#x27;#videoRecorder&#x27;), true, {
                 hidden: true
             });
             installPromise.then(() =&gt; {
+                /**
+                 * When video recorder has been installed
+                 *
+                 * @event recorderReady
+                 */
                 this.send(&#x27;setTimeEvent&#x27;, &#x27;recorderReady&#x27;);
-                this.set(&#x27;recordingIsReady&#x27;, true);
             });
         }
     },

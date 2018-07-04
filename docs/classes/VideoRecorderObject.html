@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -116,7 +117,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_services_video-recorder.js.html#l42"><code>addon&#x2F;services&#x2F;video-recorder.js:42</code></a>
+            Defined in: <a href="../files/addon_services_video-recorder.js.html#l47"><code>addon&#x2F;services&#x2F;video-recorder.js:47</code></a>
         </div>
 
             Module: <a href="../modules/services.html">services</a><br>
@@ -156,15 +157,7 @@ video recorder depending on the number of video capture frames.</p>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_hide">hide</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_install">install</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_pause">pause</a>
 
                             </li>
                             <li class="index-item method">
@@ -172,15 +165,11 @@ video recorder depending on the number of video capture frames.</p>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_resume">resume</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_show">show</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_stop">stop</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_uninstall">uninstall</a>
 
                             </li>
                     </ul>
@@ -208,7 +197,7 @@ video recorder depending on the number of video capture frames.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l306"><code>addon&#x2F;services&#x2F;video-recorder.js:306</code></a>
+        <a href="../files/addon_services_video-recorder.js.html#l238"><code>addon&#x2F;services&#x2F;video-recorder.js:238</code></a>
         </p>
 
 
@@ -216,7 +205,8 @@ video recorder depending on the number of video capture frames.</p>
     </div>
 
     <div class="description">
-        <p>Uninstall the video recorder from the page</p>
+        <p>Destroy video recorder and remove from list of recorders. Use this to remove
+the video recorder when destroying a frame, if not triggered via upload.</p>
 
     </div>
 
@@ -242,7 +232,7 @@ video recorder depending on the number of video capture frames.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l234"><code>addon&#x2F;services&#x2F;video-recorder.js:234</code></a>
+        <a href="../files/addon_services_video-recorder.js.html#l184"><code>addon&#x2F;services&#x2F;video-recorder.js:184</code></a>
         </p>
 
 
@@ -263,38 +253,6 @@ line up with the video.</p>
                         <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" class="crosslink external" target="_blank">Date</a> | Null</span>:
             </div>
         </div>
-
-
-</div>
-<div id="method_hide" class="method item">
-    <h3 class="name"><code>hide</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l284"><code>addon&#x2F;services&#x2F;video-recorder.js:284</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Hide the recorder from display. Useful if you would like to keep recording without extra UI elements to
-distract the user.</p>
-
-    </div>
-
-
 
 
 </div>
@@ -322,7 +280,7 @@ distract the user.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l84"><code>addon&#x2F;services&#x2F;video-recorder.js:84</code></a>
+        <a href="../files/addon_services_video-recorder.js.html#l89"><code>addon&#x2F;services&#x2F;video-recorder.js:89</code></a>
         </p>
 
 
@@ -363,60 +321,6 @@ distract the user.</p>
 
 
 </div>
-<div id="method_pause" class="method item">
-    <h3 class="name"><code>pause</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>skipIfMissing</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l206"><code>addon&#x2F;services&#x2F;video-recorder.js:206</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Pause the recorder. If optional skipIfMissing argument is provided (and
-true), don't raise an error if recording isn't ready yet.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">skipIfMissing</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
 <div id="method_record" class="method item">
     <h3 class="name"><code>record</code></h3>
 
@@ -435,7 +339,7 @@ true), don't raise an error if recording isn't ready yet.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l172"><code>addon&#x2F;services&#x2F;video-recorder.js:172</code></a>
+        <a href="../files/addon_services_video-recorder.js.html#l149"><code>addon&#x2F;services&#x2F;video-recorder.js:149</code></a>
         </p>
 
 
@@ -458,89 +362,41 @@ true), don't raise an error if recording isn't ready yet.</p>
 
 
 </div>
-<div id="method_resume" class="method item">
-    <h3 class="name"><code>resume</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l221"><code>addon&#x2F;services&#x2F;video-recorder.js:221</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Resume the recording</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_show" class="method item">
-    <h3 class="name"><code>show</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_services_video-recorder.js.html#l294"><code>addon&#x2F;services&#x2F;video-recorder.js:294</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Show the recorder to the user. Useful if you want to temporarily show a hidden recorder- eg to let the user fix
-a problem with video capture settings</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
-            </div>
-        </div>
-
-
-</div>
 <div id="method_stop" class="method item">
     <h3 class="name"><code>stop</code></h3>
 
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>destroy</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_services_video-recorder.js.html#l198"><code>addon&#x2F;services&#x2F;video-recorder.js:198</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Stop recording and save the video to the server</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_uninstall" class="method item">
+    <h3 class="name"><code>uninstall</code></h3>
+
+        <span class="paren">()</span>
 
 
 
@@ -560,26 +416,10 @@ a problem with video capture settings</p>
     </div>
 
     <div class="description">
-        <p>Stop recording and save the video to the server</p>
+        <p>Uninstall the video recorder from the page</p>
 
     </div>
 
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">destroy</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-            </ul>
-        </div>
 
 
 

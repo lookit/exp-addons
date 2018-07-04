@@ -31,27 +31,24 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
     //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
     layout: layout,
-
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    warning: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
+
+    startRecordingAutomatically: true,
+    doUseCamera: Ember.computed.not('isLast'),
+
+    hasWebCam: Ember.computed.alias('recorder.hasWebCam'),
 
     doingIntro: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'intro');
     }),
     playAnnouncementNow: true,
-
     doingTest: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'test');
     }),
     testTimer: null,
     testTime: 0,
-
     skip: false,
     hasBeenPaused: false,
     useAlternate: false,
@@ -59,6 +56,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     isPaused: false,
 
     showVideoWarning: false,
+    alreadyPlayedWarning: false,
 
     meta: {
         name: 'Video player',
@@ -210,6 +208,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
              * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
              * @param {Object} eventTimings
              * @param {String} videoID The ID of any webcam video recorded during this frame
+             * @param {List} videoList a list of webcam video IDs in case there are >1
              * @return {Object} The payload sent to the server
              */
             properties: {
@@ -219,6 +218,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 videoId: {
                     type: 'string'
+                },
+                videoList: {
+                    type: 'list'
                 }
             },
             // No fields are required
@@ -261,36 +263,45 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-physics:${eventName}`, extra);
+    showWarning() {
+        // Note: simply playing the videoWarningAudio here is tricky because it gets
+        // interrupted by the pause call in the MediaReload mixin. Instead it's on autoplay
+        // and gets removed when it's done, which is a little weird but works.
+        window.clearInterval(this.get('testTimer'));
+        this.set('testTime', 0);
+        this.send('setTimeEvent', 'pauseVideo', {
+            currentTask: this.get('currentTask')
+        });
+        this.set('playAnnouncementNow', false);
+        this.set('isPaused', true);
+        this.set('hasBeenPaused', true);
+        this.set('showVideoWarning', true);
+        this.send('exitFullscreen');
+        this.send('setTimeEvent', 'webcamNotConfigured');
+
+        // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+        // the user is unable to move on.
+        this.send('save');
+
+        this.showRecorder();
     },
+
 
     actions: {
 
-        showWarning() {
-            if (!this.get('showVideoWarning')) {
-                this.set('showVideoWarning', true);
-                this.send('setTimeEvent', 'webcamNotConfigured');
-
-                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-                // the user is unable to move on.
-                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
-                this.send('save');
-
-                var recorder = this.get('recorder');
-                recorder.show();
-                recorder.on('onCamAccessConfirm', () => {
-                    this.send('removeWarning');
-                    this.startRecorder();
-                });
-            }
-        },
-
         removeWarning() {
+            this.set('recorderReady', true);
+            this.whenPossibleToRecord(); // make sure this fires
             this.set('showVideoWarning', false);
-            this.get('recorder').hide();
+            this.hideRecorder();
             this.send('showFullscreen');
             this.pauseStudy();
+        },
+
+
+        reloadRecorder() {
+            this.destroyRecorder();
+            this.setupRecorder(this.$(this.get('recorderElement')), false);
         },
 
         stopVideo() {
@@ -312,14 +323,20 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         playNext() {
             if (this.get('currentTask') === 'intro') {
-                this.set('currentTask', 'test');
+                // TODO: once there's better support for MediaDevices.ondevicechange event,
+                // use that globally instead of just checking here.
+                if (!this.get('recorder.hasCamAccess') || !this.get('recorder.hasWebCam')) {
+                    this.showWarning();
+                }
+                else {
+                    this.set('currentTask', 'test');
+                }
             } else {
-                this.send('next'); // moving to intro video
+                this.send('finish'); // moving to intro video
             }
         },
 
         _afterTest() {
-            window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             $('audio#exp-music')[0].pause();
             this.send('playNext');
@@ -331,32 +348,26 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             this.set('_lastTime', 0);
 
             var testLength = this.get('testLength');
+            var _this = this;
 
             this.set('testTimer', window.setInterval(() => {
-                var videoTime = this.$('#player-video')[0].currentTime;
-                var lastTime = this.get('_lastTime');
+                var videoTime = _this.$('#player-video')[0].currentTime;
+                var lastTime = _this.get('_lastTime');
                 var diff = videoTime - lastTime;
-                this.set('_lastTime', videoTime);
+                _this.set('_lastTime', videoTime);
 
-                var testTime = this.get('testTime');
+                var testTime = _this.get('testTime');
                 if ((testTime + diff) >= (testLength - 0.02)) {
-                    this.send('_afterTest');
+                    window.clearInterval(this.get('testTimer'));
+                    _this.send('_afterTest');
                 } else {
-                    this.set('testTime', testTime + diff);
+                    _this.set('testTime', testTime + diff);
                 }
             }, 100));
         },
 
         startVideo() {
-            if (this.get('doingTest')) {
-                if (!this.get('hasCamAccess')) {
-                    this.pauseStudy(true);
-                    this.send('exitFullscreen');
-                    this.send('showWarning');
-                    $('#videoWarningAudio')[0].play();
-                }
-            }
-            if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
+            if (this.get('doingTest') && !this.get('isPaused')) {
                 if (this.get('testTime') === 0) {
                     this.send('setTestTimer');
                 }
@@ -370,7 +381,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
         startIntro() {
             if (this.get('skip')) {
-                this.send('next');
+                this.send('finish');
                 return;
             }
 
@@ -379,7 +390,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
             if (!this.get('isPaused')) {
                 if (this.isLast) {
-                    this.send('next');
+                    this.send('finish');
                 } else {
                     this.send('setTimeEvent', 'startIntro');
                     this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
@@ -387,22 +398,28 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             }
         },
 
-        next() {
+        finish() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
-            this.stopRecorder();
-            this._super(...arguments);
+            var _this = this;
+            this.stopRecorder().then(() => {
+                _this.set('stoppedRecording', true);
+                _this.send('next');
+            }, () => {
+                _this.send('next');
+            });
+        },
+
+        finishedWarningAudio() {
+            $('#videoWarningAudio').remove();
         }
     },
 
     pauseStudy(pause) { // only called in FS mode
-        if (this.get('showVideoWarning')) {
-            return;
-        }
 
-        // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
-        // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
+
+
             if (!this.get('isLast')) {
                 try {
                     this.set('hasBeenPaused', true);
@@ -452,37 +469,16 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             if (this.checkFullscreen()) {
                 if (e.which === 32) { // space: pause/unpause study
                     this.pauseStudy();
-                } else if (e.which === 112) { // F1: exit the study early
-                    this.stopRecorder();
                 }
             }
         });
-
-        if (this.get('experiment') && this.get('id') && this.get('session') && !this.get('isLast')) {
-            const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                hidden: true
-            });
-            installPromise.then(() => {
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                this.send('setTimeEvent', 'recorderReady');
-            });
-        }
+        window.clearInterval(this.get('testTimer'));
         this.send('showFullscreen');
     },
-    willDestroyElement() { // remove event handler
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
-            this.stopRecorder();
-        }
 
-        this.send('setTimeEvent', 'destroyingElement');
-        this._super(...arguments);
+    willDestroyElement() { // remove event handler
+        window.clearInterval(this.get('testTimer'));
         $(document).off('keyup.pauser');
+        this._super(...arguments);
     }
 });

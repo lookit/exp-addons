@@ -11,9 +11,12 @@ let {
 /**
  * @module exp-player
  * @submodule frames
+ * @deprecated
  */
 
 /**
+ * Deprecated: not yet adapted for use with webrtc recorder.
+ *
  * Frame to implement specific test trial structure for geometry alternation
  * experiment. Includes announcement, calibration, and alternation (test)
  * phases. During "alternation," two streams of triangles are shown, in
@@ -514,10 +517,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
             frame.startTrial();
         }
     }),
-
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-alternation:${eventName}`, extra);
-    },
 
     actions: {
         // When intro audio is complete

@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="../classes/ExpExitSurveyPilot.html">ExpExitSurveyPilot</a></li>
                                 <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                                 <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                                 <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -50,6 +49,7 @@
                                 <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                                <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
@@ -64,6 +64,7 @@
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
                                 <li><a href="../classes/MediaReload.html">MediaReload</a></li>
+                                <li><a href="../classes/permute.html">permute</a></li>
                                 <li><a href="../classes/randomParameterSet.html">randomParameterSet</a></li>
                                 <li><a href="../classes/videoRecorder.html">videoRecorder</a></li>
                                 <li><a href="../classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
@@ -173,7 +174,11 @@ images before proceeding.</p>
            &quot;parentTextBlock&quot;: {
                &quot;title&quot;: &quot;Parents!&quot;,
                &quot;text&quot;: &quot;some instructions&quot;,
-               &quot;emph&quot;: true
+               &quot;emph&quot;: true,
+               &quot;css&quot;: {
+                   &quot;color&quot;: &quot;red&quot;,
+                   &quot;font-size&quot;: &quot;12px&quot;
+               }
            },
            &quot;images&quot;: [
                {
@@ -366,15 +371,11 @@ images before proceeding.</p>
                                 <a href="#event_completeMainAudio">completeMainAudio</a>
 
                             </li>
-                            <li class="index-item event">
-                                <a href="#event_completeSpeakerAudio">completeSpeakerAudio</a>
-
-                            </li>
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_enteredFullscreen">enteredFullscreen</a>
 
                             </li>
-                            <li class="index-item event">
+                            <li class="index-item event inherited">
                                 <a href="#event_leftFullscreen">leftFullscreen</a>
 
                             </li>
@@ -383,19 +384,15 @@ images before proceeding.</p>
 
                             </li>
                             <li class="index-item event">
-                                <a href="#event_onCamAccess">onCamAccess</a>
+                                <a href="#event_playSpeakerAudio">playSpeakerAudio</a>
+
+                            </li>
+                            <li class="index-item event inherited">
+                                <a href="#event_previousFrame">previousFrame</a>
 
                             </li>
                             <li class="index-item event">
                                 <a href="#event_startSpeakerAudio">startSpeakerAudio</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_stoppingCapture">stoppingCapture</a>
-
-                            </li>
-                            <li class="index-item event">
-                                <a href="#event_videoStreamConnection">videoStreamConnection</a>
 
                             </li>
                     </ul>
@@ -420,7 +417,7 @@ images before proceeding.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l127"><code>addon&#x2F;mixins&#x2F;full-screen.js:127</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
         </p>
 
 
@@ -525,6 +522,9 @@ event sent by a particular frame</p>
                         <code>videoID</code>
                 </li>
                 <li class="arg">
+                        <code>videoList</code>
+                </li>
+                <li class="arg">
                         <code>eventTimings</code>
                 </li>
                 <li class="arg">
@@ -549,7 +549,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l473"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:473</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l494"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:494</code></a>
         </p>
 
 
@@ -572,6 +572,17 @@ event sent by a particular frame</p>
 
                     <div class="param-description">
                         <p>The ID of any video recorded during this frame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoList</code>
+                        <span class="type">List</span>
+
+
+                    <div class="param-description">
+                        <p>a list of webcam video IDs in case there are &gt;1</p>
 
                     </div>
 
@@ -629,7 +640,7 @@ final selected choice for a choice trial.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l89"><code>addon&#x2F;mixins&#x2F;full-screen.js:89</code></a>
+        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
         </p>
 
 
@@ -660,7 +671,7 @@ final selected choice for a choice trial.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l313"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:313</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l327"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:327</code></a>
         </p>
 
 
@@ -727,7 +738,7 @@ values correspond to the ids given in images</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l265"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:265</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l279"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:279</code></a>
         </p>
 
 
@@ -768,7 +779,7 @@ expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l303"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:303</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l317"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:317</code></a>
         </p>
 
 
@@ -794,7 +805,7 @@ replay/next buttons)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l224"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:224</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l238"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:238</code></a>
         </p>
 
 
@@ -819,7 +830,7 @@ replay/next buttons)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l244"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:244</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l258"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:258</code></a>
         </p>
 
 
@@ -854,7 +865,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l293"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:293</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l307"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:307</code></a>
         </p>
 
 
@@ -928,7 +939,7 @@ connection before starting audio if so)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l401"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:401</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l422"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:422</code></a>
         </p>
 
 
@@ -969,7 +980,7 @@ connection before starting audio if so)</p>
                     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
                 <div class="param-description">
-                    <p>left margin, as percentage of story area width</p>
+                    <p>distance from left of story area to image center, as percentage of story area width</p>
 
                 </div>
 
@@ -1051,7 +1062,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l233"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:233</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l247"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:247</code></a>
         </p>
 
 
@@ -1078,7 +1089,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l202"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:202</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l216"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:216</code></a>
         </p>
 
 
@@ -1104,7 +1115,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l213"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:213</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l227"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:227</code></a>
         </p>
 
 
@@ -1130,14 +1141,14 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l378"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:378</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l392"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:392</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Text block to display to parent.</p>
+        <p>Text block to display to parent. (Each field is optional)</p>
 
     </div>
 
@@ -1176,6 +1187,18 @@ select one of the images before proceeding</p>
                 </div>
 
             </li>
+            <li class="param">
+                    <code class="param-name">css</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+                <div class="param-description">
+                    <p>object specifying any css properties
+to apply to this section, and their values - e.g.
+{'color': 'red', 'font-size': '12px'}.</p>
+
+                </div>
+
+            </li>
         </ul>
 </div>
             </div>
@@ -1195,7 +1218,7 @@ select one of the images before proceeding</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l515"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:515</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l552"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:552</code></a>
                             </p>
                     
                     
@@ -1236,7 +1259,7 @@ select one of the images before proceeding</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l604"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:604</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l649"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:649</code></a>
                             </p>
                     
                     
@@ -1250,48 +1273,7 @@ select one of the images before proceeding</p>
                     
                     
                     </div>
-                    <div id="event_completeSpeakerAudio" class="events item">
-                        <h3 class="name"><code>completeSpeakerAudio</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l557"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:557</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>When image audio is completed (not recorded if interrupted)</p>
-                    
-                        </div>
-                    
-                            <div class="params">
-                                <h4>Event Payload:</h4>
-                    
-                                <ul class="params-list">
-                                    <li class="param">
-                                            <code class="param-name">imageId</code>
-                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-                    
-                    
-                                        <div class="param-description">
-                                             
-                                        </div>
-                    
-                                    </li>
-                                </ul>
-                            </div>
-                    
-                    
-                    </div>
-                    <div id="event_enteredFullscreen" class="events item">
+                    <div id="event_enteredFullscreen" class="events item inherited">
                         <h3 class="name"><code>enteredFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -1300,23 +1282,22 @@ select one of the images before proceeding</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l673"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:673</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change to fullscreen mode</p>
-                    
+                            Upon detecting change to fullscreen mode
                         </div>
                     
                     
                     
                     </div>
-                    <div id="event_leftFullscreen" class="events item">
+                    <div id="event_leftFullscreen" class="events item inherited">
                         <h3 class="name"><code>leftFullscreen</code></h3>
                         <span class="type"></span>
                     
@@ -1325,17 +1306,16 @@ select one of the images before proceeding</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l666"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:666</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Upon detecting change out of fullscreen mode</p>
-                    
+                            Upon detecting change out of fullscreen mode
                         </div>
                     
                     
@@ -1366,8 +1346,8 @@ select one of the images before proceeding</p>
                     
                     
                     </div>
-                    <div id="event_onCamAccess" class="events item">
-                        <h3 class="name"><code>onCamAccess</code></h3>
+                    <div id="event_playSpeakerAudio" class="events item">
+                        <h3 class="name"><code>playSpeakerAudio</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1377,55 +1357,14 @@ select one of the images before proceeding</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l749"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:749</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l603"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:603</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>When recorder detects a change in camera access</p>
-                    
-                        </div>
-                    
-                            <div class="params">
-                                <h4>Event Payload:</h4>
-                    
-                                <ul class="params-list">
-                                    <li class="param">
-                                            <code class="param-name">hasCamAccess</code>
-                                            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-                    
-                    
-                                        <div class="param-description">
-                                             
-                                        </div>
-                    
-                                    </li>
-                                </ul>
-                            </div>
-                    
-                    
-                    </div>
-                    <div id="event_startSpeakerAudio" class="events item">
-                        <h3 class="name"><code>startSpeakerAudio</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l542"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:542</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>When image audio is started</p>
+                            <p>When image audio is played (recorded even if not completed)</p>
                     
                         </div>
                     
@@ -1448,8 +1387,8 @@ select one of the images before proceeding</p>
                     
                     
                     </div>
-                    <div id="event_stoppingCapture" class="events item">
-                        <h3 class="name"><code>stoppingCapture</code></h3>
+                    <div id="event_previousFrame" class="events item inherited">
+                        <h3 class="name"><code>previousFrame</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1457,24 +1396,24 @@ select one of the images before proceeding</p>
                     
                     
                         <div class="meta">
-                                    <p>
-                                    Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l585"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:585</code></a>
+                                    <p>Inherited from
+                                    <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Just before stopping webcam video capture</p>
+                            <p>Move to previous frame</p>
                     
                         </div>
                     
                     
                     
                     </div>
-                    <div id="event_videoStreamConnection" class="events item">
-                        <h3 class="name"><code>videoStreamConnection</code></h3>
+                    <div id="event_startSpeakerAudio" class="events item">
+                        <h3 class="name"><code>startSpeakerAudio</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1484,14 +1423,14 @@ select one of the images before proceeding</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l761"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:761</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l584"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:584</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>When recorder detects a change in video stream connection status</p>
+                            <p>When image audio is started</p>
                     
                         </div>
                     
@@ -1500,14 +1439,12 @@ select one of the images before proceeding</p>
                     
                                 <ul class="params-list">
                                     <li class="param">
-                                            <code class="param-name">status</code>
+                                            <code class="param-name">imageId</code>
                                             <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
                     
                     
                                         <div class="param-description">
-                                            <p>status of video stream connection, e.g.
-                    'NetConnection.Connect.Success' if successful</p>
-                    
+                                             
                                         </div>
                     
                                     </li>

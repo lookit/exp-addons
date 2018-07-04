@@ -25,7 +25,7 @@
     font-weight: bold;
 }
 
-.exp-video-physics button {
+.exp-video-physics #fsButton, .exp-video-physics #nextbutton {
     margin-left: auto;
     margin-right: auto;
     min-height: 75px;
@@ -43,8 +43,38 @@
     display: block;
 }
 
-#videoWarningConfig {
-    height: 500px;
-    width: 80%;
-    margin-left: 10%;
+.exp-video-physics #camCheckBox {
+    border: medium solid gray;
+    width: 50%;
+    margin-left: 25%;
+    text-align: center;
+    padding: 2px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.exp-video-physics .checkComplete {
+    background-color: #d4efdf;
+}
+
+.exp-video-physics #reloadButton {
+}
+
+.exp-video-physics .recorder-container {
+	width:100%;
+	height:50vh;
+	margin: 0px;
+}
+
+.exp-video-physics .recorder {
+	padding: 0px;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	background-color: #ccc;
+	width: 110%;
+	height:100%;
+	min-width:450px;
+	margin-left:-10%;
+	clear:both !important;
+	position: relative;
 }
