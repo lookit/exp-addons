@@ -286,7 +286,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         this.showRecorder();
     },
 
-
     actions: {
 
         removeWarning() {
@@ -297,7 +296,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             this.send('showFullscreen');
             this.pauseStudy();
         },
-
 
         reloadRecorder() {
             this.destroyRecorder();
@@ -327,8 +325,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 // use that globally instead of just checking here.
                 if (!this.get('recorder.hasCamAccess') || !this.get('recorder.hasWebCam')) {
                     this.showWarning();
-                }
-                else {
+                } else {
                     this.set('currentTask', 'test');
                 }
             } else {
@@ -418,8 +415,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     pauseStudy(pause) { // only called in FS mode
 
         Ember.run.once(this, () => {
-
-
             if (!this.get('isLast')) {
                 try {
                     this.set('hasBeenPaused', true);

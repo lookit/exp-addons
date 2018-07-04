@@ -140,34 +140,34 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
 
     // Override to deal with whether or not recording is starting automatically
     whenPossibleToRecord: function() {
-    	if (this.get('startRecordingAutomatically')) {
-    		var _this = this;
-			if (this.get('hasCamAccess') && this.get('recorderReady')) {
-				this.startRecorder().then(() => {
-					_this.set('recorderReady', false);
-				});
-			}
-    	} else {
-    	    $('#recordButton').show();
+        if (this.get('startRecordingAutomatically')) {
+            var _this = this;
+            if (this.get('hasCamAccess') && this.get('recorderReady')) {
+                this.startRecorder().then(() => {
+                    _this.set('recorderReady', false);
+                });
+            }
+        } else {
+            $('#recordButton').show();
             $('#recordingText').text('Not recording yet');
-    	}
+        }
     }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     showWarning() {
         if (!this.get('showVideoWarning')) {
-                this.set('showVideoWarning', true);
-                this.send('setTimeEvent', 'webcamNotConfigured');
+            this.set('showVideoWarning', true);
+            this.send('setTimeEvent', 'webcamNotConfigured');
 
-                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-                // the user is unable to move on.
-                this.send('save');
+            // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
+            // the user is unable to move on.
+            this.send('save');
 
-                var recorder = this.get('recorder');
-                recorder.show();
-                recorder.on('onCamAccessConfirm', () => {
-                    this.send('removeWarning');
-                    this.startRecorder();
-                });
+            var recorder = this.get('recorder');
+            recorder.show();
+            recorder.on('onCamAccessConfirm', () => {
+                this.send('removeWarning');
+                this.startRecorder();
+            });
         }
     },
 

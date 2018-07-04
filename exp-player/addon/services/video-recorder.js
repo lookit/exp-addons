@@ -14,7 +14,7 @@ let {
 //    https://addpipe.com/docs#javascript-events-api
 //    New events available in HTML5: onRecorderInit, onRecorderReady, onConnectionClosed,
 //     onMicActivityLevel, onSaveOk
-const HOOKS = [ 'onRecordingStarted',
+const HOOKS = ['onRecordingStarted',
                 'onCamAccess',
                 'onRecorderReady',
                 'onUploadDone',
@@ -32,8 +32,8 @@ const MIN_VOLUME = 5;
 
 const FLASHVARS = {
     recorderId: '123',
-    qualityurl: "avq/480p.xml",
-    showMenu: "false", // show recording button menu. Yes, STRING "true"/"false" sigh.
+    qualityurl: 'avq/480p.xml',
+    showMenu: 'false', // show recording button menu. Yes, STRING "true"/"false" sigh.
     mrt: 100000000, // max recording time in seconds (don't use)
     sis: 1, // skip initial screen
     asv: 1, // autosave recordings
@@ -71,7 +71,7 @@ const VideoRecorder = Ember.Object.extend({
     flashReady: Ember.computed.alias('_recorderReady').readOnly(),
     connected: false,
 
-    debug: true,
+    debug: false,
     _started: false,
     _camAccess: false,
     _recording: false,
@@ -205,12 +205,10 @@ const VideoRecorder = Ember.Object.extend({
         var timeLeft = 3 - this.getTime();
         if (this.get('hasCamAccess') && (timeLeft > 0)) {
             // sleep time expects milliseconds
-            function sleep (time) {
-              return new Promise((resolve) => setTimeout(resolve, time));
+            function sleep(time) {
+                return new Promise((resolve) => setTimeout(resolve, time));
             }
-            return sleep(timeLeft * 1000).then(() => {
-                return this.stop();
-            });
+            return sleep(timeLeft * 1000).then(() => this.stop());
         } else {
             var recorder = this.get('recorder');
             if (recorder) {
@@ -298,8 +296,8 @@ const VideoRecorder = Ember.Object.extend({
         this.set('_recorderReady', true);
     },
 
-    _userHasCamMic(cam_number,mic_number, recorderId) {
-        this.set('hasWebCam', Boolean(cam_number));
+    _userHasCamMic(camNumber, micNumber, recorderId) {
+        this.set('hasWebCam', Boolean(camNumber));
     },
 
     _onConnectionStatus(status, recorderId) {
@@ -332,7 +330,7 @@ export default Ember.Service.extend({
     init() {
         var runHandler = function (recorder, hookName, args) {
             if (recorder.get('debug')) {
-                //console.log(hookName, args);
+                console.log(hookName, args);
             }
             if (recorder.get('_' + hookName)) {
                 recorder.get('_' + hookName).apply(recorder, args);
