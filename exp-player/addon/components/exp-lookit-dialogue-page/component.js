@@ -524,8 +524,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-
-
     // Move an image up and down until the isSpeaking class is removed.
     // Yes, this could much more naturally be done by using a CSS animation property
     // on isSpeaking, but despite animations getting applied properly to the element,
@@ -537,9 +535,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         if ($('#' + imageId).hasClass('isSpeaking')) {
             $('#' + imageId).animate({'margin-bottom': '.3%'}, 250, function() {
                 $('#' + imageId).animate({'margin-bottom': '0%'}, 250, function() {
-                        _this.wiggle(imageId);
-                    })
+                    _this.wiggle(imageId);
                 });
+            });
         }
     },
 
@@ -579,7 +577,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     // animate the image while audio is playing
                     $('#' + imageId).addClass('isSpeaking');
                     this.wiggle(imageId);
-
 
                     /**
                      * When image audio is started

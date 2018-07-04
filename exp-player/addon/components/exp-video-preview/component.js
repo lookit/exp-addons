@@ -63,7 +63,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
         return !(this.get('recorder.hasCamAccess') && this.get('recorderReady'));
     }),
 
-
     actions: {
         accept() {
             this.set('prompt', false);

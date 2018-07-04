@@ -107,28 +107,28 @@ export default Ember.Mixin.create({
      * JQuery string to identify the recorder element.
      * @property {String} [recorderElement='#recorder']
      */
-     recorderElement: '#recorder',
+    recorderElement: '#recorder',
 
-     /**
+    /**
      * Whether recorder has been set up yet. Automatically set when doing setup.
      * Accessible to consuming frame.
      * @property {Boolean} recorderReady
      */
-     recorderReady: false,
+    recorderReady: false,
 
-     /**
+    /**
      * Whether to use the camera in this frame. Consuming frame should set this property
      * to override if needed.
      * @property {Boolean} [doUseCamera=true]
      */
-     doUseCamera: true,
+    doUseCamera: true,
 
-     /**
+    /**
      * Whether to start recording ASAP (only applies if doUseCamera). Consuming frame
      * should set to override if needed.
      * @property {Boolean} [startRecordingAutomatically=false]
      */
-     startRecordingAutomatically: false,
+    startRecordingAutomatically: false,
 
     /**
      * A video ID to use for the current recording. Format is
@@ -145,7 +145,7 @@ export default Ember.Mixin.create({
             this.get('experiment.id'),
             this.get('id'),
             this.get('session.id'),
-            + Date.now(), // Timestamp in ms
+            +Date.now(), // Timestamp in ms
             Math.floor(Math.random() * 1000)
         ].join('_');
     },
@@ -181,8 +181,8 @@ export default Ember.Mixin.create({
         const videoId = this._generateVideoId();
         this.set('videoId', videoId);
         const recorder = this.get('videoRecorder').start(videoId, element, settings);
-        const pipeLoc = this.container.lookupFactory('config:environment')['pipeLoc'];
-        const pipeEnv = this.container.lookupFactory('config:environment')['pipeEnv']
+        const pipeLoc = this.container.lookupFactory('config:environment').pipeLoc;
+        const pipeEnv = this.container.lookupFactory('config:environment').pipeEnv;
         const installPromise = recorder.install({record}, this.get('videoId'), pipeLoc, pipeEnv);
 
         // Track specific events for all frames that use  VideoRecorder
@@ -250,7 +250,7 @@ export default Ember.Mixin.create({
                 if (this.get('videoList') == null) {
                     this.set('videoList', [this.get('videoId')]);
                 } else {
-                    this.set('videoList', this.get('videoList').concat([this.get('videoId')]))
+                    this.set('videoList', this.get('videoList').concat([this.get('videoId')]));
                 }
             });
         } else {
@@ -273,7 +273,7 @@ export default Ember.Mixin.create({
         }
     },
 
-     /**
+    /**
      * Destroy recorder and stop accessing webcam
      * @method destroyRecorder
      */
@@ -296,7 +296,7 @@ export default Ember.Mixin.create({
                     _this.destroyRecorder();
                 }, () => {
                     _this.destroyRecorder();
-                })
+                });
             }
         }
         _this.send('setTimeEvent', 'destroyingElement');
@@ -304,9 +304,9 @@ export default Ember.Mixin.create({
     },
 
     didInsertElement() {
-    	if (this.get('doUseCamera')) {
-    		var _this = this;
-    	    this.setupRecorder(this.$(this.get('recorderElement')), false).then(() => {
+        if (this.get('doUseCamera')) {
+            var _this = this;
+            this.setupRecorder(this.$(this.get('recorderElement')), false).then(() => {
                 /**
                  * When video recorder has been installed
                  *
@@ -316,24 +316,24 @@ export default Ember.Mixin.create({
                 _this.set('recorderReady', true);
                 _this.whenPossibleToRecord(); // make sure this fires
             });
-    	}
-    	this._super(...arguments);
+        }
+        this._super(...arguments);
     },
 
-     /**
+    /**
      * Observer that starts recording once recorder is ready. Override to do additional
      * stuff at this point!
      * @method whenPossibleToRecord
      */
     whenPossibleToRecord: function() {
-    	if (this.get('doUseCamera') && this.get('startRecordingAutomatically')) {
-    		var _this = this;
-			if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
-				this.startRecorder().then(() => {
-					_this.set('recorderReady', false);
-				});
-			}
-    	}
+        if (this.get('doUseCamera') && this.get('startRecordingAutomatically')) {
+            var _this = this;
+            if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+                this.startRecorder().then(() => {
+                    _this.set('recorderReady', false);
+                });
+            }
+        }
     }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     /**
@@ -350,9 +350,9 @@ export default Ember.Mixin.create({
      *   a problem with video capture settings
      * @method showRecorder
      */
-     showRecorder() {
+    showRecorder() {
         $(this.get('recorderElement')).parent().removeClass('video-recorder-hidden');
-     },
+    },
 
     init() {
         this._super(...arguments);
