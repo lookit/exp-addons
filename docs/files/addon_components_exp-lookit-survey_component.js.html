@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>addon/components/exp-lookit-survey/component.js - exp-player</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="https://yui-s.yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <link rel="icon" href="../assets/favicon.ico">
-    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <script src="https://yui-s.yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -138,7 +138,7 @@ let {
  * The &#x27;formSchema&#x27; consists of a &#x27;schema&#x27; object and an &#x27;options&#x27; object, described
  * under Properties.
  *
- * You can choose from any question types listed at http://www.alpacajs.org/documentation.html.
+ * You can choose from any question types listed at https://yui-s.www.alpacajs.org/documentation.html.
  * In that documentation, you will see that each field type - e.g., Checkbox, Radio, Text -
  * has some &#x27;Schema&#x27; properties and some &#x27;Options&#x27; properties. The properties under &#x27;Schema&#x27;
  * will be defined in the &#x27;schema&#x27; object of your formSchema. The properties under &#x27;Options&#x27;
@@ -146,7 +146,7 @@ let {
  *
  * Many question types allow you to easily validate answers. For instance, for a &quot;number&quot;
  * field you can set minimum and maximum values, and entries will automatically be
- * required to be numeric (http://www.alpacajs.org/docs/fields/number.html). You can also
+ * required to be numeric (https://yui-s.www.alpacajs.org/docs/fields/number.html). You can also
  * either set required: true in the schema-&gt;properties entry for this field OR set
  * validator: required-field in the options-&gt;fields entry if you want to require that the
  * participant enters something. A validation error message will be displayed next to
@@ -263,7 +263,7 @@ export default ExpFrameBaseComponent.extend({
                 },
                 /**
                 Object specifying the content of the form. This is in the same format as
-                the example definition of the const &#x27;schema&#x27; at http://toddjordan.github.io/ember-cli-dynamic-forms/#/demos/data:
+                the example definition of the const &#x27;schema&#x27; at https://yui-s.toddjordan.github.io/ember-cli-dynamic-forms/#/demos/data:
                 a schema and options are designated separately. Each field of the form
                 must be defined in schema. Options may additionally be specified in options.
 
@@ -276,12 +276,12 @@ export default ExpFrameBaseComponent.extend({
                         the form FIELDNAME:object. The FIELDNAME is something you select; it should be
                         unique within this form. The object contains at least &#x27;type&#x27; and &#x27;title&#x27; values,
                         as well as any additional desired parameters that belong to the &#x27;Schema&#x27; for the
-                        desired field described at http://www.alpacajs.org/documentation.html.
+                        desired field described at https://yui-s.www.alpacajs.org/documentation.html.
                     @param {Object} options The options allow additional customization of the forms specified in the schema. This
                         object should have a single key &#x27;fields&#x27; mapping to an object. Each key:value pair in this object is of
                         the form FIELDNAME:object, with FIELDNAMEs the same as in the schema.
                         The potential parameters to use are those that belong to the &#x27;Options&#x27; for the
-                        desired field described at  http://www.alpacajs.org/documentation.html.
+                        desired field described at  https://yui-s.www.alpacajs.org/documentation.html.
                 */
                 formSchema: {
                     type: &#x27;object&#x27;,
