@@ -50,16 +50,15 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     doingTest: Ember.computed('videoSources', function() {
         return (this.get('currentTask') === 'test');
     }),
-    testTimer: null,
+    testTimer: null, // reference to timer counting how long video has been playing, if time-based limit
     testTime: 0,
+    testVideosTimesPlayed: 0, // how many times the test video has been played, if count-based limit
 
     skip: false,
     hasBeenPaused: false,
     useAlternate: false,
     currentTask: 'announce', // announce, intro, or test.
     isPaused: false,
-
-    showVideoWarning: false,
 
     meta: {
         name: 'Video player',
@@ -180,15 +179,28 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
 
                 /**
-                Length to loop test videos, in seconds
+                Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.
                 @property {Number} testLength
-                @default 20
+                @default Infinity
                 */
                 testLength: {
                     type: 'number',
                     description: 'Length of test videos in seconds',
-                    default: 20
+                    default: Infinity
                 },
+
+                /**
+                Number of times to play test video before moving on. Set to Infinity to
+                use
+                @property {Number} testLength
+                @default 1
+                */
+                testCount: {
+                    type: 'number',
+                    description: 'Number of times to play test video',
+                    default: 1
+                },
+
                 /**
                 Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)
                 @property {Boolean} isLast
@@ -262,37 +274,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
     },
 
-    makeTimeEvent(eventName, extra) {
-        return this._super(`exp-physics:${eventName}`, extra);
-    },
-
     actions: {
-
-        showWarning() {
-            if (!this.get('showVideoWarning')) {
-                this.set('showVideoWarning', true);
-                this.send('setTimeEvent', 'webcamNotConfigured');
-
-                // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-                // the user is unable to move on.
-                // TODO: Assumption: this assumes the user isn't resuming this experiment later, so partial data is ok.
-                this.send('save');
-
-                var recorder = this.get('recorder');
-                recorder.show();
-                recorder.on('onCamAccessConfirm', () => {
-                    this.send('removeWarning');
-                    this.startRecorder();
-                });
-            }
-        },
-
-        removeWarning() {
-            this.set('showVideoWarning', false);
-            this.get('recorder').hide();
-            this.send('showFullscreen');
-            this.pauseStudy();
-        },
 
         stopVideo() {
             var currentTask = this.get('currentTask');
@@ -322,6 +304,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         _afterTest() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
+            this.set('testVideosTimesPlayed', 0);
             $('audio#exp-music')[0].pause();
             this.send('playNext');
         },
@@ -349,26 +332,25 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         startVideo() {
-            if (this.get('doingTest')) {
-                if (!this.get('hasCamAccess')) {
-                    this.pauseStudy(true);
-                    this.send('exitFullscreen');
-                    this.send('showWarning');
-                    $('#videoWarningAudio')[0].play();
-                }
-            }
             if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
-                if (this.get('testTime') === 0) {
-                    this.send('setTestTimer');
-                }
-                $('audio#exp-music')[0].play();
-                if (this.get('useAlternate')) {
-                    this.send('setTimeEvent', 'startAlternateVideo');
+                // Check that we haven't played it enough times already
+                this.set('testVideosTimesPlayed', this.get('testVideosTimesPlayed') + 1);
+                if ((this.get('testVideosTimesPlayed') > this.get('testCount')) && (this.get('testLength') === Infinity)) {
+                    this.send('_afterTest');
                 } else {
-                    this.send('setTimeEvent', 'startTestVideo');
+                    if (this.get('testTime') === 0) {
+                        this.send('setTestTimer');
+                    }
+                    $('audio#exp-music')[0].play();
+                    if (this.get('useAlternate')) {
+                        this.send('setTimeEvent', 'startAlternateVideo');
+                    } else {
+                        this.send('setTimeEvent', 'startTestVideo');
+                    }
                 }
             }
         },
+
         startIntro() {
             if (this.get('skip')) {
                 this.send('next');
@@ -391,16 +373,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         next() {
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
+            this.set('testVideosTimesPlayed', 0);
             this.stopRecorder();
             this._super(...arguments);
         }
     },
 
     pauseStudy(pause) { // only called in FS mode
-        if (this.get('showVideoWarning')) {
-            return;
-        }
-
         // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
         // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {

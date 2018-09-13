@@ -31,7 +31,7 @@
     {{/if}}
 
 
-    {{#if (and isPaused (not showVideoWarning)) }}
+    {{#if isPaused }}
         <audio id="pause-audio" autoplay="autoplay">
             <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.ogg" type="audio/ogg">
             <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/pause.mp3" type="audio/mp3">
@@ -57,7 +57,7 @@
     </video>
 
 
-    {{#if (and isPaused (not showVideoWarning))}}
+    {{#if isPaused}}
         <p class="pause-instructions"> Study paused </p>
         {{#if updatedIsFullscreen}}
             <p class="pause-instructions"> Press space to resume </p>
@@ -81,8 +81,3 @@
         </button>
     </div>
 {{/unless}}
-
-<audio id="videoWarningAudio">
-    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.mp3" type="audio/mpeg">
-    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/webcam_error.ogg" type="audio/ogg">
-</audio>
