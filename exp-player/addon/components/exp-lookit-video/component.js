@@ -7,6 +7,8 @@ import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
+// TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through.
+
 /**
  * @module exp-player
  * @submodule frames
@@ -67,16 +69,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             type: 'object',
             properties: {
                 /**
-                Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.
-                @property {Boolean} autoforwardOnEnd
-                @default true
-                */
-                autoforwardOnEnd: {
-                    type: 'boolean',
-                    description: 'Whether to automatically advance to the next frame when the video is complete',
-                    default: true
-                },
-                /**
                 Whether to automatically start the trial on load.
                 @property {Boolean} autoplay
                 @default true
@@ -126,6 +118,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
                 /**
                 Array of objects specifying intro video src and type, as for sources.
+                If empty, intro segment will be skipped.
                 @property {Array} introSources
                     @param {String} src
                     @param {String} type
@@ -138,7 +131,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
 
                 /**
-                Array of objects specifying attention-grabber video src and type, as for sources.
+                Array of objects specifying attention-grabber video src and type, as for sources. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.
                 @property {Array} attnSources
                     @param {String} src
                     @param {String} type
@@ -151,7 +144,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
 
                 /**
-                List of objects specifying intro announcement src and type.
+                List of objects specifying intro announcement src and type. If empty, announcement will be skipped.
                 Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
                 @property {Array} audioSources
                     @param {String} src
@@ -166,8 +159,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
                 /**
                 List of objects specifying music audio src and type, as for audioSources.
+                If empty, no music is played.
                 @param musicSources
-                @property {Array} audioSources
+                @property {Array} musicSources
                     @param {String} src
                     @param {String} type
                 @default []
@@ -274,6 +268,13 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         }
     },
 
+    // Skip the announcement if no audioSources given.
+    checkForEmptyAnnouncement: function() {
+        if (this.get('playAnnouncementNow') && !this.get('isPaused') && !this.get('audioSources').length) {
+            this.send('startIntro');
+        }
+    }.observes('playAnnouncementNow'),
+
     actions: {
 
         stopVideo() {
@@ -287,9 +288,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 this.send('setTimeEvent', 'videoStopped', {
                     currentTask
                 });
-                if (this.get('autoforwardOnEnd')) {
-                    this.send('playNext');
-                }
+                this.send('playNext');
             }
         },
 
@@ -305,7 +304,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             this.set('testVideosTimesPlayed', 0);
-            $('audio#exp-music')[0].pause();
+            if ($('audio#exp-music').length) {
+                $('audio#exp-music')[0].pause();
+            }
             this.send('playNext');
         },
 
@@ -341,7 +342,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     if (this.get('testTime') === 0) {
                         this.send('setTestTimer');
                     }
-                    $('audio#exp-music')[0].play();
+                    if ($('audio#exp-music').length) {
+                        $('audio#exp-music')[0].play();
+                    }
                     if (this.get('useAlternate')) {
                         this.send('setTimeEvent', 'startAlternateVideo');
                     } else {
@@ -352,25 +355,27 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         startIntro() {
-            if (this.get('skip')) {
+            if (this.get('skip')) { // If we need to skip because both test & alternate have been used
                 this.send('next');
                 return;
             }
-
-            this.set('currentTask', 'intro');
-            this.set('playAnnouncementNow', false);
 
             if (!this.get('isPaused')) {
                 if (this.isLast) {
                     this.send('next');
                 } else {
+                    this.set('playAnnouncementNow', false);
+                    this.set('currentTask', 'intro');
                     this.send('setTimeEvent', 'startIntro');
-                    this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
+                    // If no intro video provided, skip intro.
+                    if (!this.get('introSources').length) {
+                        this.send('playNext');
+                    }
                 }
             }
         },
 
-        next() {
+        next() { // Move to next frame altogether
             window.clearInterval(this.get('testTimer'));
             this.set('testTime', 0);
             this.set('testVideosTimesPlayed', 0);
@@ -380,8 +385,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     },
 
     pauseStudy(pause) { // only called in FS mode
-        // make sure recording is set already; otherwise, pausing recording leads to an error and all following calls fail silently. Now that this is taken
-        // care of in videoRecorder.pause(), skip the check.
         Ember.run.once(this, () => {
             if (!this.get('isLast')) {
                 try {
@@ -394,6 +397,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
                 // Currently paused: restart
                 if (!pause && wasPaused) {
+                    //this.hideRecorder();
                     this.set('doingAttn', false);
                     this.set('isPaused', false);
                     if (currentState === 'test') {
@@ -413,6 +417,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                         return;
                     }
                 } else if (pause || !wasPaused) { // Not currently paused: pause
+                    //this.showRecorder();
                     window.clearInterval(this.get('testTimer'));
                     this.set('testTime', 0);
                     this.send('setTimeEvent', 'pauseVideo', {
@@ -452,6 +457,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             });
         }
         this.send('showFullscreen');
+        this.checkForEmptyAnnouncement();
+        this.set('videosShown', [this.get('sources')[0].src, this.get('altSources')[0].src]);
     },
     willDestroyElement() { // remove event handler
         // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped

@@ -1,5 +1,10 @@
 {{! template-lint-disable invalid-interactive}}
-<div class="input-group exp-video-physics row col-md-6 ">
+<div class="input-group exp-lookit-video row col-md-6 ">
+
+    <div class="row recorder-container video-recorder-hidden">
+        <div id="recorder" class="col-xs-12">
+        </div>
+    </div>
 
     {{#if playAnnouncementNow}}
 
@@ -8,22 +13,15 @@
                    autoplay="autoplay"
         >
 
-            {{#if isLast}}
+            {{#if (and hasBeenPaused (not isLast))}}
+                <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.ogg"
+                        type="audio/ogg">
+                <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.mp3"
+                        type="audio/mp3">
+            {{else}}
                 {{#each audioSources as |stream|}}
                     <source src="{{stream.src}}" type="{{stream.type}}">
                 {{/each}}
-            {{else}}
-
-                {{#if hasBeenPaused}}
-                    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.ogg"
-                            type="audio/ogg">
-                    <source src="https://s3.amazonaws.com/lookitcontents/exp-physics/audio/return_after_pause.mp3"
-                            type="audio/mp3">
-                {{else}}
-                    {{#each audioSources as |stream|}}
-                        <source src="{{stream.src}}" type="{{stream.type}}">
-                    {{/each}}
-                {{/if}}
             {{/if}}
 
         </audio>
@@ -57,6 +55,8 @@
     </video>
 
 
+
+
     {{#if isPaused}}
         <p class="pause-instructions"> Study paused </p>
         {{#if updatedIsFullscreen}}
@@ -68,16 +68,8 @@
 
 </div>
 
-<div class="row col-md-6 exp-video-physics">
+<div class="row col-md-6 exp-lookit-video">
     <button class="btn btn-success" style="display:none;" id="fsButton" {{ action 'showFullscreen'}} >
         please return to fullscreen
     </button>
 </div>
-
-{{#unless autoforwardOnEnd}}
-    <div class="row exp-controls">
-        <button class="btn btn-default pull-right" {{ action 'next' }}>
-            Continue
-        </button>
-    </div>
-{{/unless}}
