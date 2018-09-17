@@ -1,3 +1,7 @@
+$exp-video-cal-width: 12%;
+$exp-video-left-rect: 18.75%;
+$exp-video-right-rect: 81.25%;
+
 .exp-lookit-video video {
     margin:auto;
 }
@@ -63,4 +67,24 @@
 	//top:0;
 	//right:0;
 	//left:100%;
+}
+
+.exp-lookit-video #player-calibration-video {
+    width: $exp-video-cal-width;
+    max-height: 300px;
+    position: absolute;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-lookit-video #player-calibration-video.center {
+    margin-left: 50% - $exp-video-cal-width/2;
+}
+
+.exp-lookit-video #player-calibration-video.left {
+    margin-left: $exp-video-left-rect - $exp-video-cal-width/2;
+}
+
+.exp-lookit-video #player-calibration-video.right {
+    margin-left: $exp-video-right-rect - $exp-video-cal-width/2;
 }
