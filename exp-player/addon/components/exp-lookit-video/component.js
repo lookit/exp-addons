@@ -525,6 +525,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         finish() { // Move to next frame altogether
+        // Call this something separate from test because stopRecorder promise needs to
+        // call next AFTER recording is stopped and we don't want this to have already
+        // been destroyed at that point.
             window.clearInterval(this.get('testTimer'));
             window.clearInterval(this.get('introTimer'));
             this.set('testTime', 0);
@@ -545,7 +548,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     return;
                 });
             } else {
-                console.log('no recording, next');
                 _this.send('next');
             }
         }
@@ -560,9 +562,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             frame.startCalibration();
         } else if (frame.get('currentTask') === 'test') {
             // Skip test phase if no videos provided
-            console.log('test');
             if (!frame.get('sources').length) {
-                console.log('skip test');
                 frame.send('finish');
             }
         }
