@@ -65,6 +65,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         return (this.get('currentTask') === 'test');
     }),
     testTimer: null, // reference to timer counting how long video has been playing, if time-based limit
+    calTimer: null, // reference to timer counting how long calibration segment has played
+    announceTimer: null, // reference to timer counting announcement segment
+
     testTime: 0,
     testVideosTimesPlayed: 0, // how many times the test video has been played, if count-based limit
 
@@ -529,7 +532,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         // call next AFTER recording is stopped and we don't want this to have already
         // been destroyed at that point.
             window.clearInterval(this.get('testTimer'));
-            window.clearInterval(this.get('introTimer'));
+            window.clearInterval(this.get('announceTimer'));
+            window.clearInterval(this.get('calTimer'));
             this.set('testTime', 0);
             this.set('testVideosTimesPlayed', 0);
             this.set('completedAnnouncementAudio', false);
@@ -569,7 +573,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     }),
 
     startAnnouncement() {
-        window.clearInterval(this.get('introTimer'));
+        window.clearInterval(this.get('announceTimer'));
 
         // Skip if no announcement audio provided
         if (!this.get('isPaused') && !this.get('audioSources').length && this.get('announceLength') === 0) {
@@ -582,7 +586,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         this.send('setTimeEvent', 'startAnnouncement');
         // Actual starting audio is handled by autoplay on the template.
         var _this = this; // Require at least attnLength duration of announcement phase
-        this.set('introTimer', window.setTimeout(function() {
+        this.set('announceTimer', window.setTimeout(function() {
                 _this.set('completedAnnouncementTime', true);
                 if (_this.get('completedAnnouncementAudio')) {
                     _this.set('currentTask', 'intro');
@@ -647,14 +651,14 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     }
                 );
 
+                $('#player-calibration-video').removeClass(lastLoc);
+                $('#player-calibration-video').addClass(thisLoc);
                 calVideo.pause();
                 calVideo.currentTime = 0;
                 calVideo.play();
-                $('#player-calibration-video').removeClass(lastLoc);
-                $('#player-calibration-video').addClass(thisLoc);
-                window.setTimeout(function() {
+                _this.set('calTimer', window.setTimeout(function() {
                     doCalibrationSegments(calList, thisLoc);
-                }, _this.get('calibrationLength'));
+                }, _this.get('calibrationLength')));
             }
         };
 
@@ -721,7 +725,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             } else if (pause || !wasPaused) { // Not currently paused: pause
                 //this.showRecorder();
                 window.clearInterval(this.get('testTimer'));
-                window.clearInterval(this.get('introTimer'));
+                window.clearInterval(this.get('announceTimer'));
+                window.clearInterval(this.get('calTimer'));
                 this.set('completedAnnouncementAudio', false);
                 this.set('completedAnnouncementTime', false);
                 this.set('testTime', 0);
@@ -730,6 +735,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     currentTask: this.get('currentTask')
                 });
                 this.pauseRecorder(true);
+                $('#player-calibration-video').removeClass(this.get('calibrationPositions').join(' '));
+                $('#player-calibration-video').hide();
                 this.set('isPaused', true);
             }
         });
