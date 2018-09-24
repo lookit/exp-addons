@@ -1,13 +1,13 @@
 import Ember from 'ember';
-
 import layout from './template';
-
 import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
-// TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
+let {
+    $
+} = Ember;
 
 /**
  * @module exp-player
@@ -15,27 +15,143 @@ import VideoRecord from '../../mixins/video-record';
  */
 
 /**
-Basic video display for looking measures (e.g. preferential looking, looking time). Trial consists of four phases, each of which is optional.
+* Basic video display for looking measures (e.g. preferential looking, looking time).
+* Trial consists of four phases, each of which is optional.
+*
+* 1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for attnLength seconds or the duration of the audio, whichever is longer. To skip this phase, set attnLength to 0 and do not provide audioSources.
+*
+* 2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.
+*
+* 3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.
+*
+* 4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided).
+*
+* Specifying media locations:
+* For any parameters that expect a list of audio/video sources, you can EITHER provide
+* a list of src/type pairs with full paths like this:
+```json
+    [
+        {
+            'src': 'http://.../video1.mp4',
+            'type': 'video/mp4'
+        },
+        {
+            'src': 'http://.../video1.webm',
+            'type': 'video/webm'
+        }
+    ]
+```
+* OR you can provide a list with a single object with a 'stub', which will be expanded
+* based on the parameter baseDir and the media types expected - either audioTypes or
+* videoTypes as appropriate. For example, if you provide the audio source
+```json
+    [
+        {
+            'stub': 'intro'
+        }
+    ]
+```
+* and baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this
+* will be expanded to:
+```json
+                 [
+                        {
+                            src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',
+                            type: 'audio/mp3'
+                        },
+                        {
+                            src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',
+                            type: 'audio/ogg'
+                        }
+                ]
+```
+* This allows you to simplify your JSON document a bit and also easily switch to a
+* new version of your stimuli without changing every URL. You can mix source objects with
+* full URLs and those using stubs within the same directory. However, any stimuli
+* specified using stubs MUST be
+* organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.
+*
+* Example usage:
 
-1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for attnLength seconds or the duration of the audio, whichever is longer. To skip this phase, set attnLength to 0 and do not provide audioSources.
+```json
+        "sample-intermodal-trial-2": {
+            "id": "sample-intermodal-trial-2",
+            "kind": "exp-lookit-video",
+            "isLast": false,
+            "baseDir": "https://s3.amazonaws.com/lookitcontents/intermodal/",
+            "sources": [
+                {
+                    "stub": "sbs_ramp_down_up_apple_c1_b1_NN"
+                }
+            ],
+            "testCount": 2,
+            "altSources": [
+                {
+                    "stub": "sbs_ramp_up_down_apple_c1_b1_NN"
+                }
+            ],
+            "audioTypes": [
+                "ogg",
+                "mp3"
+            ],
+            "pauseAudio": [
+                {
+                    "stub": "pause"
+                }
+            ],
+            "videoTypes": [
+                "webm",
+                "mp4"
+            ],
+            "attnSources": [
+                {
+                    "stub": "attentiongrabber"
+                }
+            ],
+            "audioSources": [
+                {
+                    "stub": "video_02"
+                }
+            ],
+            "introSources": [
+                {
+                    "stub": "cropped_book"
+                }
+            ],
+            "musicSources": [
+                {
+                    "stub": "music_02"
+                }
+            ],
+            "unpauseAudio": [
+                {
+                    "stub": "return_after_pause"
+                }
+            ],
+            "calibrationLength": 3000,
+            "calibrationAudioSources": [
+                {
+                    "stub": "chimes"
+                }
+            ],
+            "calibrationVideoSources": [
+                {
+                    "stub": "attentiongrabber"
+                }
+            ]
+        }
 
-2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.
-
-3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.
-
-4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided).
-
-@class ExpLookitVideo
-@extends ExpFrameBaseUnsafe
-
-@uses FullScreen
-@uses MediaReload
-@uses VideoRecord
+* ```
+* @class ExpLookitVideo
+* @extends ExpFrameBaseUnsafe
+* @uses FullScreen
+* @uses MediaReload
+* @uses VideoRecord
 */
 
-let {
-    $
-} = Ember;
+
+
+// TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
     // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
@@ -191,9 +307,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
 
                 /**
-                Number of times to play test video before moving on. Set to Infinity to
-                use length-based limit.
-                @property {Number} testLength
+                Number of times to play test video before moving on. This is ignored if
+                testLength is set to a finite value.
+                @property {Number} testCount
                 @default 1
                 */
                 testCount: {
@@ -203,7 +319,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
 
                 /**
-                Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement/calibration.
+                Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.
                 @property {Boolean} doRecording
                 @default true
                 */
@@ -225,7 +341,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                  /**
                  * Ordered list of positions to show calibration segment in. Options are
-                 * "center", "left", "right".
+                 * "center", "left", "right". Ignored if calibrationLength is 0.
                  *
                  * @property {Array} calibrationPositions
                  * @default ["center", "left", "right", "center"]
@@ -237,9 +353,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-                 * calibration audio (played 4 times during calibration)
+                 * calibration audio (played at each calibration position).
+                 * Ignored if calibrationLength is 0.
                  *
                  * @property {Object[]} calibrationAudioSources
+                 * @default []
                  */
                 calibrationAudioSources: {
                     type: 'array',
@@ -259,10 +377,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-                 * calibration video (played from start 4 times during
-                 * calibration)
+                 * calibration video (played from start at each calibration position).
+                 * Ignored if calibrationLength is 0.
                  *
                  * @property {Object[]} calibrationVideoSources
+                 * @default []
                  */
                 calibrationVideoSources: {
                     type: 'array',
@@ -285,6 +404,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                  * audio played upon pausing study
                  *
                  * @property {Object[]} pauseAudio
+                 * @default []
                  */
                 pauseAudio: {
                     type: 'array',
@@ -307,6 +427,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                  * audio played upon unpausing study
                  *
                  * @property {Object[]} unpauseAudio
+                 * @default []
                  */
                 unpauseAudio: {
                     type: 'array',
@@ -326,9 +447,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 },
                 /**
                  * Text to show under "Study paused / Press space to resume" when study is paused.
-                 * Default:
+                 * Default: (You'll have a moment to turn around again.)
                  *
-                 * @property {Object[]} unpauseAudio
+                 * @property {String} pauseText
+                 * @default []
+
                  */
                 pauseText: {
                     type: 'string',
@@ -404,7 +527,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 ]
 ```
                  *
-                 * @property {String[]} audioTypes
+                 * @property {String[]} videoTypes
                  * @default ['mp4', 'webm']
                  */
                 videoTypes: {
@@ -415,7 +538,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             }
         },
         data: {
-            // Capture
             type: 'object',
             /**
              * Parameters captured and sent to the server
