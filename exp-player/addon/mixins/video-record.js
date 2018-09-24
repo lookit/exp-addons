@@ -186,13 +186,14 @@ export default Ember.Mixin.create({
         const installPromise = recorder.install({record}, this.get('videoId'), pipeLoc, pipeEnv);
 
         // Track specific events for all frames that use  VideoRecorder
+        var _this = this;
         recorder.on('onCamAccess', (hasAccess) => {
-            this.send('setTimeEvent', 'recorder.hasCamAccess', {
+            _this.send('setTimeEvent', 'recorder.hasCamAccess', {
                 hasCamAccess: hasAccess
             });
         });
         recorder.on('onConnectionStatus', (status) => {
-            this.send('setTimeEvent', 'videoStreamConnection', {
+            _this.send('setTimeEvent', 'videoStreamConnection', {
                 status: status
             });
         });

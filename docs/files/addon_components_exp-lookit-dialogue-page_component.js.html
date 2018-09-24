@@ -51,6 +51,7 @@
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -642,8 +643,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         }
     },
 
-
-
     // Move an image up and down until the isSpeaking class is removed.
     // Yes, this could much more naturally be done by using a CSS animation property
     // on isSpeaking, but despite animations getting applied properly to the element,
@@ -655,9 +654,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         if ($(&#x27;#&#x27; + imageId).hasClass(&#x27;isSpeaking&#x27;)) {
             $(&#x27;#&#x27; + imageId).animate({&#x27;margin-bottom&#x27;: &#x27;.3%&#x27;}, 250, function() {
                 $(&#x27;#&#x27; + imageId).animate({&#x27;margin-bottom&#x27;: &#x27;0%&#x27;}, 250, function() {
-                        _this.wiggle(imageId);
-                    })
+                    _this.wiggle(imageId);
                 });
+            });
         }
     },
 
@@ -697,7 +696,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     // animate the image while audio is playing
                     $(&#x27;#&#x27; + imageId).addClass(&#x27;isSpeaking&#x27;);
                     this.wiggle(imageId);
-
 
                     /**
                      * When image audio is started

@@ -51,6 +51,7 @@
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -180,7 +181,6 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     disableRecord: Ember.computed(&#x27;recorder.hasCamAccess&#x27;, &#x27;recorderReady&#x27;, function() {
         return !(this.get(&#x27;recorder.hasCamAccess&#x27;) &amp;&amp; this.get(&#x27;recorderReady&#x27;));
     }),
-
 
     actions: {
         accept() {
