@@ -51,6 +51,7 @@
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -404,7 +405,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         this.showRecorder();
     },
 
-
     actions: {
 
         removeWarning() {
@@ -415,7 +415,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             this.send(&#x27;showFullscreen&#x27;);
             this.pauseStudy();
         },
-
 
         reloadRecorder() {
             this.destroyRecorder();
@@ -445,8 +444,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 // use that globally instead of just checking here.
                 if (!this.get(&#x27;recorder.hasCamAccess&#x27;) || !this.get(&#x27;recorder.hasWebCam&#x27;)) {
                     this.showWarning();
-                }
-                else {
+                } else {
                     this.set(&#x27;currentTask&#x27;, &#x27;test&#x27;);
                 }
             } else {
@@ -536,8 +534,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     pauseStudy(pause) { // only called in FS mode
 
         Ember.run.once(this, () =&gt; {
-
-
             if (!this.get(&#x27;isLast&#x27;)) {
                 try {
                     this.set(&#x27;hasBeenPaused&#x27;, true);

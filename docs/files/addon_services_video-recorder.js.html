@@ -51,6 +51,7 @@
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -132,7 +133,7 @@ let {
 //    https://addpipe.com/docs#javascript-events-api
 //    New events available in HTML5: onRecorderInit, onRecorderReady, onConnectionClosed,
 //     onMicActivityLevel, onSaveOk
-const HOOKS = [ &#x27;onRecordingStarted&#x27;,
+const HOOKS = [&#x27;onRecordingStarted&#x27;,
                 &#x27;onCamAccess&#x27;,
                 &#x27;onRecorderReady&#x27;,
                 &#x27;onUploadDone&#x27;,
@@ -150,8 +151,8 @@ const MIN_VOLUME = 5;
 
 const FLASHVARS = {
     recorderId: &#x27;123&#x27;,
-    qualityurl: &quot;avq/480p.xml&quot;,
-    showMenu: &quot;false&quot;, // show recording button menu. Yes, STRING &quot;true&quot;/&quot;false&quot; sigh.
+    qualityurl: &#x27;avq/480p.xml&#x27;,
+    showMenu: &#x27;false&#x27;, // show recording button menu. Yes, STRING &quot;true&quot;/&quot;false&quot; sigh.
     mrt: 100000000, // max recording time in seconds (don&#x27;t use)
     sis: 1, // skip initial screen
     asv: 1, // autosave recordings
@@ -189,7 +190,7 @@ const VideoRecorder = Ember.Object.extend({
     flashReady: Ember.computed.alias(&#x27;_recorderReady&#x27;).readOnly(),
     connected: false,
 
-    debug: true,
+    debug: false,
     _started: false,
     _camAccess: false,
     _recording: false,
@@ -323,12 +324,10 @@ const VideoRecorder = Ember.Object.extend({
         var timeLeft = 3 - this.getTime();
         if (this.get(&#x27;hasCamAccess&#x27;) &amp;&amp; (timeLeft &gt; 0)) {
             // sleep time expects milliseconds
-            function sleep (time) {
-              return new Promise((resolve) =&gt; setTimeout(resolve, time));
+            function sleep(time) {
+                return new Promise((resolve) =&gt; setTimeout(resolve, time));
             }
-            return sleep(timeLeft * 1000).then(() =&gt; {
-                return this.stop();
-            });
+            return sleep(timeLeft * 1000).then(() =&gt; this.stop());
         } else {
             var recorder = this.get(&#x27;recorder&#x27;);
             if (recorder) {
@@ -416,8 +415,8 @@ const VideoRecorder = Ember.Object.extend({
         this.set(&#x27;_recorderReady&#x27;, true);
     },
 
-    _userHasCamMic(cam_number,mic_number, recorderId) {
-        this.set(&#x27;hasWebCam&#x27;, Boolean(cam_number));
+    _userHasCamMic(camNumber, micNumber, recorderId) {
+        this.set(&#x27;hasWebCam&#x27;, Boolean(camNumber));
     },
 
     _onConnectionStatus(status, recorderId) {
@@ -450,7 +449,7 @@ export default Ember.Service.extend({
     init() {
         var runHandler = function (recorder, hookName, args) {
             if (recorder.get(&#x27;debug&#x27;)) {
-                //console.log(hookName, args);
+                console.log(hookName, args);
             }
             if (recorder.get(&#x27;_&#x27; + hookName)) {
                 recorder.get(&#x27;_&#x27; + hookName).apply(recorder, args);

@@ -51,6 +51,7 @@
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
+                                <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
                                 <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
                                 <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
@@ -1693,7 +1694,7 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
             isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + &#x27;audio/&#x27;,
-                &#x27;video_&#x27; + &#x27;02&#x27;), //(&#x27;00&#x27; + (e.index)).slice(-2)),
+                &#x27;video_&#x27; + (&#x27;00&#x27; + (e.index)).slice(-2)),
             musicSources: audioSourceObjs(
                 BASE_DIR + &#x27;audio/&#x27;,
                 musicName),
