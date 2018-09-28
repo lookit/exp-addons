@@ -34,7 +34,7 @@ Standard exit survey for Lookit studies: confirm participant birthdate, ask user
 ```json
 "frames": {
     "my-exit-survey": {
-        "kind": "exp-lookit-exit-survey"
+        "kind": "exp-lookit-exit-survey",
         "debriefing": {
             "title": "Thank you!",
             "text": "Learning how children react to ducks will help scientists design better rubber ducks.",
