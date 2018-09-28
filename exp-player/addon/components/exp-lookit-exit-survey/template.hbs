@@ -64,11 +64,11 @@
                             <span class="radio-holder">
                                 {{radio-button value="private" checked=useOfMedia name="useOfMedia"}}
                             </span>
-                            <strong>Private:</strong> Video may only be viewed by authorized scientists
+                            <strong>Private:</strong> Video may only be viewed by authorized scientists:
                             {{#if (eq databraryShare 'yes')}}
-                                (researchers working on the Lookit project and authorized Databrary users).
+                                Lookit project staff, researchers working with {{experiment.contactInfo}} on the study "{{experiment.name}}," and authorized Databrary users.
                             {{else}}
-                                (researchers working on the Lookit project).
+                                Lookit project staff and researchers working with {{experiment.contactInfo}} on the study "{{experiment.name}}."
                             {{/if}}
                         </label>
                     </div>
