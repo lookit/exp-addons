@@ -4,7 +4,8 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
 
-import jsPDF from '../../../node_modules/jspdf/dist/jspdf.min';
+//import jsPDF from 'jspdf';
+
 
 /**
  * @module exp-player
@@ -44,6 +45,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     }),
     startedRecording: false,
 
+
+
     actions: {
         record() {
             this.startRecorder().then(() => {
@@ -63,8 +66,13 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             }
         },
         download() {
+            // TODO: here. Works (because using ember-js-pdf instead of jspdf) but
+            // need to get lines to right length (use split_text_to_size plugin?)
             var consentPDF = new jsPDF();
-            consentPDF.fromHTML($('#consent-form-text').html(), 15, 15);
+            consentPDF.setFont('arial');
+            consentPDF.setFontSize(12);
+            consentPDF.setLineWidth(160);
+            consentPDF.text($('#consent-form-text').text(), 0, 0);
             consentPDF.save('Lookit-study-consent.pdf');
         }
     },
