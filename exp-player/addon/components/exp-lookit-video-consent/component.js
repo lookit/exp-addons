@@ -4,6 +4,8 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
 
+import jsPDF from '../../../node_modules/jspdf/dist/jspdf.min';
+
 /**
  * @module exp-player
  * @submodule frames
@@ -59,6 +61,11 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     this.send('next');
                 });
             }
+        },
+        download() {
+            var consentPDF = new jsPDF();
+            consentPDF.fromHTML($('#consent-form-text').html(), 15, 15);
+            consentPDF.save('Lookit-study-consent.pdf');
         }
     },
 
