@@ -15,6 +15,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ExpLookitSurvey",
         "ExpLookitText",
         "ExpLookitVideo",
+        "ExpLookitVideoConsent",
         "ExpMoodQuestionnaire",
         "ExpPhysicsIntro",
         "ExpPhysicsPreVideo",
