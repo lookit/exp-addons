@@ -14,7 +14,7 @@ import VideoRecord from '../../mixins/video-record';
 
 /**
 Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. A standard consent
-document is displayed, with additional study-specific information provided by the researcher, in accordance with the Lookit terms of use.
+document is displayed, with additional study-specific information provided by the researcher, in accordance with the Lookit terms of use. Consent document can be downloaded as PDF document by participant.
 
 ```json
 "frames": {
@@ -66,14 +66,51 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             }
         },
         download() {
-            // TODO: here. Works (because using ember-js-pdf instead of jspdf) but
-            // need to get lines to right length (use split_text_to_size plugin?)
+            // Get the text of the consent form to process. Split into lines, and remove
+            // repeat empty lines. Start each new line with an indent.
+            var origText = $('#consent-form-text').text().split(/\r?\n/);
+            var trimmedText = [];
+            var emptyLineWasLast = false;
+            $.each(origText, function(idx, val) {
+                if (val.trim() || !emptyLineWasLast) {
+                    trimmedText.push('     ' + val.trim());
+                    if (emptyLineWasLast) {
+                        trimmedText.push('');
+                    }
+                }
+                if (val.trim()) {
+                    emptyLineWasLast = false;
+                } else {
+                    emptyLineWasLast = true;
+                }
+            });
+
+            // Prep PDF - need to set font before splitting lines
             var consentPDF = new jsPDF();
-            consentPDF.setFont('arial');
+            consentPDF.setFont('times');
             consentPDF.setFontSize(12);
-            consentPDF.setLineWidth(160);
-            consentPDF.text($('#consent-form-text').text(), 0, 0);
-            consentPDF.save('Lookit-study-consent.pdf');
+            var timeString = moment().format('MMMM Do YYYY, h:mm:ss a'); // for header
+
+            // Wrap lines so they'll fit nicely on the page
+            var splitText = consentPDF.splitTextToSize(trimmedText, 150);
+
+            // Split into pages
+            var linesPerPage = 55;
+            var nPages = Math.ceil(splitText.length / linesPerPage);
+            for (var iPage = 0; iPage < nPages; iPage++) {
+                // Header on each page
+                consentPDF.setFontSize(10);
+                consentPDF.text(timeString + ' (page ' + (iPage+1) + ' of ' + nPages + ')', 10, 10);
+                // Actual text for the page
+                consentPDF.setFontSize(12);
+                consentPDF.text(splitText.slice(linesPerPage * iPage, linesPerPage * (iPage+1)), 25, 20);
+
+                // Go to the next page
+                if (iPage < (nPages - 1)) {
+                    consentPDF.addPage();
+                }
+            }
+            consentPDF.save('Lookit_study_consent_' + moment().format('YYYY_MM_DD') + '.pdf');
         }
     },
 
