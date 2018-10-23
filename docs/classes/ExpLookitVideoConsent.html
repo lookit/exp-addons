@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ExpVideoPhysics - exp-player</title>
+    <title>ExpLookitVideoConsent - exp-player</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -114,23 +114,21 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ExpVideoPhysics Class</h1>
+<h1>ExpLookitVideoConsent Class</h1>
 <div class="box meta">
         <div class="uses">
             Uses
             <ul class="inline commas">
-                    <li><a href="FullScreen.html">FullScreen</a></li>
-                    <li><a href="MediaReload.html">MediaReload</a></li>
                     <li><a href="VideoRecord.html">VideoRecord</a></li>
             </ul>
         </div>
 
         <div class="extends">
-            Extends <a href="../classes/ExpFrameBaseUnsafe.html" class="crosslink">ExpFrameBaseUnsafe</a>
+            Extends <a href="../classes/ExpFrameBase.html" class="crosslink">ExpFrameBase</a>
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-video-physics_component.js.html#l15"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:15</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l15"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:15</code></a>
         </div>
 
             Module: <a href="../modules/frames.html">frames</a><br>
@@ -140,7 +138,22 @@
 
 
 <div class="box intro">
-    <p>Test trial for the 'Your baby the physicist' study: audio instructions, intro video, and test video, with webcam recording.</p>
+    <p>Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. A standard consent
+document is displayed, with additional study-specific information provided by the researcher, in accordance with the Lookit terms of use. Consent document can be downloaded as PDF document by participant.</p>
+<pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
+    &quot;video-consent&quot;: {
+        &quot;id&quot;: &quot;video-consent&quot;,
+        &quot;kind&quot;: &quot;exp-lookit-video-consent&quot;,
+        &quot;PIName&quot;: &quot;Jane Smith&quot;,
+        &quot;institution&quot;: &quot;Science University&quot;,
+        &quot;PIContact&quot;: &quot;Jane Smith at 123 456 7890&quot;,
+        &quot;purpose&quot;: &quot;Why do babies love cats? This study will help us find out whether babies love cats because of their soft fur or their twitchy tails.&quot;,
+        &quot;procedures&quot;: &quot;Your child will be shown pictures of lots of different cats, along with noises that cats make like meowing and purring. We are interested in which pictures and sounds make your child smile. We will ask you (the parent) to turn around to avoid influencing your child's responses. There are no anticipated risks associated with participating.&quot;,
+        &quot;payment&quot;: &quot;After you finish the study, we will email you a $5 BabyStore gift card within approximately three days. To be eligible for the gift card your child must be in the age range for this study, you need to submit a valid consent statement, and we need to see that there is a child with you. But we will send a gift card even if you do not finish the whole study or we are not able to use your child's data! There are no other direct benefits to you or your child from participating, but we hope you will enjoy the experience.&quot;,
+        &quot;datause&quot;: &quot;We are primarily interested in your child's emotional reactions to the images and sounds. A research assistant will watch your video to measure the precise amount of delight in your child's face as he or she sees each cat picture.&quot;
+    }
+}
+</code></pre>
 
 </div>
 
@@ -163,19 +176,11 @@
 
                     <ul class="index-list methods extends">
                             <li class="index-item method inherited">
-                                <a href="#method_exitFullscreen">exitFullscreen</a>
-
-                            </li>
-                            <li class="index-item method inherited">
                                 <a href="#method_makeTimeEvent">makeTimeEvent</a>
 
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_serializeContent">serializeContent</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
                     </ul>
@@ -186,55 +191,35 @@
 
                     <ul class="index-list properties extends">
                             <li class="index-item property">
-                                <a href="#property_altSources">altSources</a>
+                                <a href="#property_datause">datause</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_attnSources">attnSources</a>
+                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_audioSources">audioSources</a>
+                                <a href="#property_institution">institution</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_audioSources">audioSources</a>
+                                <a href="#property_payment">payment</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_autoforwardOnEnd">autoforwardOnEnd</a>
+                                <a href="#property_PIContact">PIContact</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_autoplay">autoplay</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_fsButtonID">fsButtonID</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_fullScreenElementId">fullScreenElementId</a>
+                                <a href="#property_PIName">PIName</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_introSources">introSources</a>
+                                <a href="#property_procedures">procedures</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_isLast">isLast</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_poster">poster</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_sources">sources</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_testLength">testLength</a>
+                                <a href="#property_purpose">purpose</a>
 
                             </li>
                     </ul>
@@ -245,12 +230,8 @@
                     <h3>Events</h3>
 
                     <ul class="index-list events extends">
-                            <li class="index-item event inherited">
-                                <a href="#event_enteredFullscreen">enteredFullscreen</a>
-
-                            </li>
-                            <li class="index-item event inherited">
-                                <a href="#event_leftFullscreen">leftFullscreen</a>
+                            <li class="index-item event">
+                                <a href="#event_downloadConsentForm">downloadConsentForm</a>
 
                             </li>
                             <li class="index-item event inherited">
@@ -268,36 +249,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_exitFullscreen" class="method item inherited">
-    <h3 class="name"><code>exitFullscreen</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        Exit fullscreen mode
-    </div>
-
-
-
-
-</div>
 <div id="method_makeTimeEvent" class="method item inherited">
     <h3 class="name"><code>makeTimeEvent</code></h3>
 
@@ -385,16 +336,16 @@ event sent by a particular frame</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>videosShown</code>
-                </li>
-                <li class="arg">
-                        <code>eventTimings</code>
+                        <code>consentFormText</code>
                 </li>
                 <li class="arg">
                         <code>videoID</code>
                 </li>
                 <li class="arg">
                         <code>videoList</code>
+                </li>
+                <li class="arg">
+                        <code>eventTimings</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -415,7 +366,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l204"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:204</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l206"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:206</code></a>
         </p>
 
 
@@ -432,23 +383,13 @@ event sent by a particular frame</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">videosShown</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+                        <code class="param-name">consentFormText</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
                     <div class="param-description">
-                        <p>Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].</p>
+                        <p>the exact text shown in the consent document during this frame</p>
 
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">eventTimings</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-
-
-                    <div class="param-description">
-                         
                     </div>
 
                 </li>
@@ -474,6 +415,16 @@ event sent by a particular frame</p>
                     </div>
 
                 </li>
+                <li class="param">
+                        <code class="param-name">eventTimings</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
             </ul>
         </div>
 
@@ -489,419 +440,13 @@ event sent by a particular frame</p>
 
 
 </div>
-<div id="method_showFullscreen" class="method item inherited">
-    <h3 class="name"><code>showFullscreen</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        Make a specified element fullscreen
-    </div>
-
-
-
-
-</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_altSources" class="property item">
-    <h3 class="name"><code>altSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l112"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:112</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Array of objects specifying video src and type for alternate test video, as for sources.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_attnSources" class="property item">
-    <h3 class="name"><code>attnSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l138"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:138</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Array of objects specifying attention-grabber video src and type, as for sources.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_audioSources" class="property item">
-    <h3 class="name"><code>audioSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l165"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:165</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>List of objects specifying music audio src and type, as for audioSources.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">musicSources</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_audioSources" class="property item">
-    <h3 class="name"><code>audioSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l151"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:151</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>List of objects specifying intro announcement src and type.
-Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]</code></p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_autoforwardOnEnd" class="property item">
-    <h3 class="name"><code>autoforwardOnEnd</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l67"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:67</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Whether to automatically advance to the next frame when video is complete. Generally leave this true, since controls will be hidden for fullscreen videos.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_autoplay" class="property item">
-    <h3 class="name"><code>autoplay</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l77"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:77</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Whether to automatically start the trial on load.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_fsButtonID" class="property item inherited">
-    <h3 class="name"><code>fsButtonID</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The element ID of a button to show if the user leaves fullscreen mode
-    </div>
-
-
-
-</div>
-<div id="property_fullScreenElementId" class="property item inherited">
-    <h3 class="name"><code>fullScreenElementId</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The element ID of the thing to make full screen (video element, div, etc)
-    </div>
-
-
-
-</div>
-<div id="property_introSources" class="property item">
-    <h3 class="name"><code>introSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l125"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:125</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Array of objects specifying intro video src and type, as for sources.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_isLast" class="property item">
-    <h3 class="name"><code>isLast</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l189"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:189</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Whether this is the last exp-physics-video frame in the group, before moving to a different frame type. (If so, play only the intro audio, no actual tests.)</p>
-
-    </div>
-
-        <p><strong>Default:</strong> false</p>
-
-
-</div>
-<div id="property_poster" class="property item">
-    <h3 class="name"><code>poster</code></h3>
+<div id="property_datause" class="property item">
+    <h3 class="name"><code>datause</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
@@ -911,24 +456,24 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l87"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:87</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:193</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Source URL for an image to show until the video starts playing.</p>
+        <p>Study-specific data use statement (optional). This will follow the following more general text: &quot;The research group led by [PIName] at [institution] will have access to video and other data collected during this session. We will also have access to your account profile, demographic survey, and the child profile for the child who is participating, including changes you make in the future to any of this information. We may study your child’s responses in connection with his or her previous responses to this or other studies run by our group, siblings’ responses to this or other studies run by our group, or demographic survey responses.&quot;
+You may want to note what measures you will actually be coding for (looking time, facial expressions, parent-child interaction, etc.) and other more specific information about your use of data from this study here. For instance, you would note if you were building a corpus of naturalistic data that may be used to answer a variety of questions (rather than just collecting data for a single planned study).</p>
 
     </div>
 
-        <p><strong>Default:</strong> &#x27;&#x27;</p>
 
 
 </div>
-<div id="property_sources" class="property item">
-    <h3 class="name"><code>sources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+<div id="property_id" class="property item">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
 
@@ -937,47 +482,23 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l97"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:97</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l130"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:130</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). Example value:</p>
-<p><code>[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]</code></p>
+        <p>A unique identifier for this item</p>
 
     </div>
 
-        <p><strong>Default:</strong> []</p>
 
 
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
 </div>
-<div id="property_testLength" class="property item">
-    <h3 class="name"><code>testLength</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+<div id="property_institution" class="property item">
+    <h3 class="name"><code>institution</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
 
@@ -986,18 +507,142 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-physics_component.js.html#l179"><code>addon&#x2F;components&#x2F;exp-video-physics&#x2F;component.js:179</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l148"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:148</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Length to loop test videos, in seconds</p>
+        <p>Name of institution running this study (if ambiguous, list institution whose IRB approved the study)</p>
 
     </div>
 
-        <p><strong>Default:</strong> 20</p>
+
+
+</div>
+<div id="property_payment" class="property item">
+    <h3 class="name"><code>payment</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l184"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:184</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Statement about payment/compensation for participation, including a statement that there are no additional benefits anticipated to the participant. E.g., &quot;After you finish the study, we will email you a $5 BabyStore gift card within approximately three days. To be eligible for the gift card your child must be in the age range for this study, you need to submit a valid consent statement, and we need to see that there is a child with you. But we will send a gift card even if you do not finish the whole study or we are not able to use your child's data! There are no other direct benefits to you or your child from participating, but we hope you will enjoy the experience.&quot;</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_PIContact" class="property item">
+    <h3 class="name"><code>PIContact</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l157"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:157</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Contact information for PI or lab in case of participant questions or concerns. This will directly follow the phrase &quot;please contact&quot;, so format accordingly: e.g., &quot;the XYZ lab at <a href="mailto:xyz@science.edu">xyz@science.edu</a>&quot; or &quot;Mary Smith at 123 456 7890&quot;.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_PIName" class="property item">
+    <h3 class="name"><code>PIName</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l139"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:139</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Name of PI running this study</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_procedures" class="property item">
+    <h3 class="name"><code>procedures</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l175"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:175</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Brief description of study procedures, including any risks or a statement that there are no anticipated risks. We add a statement about the duration (from your study definition) to the start (e.g., &quot;This study takes about 10 minutes to complete&quot;), so you don't need to include that. It can be in third person or addressed to the parent. E.g., &quot;Your child will be shown pictures of lots of different cats, along with noises that cats make like meowing and purring. We are interested in which pictures and sounds make your child smile. We will ask you (the parent) to turn around to avoid influencing your child's responses. There are no anticipated risks associated with participating.&quot;</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_purpose" class="property item">
+    <h3 class="name"><code>purpose</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l166"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:166</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Brief description of purpose of study - 1-2 sentences that describe what you are trying to find out. Language should be as straightforward and accessible as possible! E.g., &quot;Why do babies love cats? This study will help us find out whether babies love cats because of their soft fur or their twitchy tails.&quot;</p>
+
+    </div>
+
 
 
 </div>
@@ -1007,8 +652,8 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
-                    <div id="event_enteredFullscreen" class="events item inherited">
-                        <h3 class="name"><code>enteredFullscreen</code></h3>
+                    <div id="event_downloadConsentForm" class="events item">
+                        <h3 class="name"><code>downloadConsentForm</code></h3>
                         <span class="type"></span>
                     
                     
@@ -1016,40 +661,17 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l115"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:115</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            Upon detecting change to fullscreen mode
-                        </div>
+                            <p>When participant downloads consent form</p>
                     
-                    
-                    
-                    </div>
-                    <div id="event_leftFullscreen" class="events item inherited">
-                        <h3 class="name"><code>leftFullscreen</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            Upon detecting change out of fullscreen mode
                         </div>
                     
                     
