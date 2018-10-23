@@ -111,6 +111,13 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 }
             }
             consentPDF.save('Lookit_study_consent_' + moment().format('YYYY_MM_DD') + '.pdf');
+
+            /**
+             * When participant downloads consent form
+             *
+             * @event downloadConsentForm
+             */
+            this.send('setTimeEvent', 'downloadConsentForm');
         }
     },
 
