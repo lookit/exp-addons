@@ -30,6 +30,7 @@
     {{#if (and doingAnnouncement (not isPaused))}}
         <audio id="announcement-audio"
                onended={{action 'announcementEnded'}}
+               onplaying={{action 'announcementStarted'}}
                autoplay="autoplay"
         >
             {{#if hasBeenPaused}}

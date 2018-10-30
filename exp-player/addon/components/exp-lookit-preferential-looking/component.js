@@ -682,6 +682,12 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             }
         },
 
+        announcementStarted() { // make sure that audio complete flag is reset when starting -
+        // mysteriously set to true when starting, possibly due to reloading counting as
+        // ended event
+            this.set('completedAnnouncementAudio', false);
+        },
+
         videoStarted() {
             if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
                 if (this.get('useStaticTestStimuli')) {
