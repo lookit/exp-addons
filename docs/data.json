@@ -668,10 +668,11 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
             "line": 17,
-            "description": "NOT YET ADAPTED FOR WEBRTC RECORDER.\nFrame to implement a basic preferential looking trial, with static images\ndisplayed in the center or at left and right of the screen. Trial proceeds\nin segments:\n- Intro: central attentiongrabber video (looping) & intro audio [wait until\n  recording is established to move on, and a minimum amount of time]\n- Test: image(s) displayed, any test audio played [set amount of time] OR\nCalibration: calibration video displayed at center, left, right, center, each\nfor calibrationLength s.\n- Final audio: central attentiongrabber video (looping) & final audio\n  (optional section, intended for last trial in block)\n\nThere are three basic uses of this frame expected:\n- Familiarization trial with a single central image. Provide a value for\ncenterImage, but not rightImage or leftImage.\n- Test trial with right and left images. Provide a value for rightImage and\nleftImage, but not centerImage. (There is no explicit \"preferential looking\nvs. familiarization\" switch: all of the images provided will be displayed.)\n- Calibration trial. Set isCalibrationFrame to true, and provide\ncalibrationLength (length of each calibration segment in s),\ncalibrationVideoSources, and calibrationAudioSources.\n\nThis frame extends ExpFrameBaseUnsafe because it is displayed fullscreen\nand is expected to be repeated.\n\n```json\n\"frames\": {\n   \"preferential-looking\": {\n       \"kind\": \"exp-lookit-preferential-looking\",\n       \"id\": \"pref-trial\",\n       \"isCalibrationFrame\": false,\n       \"allowPausingDuringTest\": true,\n       \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/labelsconcepts/\",\n       \"audioTypes\": [\"mp3\", \"ogg\"],\n       \"videoTypes\": [\"webm\", \"mp4\"],\n       \"rightImage\": \"fam.jpg\",\n       \"leftImage\": \"novel.jpg\",\n       \"centerImage\": \"0001.jpg\",\n       \"pauseAudio\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/pause.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ],\n       \"trialLength\": 10,\n       \"fsAudio\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/fullscreen.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/fullscreen.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ],\n       \"calibrationLength\": 3,\n       \"attnLength\": 1,\n       \"endAudioSources\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/all_done.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/all_done.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ],\n       \"introAudioSources\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ],\n       \"testAudioSources\": [\n           {\n               \"stub\": \"Familiarization_find_dax_amplified_repeated\"\n           }\n       ],\n       \"unpauseAudio\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/return_after_pause.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ],\n       \"calibrationVideoSources\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/webm/attention.webm\",\n               \"type\": \"video/webm\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp4/attention.mp4\",\n               \"type\": \"video/mp4\"\n           }\n       ],\n       \"videoSources\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/webm/attentiongrabber.webm\",\n               \"type\": \"video/webm\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/mp4/attentiongrabber.mp4\",\n               \"type\": \"video/mp4\"\n           }\n       ],\n       \"calibrationAudioSources\": [\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3\",\n               \"type\": \"audio/mp3\"\n           },\n           {\n               \"src\": \"https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg\",\n               \"type\": \"audio/ogg\"\n           }\n       ]\n   }\n}\n\n```",
+            "description": "Basic video display for looking measures (e.g. preferential looking, looking time).\nTrial consists of four phases, each of which is optional.\n\n1. Announcement: The audio in announcementAudio is played while the announcementVideo video is played centrally, looping as needed. This lasts for announcementLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announcementLength to 0 and do not provide announcementAudio.\n\n2. Intro: The introVideo video is played centrally until it ends. To skip this phase, do not provide introVideo.\n\n3. Calibration: The video in calibrationVideo is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudio is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.\n\n4. Test: The video in testVideo and audio in testAudio (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altTestVideo will be used again (defaulting to the same video if altTestVideo is not provided).\n\nSpecifying media locations:\nFor any parameters that expect a list of audio/video sources, you can EITHER provide\na list of src/type pairs with full paths like this:\n```json\n   [\n       {\n           'src': 'http://.../video1.mp4',\n           'type': 'video/mp4'\n       },\n       {\n           'src': 'http://.../video1.webm',\n           'type': 'video/webm'\n       }\n   ]\n```\nOR you can provide a list with a single object with a 'stub', which will be expanded\nbased on the parameter baseDir. Expected audio/video locations will be based on either audioTypes or\nvideoTypes as appropriate; images will be expected to all be in an img/ subdirectory.\nFor example, if you provide the audio source\n```json\n   [\n       {\n           'stub': 'intro'\n       }\n   ]\n```\nand baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this\nwill be expanded to:\n```json\n                [\n                       {\n                           src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',\n                           type: 'audio/mp3'\n                       },\n                       {\n                           src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',\n                           type: 'audio/ogg'\n                       }\n               ]\n```\nThis allows you to simplify your JSON document a bit and also easily switch to a\nnew version of your stimuli without changing every URL. You can mix source objects with\nfull URLs and those using stubs within the same directory. However, any stimuli\nspecified using stubs MUST be\norganized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.\n\nExample usage:\n\n```json\n   \"sample-trial\": {\n       \"id\": \"sample-looking-trial\",\n       \"kind\": \"exp-lookit-preferential-looking\",\n       \"isLast\": false,\n       \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/labelsconcepts/\",\n       \"leftImage\": \"stapler_test_02.jpg\",\n       \"testLength\": 8,\n       \"audioTypes\": [\n           \"ogg\",\n           \"mp3\"\n       ],\n       \"pauseAudio\": [\n           {\n               \"stub\": \"pause\"\n           }\n       ],\n       \"rightImage\": \"novel_02.jpg\",\n       \"videoTypes\": [\n           \"webm\",\n           \"mp4\"\n       ],\n       \"announcementVideo\": [\n           {\n               \"stub\": \"attentiongrabber\"\n           }\n       ],\n       \"announcementAudio\": [\n           {\n               \"stub\": \"video_02\"\n           }\n       ],\n       \"introVideo\": [\n           {\n               \"stub\": \"cropped_book\"\n           }\n       ],\n       \"testAudio\": [\n           {\n               \"stub\": \"400Hz_tones\"\n           }\n       ],\n       \"unpauseAudio\": [\n           {\n               \"stub\": \"return_after_pause\"\n           }\n       ],\n       \"calibrationLength\": 0,\n       \"calibrationAudio\": [\n           {\n               \"stub\": \"chimes\"\n           }\n       ],\n       \"calibrationVideo\": [\n           {\n               \"stub\": \"attentiongrabber\"\n           }\n       ],\n       \"loopTestAudio\": false\n   }\n```",
             "extends": "ExpFrameBaseUnsafe",
             "uses": [
                 "FullScreen",
+                "MediaReload",
                 "VideoRecord"
             ]
         },
@@ -989,6 +990,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [
+                "ExpLookitPreferentialLooking",
                 "ExpLookitVideo",
                 "ExpVideoPhysics"
             ],
@@ -1057,7 +1059,7 @@
             "namespace": "",
             "file": "addon/randomizers/random-parameter-set.js",
             "line": 8,
-            "description": "Randomizer to implement flexible condition assignment and counterbalancing by\nallowing the user to specify an arbitrary sequence of frames to create. A\nset of parameters is randomly selected from a list of available parameterSets,\nand these parameters are substituted in to the parameters specified in the\nlist of frames.\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"random-parameter-set\",\nas shown below, in addition to the parameters described under 'properties'.\n\nThis\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"random-parameter-set\",\n       \"kind\": \"choice\",\n       \"id\": \"test-trials\",\n       \"commonFrameProperties\": {\n           \"kind\": \"exp-lookit-story-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"doRecording\": true,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"Common instructions across test trials here\",\n               \"emph\": true\n           }\n       },\n       \"frameList\": [\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG1\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG1\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG1\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION1AUDIO\"}],\n                       \"highlights\": \"QUESTION1HIGHLIGHTS\"\n                   }\n               ]\n           },\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG2\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG2\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG2\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION2AUDIO\"}],\n                       \"highlights\": \"QUESTION2HIGHLIGHTS\"\n                   }\n               ]\n           }\n       ],\n       \"parameterSets\": [\n           {\n               \"AGENTIMG1\": \"flurpagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"flurpleftmean1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.399293,\t3.617124], \"image\": \"agent\"},\n                   {\"range\": [5.085112,\t6.811467], \"image\": \"left\"},\n                   {\"range\": [6.905418,\t8.702236], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"flurpagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"flurpleftinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.372569,\t5.309110], \"image\": \"agent\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"left\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"right\"},\n                   {\"range\": [9.966225,\t11.922212], \"image\": \"left\"},\n                   {\"range\": [12.052612,\t14.008600], \"image\": \"right\"}\n               ]\n           },\n           {\n               \"AGENTIMG1\": \"zazzagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"zazzrightnice1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.348454,\t3.736871], \"image\": \"agent\"},\n                   {\"range\": [5.395033,\t6.884975], \"image\": \"left\"},\n                   {\"range\": [6.969085,\t8.975701], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"zazzagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"zazzrightinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.572920,\t5.138376], \"image\": \"agent\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"left\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"right\"},\n                   {\"range\": [9.721735,\t11.565821], \"image\": \"left\"},\n                   {\"range\": [11.655340,\t13.535233], \"image\": \"right\"}\n               ]\n           }\n       ],\n       \"parameterSetWeights\": [1, 1]\n   }\n}\n\n```"
+            "description": "Randomizer to implement flexible condition assignment and counterbalancing by\nallowing the user to specify an arbitrary sequence of frames to create. A\nset of parameters is randomly selected from a list of available parameterSets,\nand these parameters are substituted in to the parameters specified in the\nlist of frames.\n\nFor a more detailed walkthrough, please see\nhttps://lookit.readthedocs.io/en/develop/experiments.html#randomizer-frames\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"random-parameter-set\",\nas shown below, in addition to the parameters described under 'properties'.\n\nThis\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"random-parameter-set\",\n       \"kind\": \"choice\",\n       \"id\": \"test-trials\",\n       \"commonFrameProperties\": {\n           \"kind\": \"exp-lookit-story-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"doRecording\": true,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"Common instructions across test trials here\",\n               \"emph\": true\n           }\n       },\n       \"frameList\": [\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG1\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG1\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG1\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION1AUDIO\"}],\n                       \"highlights\": \"QUESTION1HIGHLIGHTS\"\n                   }\n               ]\n           },\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG2\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG2\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG2\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION2AUDIO\"}],\n                       \"highlights\": \"QUESTION2HIGHLIGHTS\"\n                   }\n               ]\n           }\n       ],\n       \"parameterSets\": [\n           {\n               \"AGENTIMG1\": \"flurpagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"flurpleftmean1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.399293,\t3.617124], \"image\": \"agent\"},\n                   {\"range\": [5.085112,\t6.811467], \"image\": \"left\"},\n                   {\"range\": [6.905418,\t8.702236], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"flurpagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"flurpleftinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.372569,\t5.309110], \"image\": \"agent\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"left\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"right\"},\n                   {\"range\": [9.966225,\t11.922212], \"image\": \"left\"},\n                   {\"range\": [12.052612,\t14.008600], \"image\": \"right\"}\n               ]\n           },\n           {\n               \"AGENTIMG1\": \"zazzagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"zazzrightnice1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.348454,\t3.736871], \"image\": \"agent\"},\n                   {\"range\": [5.395033,\t6.884975], \"image\": \"left\"},\n                   {\"range\": [6.969085,\t8.975701], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"zazzagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"zazzrightinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.572920,\t5.138376], \"image\": \"agent\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"left\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"right\"},\n                   {\"range\": [9.721735,\t11.565821], \"image\": \"left\"},\n                   {\"range\": [11.655340,\t13.535233], \"image\": \"right\"}\n               ]\n           }\n       ],\n       \"parameterSetWeights\": [1, 1]\n   }\n}\n\n```"
         },
         "VideoRecorderObject": {
             "name": "VideoRecorderObject",
@@ -2261,19 +2263,344 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 210,
-            "description": "Whether to do calibration instead of a static image display.\nIf this is true, then provide calibrationLength,\ncalibrationAudioSources, and calibrationVideoSources as well.",
+            "line": 197,
+            "description": "Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). If none provided, skip test phase.\n\nExample value:\n\n```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```",
             "itemtype": "property",
-            "name": "isCalibrationFrame",
-            "type": "Boolean",
-            "default": "false",
+            "name": "testVideo",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 214,
+            "description": "Array of objects specifying video src and type for alternate test video, as for testVideo. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altTestVideo is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).",
+            "itemtype": "property",
+            "name": "altTestVideo",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 227,
+            "description": "Array of objects specifying intro video src and type, as for testVideo.\nIf empty, intro segment will be skipped.",
+            "itemtype": "property",
+            "name": "introVideo",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 241,
+            "description": "Array of objects specifying attention-grabber video src and type, as for testVideo. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.",
+            "itemtype": "property",
+            "name": "announcementVideo",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 253,
+            "description": "minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announcementLength and the duration of any announcement audio.",
+            "itemtype": "property",
+            "name": "announcementLength",
+            "type": "Number",
+            "default": "2",
             "class": "ExpLookitPreferentialLooking",
             "module": "exp-player",
             "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 223,
+            "line": 264,
+            "description": "List of objects specifying intro announcement src and type. If empty and minimum announcementLength is 0, announcement is skipped.\nExample: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`",
+            "itemtype": "property",
+            "name": "announcementAudio",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 278,
+            "description": "URL of image to show on left, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
+            "itemtype": "property",
+            "name": "leftImage",
+            "type": "String",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 289,
+            "description": "URL of image to show on right, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
+            "itemtype": "property",
+            "name": "right",
+            "type": "String",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 300,
+            "description": "URL of image to show at center, if any. Can be a full URL or\na stub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
+            "itemtype": "property",
+            "name": "centerImage",
+            "type": "String",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 312,
+            "description": "List of objects specifying test audio src and type, as for announcementAudio.\nIf empty, no additional test audio is played besides any audio in testVideo.",
+            "itemtype": "property",
+            "name": "testAudio",
+            "type": "Array",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames",
+            "subprops": [
+                {
+                    "name": "testAudio",
+                    "description": ""
+                },
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ]
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 327,
+            "description": "Whether test audio should loop",
+            "itemtype": "property",
+            "name": "loopTestAudio",
+            "type": "Boolean",
+            "default": "true",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 338,
+            "description": "Whether to allow participant to pause study during test. If no, study still\npauses but upon unpausing moves to next trial. If yes, study restarts from\nbeginning upon unpausing (with alternate sources).",
+            "itemtype": "property",
+            "name": "allowPauseDuringTest",
+            "type": "Boolean",
+            "default": "true",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 351,
+            "description": "Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.",
+            "itemtype": "property",
+            "name": "testLength",
+            "type": "Number",
+            "default": "Infinity",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 362,
+            "description": "Number of times to play test video before moving on. This is ignored if\ntestLength is set to a finite value.",
+            "itemtype": "property",
+            "name": "testCount",
+            "type": "Number",
+            "default": "1",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 374,
+            "description": "Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.",
+            "itemtype": "property",
+            "name": "doRecording",
+            "type": "Boolean",
+            "default": "true",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 384,
+            "description": "length of single calibration segment in ms. 0 to skip calibration.",
+            "itemtype": "property",
+            "name": "calibrationLength",
+            "type": "Number",
+            "default": "3000",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 395,
+            "description": "Ordered list of positions to show calibration segment in. Options are\n\"center\", \"left\", \"right\". Ignored if calibrationLength is 0.",
+            "itemtype": "property",
+            "name": "calibrationPositions",
+            "type": "Array",
+            "default": "[\"center\", \"left\", \"right\", \"center\"]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 407,
+            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration audio (played at each calibration position).\nIgnored if calibrationLength is 0.",
+            "itemtype": "property",
+            "name": "calibrationAudio",
+            "type": "Object[]",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 431,
+            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration video (played from start at each calibration position).\nIgnored if calibrationLength is 0.",
+            "itemtype": "property",
+            "name": "calibrationVideo",
+            "type": "Object[]",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 455,
+            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon pausing study",
+            "itemtype": "property",
+            "name": "pauseAudio",
+            "type": "Object[]",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 478,
+            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon unpausing study. Unpausing audio will always be played\nbefore proceeding to next trial, even if this trial will not be redone\n(e.g. because it was paused during test and allowPauseDuringTest is\nset to false)",
+            "itemtype": "property",
+            "name": "unpauseAudio",
+            "type": "Object[]",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 504,
+            "description": "Text to show under \"Study paused / Press space to resume\" when study is paused.\nDefault: (You'll have a moment to turn around again.)",
+            "itemtype": "property",
+            "name": "pauseText",
+            "type": "String",
+            "default": "[]",
+            "class": "ExpLookitPreferentialLooking",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-preferential-looking/component.js",
+            "line": 517,
             "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
             "itemtype": "property",
             "name": "baseDir",
@@ -2285,8 +2612,8 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 244,
-            "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\n(e.g. introAudioSources) is given as [{'stub': 'intro'}],\nthen introAudioSources will be expanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
+            "line": 538,
+            "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "audioTypes",
             "type": "String[]",
@@ -2297,221 +2624,37 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 272,
-            "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf video is ['typeA', 'typeB'] and an video source\nis given as {['stub': 'attn']}, then\nthe video source will be expanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/attn.typeA',\n                           type: 'video/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/attn.typeB',\n                           type: 'video/typeB'\n                       }\n               ]\n```",
+            "line": 566,
+            "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an video source\nis given as [{'stub': 'intro'}], the video source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "videoTypes",
             "type": "String[]",
-            "default": "['mp3', 'ogg']",
+            "default": "['mp4', 'webm']",
             "class": "ExpLookitPreferentialLooking",
             "module": "exp-player",
             "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 300,
-            "description": "Whether to allow user to pause the study during the test\nsegment and restart from intro; otherwise, user can pause but\nthis frame will end upon unpausing. Applies to pausing during\nboth image display and calibration segments. Pausing is\nalways allowed during the intro.",
-            "itemtype": "property",
-            "name": "allowPausingDuringTest",
-            "type": "Boolean",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 313,
-            "description": "URL of image to show on left, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
-            "itemtype": "property",
-            "name": "leftImage",
-            "type": "String",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 324,
-            "description": "URL of image to show on right, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
-            "itemtype": "property",
-            "name": "right",
-            "type": "String",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 335,
-            "description": "URL of image to show at center, if any. Can be a full URL or\na stub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
-            "itemtype": "property",
-            "name": "centerImage",
-            "type": "String",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 346,
-            "description": "minimum amount of time to show attention-getter in seconds.\nattention-getter intro video will be shown for at least this\nlong, and also until any intro audio finishes playing and a\nwebcam connection is established.",
-            "itemtype": "property",
-            "name": "attnLength",
-            "type": "Number",
-            "default": "5",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 360,
-            "description": "length of preferential looking trial in seconds. (Only used\nif not isCalibrationFrame.)",
-            "itemtype": "property",
-            "name": "trialLength",
-            "type": "Number",
-            "default": "6",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 372,
-            "description": "length of single calibration segment in seconds (only used\nif isCalibrationFrame)",
-            "itemtype": "property",
-            "name": "calibrationLength",
-            "type": "Number",
-            "default": "3",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 384,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor audio played during test trial. (Only used if not\nisCalibrationFrame.)\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "testAudioSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 414,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor instructions or any other audio during attention-getter\nvideo\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "introAudioSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 444,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor audio played after trial ends (optional, intended for\nuse on last trial to let parents know they can open their\neyes)\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "endAudioSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 475,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor calibration audio, played from start during each\ncalibration segment (only used if isCalibrationFrame)\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "calibrationAudioSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 505,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor calibration video, played from start during each\ncalibration segment (only used if isCalibrationFrame)\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `videoTypes` values; see `videoTypes`.",
-            "itemtype": "property",
-            "name": "calibrationVideoSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 535,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects\nfor attention-getter video\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `videoTypes` values; see `videoTypes`.",
-            "itemtype": "property",
-            "name": "videoSources",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 564,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon pausing study\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "pauseAudio",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 593,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon resuming study\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "unpauseAudio",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 622,
-            "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played when study is paused due to not being fullscreen\n\nCan also give a single element {stub: 'filename'}, which will\nbe expanded out to the appropriate array based on `baseDir`\nand `audioTypes` values; see `audioTypes`.",
-            "itemtype": "property",
-            "name": "fsAudio",
-            "type": "Object[]",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 654,
+            "line": 598,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
             "params": [
                 {
+                    "name": "videosShown",
+                    "description": "Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].",
+                    "type": "Array"
+                },
+                {
+                    "name": "eventTimings",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
                     "name": "videoID",
-                    "description": "The ID of any video recorded during this frame",
+                    "description": "The ID of any webcam video recorded during this frame",
                     "type": "String"
-                },
-                {
-                    "name": "hasBeenPaused",
-                    "description": "whether this trial was paused",
-                    "type": "Boolean"
-                },
-                {
-                    "name": "isCalibrationFrame",
-                    "description": "whether this is a calibration frame (given as a property of the frame)",
-                    "type": "Boolean"
-                },
-                {
-                    "name": "allowPausingDuringTest",
-                    "description": "whether the user can return to the test/calibration period after pausing (given as a property of the frame)",
-                    "type": "Boolean"
                 },
                 {
                     "name": "rightImage",
@@ -2529,24 +2672,9 @@
                     "type": "String"
                 },
                 {
-                    "name": "trialLength",
-                    "description": "seconds to display images if this is a test trial (given as a property of the frame)",
+                    "name": "testLength",
+                    "description": "seconds to display images/loop videos (given as a property of the frame), if using time-based limit",
                     "type": "Number"
-                },
-                {
-                    "name": "calibrationLength",
-                    "description": "s to display calibration video in each of four locations if this is a calibration trial (given as a property of the frame)",
-                    "type": "Number"
-                },
-                {
-                    "name": "testAudioSources",
-                    "description": "Array of {src: 'url', type: 'MIMEtype'} objects for audio played during test trial (given as a property of the frame)",
-                    "type": "Object[]"
-                },
-                {
-                    "name": "eventTimings",
-                    "description": "",
-                    "type": "Object"
                 }
             ],
             "return": {
@@ -2559,17 +2687,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 785,
-            "description": "Just before starting intro segment",
-            "itemtype": "event",
-            "name": "startIntro",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 820,
+            "line": 846,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -2586,10 +2704,10 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 1004,
-            "description": "When video recorder has been installed",
-            "itemtype": "event",
-            "name": "recorderReady",
+            "line": 1072,
+            "description": "Observer that starts recording once recorder is ready. Override to do additional\nstuff at this point!",
+            "itemtype": "method",
+            "name": "whenPossibleToRecord",
             "class": "ExpLookitPreferentialLooking",
             "module": "exp-player",
             "submodule": "frames"
@@ -4524,7 +4642,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 190,
+            "line": 195,
             "description": "Object describing common parameters to use in EVERY frame created\nby this randomizer. Parameter names and values are as described in\nthe documentation for the frameType used.",
             "itemtype": "property",
             "name": "commonFrameProperties",
@@ -4535,7 +4653,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 198,
+            "line": 203,
             "description": "Unique string identifying this set of frames",
             "itemtype": "property",
             "name": "id",
@@ -4546,8 +4664,8 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 204,
-            "description": "List of frames to be created by this randomizer. Each frame is an\nobject with any necessary frame-specific properties specified. The\n'kind' of frame can be specified either here (per frame) or in\ncommonFrameProperties. If a property is defined for a given frame both\nin this frame list and in commonFrameProperties, the value in the frame\nlist will take precedence.\n\n(E.g., you could include 'kind': 'normal-frame' in\ncommmonFrameProperties, but for a single frame in frameList, include\n'kind': 'special-frame'.)\n\nAny property VALUES within any of the frames in this list which match\na property NAME in the selected parameterSet will be replaced by the\ncorresponding parameterSet value. E.g., suppose a frame in frameList is\n\n```\n  {'leftImage': 'LEFTIMAGE1',\n  'rightImage': 'frog.jpg',\n  'size': 'IMAGESIZE'}\n```\n\nand the row that has been selected randomly of parameterSets is\n\n```\n{'LEFTIMAGE1': 'toad.jpg',\n       'LEFTIMAGE2': 'dog.jpg',\n       'IMAGESIZE': 250}\n```\n\nThen the frame would be transformed into:\n```\n  {'leftImage': 'toad.jpg',\n  'rightImage': 'frog.jpg',\n  'size': 250}\n```\n\nThe same values may be applied across multiple frames. For instance,\nsuppose frameList is\n\n```\n      [\n           {\n               'leftImage': 'LEFTIMAGE1',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           },\n           {\n               'leftImage': 'LEFTIMAGE2',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           }\n       ]\n```\n\nThen the corresponding processed frames would include the values\n```\n      [\n           {\n               'leftImage': 'toad.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           },\n           {\n               'leftImage': 'dog.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           }\n       ]\n```\nA property value like 'IMAGESIZE' may be placed in a frame definition\nnested within another object (at any depth) or within a list and\nwill still be replaced.",
+            "line": 209,
+            "description": "List of frames to be created by this randomizer. Each frame is an\nobject with any necessary frame-specific properties specified. The\n`kind` of frame can be specified either here (per frame) or in\n`commonFrameProperties`. If a property is defined for a given frame both\nin this frame list and in `commonFrameProperties`, the value in the frame\nlist will take precedence.\n\n(E.g., you could include `'kind': 'normal-frame'` in\n`commmonFrameProperties`, but for a single frame in `frameList`, include\n`'kind': 'special-frame'`.)\n\nAny property VALUES within any of the frames in this list which match\na property NAME in the selected `parameterSet` will be replaced by the\ncorresponding `parameterSet` value. E.g., suppose a frame in `frameList` is\n\n```\n{\n   'leftImage': 'LEFTIMAGE1',\n   'rightImage': 'frog.jpg',\n   'size': 'IMAGESIZE'\n}\n```\n\nand the row that has been selected randomly of `parameterSets` is\n\n```\n{\n   'LEFTIMAGE1': 'toad.jpg',\n   'LEFTIMAGE2': 'dog.jpg',\n   'IMAGESIZE': 250\n}\n```\n\nThen the frame would be transformed into:\n```\n{\n   'leftImage': 'toad.jpg',\n    'rightImage': 'frog.jpg',\n    'size': 250\n}\n```\n\nThe same values may be applied across multiple frames. For instance,\nsuppose `frameList` is\n\n```\n      [\n           {\n               'leftImage': 'LEFTIMAGE1',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           },\n           {\n               'leftImage': 'LEFTIMAGE2',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           }\n       ]\n```\n\nThen the corresponding processed frames would include the values\n```\n      [\n           {\n               'leftImage': 'toad.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           },\n           {\n               'leftImage': 'dog.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           }\n       ]\n```\nA property value like `IMAGESIZE` may be placed in a frame definition\nnested within another object (at any depth) or within a list and\nwill still be replaced.\n\nYou can also use selectors to randomly sample from or permute\na list given in a `parameterSet`. Suppose `LISTVAR` is defined in\na `parameterSet` as `THELIST`, e.g. a list of potential stimuli. Within frames in your `frameList`\n(and in `commonFrameProperties`), you can use any of the following:\n\n* Select the Nth element (0-indexed) of `THELIST`: (Will cause error if `N >= THELIST.length`)\n```\n   'parameterName': 'LISTVAR#N'\n```\n* Select (uniformly) a random element of `THELIST`:\n```\n   'parameterName': 'LISTVAR#RAND'\n```\n* Set `parameterName` to a random permutation of `THELIST`:\n```\n   'parameterName': 'LISTVAR#PERM'\n```\n* Select the next element in a random permutation of `THELIST`, which is used across all\nsubstitutions in this randomizer. This allows you, for instance, to provide a list\nof possible images in your `parameterSet`, and use a different one each frame with the\nsubset/order randomized per participant. If more `LISTVAR_UNIQ` parameters than\nelements of `THELIST` are used, we loop back around to the start of the permutation\ngenerated for this randomizer.\n```\n   'parameterName': 'LISTVAR#UNIQ'\n```",
             "itemtype": "property",
             "name": "frameList",
             "type": "Object[]",
@@ -4557,7 +4675,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 281,
+            "line": 319,
             "description": "Array of parameter sets to randomly select from in order to determine\nthe parameters for each frame in this session.\n\nA single element of parameterSets will be applied to a given session.",
             "itemtype": "property",
             "name": "parameterSets",
@@ -4568,8 +4686,8 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 290,
-            "description": "[Optional] Array of weights for parameter sets; elements correspond to\nelements of parameterSets. The probability of selecting an element\nparameterSets[i] is parameterSetWeights[i]/sum(parameterSetWeights).\n\nIf not provided, all parameterSets are weighted equally.\n\nThis is intended to allow manual control of counterbalancing during\ndata collection, e.g. to allow one condition to \"catch up\" if it was\nrandomly selected less often.",
+            "line": 328,
+            "description": "[Optional] Array of weights for parameter sets; elements correspond to\nelements of parameterSets. The probability of selecting an element\n`parameterSets[i]` is `parameterSetWeights[i]/sum(parameterSetWeights)`.\n\nIf not provided, all `parameterSets` are weighted equally.\n\nThis is intended to allow manual control of counterbalancing during\ndata collection, e.g. to allow one condition to \"catch up\" if it was\nrandomly selected less often.",
             "itemtype": "property",
             "name": "parameterSetWeights",
             "type": "Number[]",
@@ -4579,7 +4697,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 340,
+            "line": 435,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "conditions",
