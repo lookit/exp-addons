@@ -12,6 +12,9 @@ import Ember from 'ember';
 * and these parameters are substituted in to the parameters specified in the
 * list of frames.
 *
+* For a more detailed walkthrough, please see
+* https://lookit.readthedocs.io/en/develop/experiments.html#randomizer-frames
+*
 * To use, define a frame with "kind": "choice" and "sampler": "random-parameter-set",
 * as shown below, in addition to the parameters described under 'properties'.
 *
@@ -206,42 +209,48 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     /**
      * List of frames to be created by this randomizer. Each frame is an
      * object with any necessary frame-specific properties specified. The
-     * 'kind' of frame can be specified either here (per frame) or in
-     * commonFrameProperties. If a property is defined for a given frame both
-     * in this frame list and in commonFrameProperties, the value in the frame
+     * `kind` of frame can be specified either here (per frame) or in
+     * `commonFrameProperties`. If a property is defined for a given frame both
+     * in this frame list and in `commonFrameProperties`, the value in the frame
      * list will take precedence.
      *
-     * (E.g., you could include 'kind': 'normal-frame' in
-     * commmonFrameProperties, but for a single frame in frameList, include
-     * 'kind': 'special-frame'.)
+     * (E.g., you could include `'kind': 'normal-frame'` in
+     * `commmonFrameProperties`, but for a single frame in `frameList`, include
+     * `'kind': 'special-frame'`.)
      *
      * Any property VALUES within any of the frames in this list which match
-     * a property NAME in the selected parameterSet will be replaced by the
-     * corresponding parameterSet value. E.g., suppose a frame in frameList is
+     * a property NAME in the selected `parameterSet` will be replaced by the
+     * corresponding `parameterSet` value. E.g., suppose a frame in `frameList` is
      *
-     * ```
-     *   {'leftImage': 'LEFTIMAGE1',
-     *   'rightImage': 'frog.jpg',
-     *   'size': 'IMAGESIZE'}
-     * ```
+```
+{
+    'leftImage': 'LEFTIMAGE1',
+    'rightImage': 'frog.jpg',
+    'size': 'IMAGESIZE'
+}
+```
      *
-     * and the row that has been selected randomly of parameterSets is
+     * and the row that has been selected randomly of `parameterSets` is
      *
-     * ```
-     * {'LEFTIMAGE1': 'toad.jpg',
-        'LEFTIMAGE2': 'dog.jpg',
-        'IMAGESIZE': 250}
-     * ```
+```
+{
+    'LEFTIMAGE1': 'toad.jpg',
+    'LEFTIMAGE2': 'dog.jpg',
+    'IMAGESIZE': 250
+}
+```
      *
      * Then the frame would be transformed into:
-     * ```
-     *   {'leftImage': 'toad.jpg',
-     *   'rightImage': 'frog.jpg',
-     *   'size': 250}
-     * ```
+```
+{
+    'leftImage': 'toad.jpg',
+     'rightImage': 'frog.jpg',
+     'size': 250
+}
+```
      *
      * The same values may be applied across multiple frames. For instance,
-     * suppose frameList is
+     * suppose `frameList` is
 
 ```
        [
@@ -273,10 +282,37 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
             }
         ]
 ```
-     * A property value like 'IMAGESIZE' may be placed in a frame definition
+     * A property value like `IMAGESIZE` may be placed in a frame definition
      * nested within another object (at any depth) or within a list and
      * will still be replaced.
-
+     *
+     * You can also use selectors to randomly sample from or permute
+     * a list given in a `parameterSet`. Suppose `LISTVAR` is defined in
+     * a `parameterSet` as `THELIST`, e.g. a list of potential stimuli. Within frames in your `frameList`
+     * (and in `commonFrameProperties`), you can use any of the following:
+     *
+     * * Select the Nth element (0-indexed) of `THELIST`: (Will cause error if `N >= THELIST.length`)
+```
+    'parameterName': 'LISTVAR#N'
+```
+     * * Select (uniformly) a random element of `THELIST`:
+```
+    'parameterName': 'LISTVAR#RAND'
+```
+    * * Set `parameterName` to a random permutation of `THELIST`:
+```
+    'parameterName': 'LISTVAR#PERM'
+```
+    * * Select the next element in a random permutation of `THELIST`, which is used across all
+    * substitutions in this randomizer. This allows you, for instance, to provide a list
+    * of possible images in your `parameterSet`, and use a different one each frame with the
+    * subset/order randomized per participant. If more `LISTVAR_UNIQ` parameters than
+    * elements of `THELIST` are used, we loop back around to the start of the permutation
+    * generated for this randomizer.
+```
+    'parameterName': 'LISTVAR#UNIQ'
+```
+     *
      * @property {Object[]} frameList
      */
 
@@ -292,9 +328,9 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     /**
      * [Optional] Array of weights for parameter sets; elements correspond to
      * elements of parameterSets. The probability of selecting an element
-     * parameterSets[i] is parameterSetWeights[i]/sum(parameterSetWeights).
+     * `parameterSets[i]` is `parameterSetWeights[i]/sum(parameterSetWeights)`.
      *
-     * If not provided, all parameterSets are weighted equally.
+     * If not provided, all `parameterSets` are weighted equally.
      *
      * This is intended to allow manual control of counterbalancing during
      * data collection, e.g. to allow one condition to "catch up" if it was
