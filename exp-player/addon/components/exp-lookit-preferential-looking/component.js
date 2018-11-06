@@ -2,6 +2,7 @@ import Ember from 'ember';
 import layout from './template';
 import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
 import FullScreen from '../../mixins/full-screen';
+import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
 
 let {
@@ -11,305 +12,269 @@ let {
 /**
  * @module exp-player
  * @submodule frames
- * @deprecated
  */
 
 /**
- * NOT YET ADAPTED FOR WEBRTC RECORDER.
- * Frame to implement a basic preferential looking trial, with static images
- * displayed in the center or at left and right of the screen. Trial proceeds
- * in segments:
- * - Intro: central attentiongrabber video (looping) & intro audio [wait until
- *   recording is established to move on, and a minimum amount of time]
- * - Test: image(s) displayed, any test audio played [set amount of time] OR
- * Calibration: calibration video displayed at center, left, right, center, each
- * for calibrationLength s.
- * - Final audio: central attentiongrabber video (looping) & final audio
- *   (optional section, intended for last trial in block)
- *
- * There are three basic uses of this frame expected:
- * - Familiarization trial with a single central image. Provide a value for
- * centerImage, but not rightImage or leftImage.
- * - Test trial with right and left images. Provide a value for rightImage and
- * leftImage, but not centerImage. (There is no explicit "preferential looking
- * vs. familiarization" switch: all of the images provided will be displayed.)
- * - Calibration trial. Set isCalibrationFrame to true, and provide
- * calibrationLength (length of each calibration segment in s),
- * calibrationVideoSources, and calibrationAudioSources.
- *
- * This frame extends ExpFrameBaseUnsafe because it is displayed fullscreen
- * and is expected to be repeated.
+* Basic video display for looking measures (e.g. preferential looking, looking time).
+* Trial consists of four phases, each of which is optional.
+*
+* 1. Announcement: The audio in announcementAudio is played while the announcementVideo video is played centrally, looping as needed. This lasts for announcementLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announcementLength to 0 and do not provide announcementAudio.
+*
+* 2. Intro: The introVideo video is played centrally until it ends. To skip this phase, do not provide introVideo.
+*
+* 3. Calibration: The video in calibrationVideo is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudio is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.
+*
+* 4. Test: The video in testVideo and audio in testAudio (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altTestVideo will be used again (defaulting to the same video if altTestVideo is not provided).
+*
+* Specifying media locations:
+* For any parameters that expect a list of audio/video sources, you can EITHER provide
+* a list of src/type pairs with full paths like this:
+```json
+    [
+        {
+            'src': 'http://.../video1.mp4',
+            'type': 'video/mp4'
+        },
+        {
+            'src': 'http://.../video1.webm',
+            'type': 'video/webm'
+        }
+    ]
+```
+* OR you can provide a list with a single object with a 'stub', which will be expanded
+* based on the parameter baseDir. Expected audio/video locations will be based on either audioTypes or
+* videoTypes as appropriate; images will be expected to all be in an img/ subdirectory.
+* For example, if you provide the audio source
+```json
+    [
+        {
+            'stub': 'intro'
+        }
+    ]
+```
+* and baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this
+* will be expanded to:
+```json
+                 [
+                        {
+                            src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',
+                            type: 'audio/mp3'
+                        },
+                        {
+                            src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',
+                            type: 'audio/ogg'
+                        }
+                ]
+```
+* This allows you to simplify your JSON document a bit and also easily switch to a
+* new version of your stimuli without changing every URL. You can mix source objects with
+* full URLs and those using stubs within the same directory. However, any stimuli
+* specified using stubs MUST be
+* organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.
+*
+* Example usage:
 
 ```json
- "frames": {
-    "preferential-looking": {
+    "sample-trial": {
+        "id": "sample-looking-trial",
         "kind": "exp-lookit-preferential-looking",
-        "id": "pref-trial",
-        "isCalibrationFrame": false,
-        "allowPausingDuringTest": true,
+        "isLast": false,
         "baseDir": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/",
-        "audioTypes": ["mp3", "ogg"],
-        "videoTypes": ["webm", "mp4"],
-        "rightImage": "fam.jpg",
-        "leftImage": "novel.jpg",
-        "centerImage": "0001.jpg",
+        "leftImage": "stapler_test_02.jpg",
+        "testLength": 8,
+        "audioTypes": [
+            "ogg",
+            "mp3"
+        ],
         "pauseAudio": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/pause.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/pause.ogg",
-                "type": "audio/ogg"
+                "stub": "pause"
             }
         ],
-        "trialLength": 10,
-        "fsAudio": [
+        "rightImage": "novel_02.jpg",
+        "videoTypes": [
+            "webm",
+            "mp4"
+        ],
+        "announcementVideo": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/fullscreen.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/fullscreen.ogg",
-                "type": "audio/ogg"
+                "stub": "attentiongrabber"
             }
         ],
-        "calibrationLength": 3,
-        "attnLength": 1,
-        "endAudioSources": [
+        "announcementAudio": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/all_done.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/all_done.ogg",
-                "type": "audio/ogg"
+                "stub": "video_02"
             }
         ],
-        "introAudioSources": [
+        "introVideo": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg",
-                "type": "audio/ogg"
+                "stub": "cropped_book"
             }
         ],
-        "testAudioSources": [
+        "testAudio": [
             {
-                "stub": "Familiarization_find_dax_amplified_repeated"
+                "stub": "400Hz_tones"
             }
         ],
         "unpauseAudio": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/return_after_pause.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/return_after_pause.ogg",
-                "type": "audio/ogg"
+                "stub": "return_after_pause"
             }
         ],
-        "calibrationVideoSources": [
+        "calibrationLength": 0,
+        "calibrationAudio": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/webm/attention.webm",
-                "type": "video/webm"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp4/attention.mp4",
-                "type": "video/mp4"
+                "stub": "chimes"
             }
         ],
-        "videoSources": [
+        "calibrationVideo": [
             {
-                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/webm/attentiongrabber.webm",
-                "type": "video/webm"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/stimuli/attention/mp4/attentiongrabber.mp4",
-                "type": "video/mp4"
+                "stub": "attentiongrabber"
             }
         ],
-        "calibrationAudioSources": [
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/mp3/chimes.mp3",
-                "type": "audio/mp3"
-            },
-            {
-                "src": "https://s3.amazonaws.com/lookitcontents/geometry/ogg/chimes.ogg",
-                "type": "audio/ogg"
-            }
-        ]
+        "loopTestAudio": false
     }
- }
+* ```
+* @class ExpLookitVideo
+* @extends ExpFrameBaseUnsafe
+* @uses FullScreen
+* @uses MediaReload
+* @uses VideoRecord
+*/
 
- * ```
- * @class ExpLookitPreferentialLooking
- * @extends ExpFrameBaseUnsafe
- * @uses FullScreen
- * @uses VideoRecord
- */
+// TODO: refactor into cleaner structure with segments announcement, intro, calibration,
+// test, with more general logic for transitions. Construct list at start since some
+// elements optional. Then proceed through - instead of setting task manually, use
+// utility to move to next task within list. For each segment, allow video/image/text
+// stimuli.
 
-export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen
-    // must use "unsafe" saves (in order for the fullscreen event to register as
-    // being user-initiated and not from a promise handler) #LEI-369.
-    // exp-alternation frames are expected to be repeated, so they need to be
-    // unsafe.
-    type: 'exp-lookit-preferential-looking',
+export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
+    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
+    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
     layout: layout,
+    type: 'exp-lookit-preferential-looking',
+
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
-    videoRecorder: Ember.inject.service(),
-    recorder: null,
-    hasCamAccess: Ember.computed.alias('recorder.hasCamAccess'),
-    videoUploadConnected: Ember.computed.alias('recorder.connected'),
 
-    // Track state of experiment
-    completedAudio: false,
-    completedAttn: false,
-    currentSegment: 'intro', // 'calibration', 'test', 'finalaudio' (mutually exclusive)
-    previousSegment: 'intro', // used when pausing/unpausing - refers to segment that study was paused during
+    // Override setting in VideoRecord mixin - only use camera if doing recording
+    doUseCamera: Ember.computed.alias('doRecording'),
 
-    readyToStartCalibration: Ember.computed('hasCamAccess', 'videoUploadConnected', 'completedAudio', 'completedAttn',
-        function() {
-            return (this.get('hasCamAccess') && this.get('videoUploadConnected') && this.get('completedAttn') && (!this.get('hasBeenPaused') || this.get('completedAudio')));
-        }),
+    completedAnnouncementAudio: false,
+    completedAnnouncementTime: false,
 
-    // helpers for use in template
-    doingCalibration: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'calibration');
-    }),
-    doingIntro: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'intro');
-    }),
-    doingTest: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'test');
-    }),
-    doingFinalAudio: Ember.computed('currentSegment', function() {
-        return (this.get('currentSegment') === 'finalaudio');
+    doingAnnouncement: Ember.computed('videoSources', function() {
+        return (this.get('currentTask') === 'announce');
     }),
 
-    isPaused: false,
+    doingIntro: Ember.computed('videoSources', function() {
+        return (this.get('currentTask') === 'intro');
+    }),
+
+    doingTest: Ember.computed('videoSources', function() {
+        return (this.get('currentTask') === 'test');
+    }),
+    testTimer: null, // reference to timer counting how long video has been playing, if time-based limit
+    calTimer: null, // reference to timer counting how long calibration segment has played
+    announceTimer: null, // reference to timer counting announcement segment
+
+    testTime: 0,
+    testVideosTimesPlayed: 0, // how many times the test video has been played, if count-based limit
+
+    skip: false,
     hasBeenPaused: false,
-    skipTest: false,
-
-    // Timers for intro & stimuli
-    introTimer: null, // minimum length of intro segment
-    stimTimer: null,  // display of static images
-    calTimer: null,   // display of calibration video
+    useAlternate: false,
+    currentTask: null, // announce, intro, calibration, or test.
+    isPaused: false,
 
     meta: {
         name: 'ExpLookitPreferentialLooking',
-        description: 'Frame to implement specific test trial structure for geometry alternation experiment. Includes announcement, calibration, and alternation (test) phases. During "alternation," two streams of triangles are shown, in rectangles on the left and right of the screen: one one side both size and shape change, on the other only size changes. Frame is displayed fullscreen and video recording is conducted during calibration/test.',
+        description: 'Component that displays video or images for looking measurements',
         parameters: {
             type: 'object',
             properties: {
                 /**
-                 * Whether to do calibration instead of a static image display.
-                 * If this is true, then provide calibrationLength,
-                 * calibrationAudioSources, and calibrationVideoSources as well.
-                 *
-                 * @property {Boolean} isCalibrationFrame
-                 * @default false
-                 */
-                isCalibrationFrame: {
-                    type: 'boolean',
-                    default: false,
-                    description: 'Whether to do calibration instead of a static image display'
-                },
-                /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with `baseDir` + `img/`. Any audio/video src values that give
-                 * a value for 'stub' rather than 'src' and 'type' will be
-                 * expanded out to
-                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir SHOULD include a trailing slash
-                 * (e.g., `http://stimuli.org/myexperiment/`, not
-                 * `http://stimuli.org/myexperiment`)
-                 *
-                 * @property {String} baseDir
-                 * @default ''
-                 */
-                baseDir: {
+                Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). If none provided, skip test phase.
+
+                Example value:
+
+                ```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```
+                @property {Array} testVideo
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                testVideo: {
                     type: 'string',
-                    default: '',
-                    description: 'Base directory for all stimuli'
+                    description: 'List of objects specifying video src and type for test videos',
+                    default: []
+                },
+
+                /**
+                Array of objects specifying video src and type for alternate test video, as for testVideo. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altTestVideo is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).
+                @property {Array} altTestVideo
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                altTestVideo: {
+                    type: 'string',
+                    description: 'List of objects specifying video src and type for alternate test videos',
+                    default: []
+                },
+
+                /**
+                Array of objects specifying intro video src and type, as for testVideo.
+                If empty, intro segment will be skipped.
+                @property {Array} introVideo
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                introVideo: {
+                    type: 'string',
+                    description: 'List of objects specifying intro video src and type',
+                    default: []
+                },
+
+                /**
+                Array of objects specifying attention-grabber video src and type, as for testVideo. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.
+                @property {Array} announcementVideo
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                announcementVideo: {
+                    type: 'string',
+                    description: 'List of objects specifying attention-grabber video src and type',
+                    default: []
                 },
                 /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is ['typeA', 'typeB'] and an audio source
-                 * (e.g. introAudioSources) is given as [{'stub': 'intro'}],
-                 * then introAudioSources will be expanded out to
+                 * minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announcementLength and the duration of any announcement audio.
                  *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/intro.typeA',
-                            type: 'audio/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/intro.typeB',
-                            type: 'audio/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} audioTypes
-                 * @default ['mp3', 'ogg']
+                 * @property {Number} announcementLength
+                 * @default 2
                  */
-                audioTypes: {
-                    type: 'array',
-                    default: ['mp3', 'ogg'],
-                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
+                announcementLength: {
+                    type: 'number',
+                    description: 'minimum duration of announcement phase in seconds',
+                    default: 2
                 },
                 /**
-                 * List of video types to expect for any video specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If video is ['typeA', 'typeB'] and an video source
-                 * is given as {['stub': 'attn']}, then
-                 * the video source will be expanded out to
-                 *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/attn.typeA',
-                            type: 'video/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/attn.typeB',
-                            type: 'video/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} videoTypes
-                 * @default ['mp3', 'ogg']
-                 */
-                videoTypes: {
-                    type: 'array',
-                    default: ['webm', 'mp4'],
-                    description: 'List of video types to expect for any video sources specified as strings rather than lists of src/type pairs'
+                List of objects specifying intro announcement src and type. If empty and minimum announcementLength is 0, announcement is skipped.
+                Example: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`
+                @property {Array} announcementAudio
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                announcementAudio: {
+                    type: 'string',
+                    description: 'List of objects specifying intro announcement audio src and type',
+                    default: []
                 },
-                /**
-                 * Whether to allow user to pause the study during the test
-                 * segment and restart from intro; otherwise, user can pause but
-                 * this frame will end upon unpausing. Applies to pausing during
-                 * both image display and calibration segments. Pausing is
-                 * always allowed during the intro.
-                 *
-                 * @property {Boolean} allowPausingDuringTest
-                 */
-                allowPausingDuringTest: {
-                    type: 'boolean',
-                    description: 'Whether to allow user to pause the study during the test segment and restart from intro; otherwise, user can pause but this frame will end upon unpausing'
-                },
+
                 /**
                  * URL of image to show on left, if any. Can be a full URL or a
                  * stub that will be appended to `baseDir` + `img/` (see
@@ -343,147 +308,111 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                     type: 'string',
                     description: 'URL of image to show on left'
                 },
+
                 /**
-                 * minimum amount of time to show attention-getter in seconds.
-                 * attention-getter intro video will be shown for at least this
-                 * long, and also until any intro audio finishes playing and a
-                 * webcam connection is established.
-                 *
-                 * @property {Number} attnLength
-                 * @default 5
-                 */
-                attnLength: {
-                    type: 'number',
-                    description: 'minimum amount of time to show attention-getter in seconds',
-                    default: 5
+                List of objects specifying test audio src and type, as for announcementAudio.
+                If empty, no additional test audio is played besides any audio in testVideo.
+                @param testAudio
+                @property {Array} testAudio
+                    @param {String} src
+                    @param {String} type
+                @default []
+                */
+                testAudio: {
+                    type: 'string',
+                    description: 'List of objects specifying music audio src and type',
+                    default: []
                 },
+
                 /**
-                 * length of preferential looking trial in seconds. (Only used
-                 * if not isCalibrationFrame.)
-                 *
-                 * @property {Number} trialLength
-                 * @default 6
-                 */
-                trialLength: {
-                    type: 'number',
-                    description: 'length of preferential looking trial in seconds',
-                    default: 6
+                Whether test audio should loop
+                @property {boolean} loopTestAudio
+                @default true
+                */
+                loopTestAudio: {
+                    type: 'boolean',
+                    description: 'Whether test audio should loop',
+                    default: true
                 },
+
                 /**
-                 * length of single calibration segment in seconds (only used
-                 * if isCalibrationFrame)
+                Whether to allow participant to pause study during test. If no, study still
+                pauses but upon unpausing moves to next trial. If yes, study restarts from
+                beginning upon unpausing (with alternate sources).
+                @property {boolean} allowPauseDuringTest
+                @default true
+                */
+                allowPauseDuringTest: {
+                    type: 'boolean',
+                    description: 'Whether to allow participant to pause study during test',
+                    default: true
+                },
+
+                /**
+                Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.
+                @property {Number} testLength
+                @default Infinity
+                */
+                testLength: {
+                    type: 'number',
+                    description: 'Length of test videos in seconds',
+                    default: Infinity
+                },
+
+                /**
+                Number of times to play test video before moving on. This is ignored if
+                testLength is set to a finite value.
+                @property {Number} testCount
+                @default 1
+                */
+                testCount: {
+                    type: 'number',
+                    description: 'Number of times to play test video',
+                    default: 1
+                },
+
+                /**
+                Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.
+                @property {Boolean} doRecording
+                @default true
+                */
+                doRecording: {
+                    type: 'boolean',
+                    description: 'Whether to do video recording',
+                    default: true
+                },
+                 /**
+                 * length of single calibration segment in ms. 0 to skip calibration.
                  *
                  * @property {Number} calibrationLength
-                 * @default 3
+                 * @default 3000
                  */
                 calibrationLength: {
                     type: 'number',
-                    description: 'length of single calibration segment in seconds',
-                    default: 3
+                    description: 'length of single calibration segment in ms',
+                    default: 3000
+                },
+                 /**
+                 * Ordered list of positions to show calibration segment in. Options are
+                 * "center", "left", "right". Ignored if calibrationLength is 0.
+                 *
+                 * @property {Array} calibrationPositions
+                 * @default ["center", "left", "right", "center"]
+                 */
+                calibrationPositions: {
+                    type: 'Array',
+                    description: 'Ordered list of positions to show calibration',
+                    default: ['center', 'left', 'right', 'center']
                 },
                 /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for audio played during test trial. (Only used if not
-                 * isCalibrationFrame.)
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * calibration audio (played at each calibration position).
+                 * Ignored if calibrationLength is 0.
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
-                 * @property {Object[]} testAudioSources
+                 * @property {Object[]} calibrationAudio
+                 * @default []
                  */
-                testAudioSources: {
-                    type: 'array',
-                    description: 'List of objects specifying audio src and type for audio played during test trial',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
-                            }
-                        }
-                    }
-                },
-                /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for instructions or any other audio during attention-getter
-                 * video
-                 *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
-                 * @property {Object[]} introAudioSources
-                 */
-                introAudioSources: {
-                    type: 'array',
-                    description: 'List of objects specifying audio src and type for instructions during attention-getter video',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
-                            }
-                        }
-                    }
-                },
-                /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for audio played after trial ends (optional, intended for
-                 * use on last trial to let parents know they can open their
-                 * eyes)
-                 *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
-                 * @property {Object[]} endAudioSources
-                 */
-                endAudioSources: {
-                    type: 'array',
-                    description: 'Supply this to play audio at the end of the trial; list of objects specifying audio src and type',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
-                            }
-                        }
-                    }
-                },
-                /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for calibration audio, played from start during each
-                 * calibration segment (only used if isCalibrationFrame)
-                 *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
-                 * @property {Object[]} calibrationAudioSources
-                 */
-                calibrationAudioSources: {
+                calibrationAudio: {
                     type: 'array',
                     description: 'list of objects specifying audio src and type for calibration audio',
                     default: [],
@@ -495,27 +424,21 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
                             }
                         }
                     }
                 },
                 /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for calibration video, played from start during each
-                 * calibration segment (only used if isCalibrationFrame)
+                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+                 * calibration video (played from start at each calibration position).
+                 * Ignored if calibrationLength is 0.
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `videoTypes` values; see `videoTypes`.
-                 *
-                 * @property {Object[]} calibrationVideoSources
+                 * @property {Object[]} calibrationVideo
+                 * @default []
                  */
-                calibrationVideoSources: {
+                calibrationVideo: {
                     type: 'array',
-                    description: 'list of objects specifying video src and type for calibration video',
+                    description: 'list of objects specifying video src and type for calibration audio',
                     default: [],
                     items: {
                         type: 'object',
@@ -524,38 +447,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
-                                type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
-                            }
-                        }
-                    }
-                },
-                /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects
-                 * for attention-getter video
-                 *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `videoTypes` values; see `videoTypes`.
-                 *
-                 * @property {Object[]} videoSources
-                 */
-                videoSources: {
-                    type: 'array',
-                    description: 'List of objects specifying video src and type for attention-getter video',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            },
-                            'stub': {
                                 type: 'string'
                             }
                         }
@@ -565,11 +456,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
                  * audio played upon pausing study
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
                  * @property {Object[]} pauseAudio
+                 * @default []
                  */
                 pauseAudio: {
                     type: 'array',
@@ -583,26 +471,23 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                             },
                             'type': {
                                 type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
                             }
                         }
                     }
                 },
                 /**
                  * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-                 * audio played upon resuming study
-                 *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
+                 * audio played upon unpausing study. Unpausing audio will always be played
+                 * before proceeding to next trial, even if this trial will not be redone
+                 * (e.g. because it was paused during test and allowPauseDuringTest is
+                 * set to false)
                  *
                  * @property {Object[]} unpauseAudio
+                 * @default []
                  */
                 unpauseAudio: {
                     type: 'array',
-                    description: 'List of objects specifying audio src and type for audio played when pausing study',
+                    description: 'List of objects specifying audio src and type for audio played when unpausing study',
                     default: [],
                     items: {
                         type: 'object',
@@ -611,76 +496,125 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                                 type: 'string'
                             },
                             'type': {
-                                type: 'string'
-                            },
-                            'stub': {
                                 type: 'string'
                             }
                         }
                     }
                 },
                 /**
-                 * Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-                 * audio played when study is paused due to not being fullscreen
+                 * Text to show under "Study paused / Press space to resume" when study is paused.
+                 * Default: (You'll have a moment to turn around again.)
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
-                 * be expanded out to the appropriate array based on `baseDir`
-                 * and `audioTypes` values; see `audioTypes`.
-                 *
-                 * @property {Object[]} fsAudio
+                 * @property {String} pauseText
+                 * @default []
+
                  */
-                fsAudio: {
-                    type: 'array',
-                    description: 'List of objects specifying audio src and type for audio played when pausing study if study is not fullscreen',
-                    default: [],
-                    items: {
-                        type: 'object',
-                        properties: {
-                            'src': {
-                                type: 'string'
-                            },
-                            'type': {
-                                type: 'string'
-                            },
-                            'stub': {
-                                type: 'string'
-                            }
+                pauseText: {
+                    type: 'string',
+                    description: 'Text to show under Study paused when study is paused.',
+                    default: "(You'll have a moment to turn around again.)"
+                },
+                /**
+                 * Base directory for where to find stimuli. Any image src
+                 * values that are not full paths will be expanded by prefixing
+                 * with `baseDir` + `img/`. Any audio/video src values that give
+                 * a value for 'stub' rather than 'src' and 'type' will be
+                 * expanded out to
+                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
+                 * are given by audioTypes and videoTypes.
+                 *
+                 * Note that baseDir SHOULD include a trailing slash
+                 * (e.g., `http://stimuli.org/myexperiment/`, not
+                 * `http://stimuli.org/myexperiment`)
+                 *
+                 * @property {String} baseDir
+                 * @default ''
+                 */
+                baseDir: {
+                    type: 'string',
+                    default: '',
+                    description: 'Base directory for all stimuli'
+                },
+                /**
+                 * List of audio types to expect for any audio specified just
+                 * with a string rather than with a list of src/type pairs.
+                 * If audioTypes is ['typeA', 'typeB'] and an audio source
+                 * is given as [{'stub': 'intro'}], the audio source will be
+                 * expanded out to
+                 *
+```json
+                 [
+                        {
+                            src: 'baseDir' + 'typeA/intro.typeA',
+                            type: 'audio/typeA'
+                        },
+                        {
+                            src: 'baseDir' + 'typeB/intro.typeB',
+                            type: 'audio/typeB'
                         }
-                    }
+                ]
+```
+                 *
+                 * @property {String[]} audioTypes
+                 * @default ['mp3', 'ogg']
+                 */
+                audioTypes: {
+                    type: 'array',
+                    default: ['mp3', 'ogg'],
+                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
+                },
+                /**
+                 * List of video types to expect for any video specified just
+                 * with a string rather than with a list of src/type pairs.
+                 * If audioTypes is ['typeA', 'typeB'] and an video source
+                 * is given as [{'stub': 'intro'}], the video source will be
+                 * expanded out to
+                 *
+```json
+                 [
+                        {
+                            src: 'baseDir' + 'typeA/intro.typeA',
+                            type: 'audio/typeA'
+                        },
+                        {
+                            src: 'baseDir' + 'typeB/intro.typeB',
+                            type: 'audio/typeB'
+                        }
+                ]
+```
+                 *
+                 * @property {String[]} videoTypes
+                 * @default ['mp4', 'webm']
+                 */
+                videoTypes: {
+                    type: 'array',
+                    default: ['mp4', 'webm'],
+                    description: 'List of audio types to expect for any video sources specified as strings rather than lists of src/type pairs'
                 }
             }
         },
         data: {
+            type: 'object',
             /**
              * Parameters captured and sent to the server
              *
              * @method serializeContent
-             * @param {String} videoID The ID of any video recorded during this frame
-             * @param {Boolean} hasBeenPaused whether this trial was paused
-             * @param {Boolean} isCalibrationFrame whether this is a calibration frame (given as a property of the frame)
-             * @param {Boolean} allowPausingDuringTest whether the user can return to the test/calibration period after pausing (given as a property of the frame)
+             * @param {Array} videosShown Sources of videos (potentially) shown during this trial: [source of test video, source of alternate test video].
+             * @param {Object} eventTimings
+             * @param {String} videoID The ID of any webcam video recorded during this frame
              * @param {String} rightImage URL of image shown on right (given as a property of the frame)
              * @param {String} leftImage URL of image shown on left (given as a property of the frame)
              * @param {String} centerImage URL of image shown at center (given as a property of the frame)
-             * @param {Number} trialLength seconds to display images if this is a test trial (given as a property of the frame)
-             * @param {Number} calibrationLength s to display calibration video in each of four locations if this is a calibration trial (given as a property of the frame)
-             * @param {Object[]} testAudioSources Array of {src: 'url', type: 'MIMEtype'} objects for audio played during test trial (given as a property of the frame)
-             * @param {Object} eventTimings
+             * @param {Number} testLength seconds to display images/loop videos (given as a property of the frame), if using time-based limit
              * @return {Object} The payload sent to the server
              */
-            type: 'object',
             properties: {
+                videosShown: {
+                    type: 'string',
+                    default: []
+                },
                 videoId: {
                     type: 'string'
-                },
-                hasBeenPaused: {
-                    type: 'boolean'
-                },
-                isCalibrationFrame: {
-                    type: 'boolean'
-                },
-                allowPausingDuringTest: {
-                    type: 'boolean'
                 },
                 rightImage: {
                     type: 'string'
@@ -691,122 +625,214 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                 centerImage: {
                     type: 'string'
                 },
-                trialLength: {
-                    type: 'number'
-                },
-                testAudioSources: {
-                    type: 'object'
-                },
-                calibrationLength: {
+                testLength: {
                     type: 'number'
                 }
+            }
+            // No fields are required
+        }
+    },
+
+    videoSources: Ember.computed('isPaused', 'currentTask', 'useAlternate', function() {
+        if (this.get('isPaused')) {
+            return this.get('announcementVideo_parsed');
+        } else {
+            switch (this.get('currentTask')) {
+                case 'announce':
+                    return this.get('announcementVideo_parsed');
+                case 'intro':
+                    return this.get('introVideo_parsed');
+                case 'test':
+                    if (this.get('useAlternate')) {
+                        if (this.get('altTestVideo').length) {
+                            return this.get('altTestVideo_parsed');
+                        } else { // default to playing same test video again
+                            return this.get('sources_parsed');
+                        }
+                    } else {
+                        return this.get('testVideo_parsed');
+                    }
+            }
+        }
+        return [];
+    }),
+
+    shouldLoop: Ember.computed('videoSources', function() {
+        return (this.get('isPaused') || (this.get('currentTask') === 'announce' || this.get('currentTask') === 'test'));
+    }),
+
+    onFullscreen() {
+        if (this.get('isDestroyed')) {
+            return;
+        }
+        this._super(...arguments);
+        if (!this.checkFullscreen()) {
+            if (!this.get('isPaused')) {
+                this.pauseStudy();
             }
         }
     },
 
-    calObserver: Ember.observer('readyToStartCalibration', function(frame) {
-        if (frame.get('readyToStartCalibration') && frame.get('currentSegment') === 'intro') {
+    actions: {
 
-            if (!this.get('skipTest')) {
-                frame.set('currentSegment', 'test');
-                frame.startTrial();
+        announcementEnded() {
+            this.set('completedAnnouncementAudio', true);
+            if (this.get('completedAnnouncementTime')) {
+                this.set('currentTask', 'intro');
+            }
+        },
+
+        announcementStarted() { // make sure that audio complete flag is reset when starting -
+        // mysteriously set to true when starting, possibly due to reloading counting as
+        // ended event
+            this.set('completedAnnouncementAudio', false);
+        },
+
+        videoStarted() {
+            if (this.get('currentTask') === 'test' && !this.get('isPaused')) {
+                if (this.get('useStaticTestStimuli')) {
+                    this.setTestTimer();
+                    if ($('audio#exp-music').length) {
+                        this.playAudio($('audio#exp-music')[0]);
+                    }
+
+                } else {
+                    // Check that we haven't played it enough times already
+                    this.set('testVideosTimesPlayed', this.get('testVideosTimesPlayed') + 1);
+                    if ((this.get('testVideosTimesPlayed') > this.get('testCount')) && (this.get('testLength') === Infinity)) {
+                        this.send('finish');
+                    } else {
+                        if (this.get('testTime') === 0) {
+                            this.setTestTimer();
+                        }
+                        if ($('audio#exp-music').length) {
+                            this.playAudio($('audio#exp-music')[0]);
+                        }
+                        if (this.get('useAlternate')) {
+                            this.send('setTimeEvent', 'startAlternateVideo');
+                        } else {
+                            this.send('setTimeEvent', 'startTestVideo');
+                        }
+                    }
+                }
+            }
+        },
+
+        videoStopped() {
+            var currentTask = this.get('currentTask');
+            if (this.get('testTime') >= this.get('testLength')) {
+                this.send('finish');
+            } else if (this.get('shouldLoop')) {
+                this.set('_lastTime', 0);
+                this.$('#player-video')[0].play();
             } else {
-                frame.endTrial();
+                this.send('setTimeEvent', 'videoStopped', {
+                    currentTask
+                });
+                if (this.get('currentTask') === 'intro') {
+                    this.set('currentTask', 'calibration');
+                }
+            }
+        },
+
+        finish() { // Move to next frame altogether
+        // Call this something separate from test because stopRecorder promise needs to
+        // call next AFTER recording is stopped and we don't want this to have already
+        // been destroyed at that point.
+            window.clearInterval(this.get('testTimer'));
+            window.clearInterval(this.get('announceTimer'));
+            window.clearInterval(this.get('calTimer'));
+            this.set('testTime', 0);
+            this.set('testVideosTimesPlayed', 0);
+            this.set('completedAnnouncementAudio', false);
+            this.set('completedAnnouncementTime', false);
+            if ($('audio#exp-music').length) {
+                $('audio#exp-music')[0].pause();
+            }
+            var _this = this;
+            if (this.get('doRecording')) {
+                this.stopRecorder().then(() => {
+                    _this.set('stoppedRecording', true);
+                    _this.send('next');
+                    return;
+                }, () => {
+                    _this.send('next');
+                    return;
+                });
+            } else {
+                _this.send('next');
+            }
+        }
+    },
+
+    segmentObserver: Ember.observer('currentTask', function(frame) {
+        if (frame.get('currentTask') === 'announce') {
+            frame.startAnnouncement();
+        } else if (frame.get('currentTask') === 'intro') {
+            frame.startIntro();
+        } else if (frame.get('currentTask') === 'calibration') {
+            frame.startCalibration();
+        } else if (frame.get('currentTask') === 'test') {
+            // Skip test phase if no videos or images provided
+            if (!frame.get('testVideo').length) {
+                if (!frame.get('leftImage') && !frame.get('rightImage') && !frame.get('centerImage')) {
+                    frame.send('finish');
+                } else {
+                    frame.set('useStaticTestStimuli', true);
+                    $('#allstimuli').show();
+                    frame.send('videoStarted');
+                }
             }
         }
     }),
 
-    actions: {
+    startAnnouncement() {
+        window.clearInterval(this.get('announceTimer'));
 
-        // When intro audio is complete
-        completedIntroAudio() {
-            this.set('completedAudio', true);
-            this.notifyPropertyChange('readyToStartCalibration');
-        },
-
-        next() {
-            this.stopRecorder();
-            this._super(...arguments);
+        // Skip if no announcement audio provided
+        if (!this.get('isPaused') && !this.get('announcementAudio').length && this.get('announcementLength') === 0) {
+            this.startIntro();
+            return;
         }
-
-    },
-
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
-    // Updates this['propertyName'] based on the appropriate type, which should
-    // be 'audio', 'video', or 'image'.
-    expandAsset(propertyName, type) {
-
-        if (this.hasOwnProperty(propertyName)) {
-
-            var asset = this[propertyName];
-            var fullAsset = asset;
-            var _this = this;
-
-            if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
-                // Image: replace stub with full URL if needed
-                fullAsset = this.baseDir + 'img/' + asset;
-            } else if (type === 'audio' || type === 'video') {
-                // Audio/video: replace any source objects that have a
-                // 'stub' attribute with the appropriate expanded source
-                // objects
-                fullAsset = [];
-
-                var types = [];
-                if (type === 'audio') {
-                    types = this.audioTypes;
-                } else {
-                    types = this.videoTypes;
+        if (!this.get('announcementAudio').length) { // Audio counts as complete if none provided
+            this.set('completedAnnouncementAudio', true);
+        }
+        this.send('setTimeEvent', 'startAnnouncement');
+        // Actual starting audio is handled by autoplay on the template.
+        var _this = this; // Require at least announcementLength duration of announcement phase
+        this.set('announceTimer', window.setTimeout(function() {
+                _this.set('completedAnnouncementTime', true);
+                if (_this.get('completedAnnouncementAudio')) {
+                    _this.set('currentTask', 'intro');
                 }
-
-                asset.forEach(function(srcObj) {
-                    if (srcObj.hasOwnProperty('stub')) {
-                        for (var iType = 0; iType < types.length; iType++) {
-                            fullAsset.push({
-                                src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
-                                type: type + '/' + types[iType]
-                            });
-                        }
-                    } else {
-                        fullAsset.push(srcObj);
-                    }
-                });
-            }
-
-            this.set(propertyName + '_parsed', fullAsset);
-
-        }
+            }, _this.get('announcementLength') * 1000));
     },
 
     startIntro() {
-
-        var _this = this;
-
-        /**
-         * Just before starting intro segment
-         *
-         * @event startIntro
-         */
-        _this.send('setTimeEvent', 'startIntro');
-        $('#player-video')[0].play();
-
-        // Set a timer for the minimum length for the intro/break
-        $('#player-audio')[0].currentTime = 0;
-        $('#player-audio')[0].play();
-
-        _this.set('introTimer', window.setTimeout(function() {
-            _this.set('completedAttn', true);
-            _this.notifyPropertyChange('readyToStartCalibration');
-        }, _this.get('attnLength') * 1000));
-
+        if (this.get('skip')) { // If we need to skip because both test & alternate have been used
+            this.send('finish');
+            return;
+        }
+        if (!this.get('isPaused')) {
+            this.send('setTimeEvent', 'startIntro');
+            // If no intro video provided, skip intro.
+            if (!this.get('introVideo').length) {
+                this.set('currentTask', 'calibration');
+            }
+        }
     },
 
     startCalibration() {
         var _this = this;
 
+        // First check whether any calibration video provided. If not, skip.
+        if (!this.get('calibrationLength')) {
+            this.set('currentTask', 'test');
+            return;
+        }
+
         var calAudio = $('#player-calibration-audio')[0];
         var calVideo = $('#player-calibration-video')[0];
-
         $('#player-calibration-video').show();
 
         // Show the calibration segment at center, left, right, center, each
@@ -814,7 +840,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
         var doCalibrationSegments = function(calList, lastLoc) {
             if (calList.length === 0) {
                 $('#player-calibration-video').hide();
-                _this.endTrial();
+                _this.set('currentTask', 'test');
             } else {
                 var thisLoc = calList.shift();
                 /**
@@ -825,205 +851,242 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
                  */
                 _this.send('setTimeEvent', 'startCalibration',
                     {location: thisLoc});
-                calAudio.pause();
-                calAudio.currentTime = 0;
-                calAudio.play();
+                _this.playAudio(calAudio);
+
+                $('#player-calibration-video').removeClass(lastLoc);
+                $('#player-calibration-video').addClass(thisLoc);
                 calVideo.pause();
                 calVideo.currentTime = 0;
                 calVideo.play();
-                $('#player-calibration-video').removeClass(lastLoc);
-                $('#player-calibration-video').addClass(thisLoc);
                 _this.set('calTimer', window.setTimeout(function() {
                     doCalibrationSegments(calList, thisLoc);
-                }, 1000 * _this.get('calibrationLength')));
+                }, _this.get('calibrationLength')));
             }
         };
 
-        $('#player-calibration-video').removeClass('left right');
-        $('#player-calibration-video').addClass('center');
-        doCalibrationSegments(['center', 'left', 'right', 'center'], '');
+        doCalibrationSegments(this.get('calibrationPositions').slice(), '');
 
     },
 
-    startTrial() {
-
+    setTestTimer() {
+        window.clearInterval(this.get('testTimer'));
+        this.set('testTime', 0);
+        this.set('_lastTime', 0);
         var _this = this;
 
-        _this.send('setTimeEvent', 'startTestTrial');
+        var testLength = this.get('testLength');
 
-        if (_this.get('isCalibrationFrame')) { // Calibration frame
-            _this.set('currentSegment', 'calibration');
-            _this.startCalibration();
-        } else { // Regular static image preferential looking frame
-            $('#allstimuli').show();
-            _this.set('currentSegment', 'test');
-
-            var $audioPlayer = $('#player-test-audio');
-            $audioPlayer[0].currentTime = 0;
-            $audioPlayer[0].play();
-
-            // Now presenting stimuli; stop after trial length.
-            _this.set('stimTimer', window.setTimeout(function() {
-                    window.clearTimeout(_this.get('stimTimer'));
-                    $audioPlayer[0].pause();
-                    $('#allstimuli').hide();
-                    _this.endTrial();
-                }, _this.trialLength * 1000));
-        }
-    },
-
-    // When stimuli have been shown for time indicated: play end-audio if
-    // present, or just move on.
-    endTrial() {
-        // Don't allow pausing anymore
-        $(document).off('keyup.pauser');
-        this.stopRecorder();
-        if (this.get('endAudioSources').length) {
-            this.set('currentSegment', 'finalaudio');
-            $('#player-endaudio')[0].play();
+        if (this.get('useStaticTestStimuli')) {
+            this.set('testTimer', window.setTimeout(() => {
+                _this.send('finish');
+            }, testLength * 1000));
         } else {
-            this.send('next');
+            this.set('testTimer', window.setInterval(() => {
+                var videoTime = this.$('#player-video')[0].currentTime;
+                var lastTime = this.get('_lastTime');
+                var diff = videoTime - lastTime;
+                this.set('_lastTime', videoTime);
+
+                var testTime = this.get('testTime');
+                if ((testTime + diff) >= (testLength - 0.02)) {
+                    this.send('finish');
+                } else {
+                    this.set('testTime', testTime + diff);
+                }
+            }, 100));
         }
     },
 
-    onFullscreen() {
-        if (this.get('isDestroyed')) {
-            return;
-        }
-        this._super(...arguments);
-        if (!this.checkFullscreen()) {
-            if (!(this.get('isPaused')) && (this.get('currentSegment') !== 'finalaudio')) {
-                this.pauseStudy();
-            }
-        }
-    },
-
-    handleSpace(event, frame) {
-        // Only pause/unpause on space if study is fullscreen (or not currently paused)
-        if (frame.checkFullscreen() || !frame.isPaused) {
-            if (event.which === 32) { // space
-                frame.pauseStudy();
-            }
-        }
-    },
-
-    // Pause/unpause study.
-    pauseStudy() {
-
+    pauseStudy(pause) { // only called in FS mode
         Ember.run.once(this, () => {
-            // Only "count" as pausing if outside of intro segment
-            if (!this.get('allowPausingDuringTest') && (this.get('currentSegment') !== 'intro')) {
-                this.set('skipTest', true);
+            try {
+                this.set('hasBeenPaused', true);
+            } catch (_) {
+                return;
             }
-
-            this.set('hasBeenPaused', true);
             var wasPaused = this.get('isPaused');
+            var currentState = this.get('currentTask');
 
-            if (wasPaused) { // Currently paused: RESUME
-                $('#player-pause-audio, #player-pause-audio-leftfs').each(function() {
-                    this.pause();
-                    this.currentTime = 0;
-                });
+            if (!pause && wasPaused) { // Currently paused: restart
+                //this.hideRecorder();
+                this.set('isPaused', false);
+                // reset announcement to start
+
+                if (currentState === 'test') {
+                    if (this.get('allowPauseDuringTest')) {
+                        if (this.get('useAlternate')) {
+                            this.set('skip', true);
+                        }
+                        this.set('useAlternate', true);
+                    } else {
+                        this.set('skip', true);
+                    }
+
+                }
+                if (this.get('currentTask') === 'announce') {
+                    // if task isn't changing, won't trigger announcement start naturally
+                    this.segmentObserver(this);
+                }
+                this.set('currentTask', 'announce');
 
                 try {
                     this.resumeRecorder();
                 } catch (_) {
                     return;
                 }
-                this.set('isPaused', false);
-                this.startIntro();
-
-            } else { // Not currently paused: PAUSE
-
-                this.set('previousSegment', this.get('currentSegment'));
-                this.set('currentSegment', 'intro');
-
-                $('audio, video:not(#player-video)').each(function() {
-                    this.pause();
-                    this.currentTime = 0;
+            } else if (pause || !wasPaused) { // Not currently paused: pause
+                //this.showRecorder();
+                window.clearInterval(this.get('testTimer'));
+                window.clearInterval(this.get('announceTimer'));
+                window.clearInterval(this.get('calTimer'));
+                this.set('completedAnnouncementAudio', false);
+                this.set('completedAnnouncementTime', false);
+                this.set('testTime', 0);
+                this.set('testVideosTimesPlayed', 0);
+                this.send('setTimeEvent', 'pauseVideo', {
+                    currentTask: this.get('currentTask')
                 });
-
-                $('#allstimuli').hide();
-                $('#player-calibration-video').hide();
-
-                this.set('completedAudio', false);
-                this.set('completedAttn', false);
-
-                window.clearTimeout(this.get('introTimer'));
-                window.clearTimeout(this.get('stimTimer'));
-                window.clearTimeout(this.get('calTimer'));
-
                 this.pauseRecorder(true);
-
-                if (this.checkFullscreen()) {
-                    $('#player-pause-audio')[0].play();
-                } else {
-                    $('#player-pause-audio-leftfs')[0].play();
+                $('#player-calibration-video').removeClass(this.get('calibrationPositions').join(' '));
+                $('#player-calibration-video').hide();
+                if ($('audio#exp-music').length) {
+                    $('audio#exp-music')[0].pause();
+                    $('audio#exp-music')[0].currentTime = 0;
                 }
+                $('#allstimuli').hide();
                 this.set('isPaused', true);
             }
         });
+    },
 
+    // Utility to play audio object and avoid failing to actually trigger play for
+    // dumb browser reasons / race conditions
+    playAudio(audioObj) {
+        //audioObj.pause();
+        audioObj.currentTime = 0;
+        audioObj.play().then( _ => {
+        }).catch(error => {
+            audioObj.play();
+            }
+        );
+    },
+
+    // Utility to expand stubs into either full URLs (for images) or
+    // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
+    expandAsset(asset, type) {
+        var fullAsset = asset;
+        var _this = this;
+
+        if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
+            // Image: replace stub with full URL if needed
+            fullAsset = this.baseDir + 'img/' + asset;
+        } else {
+            if (type === 'audio') {
+                var types = this.audioTypes;
+            } else if (type === 'video') {
+                var types = this.videoTypes;
+            }
+            // Replace any source objects that have a
+            // 'stub' attribute with the appropriate expanded source
+            // objects
+            fullAsset = [];
+            asset.forEach(function(srcObj) {
+                if (srcObj.hasOwnProperty('stub')) {
+                    for (var iType = 0; iType < types.length; iType++) {
+                        fullAsset.push({
+                            src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
+                            type: type + '/' + types[iType]
+                        });
+                    }
+                } else {
+                    fullAsset.push(srcObj);
+                }
+            });
+        }
+        return fullAsset;
     },
 
     didInsertElement() {
         this._super(...arguments);
 
-        // Expand any stubs given for image, audio, or video sources, based on
-        // baseDir and audioTypes/videoTypes.
+        // Expand any audio/video src stubs
+        var audSrcParameterNames = [
+            "announcementAudio",
+            "testAudio",
+            "calibrationAudio",
+            "pauseAudio",
+            "unpauseAudio"
+        ];
+        var vidSrcParameterNames = [
+            "testVideo",
+            "altTestVideo",
+            "introVideo",
+            "announcementVideo",
+            "calibrationVideo"
+        ];
+        var imgSrcParameterNames = [
+            'leftImage',
+            'rightImage',
+            'centerImage'
+        ];
+
         var _this = this;
-        ['rightImage', 'leftImage', 'centerImage'].forEach(function(prop) {
-            _this.expandAsset(prop, 'image');
+        audSrcParameterNames.forEach((paraName) => {
+            var sources = _this.get(paraName);
+            if (sources) {
+                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'audio'));
+            }
+        });
+        vidSrcParameterNames.forEach((paraName) => {
+            var sources = _this.get(paraName);
+            if (sources) {
+                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'video'));
+            }
+        });
+        imgSrcParameterNames.forEach((paraName) => {
+            var sources = _this.get(paraName);
+            if (sources) {
+                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'image'));
+            }
         });
 
-        ['testAudioSources',
-         'introAudioSources',
-         'endAudioSources',
-         'calibrationAudioSources',
-         'pauseAudio',
-         'unpauseAudio',
-         'fsAudio'].forEach(function(prop) {
-            _this.expandAsset(prop, 'audio');
+
+        $(document).on('keyup.pauser', (e) => {
+            if (this.checkFullscreen()) {
+                if (e.which === 32) { // space: pause/unpause study
+                    this.pauseStudy();
+                }
+            }
         });
 
-        ['calibrationVideoSources',
-         'videoSources'].forEach(function(prop) {
-            _this.expandAsset(prop, 'video');
-        });
-
-        // Begin frame. Actual test trial will start once recording is ready.
         this.send('showFullscreen');
-        $(document).on('keyup.pauser', function(e) {_this.handleSpace(e, _this);});
-        this.startIntro();
-
-        if (this.get('experiment') && this.get('id') && this.get('session')) {
-            const installPromise = this.setupRecorder(this.$('#videoRecorder'), true, {
-                hidden: true
-            });
-            installPromise.then(() => {
-                /**
-                 * When video recorder has been installed
-                 *
-                 * @event recorderReady
-                 */
-                this.send('setTimeEvent', 'recorderReady');
-            });
+        if (this.get('testVideo').length) {
+            this.set('videosShown', [this.get('testVideo')[0].src, this.get('altTestVideo')[0].src]);
+        } else {
+            this.set('videosShown', []);
         }
+        this.set('currentTask', 'announce');
+        this.segmentObserver(this);
     },
 
-    willDestroyElement() {
-        this.send('setTimeEvent', 'destroyingElement');
-
-        // Whenever the component is destroyed, make sure that event handlers are removed and video recorder is stopped
-        const recorder = this.get('recorder');
-        if (recorder) {
-            recorder.hide(); // Hide the webcam config screen
-            this.stopRecorder();
+    /**
+     * Observer that starts recording once recorder is ready. Override to do additional
+     * stuff at this point!
+     * @method whenPossibleToRecord
+     */
+    whenPossibleToRecord: function() {
+        if (this.get('doRecording')) {
+            var _this = this;
+            if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+                this.startRecorder().then(() => {
+                    _this.set('recorderReady', false);
+                });
+            }
         }
-        // Remove pause handler
-        $(document).off('keyup.pauser');
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
+    willDestroyElement() { // remove event handler
+        $(document).off('keyup.pauser');
         this._super(...arguments);
     }
-
 });

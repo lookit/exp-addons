@@ -1,6 +1,9 @@
 $exp-lookit-preferential-looking-AR: 2;
 $exp-lookit-preferential-looking-picwidth: 30;
 $exp-lookit-preferential-looking-picmargin: 2;
+$exp-pref-look-cal-width: 12%;
+$exp-pref-look-left-rect: 18.75%;
+$exp-pref-look-right-rect: 81.25%;
 
 .exp-lookit-preferential-looking #allstimuli, #experiment-player.player-fullscreen .exp-lookit-preferential-looking #allstimuli{
     overflow:hidden;
@@ -20,10 +23,23 @@ $exp-lookit-preferential-looking-picmargin: 2;
     padding:0;
 }
 
-.exp-lookit-preferential-looking video.attn {
+.exp-lookit-preferential-looking video {
     margin:auto;
+}
+
+.exp-lookit-preferential-looking video.intro {
+    max-height: 50%;
+}
+
+.exp-lookit-preferential-looking video.test:not(.attn) {
+    max-height:80%;
+    width:100%;
+}
+
+.exp-lookit-preferential-looking video.attn {
     max-height: 30%;
 }
+
 
 .exp-lookit-preferential-looking .pause-instructions {
     display: block;
@@ -35,7 +51,7 @@ $exp-lookit-preferential-looking-picmargin: 2;
     font-weight: bold;
 }
 
-.exp-lookit-preferential-looking button {
+.exp-lookit-preferential-looking #fsButton, .exp-lookit-preferential-looking #nextbutton {
     margin-left: auto;
     margin-right: auto;
     min-height: 75px;
@@ -43,37 +59,12 @@ $exp-lookit-preferential-looking-picmargin: 2;
     position: relative;
     display: block;
     font-size: 2em;
-    padding: 10px;
-    height: 10%;
-    width: 30%;
-}
-
-.exp-lookit-preferential-looking #player-calibration-video {
-    width: $exp-alternation-cal-width;
-    max-height: 300px;
-    position: absolute;
-    margin: auto;
-    top: 0; left: 0; bottom: 0; right: 0;
-}
-
-.exp-lookit-preferential-looking #player-calibration-video.center {
-    margin-left: 50% - $exp-alternation-cal-width/2;
-}
-
-.exp-lookit-preferential-looking #player-calibration-video.left {
-    margin-left: $exp-alternation-left-rect - $exp-alternation-cal-width/2;
-}
-
-.exp-lookit-preferential-looking #player-calibration-video.right {
-    margin-left: $exp-alternation-right-rect - $exp-alternation-cal-width/2;
 }
 
 #experiment-player:not(.player-fullscreen) .exp-lookit-preferential-looking video {
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
     width: 50%;
-    max-width: 250px;
     position: relative;
     display: block;
 }
@@ -94,24 +85,57 @@ $exp-lookit-preferential-looking-picmargin: 2;
 
 .exp-lookit-preferential-looking #left-container {
     @include pic-container($exp-lookit-preferential-looking-picmargin * 1%);
-    //border: thin solid blue;
 }
 
 .exp-lookit-preferential-looking #right-container {
     @include pic-container((100 - $exp-lookit-preferential-looking-picmargin - $exp-lookit-preferential-looking-picwidth) * 1%);
-    //border: thin solid red;
 }
 
 .exp-lookit-preferential-looking #center-container {
     @include pic-container(((100 - $exp-lookit-preferential-looking-picwidth) / 2) * 1%);
-    //border: thin solid green;
 }
 
 .exp-lookit-preferential-looking img.stim-image {
-    //border: thin solid red;
     max-width: 100%;
     max-height: 100%;
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-lookit-preferential-looking .recorder-container {
+	width:100%;
+	height:50vh;
+	margin: 0px;
+}
+
+.exp-lookit-preferential-looking .recorder {
+	padding: 0px;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	background-color: #ccc;
+	width: 110%;
+	height:100%;
+	min-width:350px;
+	margin-left:-10%;
+}
+
+.exp-lookit-preferential-looking #player-calibration-video {
+    width: $exp-pref-look-cal-width;
+    max-height: 300px;
+    position: absolute;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.exp-lookit-preferential-looking #player-calibration-video.center {
+    margin-left: 50% - $exp-pref-look-cal-width/2;
+}
+
+.exp-lookit-preferential-looking #player-calibration-video.left {
+    margin-left: $exp-pref-look-left-rect - $exp-pref-look-cal-width/2;
+}
+
+.exp-lookit-preferential-looking #player-calibration-video.right {
+    margin-left: $exp-pref-look-right-rect - $exp-pref-look-cal-width/2;
 }
