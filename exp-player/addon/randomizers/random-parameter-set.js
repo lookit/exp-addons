@@ -339,15 +339,16 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      * @property {Number[]} parameterSetWeights
      */
 
-
-
     function replaceValues(obj, rep) {
         for (var property in obj) {
             if (obj.hasOwnProperty(property)) {
-                if (typeof obj[property] === 'object') {
+                if (typeof obj[property] === 'object') { // recursively handle objects
                     obj[property] = replaceValues(obj[property], rep);
-                    // TODO: also allow lists
-                } else {
+                } else if (Array.isArray(obj[property])) { // and lists
+                    for (var iElement=0; iElement < obj[property].length; iElement++) {
+                        obj[property][iElement] = replaceValues(obj[property][iElement], rep);
+                    }
+                } else if (typeof obj[property] === 'string') { // do substitution for strings
                     // If rep has this exact property, just sub in that value
                     if (rep.hasOwnProperty(obj[property])) {
                         obj[property] = rep[obj[property]];
