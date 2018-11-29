@@ -15,7 +15,8 @@ let {
  */
 
 /**
- * Deprecated: not yet adapted for use with webrtc recorder.
+ * Deprecated: not yet adapted for use with webrtc recorder. Currently kept in codebase
+ * as an example of generating & drawing stimuli on the fly, but can be safely removed.
  *
  * Frame to implement specific test trial structure for geometry alternation
  * experiment. Includes announcement, calibration, and alternation (test)
