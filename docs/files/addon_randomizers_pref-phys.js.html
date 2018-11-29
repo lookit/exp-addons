@@ -46,22 +46,16 @@
                                 <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                                 <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                                 <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpLookitVideoConsent.html">ExpLookitVideoConsent</a></li>
-                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
-                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
-                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
                                 <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
                                 <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
                                 <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
-                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
                                 <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
@@ -1670,47 +1664,55 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
 
     var nVideos = eventVideos.length;
     return eventVideos.map((e) =&gt; {
-        if (e.index === nVideos) {
+        if (e.index === nVideos) { // last frame
             return {
-                kind: &#x27;exp-video-physics&#x27;,
+                kind: &#x27;exp-lookit-video&#x27;,
                 id: &#x60;${frameId}&#x60;,
-                autoplay: true,
-                isLast: true,
                 audioSources: audioSourceObjs(
                     BASE_DIR + &#x27;audio/&#x27;,
                     &#x27;all_done&#x27;),
                 attnSources: videoSourceObjs(
                     BASE_DIR + &#x27;stimuli/attention/&#x27;,
                     &#x27;attentiongrabber&#x27;, true),
+                announceLength: 0, // no minimum announcement length
+                calibrationLength: 0, // no separate calibration phase
+                doRecording: false,
+                pauseAudio: audioSourceObjs(BASE_DIR + &#x27;audio/&#x27;, &quot;pause&quot;),
+                unpauseAudio:  audioSourceObjs(BASE_DIR + &#x27;audio/&#x27;, &quot;return_after_pause&quot;),
+                pauseText: &quot;(You&#x27;ll have a moment to turn around again.)&quot;
             };
         }
         var allMusic = [&#x27;music_01&#x27;, &#x27;music_02&#x27;, &#x27;music_03&#x27;, &#x27;music_04&#x27;, &#x27;music_06&#x27;, &#x27;music_07&#x27;, &#x27;music_09&#x27;, &#x27;music_10&#x27;];
         var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
-        return {
-            kind: &#x27;exp-video-physics&#x27;,
+        return { // all non-last frames
+            kind: &#x27;exp-lookit-video&#x27;,
             id: &#x60;${frameId}&#x60;,
-            autoplay: true,
-            testLength: 24, // length of test trial in seconds
-            isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + &#x27;audio/&#x27;,
                 &#x27;video_&#x27; + (&#x27;00&#x27; + (e.index)).slice(-2)),
-            musicSources: audioSourceObjs(
-                BASE_DIR + &#x27;audio/&#x27;,
-                musicName),
-            introSources: videoSourceObjs(
-                BASE_DIR + &#x27;stimuli/intro/&#x27;,
-                &#x60;cropped_${e.object}&#x60;, true),
             attnSources: videoSourceObjs(
                 BASE_DIR + &#x27;stimuli/attention/&#x27;,
                 &#x27;attentiongrabber&#x27;, true),
+            announceLength: 0, // no minimum announcement length
+            introSources: videoSourceObjs(
+                BASE_DIR + &#x27;stimuli/intro/&#x27;,
+                &#x60;cropped_${e.object}&#x60;, true),
+            calibrationLength: 0, // no separate calibration phase
+            musicSources: audioSourceObjs(
+                BASE_DIR + &#x27;audio/&#x27;,
+                musicName),
             sources: videoSourceObjs(
 		BASE_DIR + &#x27;stimuli/&#x27; + e.compType + &#x27;/&#x27;,
 		e.fname, true),
             altSources: videoSourceObjs(
                 BASE_DIR + &#x27;stimuli/&#x27; + e.compType + &#x27;/&#x27;,
-                e.altName, true)
+                e.altName, true),
+            testLength: 24, // length of test trial in seconds
+            doRecording: true,
+            pauseAudio: audioSourceObjs(BASE_DIR + &#x27;audio/&#x27;, &quot;pause&quot;),
+            unpauseAudio:  audioSourceObjs(BASE_DIR + &#x27;audio/&#x27;, &quot;return_after_pause&quot;),
+            pauseText: &quot;(You&#x27;ll have a moment to turn around again.)&quot;
         };
     });
 }
