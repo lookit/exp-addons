@@ -46,22 +46,16 @@
                                 <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                                 <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                                 <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpLookitVideoConsent.html">ExpLookitVideoConsent</a></li>
-                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
-                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
-                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
                                 <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
                                 <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
                                 <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
-                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
                                 <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
@@ -122,6 +116,7 @@ import Em from &#x27;ember&#x27;;
 import layout from &#x27;./template&#x27;;
 
 import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
+import ExpLookitVideoConsent from &#x27;../../components/exp-lookit-video-consent/component&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
 
 /**
@@ -130,7 +125,10 @@ import VideoRecord from &#x27;../../mixins/video-record&#x27;;
  */
 
 /**
-Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. Example of MIT consent form, as of 2/28/2017:
+Video consent frame for Lookit studies UNDER INITIAL MIT PROTOCOL ONLY, with consent document displayed at left and instructions to start recording, read a statement out loud, and send.
+This version allows custom specification of consent form text.
+For studies by researchers who have signed the Lookit Usage Agreement and have approval from their own IRB, please use exp-lookit-video-consent frame.
+Consent document can be downloaded as PDF document by participant.
 
 &#x60;&#x60;&#x60;json
 &quot;frames&quot;: {
@@ -153,7 +151,7 @@ Video consent frame for Lookit studies, with consent document displayed at left 
                 &quot;title&quot;: &quot;Use of data&quot;
             },
             {
-                &quot;text&quot;: &quot;If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: lschulz@mit.edu or (617) 324-4859.&quot;,
+                &quot;text&quot;: &quot;If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: {contact}&quot;,
                 &quot;title&quot;: &quot;Contact information&quot;
             }
         ],
@@ -165,37 +163,13 @@ Video consent frame for Lookit studies, with consent document displayed at left 
 &#x60;&#x60;&#x60;
 
 @class ExpVideoConsent
-@extends ExpFrameBase
+@extends ExpLookitVideoConsent
 
 @uses VideoRecord
 */
 
-export default ExpFrameBaseComponent.extend(VideoRecord, {
+export default ExpLookitVideoConsent.extend(VideoRecord, {
     layout,
-    disableRecord: Em.computed(&#x27;recorder.recording&#x27;, &#x27;recorder.hasCamAccess&#x27;, function () {
-        return !this.get(&#x27;recorder.hasCamAccess&#x27;) || this.get(&#x27;recorder.recording&#x27;);
-    }),
-    startedRecording: false,
-
-    actions: {
-        record() {
-            this.startRecorder().then(() =&gt; {
-                this.set(&#x27;startedRecording&#x27;, true);
-                // Require at least 3 s recording
-                setTimeout(function() {
-                    $(&#x27;#submitbutton&#x27;).prop(&#x27;disabled&#x27;, false);
-                }, 3000);
-            });
-        },
-        finish() {
-            if (!this.get(&#x27;stoppedRecording&#x27;)) {
-                this.stopRecorder().then(() =&gt; {
-                    this.set(&#x27;stoppedRecording&#x27;, true);
-                    this.send(&#x27;next&#x27;);
-                });
-            }
-        }
-    },
 
     meta: {
         name: &#x27;Video Consent Form&#x27;,
@@ -261,6 +235,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              * Parameters captured and sent to the server
              *
              * @method serializeContent
+             * @param {String} consentFormText the exact text shown in the consent document during this frame
              * @param {String} videoID The ID of any webcam video recorded during this frame
              * @param {List} videoList a list of webcam video IDs in case there are &gt;1
              * @param {Object} eventTimings
@@ -273,6 +248,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 },
                 videoList: {
                     type: &#x27;list&#x27;
+                },
+                consentFormText: {
+                    type: &#x27;string&#x27;
                 }
             },
             required: [&#x27;videoId&#x27;]

@@ -1550,47 +1550,55 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
 
     var nVideos = eventVideos.length;
     return eventVideos.map((e) => {
-        if (e.index === nVideos) {
+        if (e.index === nVideos) { // last frame
             return {
-                kind: 'exp-video-physics',
+                kind: 'exp-lookit-video',
                 id: `${frameId}`,
-                autoplay: true,
-                isLast: true,
                 audioSources: audioSourceObjs(
                     BASE_DIR + 'audio/',
                     'all_done'),
                 attnSources: videoSourceObjs(
                     BASE_DIR + 'stimuli/attention/',
                     'attentiongrabber', true),
+                announceLength: 0, // no minimum announcement length
+                calibrationLength: 0, // no separate calibration phase
+                doRecording: false,
+                pauseAudio: audioSourceObjs(BASE_DIR + 'audio/', "pause"),
+                unpauseAudio:  audioSourceObjs(BASE_DIR + 'audio/', "return_after_pause"),
+                pauseText: "(You'll have a moment to turn around again.)"
             };
         }
         var allMusic = ['music_01', 'music_02', 'music_03', 'music_04', 'music_06', 'music_07', 'music_09', 'music_10'];
         var musicName = allMusic[Math.floor(Math.random() * allMusic.length)];
 
-        return {
-            kind: 'exp-video-physics',
+        return { // all non-last frames
+            kind: 'exp-lookit-video',
             id: `${frameId}`,
-            autoplay: true,
-            testLength: 24, // length of test trial in seconds
-            isLast: false,
             audioSources: audioSourceObjs(
                 BASE_DIR + 'audio/',
                 'video_' + ('00' + (e.index)).slice(-2)),
-            musicSources: audioSourceObjs(
-                BASE_DIR + 'audio/',
-                musicName),
-            introSources: videoSourceObjs(
-                BASE_DIR + 'stimuli/intro/',
-                `cropped_${e.object}`, true),
             attnSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/attention/',
                 'attentiongrabber', true),
+            announceLength: 0, // no minimum announcement length
+            introSources: videoSourceObjs(
+                BASE_DIR + 'stimuli/intro/',
+                `cropped_${e.object}`, true),
+            calibrationLength: 0, // no separate calibration phase
+            musicSources: audioSourceObjs(
+                BASE_DIR + 'audio/',
+                musicName),
             sources: videoSourceObjs(
 		BASE_DIR + 'stimuli/' + e.compType + '/',
 		e.fname, true),
             altSources: videoSourceObjs(
                 BASE_DIR + 'stimuli/' + e.compType + '/',
-                e.altName, true)
+                e.altName, true),
+            testLength: 24, // length of test trial in seconds
+            doRecording: true,
+            pauseAudio: audioSourceObjs(BASE_DIR + 'audio/', "pause"),
+            unpauseAudio:  audioSourceObjs(BASE_DIR + 'audio/', "return_after_pause"),
+            pauseText: "(You'll have a moment to turn around again.)"
         };
     });
 }

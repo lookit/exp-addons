@@ -46,22 +46,16 @@
                                 <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                                 <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                                 <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                                 <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                                 <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
                                 <li><a href="../classes/ExpLookitText.html">ExpLookitText</a></li>
                                 <li><a href="../classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
                                 <li><a href="../classes/ExpLookitVideoConsent.html">ExpLookitVideoConsent</a></li>
-                                <li><a href="../classes/ExpMoodQuestionnaire.html">ExpMoodQuestionnaire</a></li>
-                                <li><a href="../classes/ExpPhysicsIntro.html">ExpPhysicsIntro</a></li>
-                                <li><a href="../classes/ExpPhysicsPreVideo.html">ExpPhysicsPreVideo</a></li>
-                                <li><a href="../classes/ExpPhysicsPreviewExplanation.html">ExpPhysicsPreviewExplanation</a></li>
                                 <li><a href="../classes/ExpPlayer.html">ExpPlayer</a></li>
                                 <li><a href="../classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
                                 <li><a href="../classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
                                 <li><a href="../classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
-                                <li><a href="../classes/ExpVideoPhysics.html">ExpVideoPhysics</a></li>
                                 <li><a href="../classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
                                 <li><a href="../classes/FullScreen.html">FullScreen</a></li>
                                 <li><a href="../classes/geometry.html">geometry</a></li>
@@ -138,13 +132,13 @@ let {
 * Basic video display for looking measures (e.g. preferential looking, looking time).
 * Trial consists of four phases, each of which is optional.
 *
-* 1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for attnLength seconds or the duration of the audio, whichever is longer. To skip this phase, set attnLength to 0 and do not provide audioSources.
+* 1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.
 *
 * 2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.
 *
 * 3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.
 *
-* 4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided).
+* 4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.
 *
 * Specifying media locations:
 * For any parameters that expect a list of audio/video sources, you can EITHER provide
