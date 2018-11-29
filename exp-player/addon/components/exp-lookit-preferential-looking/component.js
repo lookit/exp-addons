@@ -381,7 +381,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     description: 'Whether to do video recording',
                     default: true
                 },
-                 /**
+                /**
                  * length of single calibration segment in ms. 0 to skip calibration.
                  *
                  * @property {Number} calibrationLength
@@ -392,7 +392,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     description: 'length of single calibration segment in ms',
                     default: 3000
                 },
-                 /**
+                /**
                  * Ordered list of positions to show calibration segment in. Options are
                  * "center", "left", "right". Ignored if calibrationLength is 0.
                  *
@@ -683,8 +683,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         announcementStarted() { // make sure that audio complete flag is reset when starting -
-        // mysteriously set to true when starting, possibly due to reloading counting as
-        // ended event
+            // mysteriously set to true when starting, possibly due to reloading counting as
+            // ended event
             this.set('completedAnnouncementAudio', false);
         },
 
@@ -736,9 +736,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         finish() { // Move to next frame altogether
-        // Call this something separate from test because stopRecorder promise needs to
-        // call next AFTER recording is stopped and we don't want this to have already
-        // been destroyed at that point.
+            // Call this something separate from test because stopRecorder promise needs to
+            // call next AFTER recording is stopped and we don't want this to have already
+            // been destroyed at that point.
             window.clearInterval(this.get('testTimer'));
             window.clearInterval(this.get('announceTimer'));
             window.clearInterval(this.get('calTimer'));
@@ -964,9 +964,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     playAudio(audioObj) {
         //audioObj.pause();
         audioObj.currentTime = 0;
-        audioObj.play().then( _ => {
-        }).catch(error => {
-            audioObj.play();
+        audioObj.play().then(_ => {
+            }).catch(error => {
+                audioObj.play();
             }
         );
     },
@@ -1011,18 +1011,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         // Expand any audio/video src stubs
         var audSrcParameterNames = [
-            "announcementAudio",
-            "testAudio",
-            "calibrationAudio",
-            "pauseAudio",
-            "unpauseAudio"
+            'announcementAudio',
+            'testAudio',
+            'calibrationAudio',
+            'pauseAudio',
+            'unpauseAudio'
         ];
         var vidSrcParameterNames = [
-            "testVideo",
-            "altTestVideo",
-            "introVideo",
-            "announcementVideo",
-            "calibrationVideo"
+            'testVideo',
+            'altTestVideo',
+            'introVideo',
+            'announcementVideo',
+            'calibrationVideo'
         ];
         var imgSrcParameterNames = [
             'leftImage',
@@ -1049,7 +1049,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 _this.set(paraName + '_parsed', _this.expandAsset(sources, 'image'));
             }
         });
-
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {
