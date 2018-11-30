@@ -512,7 +512,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 pauseText: {
                     type: 'string',
                     description: 'Text to show under Study paused when study is paused.',
-                    default: "(You'll have a moment to turn around again.)"
+                    default: '(You\'ll have a moment to turn around again.)'
                 },
                 /**
                  * Base directory for where to find stimuli. Any image src
@@ -964,8 +964,8 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     playAudio(audioObj) {
         //audioObj.pause();
         audioObj.currentTime = 0;
-        audioObj.play().then(_ => {
-            }).catch(error => {
+        audioObj.play().then(() => {
+            }).catch(() => {
                 audioObj.play();
             }
         );
@@ -981,10 +981,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             // Image: replace stub with full URL if needed
             fullAsset = this.baseDir + 'img/' + asset;
         } else {
+            var types = [];
             if (type === 'audio') {
-                var types = this.audioTypes;
+                types = this.audioTypes;
             } else if (type === 'video') {
-                var types = this.videoTypes;
+                types = this.videoTypes;
             }
             // Replace any source objects that have a
             // 'stub' attribute with the appropriate expanded source
