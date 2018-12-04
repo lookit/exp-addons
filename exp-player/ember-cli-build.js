@@ -6,6 +6,9 @@ module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
       'ember-cli-dynamic-forms': {
              includeBootstrapAssets: false
+     },
+     'ember-cli-template-lint': {
+        testGenerator: 'qunit' // or 'mocha', etc.
      }
     // Add options here
   });
