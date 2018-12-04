@@ -74,6 +74,7 @@
     "ember-cli-htmlbars": "^3.0.1",
     "ember-cli-template-lint": "^0.7.6",
     "ember-cp-validations": "4.0.0-beta.3",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "git-branch-is": "^2.1.0",
     "typescript": "3.2.1"
   },
