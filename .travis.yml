@@ -29,6 +29,5 @@ install:
 
 script:
   - pwd
-  - yarn run check-style
-  - ./node_modules/jscs/bin/jscs .
+  - yarn test
   - ember build
