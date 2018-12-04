@@ -48,9 +48,9 @@
     <!--PAUSE AUDIO-->
     {{#if isPaused }}
         <audio id="pause-audio" autoplay="autoplay">
-        {{#each pauseAudio_parsed as |stream|}}
-            <source src="{{stream.src}}" type="{{stream.type}}">
-        {{/each}}
+            {{#each pauseAudio_parsed as |stream|}}
+                <source src="{{stream.src}}" type="{{stream.type}}">
+            {{/each}}
         </audio>
     {{/if}}
 

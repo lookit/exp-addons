@@ -1,5 +1,5 @@
 import { module, skip } from 'qunit';
-import test from 'dummy/tests/ember-sinon-qunit/test';
+import test from 'ember-sinon-qunit/test-support/test';
 
 import { getRandomElement, replaceValues, randomizer } from 'exp-player/randomizers/random-parameter-set';
 

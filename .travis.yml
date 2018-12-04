@@ -12,7 +12,6 @@ cache:
 
 env:
   matrix:
-    - TEST_DIR="exp-models"
     - TEST_DIR="exp-player"
 
 before_install:
@@ -26,8 +25,9 @@ install:
   - cd $TEST_DIR
   - npm link
   - yarn install --pure-lockfile
-  - ./node_modules/bower/bin/bower install --config.interactive=false
+  - bower install --config.interactive=false
 
 script:
   - pwd
   - yarn test
+  - ember build

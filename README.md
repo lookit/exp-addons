@@ -2,13 +2,9 @@
 
 A shared home for all of our shared addons
 
-**For historical reasons, all PRs targeted to ISP must be aimed at the "ISP" branch**.
-
-
 # Installation
 
 Before beginning, you will need to install [Yarn](https://yarnpkg.com/en/docs/install), a package manager (like npm). 
-
 
 ## Install the submodule:
 
@@ -22,14 +18,13 @@ An example setup might be:
     ...    
 ```
 
-And the corresponding package.json entries are:
+And the corresponding package.json entry is:
 
 ```json
 {
   ...,
   "dependencies": {
-    "exp-player": "file:./ext/exp-addons/exp-player",
-    "exp-models": "file:./ext/exp-addons/exp-models"
+    "exp-player": "file:./ext/exp-addons/exp-player"
   }
 }
 
@@ -41,7 +36,7 @@ For example:
 cd lib && \
 git submodule init && \
 git submodule update && \
-cd exp-models && \
+cd exp-player && \
 yarn install --pure-lockfile
 ```
 
@@ -55,11 +50,8 @@ this:
 ROOT=`git rev-parse --show-toplevel`
 cd $ROOT/ext/exp-addons/exp-player && \
 yarn link && \
-cd $ROOT/ext/exp-addons/exp-models && \
-yarn link && \
 cd $ROOT && \
-yarn link exp-player && \
-yarn link exp-models
+yarn link exp-player
 ```
 
 ### Adding dependencies on other packages

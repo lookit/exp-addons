@@ -4,8 +4,9 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
 
-//import jsPDF from 'jspdf';
-
+let {
+    $
+} = Em;
 
 /**
  * @module exp-player
@@ -44,8 +45,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
     }),
     startedRecording: false,
-
-
 
     actions: {
         record() {
@@ -86,7 +85,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             });
 
             // Prep PDF - need to set font before splitting lines
+            // jscs:disable requireCapitalizedConstructors
             var consentPDF = new jsPDF();
+            // jscs:enable requireCapitalizedConstructors
             consentPDF.setFont('times');
             consentPDF.setFontSize(12);
             var timeString = moment().format('MMMM Do YYYY, h:mm:ss a'); // for header
@@ -100,10 +101,10 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             for (var iPage = 0; iPage < nPages; iPage++) {
                 // Header on each page
                 consentPDF.setFontSize(10);
-                consentPDF.text(timeString + ' (page ' + (iPage+1) + ' of ' + nPages + ')', 10, 10);
+                consentPDF.text(timeString + ' (page ' + (iPage + 1) + ' of ' + nPages + ')', 10, 10);
                 // Actual text for the page
                 consentPDF.setFontSize(12);
-                consentPDF.text(splitText.slice(linesPerPage * iPage, linesPerPage * (iPage+1)), 25, 20);
+                consentPDF.text(splitText.slice(linesPerPage * iPage, linesPerPage * (iPage + 1)), 25, 20);
 
                 // Go to the next page
                 if (iPage < (nPages - 1)) {

@@ -120,7 +120,7 @@ const VideoRecorder = Ember.Object.extend({
         $container.append($('<div>', {id: origDivId}));
         $element.append($container);
 
-        return new RSVP.Promise((resolve, reject) => {
+        return new RSVP.Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
             window.size = { // just display size when showing to user. We override css.
                 width: 320,
                 height: 240
@@ -200,14 +200,16 @@ const VideoRecorder = Ember.Object.extend({
      * @method stop
      */
     stop() {
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
         // Force at least 3 seconds of video to be recorded to ensure upload is called.
         // Not thoroughly tested that this is still necessary w webRTC recorder.
         var timeLeft = 3 - this.getTime();
         if (this.get('hasCamAccess') && (timeLeft > 0)) {
             // sleep time expects milliseconds
-            function sleep(time) {
-                return new Promise((resolve) => setTimeout(resolve, time));
-            }
+
             return sleep(timeLeft * 1000).then(() => this.stop());
         } else {
             var recorder = this.get('recorder');
@@ -270,7 +272,7 @@ const VideoRecorder = Ember.Object.extend({
     },
 
     // Begin Flash hooks
-    _onRecordingStarted(recorderId) { // jshint ignore:line
+    _onRecordingStarted(recorderId) { // eslint-disable-line no-unused-vars
         this.set('_recording', true);
         this.set('pipeVideoName', this.get('recorder').getStreamName());
         if (this.get('_recordPromise')) {
@@ -278,7 +280,7 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onUploadDone(streamName, streamDuration, userId, recorderId) { // jshint ignore:line
+    _onUploadDone(streamName, streamDuration, userId, recorderId) { // eslint-disable-line no-unused-vars
         //this.destroy();
         if (this.get('_stopPromise')) {
             console.log('Resolving stop promise...');
@@ -287,20 +289,20 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onCamAccess(allowed, recorderId) { // jshint ignore:line
+    _onCamAccess(allowed, recorderId) { // eslint-disable-line no-unused-vars
         console.log('onCamAccess: ' + recorderId);
         this.set('hasCamAccess', allowed);
     },
 
-    _onRecorderReady(recorderId, recorderType) {
+    _onRecorderReady(recorderId, recorderType) { // eslint-disable-line no-unused-vars
         this.set('_recorderReady', true);
     },
 
-    _userHasCamMic(camNumber, micNumber, recorderId) {
+    _userHasCamMic(camNumber, micNumber, recorderId) { // eslint-disable-line no-unused-vars
         this.set('hasWebCam', Boolean(camNumber));
     },
 
-    _onConnectionStatus(status, recorderId) {
+    _onConnectionStatus(status, recorderId) { // eslint-disable-line no-unused-vars
         if (status === 'connected') {
             this.set('connected', true);
         } else {
@@ -308,7 +310,7 @@ const VideoRecorder = Ember.Object.extend({
         }
     },
 
-    _onMicActivityLevel(recorderId, currentActivityLevel) {
+    _onMicActivityLevel(recorderId, currentActivityLevel) { // eslint-disable-line no-unused-vars
         if (currentActivityLevel > MIN_VOLUME) {
             this.set('micChecked', true);
         }
