@@ -4,6 +4,10 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
 
+let {
+    $
+} = Em;
+
 /**
  * @module exp-player
  * @submodule frames

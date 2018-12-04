@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import layout from './template';
 
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';

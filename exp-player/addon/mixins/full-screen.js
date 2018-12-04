@@ -46,7 +46,7 @@ export default Ember.Mixin.create({
 
         var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
-            if (!!document[opt]) {
+            if (!!document[opt]) {  // eslint-disable-line no-extra-boolean-cast
                 return true;
             }
         }
@@ -89,7 +89,7 @@ export default Ember.Mixin.create({
         }
     },
 
-    displayError(error) { // jshint ignore:line
+    displayError(error) {  // eslint-disable-line no-unused-vars
         // Exit fullscreen first to make sure error is visible to users.
         this.send('exitFullscreen');
         return this._super(...arguments);

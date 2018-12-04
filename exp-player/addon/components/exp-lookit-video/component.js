@@ -760,9 +760,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 calAudio.pause();
                 calAudio.currentTime = 0;
                 calAudio.play().then(
-                    _ => {
+                    _ => {  // eslint-disable-line no-unused-vars
                     })
-                    .catch(error => {
+                    .catch(error => {  // eslint-disable-line no-unused-vars
                         calAudio.play();
                     }
                 );
@@ -868,10 +868,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             // Image: replace stub with full URL if needed
             fullAsset = this.baseDir + 'img/' + asset;
         } else {
+            var types;
             if (type === 'audio') {
-                var types = this.audioTypes;
+                types = this.audioTypes;
             } else if (type === 'video') {
-                var types = this.videoTypes;
+                types = this.videoTypes;
             }
             // Replace any source objects that have a
             // 'stub' attribute with the appropriate expanded source

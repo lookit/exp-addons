@@ -7,11 +7,11 @@ export default Ember.Mixin.create({
     store: Ember.inject.service(),
     currentUser: Ember.inject.service(),
 
-    _getExperiment(params) { // jshint ignore: line
+    _getExperiment(params) { // eslint-disable-line no-unused-vars
 
     },
     _getSession(params, experiment) { // jshint ignore: line
-        return this.get('currentUser').getCurrentUser().then(([account, profile]) =>
+        return this.get('currentUser').getCurrentUser().then(([account, profile]) =>  // eslint-disable-line no-unused-vars
             this.store.createRecord(experiment.get('sessionCollectionId'), {
                 experimentId: experiment.id,
                 profileId: profile.get('profileId'),
@@ -23,7 +23,7 @@ export default Ember.Mixin.create({
             })
         );
     },
-    model(params) {
+    model(params) {  // eslint-disable-line no-unused-vars
         // While a little gross, this ensures all the criteria for participation
         // are met before the route resolves. This has the benefit that the route's
         // loading state is active until all of this is complete.
