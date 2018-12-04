@@ -1,7 +1,6 @@
-import Em from 'ember';
 import layout from './template';
 
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import ExpLookitVideoConsent from '../../components/exp-lookit-video-consent/component';
 import VideoRecord from '../../mixins/video-record';
 
 /**
@@ -10,7 +9,10 @@ import VideoRecord from '../../mixins/video-record';
  */
 
 /**
-Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. Example of MIT consent form, as of 2/28/2017:
+Video consent frame for Lookit studies UNDER INITIAL MIT PROTOCOL ONLY, with consent document displayed at left and instructions to start recording, read a statement out loud, and send.
+This version allows custom specification of consent form text.
+For studies by researchers who have signed the Lookit Usage Agreement and have approval from their own IRB, please use exp-lookit-video-consent frame.
+Consent document can be downloaded as PDF document by participant.
 
 ```json
 "frames": {
@@ -33,7 +35,7 @@ Video consent frame for Lookit studies, with consent document displayed at left 
                 "title": "Use of data"
             },
             {
-                "text": "If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: lschulz@mit.edu or (617) 324-4859.",
+                "text": "If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: {contact}",
                 "title": "Contact information"
             }
         ],
@@ -45,37 +47,13 @@ Video consent frame for Lookit studies, with consent document displayed at left 
 ```
 
 @class ExpVideoConsent
-@extends ExpFrameBase
+@extends ExpLookitVideoConsent
 
 @uses VideoRecord
 */
 
-export default ExpFrameBaseComponent.extend(VideoRecord, {
+export default ExpLookitVideoConsent.extend(VideoRecord, {
     layout,
-    disableRecord: Em.computed('recorder.recording', 'recorder.hasCamAccess', function () {
-        return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
-    }),
-    startedRecording: false,
-
-    actions: {
-        record() {
-            this.startRecorder().then(() => {
-                this.set('startedRecording', true);
-                // Require at least 3 s recording
-                setTimeout(function() {
-                    $('#submitbutton').prop('disabled', false);
-                }, 3000);
-            });
-        },
-        finish() {
-            if (!this.get('stoppedRecording')) {
-                this.stopRecorder().then(() => {
-                    this.set('stoppedRecording', true);
-                    this.send('next');
-                });
-            }
-        }
-    },
 
     meta: {
         name: 'Video Consent Form',
@@ -141,6 +119,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              * Parameters captured and sent to the server
              *
              * @method serializeContent
+             * @param {String} consentFormText the exact text shown in the consent document during this frame
              * @param {String} videoID The ID of any webcam video recorded during this frame
              * @param {List} videoList a list of webcam video IDs in case there are >1
              * @param {Object} eventTimings
@@ -153,6 +132,9 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 },
                 videoList: {
                     type: 'list'
+                },
+                consentFormText: {
+                    type: 'string'
                 }
             },
             required: ['videoId']
