@@ -51,8 +51,6 @@
     "ember-sinon": "3.0.0",
     "ember-sinon-qunit": "3.3.0",
     "ember-try": "~1.1.0",
-    "eonasdan-bootstrap-datetimepicker": "4.17.47",
-    "eonasdan-bootstrap-datetimepicker-npm": "4.17.42",
     "jscs": "^3.0.7",
     "loader.js": "^4.7.0",
     "moment": "2.22.2",
@@ -63,7 +61,9 @@
     "ember-addon"
   ],
   "resolutions": {
-    "node-sass": "^4.10.0"
+    "node-sass": "^4.10.0",
+    "**/ember-bootstrap-datetimepicker/ember-cli-babel": "^6.6",
+    "**/ember-bootstrap-datetimepicker/ember-runtime-enumerable-includes-polyfill/ember-cli-babel": "^6.6"
   },
   "dependencies": {
     "broccoli-auto-generated": "0.0.3",
