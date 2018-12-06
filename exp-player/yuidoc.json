@@ -1,11 +1,14 @@
 {
-    "url": "https://github.com/CenterForOpenScience/exp-addons",
+    "url": "https://github.com/lookit/exp-addons",
+    "projectLogo": "../themes/lookit/assets/css/logo.png",
     "options": {
         "linkNatives": "true",
+        "selleck": "true",
         "attributesEmit": "true",
         "paths": [
             "addon"
         ],
-        "outdir": "../docs/"
+        "outdir": "../docs/",
+        "themedir": "../themes/lookit/"
     }
 }
