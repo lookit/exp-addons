@@ -11,7 +11,6 @@ let {
 /**
  * @module exp-player
  * @submodule frames
- * @deprecated
  */
 
 /**
