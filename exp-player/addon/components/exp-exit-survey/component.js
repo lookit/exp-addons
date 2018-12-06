@@ -20,7 +20,6 @@ This is the exit survey used by "Your baby the physicist". Use the updated frame
 @extends ExpFrameBase
 @uses Validations
 @uses FullScreen
-@deprecated
 */
 
 const Validations = buildValidations({

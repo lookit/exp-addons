@@ -38,7 +38,7 @@
  */
 
 /**
- * Mixins that can be used to add functionality, eg to a specific frame
+ * Mixins that can be used to add functionality to specific frames
  *
  * @module exp-player
  * @submodule mixins
@@ -46,7 +46,7 @@
  */
 
 /**
- * Services used to share data or provide centralized functionality
+ * Services used to provide centralized functionality
  *
  * @module exp-player
  * @submodule services
