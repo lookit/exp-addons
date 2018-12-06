@@ -149,8 +149,6 @@ let {
 * @uses VideoRecord
 */
 
-
-
 // TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
 
 export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
@@ -328,7 +326,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     description: 'Whether to do video recording',
                     default: true
                 },
-                 /**
+                /**
                  * length of single calibration segment in ms. 0 to skip calibration.
                  *
                  * @property {Number} calibrationLength
@@ -339,7 +337,7 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                     description: 'length of single calibration segment in ms',
                     default: 3000
                 },
-                 /**
+                /**
                  * Ordered list of positions to show calibration segment in. Options are
                  * "center", "left", "right". Ignored if calibrationLength is 0.
                  *
@@ -650,9 +648,9 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
         },
 
         finish() { // Move to next frame altogether
-        // Call this something separate from test because stopRecorder promise needs to
-        // call next AFTER recording is stopped and we don't want this to have already
-        // been destroyed at that point.
+            // Call this something separate from test because stopRecorder promise needs
+            // to call next AFTER recording is stopped and we don't want this to have
+            // already been destroyed at that point.
             window.clearInterval(this.get('testTimer'));
             window.clearInterval(this.get('announceTimer'));
             window.clearInterval(this.get('calTimer'));
@@ -733,10 +731,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
     startCalibration() {
         var _this = this;
 
-        // Don't allow pausing during calibration/test.
-        // $(document).off('keyup.pauser');
-
-
         // First check whether any calibration video provided. If not, skip.
         if (!this.get('calibrationLength')) {
             this.set('currentTask', 'test');
@@ -766,10 +760,10 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 calAudio.pause();
                 calAudio.currentTime = 0;
                 calAudio.play().then(
-                    _ => {
+                    _ => {  // eslint-disable-line no-unused-vars
                     })
-                    .catch(error => {
-                      calAudio.play()
+                    .catch(error => {  // eslint-disable-line no-unused-vars
+                        calAudio.play();
                     }
                 );
 
@@ -874,10 +868,11 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
             // Image: replace stub with full URL if needed
             fullAsset = this.baseDir + 'img/' + asset;
         } else {
+            var types;
             if (type === 'audio') {
-                var types = this.audioTypes;
+                types = this.audioTypes;
             } else if (type === 'video') {
-                var types = this.videoTypes;
+                types = this.videoTypes;
             }
             // Replace any source objects that have a
             // 'stub' attribute with the appropriate expanded source
@@ -904,18 +899,18 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
 
         // Expand any audio/video src stubs
         var audSrcParameterNames = [
-            "audioSources",
-            "musicSources",
-            "calibrationAudioSources",
-            "pauseAudio",
-            "unpauseAudio"
+            'audioSources',
+            'musicSources',
+            'calibrationAudioSources',
+            'pauseAudio',
+            'unpauseAudio'
         ];
         var vidSrcParameterNames = [
-            "sources",
-            "altSources",
-            "introSources",
-            "attnSources",
-            "calibrationVideoSources"
+            'sources',
+            'altSources',
+            'introSources',
+            'attnSources',
+            'calibrationVideoSources'
         ];
 
         var _this = this;
@@ -931,7 +926,6 @@ export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, Video
                 _this.set(paraName + '_parsed', _this.expandAsset(sources, 'video'));
             }
         });
-
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {

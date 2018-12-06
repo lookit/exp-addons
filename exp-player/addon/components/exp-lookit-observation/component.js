@@ -1,6 +1,11 @@
 import ExpFrameBaseComponent from 'exp-player/components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
 import layout from './template';
+import Em from 'ember';
+
+let {
+    $
+} = Em;
 
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     type: 'exp-lookit-observation',
@@ -176,7 +181,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     },
 
     didInsertElement() { // initial state of all buttons/text
-        var _this = this;
         $('#hiddenWebcamMessage').hide();
         $('#recordButton').hide();
         $('#pauseButton').hide();
@@ -228,10 +232,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             });
         },
         toggleWebcamButton() {
-            var _this = this;
             if (!this.toggling) {
                 this.set('toggling', true);
-                var recorder = this.get('recorder');
                 if (!this.get('hidden')) {
                     $('#webcamToggleButton').html('Show');
                     $('#hiddenWebcamMessage').show();

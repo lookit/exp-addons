@@ -1,7 +1,5 @@
-import Em from 'ember';
 import layout from './template';
 
-import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import ExpLookitVideoConsent from '../../components/exp-lookit-video-consent/component';
 import VideoRecord from '../../mixins/video-record';
 

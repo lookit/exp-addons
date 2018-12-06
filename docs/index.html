@@ -3,85 +3,78 @@
 <head>
     <meta charset="utf-8">
     <title>exp-player</title>
-    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="./assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="./assets/css/main.css" id="site_styles">
+    <link rel="stylesheet" href="https://yui-s.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="icon" href="./assets/favicon.ico">
-    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <script src="https://yui-s.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
-
 <div id="doc">
-    <div id="hd" class="yui3-g header">
-        <div class="yui3-u-3-4">
-                <h1><img src="./assets/css/logo.png" title="exp-player" width="117" height="52"></h1>
-        </div>
-        <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.5.1</em>
-        </div>
-    </div>
     <div id="bd" class="yui3-g">
-
-        <div class="yui3-u-1-4">
+        <div class="yui3-u-1-5">
             <div id="docs-sidebar" class="sidebar apidocs">
-                <div id="api-list">
-                    <h2 class="off-left">APIs</h2>
-                    <div id="api-tabview" class="tabview">
-                        <ul class="tabs">
-                            <li><a href="#api-classes">Classes</a></li>
-                            <li><a href="#api-modules">Modules</a></li>
+              <h2 style="display:inline;">
+              <div>
+                <img style="float:right; vertical-align:middle;" src="./assets/css/logo.png" height="70">
+                <span>Lookit<br> component<br> docs</span>
+              </div>
+
+              </h2>
+
+
+              <div id="api-list">
+                  <div id="api-tabview">
+              
+                    <div id="api-tabview-panel">
+                        <h2 class="off-left">Collections</h2>
+                        <ul id="api-modules" class="apis modules">
+                            <li class="module-sidebar-components"><a href="./modules/components.html">components</a></li>
+                            <li class="module-sidebar-exp-player"><a href="./modules/exp-player.html">exp-player</a></li>
+                            <li class="module-sidebar-frames"><a href="./modules/frames.html">frames</a></li>
+                            <li class="module-sidebar-mixins"><a href="./modules/mixins.html">mixins</a></li>
+                            <li class="module-sidebar-randomizers"><a href="./modules/randomizers.html">randomizers</a></li>
+                            <li class="module-sidebar-services"><a href="./modules/services.html">services</a></li>
                         </ul>
-                
-                        <div id="api-tabview-filter">
-                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
-                        </div>
-                
-                        <div id="api-tabview-panel">
-                            <ul id="api-classes" class="apis classes">
-                                <li><a href="./classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
-                                <li><a href="./classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                                <li><a href="./classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
-                                <li><a href="./classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
-                                <li><a href="./classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
-                                <li><a href="./classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
-                                <li><a href="./classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
-                                <li><a href="./classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
-                                <li><a href="./classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
-                                <li><a href="./classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
-                                <li><a href="./classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
-                                <li><a href="./classes/ExpLookitText.html">ExpLookitText</a></li>
-                                <li><a href="./classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
-                                <li><a href="./classes/ExpLookitVideoConsent.html">ExpLookitVideoConsent</a></li>
-                                <li><a href="./classes/ExpPlayer.html">ExpPlayer</a></li>
-                                <li><a href="./classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
-                                <li><a href="./classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
-                                <li><a href="./classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
-                                <li><a href="./classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
-                                <li><a href="./classes/FullScreen.html">FullScreen</a></li>
-                                <li><a href="./classes/geometry.html">geometry</a></li>
-                                <li><a href="./classes/MediaReload.html">MediaReload</a></li>
-                                <li><a href="./classes/permute.html">permute</a></li>
-                                <li><a href="./classes/randomParameterSet.html">randomParameterSet</a></li>
-                                <li><a href="./classes/videoRecorder.html">videoRecorder</a></li>
-                                <li><a href="./classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
-                                <li><a href="./classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
-                            </ul>
-                
-                
-                            <ul id="api-modules" class="apis modules">
-                                <li><a href="./modules/components.html">components</a></li>
-                                <li><a href="./modules/exp-player.html">exp-player</a></li>
-                                <li><a href="./modules/frames.html">frames</a></li>
-                                <li><a href="./modules/mixins.html">mixins</a></li>
-                                <li><a href="./modules/randomizers.html">randomizers</a></li>
-                                <li><a href="./modules/services.html">services</a></li>
-                            </ul>
-                        </div>
+                        <h2 class="off-left">All elements</h2>
+                              <div id="api-tabview-filter">
+                      <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
-                </div>
+                        <ul id="api-classes" class="apis classes">
+                            <li><a href="./classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
+                            <li><a href="./classes/ExpFrameBase.html">ExpFrameBase</a></li>
+                            <li><a href="./classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
+                            <li><a href="./classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
+                            <li><a href="./classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
+                            <li><a href="./classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
+                            <li><a href="./classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
+                            <li><a href="./classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="./classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
+                            <li><a href="./classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
+                            <li><a href="./classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
+                            <li><a href="./classes/ExpLookitText.html">ExpLookitText</a></li>
+                            <li><a href="./classes/ExpLookitVideo.html">ExpLookitVideo</a></li>
+                            <li><a href="./classes/ExpLookitVideoConsent.html">ExpLookitVideoConsent</a></li>
+                            <li><a href="./classes/ExpPlayer.html">ExpPlayer</a></li>
+                            <li><a href="./classes/ExpVideoConfig.html">ExpVideoConfig</a></li>
+                            <li><a href="./classes/ExpVideoConfigQuality.html">ExpVideoConfigQuality</a></li>
+                            <li><a href="./classes/ExpVideoConsent.html">ExpVideoConsent</a></li>
+                            <li><a href="./classes/ExpVideoPreview.html">ExpVideoPreview</a></li>
+                            <li><a href="./classes/FullScreen.html">FullScreen</a></li>
+                            <li><a href="./classes/MediaReload.html">MediaReload</a></li>
+                            <li><a href="./classes/permute.html">permute</a></li>
+                            <li><a href="./classes/randomParameterSet.html">randomParameterSet</a></li>
+                            <li><a href="./classes/videoRecorder.html">videoRecorder</a></li>
+                            <li><a href="./classes/VideoRecorderObject.html">VideoRecorderObject</a></li>
+                            <li><a href="./classes/VideoRecordMixin.html">VideoRecordMixin</a></li>
+                        </ul>
+                    </div>
+              
+                  </div>
+              </div>
             </div>
         </div>
-        <div class="yui3-u-3-4">
+        <div class="yui3-u-4-5">
                 <div id="api-options">
                     Show:
                     <label for="api-show-inherited">
@@ -111,20 +104,36 @@
     <div class="apidocs">
         <div id="docs-main" class="content">
             <p>
-            Browse to a module or class using the sidebar to view its API documentation.
+            Browse to a collection or element using the sidebar to view its documentation.
             </p>
 
-            <h2>Keyboard Shortcuts</h2>
 
             <ul>
-                <li><p>Press <kbd>s</kbd> to focus the API search box.</p></li>
+            <li>
+            The <b>frames</b> are available frame types to use in Lookit studies - like
+            instructions pages or looking-time trials. The documentation will tell you
+            how each frame works and what parameters you need to give it.
+            </li>
 
-                <li><p>Use <kbd>Up</kbd> and <kbd>Down</kbd> to select classes, modules, and search results.</p></li>
+            <li>
+            The <b>randomizers</b> are used to set up counterbalancing or condition
+            assignment. The randomizers described here correspond to values for 'sampler'
+            when you define a frame with type 'choice'. The documentation will tell you
+            how each randomizer works and what parameters you need to give it.
+            </li>
 
-                <li class="mac-only"><p>With the API search box or sidebar focused, use <kbd><span class="cmd">&#x2318;</span>-Left</kbd> or <kbd><span class="cmd">&#x2318;</span>-Right</kbd> to switch sidebar tabs.</p></li>
+            <li>
+            The mixins and services are not relevant unless you are creating your own frames.
+            </li>
 
-                <li class="pc-only"><p>With the API search box or sidebar focused, use <kbd>Ctrl+Left</kbd> and <kbd>Ctrl+Right</kbd> to switch sidebar tabs.</p></li>
+            <li>
+            These are the docs for particular frames - they are autogenerated from comments
+            in the source code.
+            For more general (and readable) information on how to define and test your Lookit study, please
+            see the <a href="https://lookit.readthedocs.io">Lookit docs</a>.
+            </li>
             </ul>
+
         </div>
     </div>
 
@@ -135,6 +144,7 @@
         </div>
     </div>
 </div>
+
 <script src="./assets/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>
 <script src="./assets/js/yui-prettify.js"></script>

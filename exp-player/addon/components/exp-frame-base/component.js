@@ -84,7 +84,7 @@ export default Ember.Component.extend({
         this.set('eventTimings', []);
     }),
 
-    loadData: function (frameData) { // jshint ignore:line
+    loadData: function (frameData) { // eslint-disable-line no-unused-vars
         return null;
     },
 
@@ -133,7 +133,7 @@ export default Ember.Component.extend({
     },
 
     // Display error messages related to save failures
-    displayError(error) { // jshint ignore:line
+    displayError(error) { // eslint-disable-line no-unused-vars
         // If the save failure was a server error, warn the user. This error should never disappear.
         const msg = 'If this problem persists, please contact your study coordinator.';
         this.get('toast').error(msg, 'Error: Could not save data', {timeOut: 0, extendedTimeOut: 0});

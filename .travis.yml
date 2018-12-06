@@ -12,11 +12,9 @@ cache:
 
 env:
   matrix:
-    - TEST_DIR="exp-models"
     - TEST_DIR="exp-player"
 
 before_install:
-  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH=$HOME/.yarn/bin:$PATH
   - echo $HOME && echo $PATH
@@ -26,8 +24,9 @@ install:
   - cd $TEST_DIR
   - npm link
   - yarn install --pure-lockfile
-  - ./node_modules/bower/bin/bower install --config.interactive=false
+  - bower install --config.interactive=false
 
 script:
   - pwd
   - yarn test
+  - ember build
