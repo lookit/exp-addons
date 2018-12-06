@@ -311,13 +311,13 @@ abbr {
     cursor: help;
 }
 
-.prettyprint li.L0, 
-.prettyprint li.L1, 
-.prettyprint li.L2, 
-.prettyprint li.L3, 
-.prettyprint li.L5, 
-.prettyprint li.L6, 
-.prettyprint li.L7, 
+.prettyprint li.L0,
+.prettyprint li.L1,
+.prettyprint li.L2,
+.prettyprint li.L3,
+.prettyprint li.L5,
+.prettyprint li.L6,
+.prettyprint li.L7,
 .prettyprint li.L8 {
     list-style: decimal;
 }
@@ -687,7 +687,11 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 .apidocs .module-submodule-description p:first-child { margin-top: 0; }
 
 /* -- Sidebar TabView ------------------------------------------------------- */
-#api-tabview { margin-top: 0.6em; }
+
+
+#api-tabview {
+  margin-top: 0.6em;
+}
 
 #api-tabview-filter,
 #api-tabview-panel {
@@ -781,3 +785,13 @@ kbd .cmd { font-family: Monaco, Helvetica; }
     font-weight: bold;
 }
 
+/* LOOKIT */
+
+img.logo {
+  height: 80px;
+  width: auto;
+}
+
+li.module-sidebar-exp-player {
+  display: none;
+}
