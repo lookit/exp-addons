@@ -18,7 +18,7 @@ export default Ember.Mixin.create({
      *  The element ID of the thing to make full screen (video element, div, etc)
      * @property {String} fullScreenElementId
      */
-    fullScreenElementId: null,
+    fullScreenElementId: 'experiment-player',
     displayFullscreen: false,
 
     /**
@@ -46,7 +46,7 @@ export default Ember.Mixin.create({
 
         var opts = ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'];
         for (var opt of opts) {
-            if (!!document[opt]) {
+            if (!!document[opt]) {  // eslint-disable-line no-extra-boolean-cast
                 return true;
             }
         }
@@ -64,8 +64,12 @@ export default Ember.Mixin.create({
         this.set('isFullscreen', isFS);
 
         var $button = $(`#${this.get('fsButtonID')}`);
-        if (isFS) {
-            $element.addClass('player-fullscreen');
+        if (isFS) { // just entered FS mode
+            if (this.get('displayFullscreenOverride') && !this.get('displayFullscreen')) {
+                $element.addClass('player-fullscreen-override');
+            } else {
+                $element.addClass('player-fullscreen');
+            }
             if (this.displayFullscreen && this.fsButtonID) {
                 $button.hide();
             }
@@ -75,8 +79,9 @@ export default Ember.Mixin.create({
              * @event enteredFullscreen
             */
             this.send('setTimeEvent', 'enteredFullscreen');
-        } else {
+        } else { // just exited FS mode
             $element.removeClass('player-fullscreen');
+            $element.removeClass('player-fullscreen-override');
             if (this.displayFullscreen && this.fsButtonID) {
                 $button.show();
             }
@@ -89,7 +94,7 @@ export default Ember.Mixin.create({
         }
     },
 
-    displayError(error) { // jshint ignore:line
+    displayError(error) {  // eslint-disable-line no-unused-vars
         // Exit fullscreen first to make sure error is visible to users.
         this.send('exitFullscreen');
         return this._super(...arguments);
@@ -101,11 +106,6 @@ export default Ember.Mixin.create({
          * @method showFullscreen
          */
         showFullscreen: function () {
-
-            if (!this.get('displayFullscreen')) {
-                this.send('exitFullscreen');
-                return;
-            }
 
             var elementId = this.get('fullScreenElementId');
             if (!elementId) {
@@ -150,10 +150,30 @@ export default Ember.Mixin.create({
                 document.webkitExitFullscreen();
             }
             this.set('isFullscreen', false);
-            var elementId = this.get('fullScreenElementId');
-            var selector = Ember.$(`#${elementId}`);
-            selector.removeClass('player-fullscreen');
+            // Note: we may be leaving fullscreen from a different frame, and no longer
+            // know which element .player-fullscreen was attached to. Remove it from all
+            // elements, otherwise we don't leave cleanly if a custom ID was specified!
+            Ember.$('*').removeClass('player-fullscreen');
+            Ember.$('*').removeClass('player-fullscreen-override');
         }
+    },
 
-    }
+    meta: {
+        parameters: {
+            type: 'object',
+            properties: {
+                /**
+                 * Whether to display this frame as fullscreen, even though it is not
+                 * generally used that way.
+                 *
+                 * @property {String} id
+                 */
+                displayFullscreenOverride: {
+                    type: 'boolean',
+                    description: 'Whether to override default and display this frame as fullscreen',
+                    default: false
+                }
+            }
+        }
+    },
 });

@@ -3,12 +3,12 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "ExpExitSurvey",
         "ExpFrameBase",
-        "ExpFrameBaseUnsafe",
         "ExpLookitDialoguePage",
         "ExpLookitExitSurvey",
         "ExpLookitGeometryAlternation",
         "ExpLookitInstructions",
         "ExpLookitMoodQuestionnaire",
+        "ExpLookitPreferentialLooking",
         "ExpLookitPreviewExplanation",
         "ExpLookitStoryPage",
         "ExpLookitSurvey",
@@ -24,7 +24,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "MediaReload",
         "VideoRecordMixin",
         "VideoRecorderObject",
-        "geometry",
         "permute",
         "randomParameterSet",
         "videoRecorder"
@@ -56,7 +55,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "mixins",
             "name": "mixins",
-            "description": "Mixins that can be used to add functionality, eg to a specific frame"
+            "description": "Mixins that can be used to add functionality to specific frames"
         },
         {
             "displayName": "randomizers",
@@ -66,7 +65,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "services",
             "name": "services",
-            "description": "Services used to share data or provide centralized functionality"
+            "description": "Services used to provide centralized functionality"
         }
     ],
     "elements": []

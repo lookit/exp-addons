@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from './template';
-import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
 
@@ -11,7 +11,6 @@ let {
 /**
  * @module exp-player
  * @submodule frames
- * @deprecated
  */
 
 /**
@@ -28,8 +27,11 @@ let {
  * The geometry randomizer generates a series of ExpLookitGeometryAlternation
  * frames.
  *
- * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
- * and expected to be repeated.
+ * This frame is displayed fullscreen; if the frame before it is not, that frame
+ * needs to include a manual "next" button so that there's a user interaction
+ * event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
+ * without a user event.)
+ *
 
 ```json
  "frames": {
@@ -137,14 +139,12 @@ let {
 
  * ```
  * @class ExpLookitGeometryAlternation
- * @extends ExpFrameBaseUnsafe
+ * @extends ExpFrameBase
  * @uses FullScreen
  * @uses VideoRecord
  */
 
-export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
-    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369. exp-alternation frames are expected to be repeated, so they need to be unsafe.
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     type: 'exp-lookit-geometry-alternation',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component

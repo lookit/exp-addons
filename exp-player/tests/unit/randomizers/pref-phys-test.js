@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 import { module } from 'qunit';
-import test from 'dummy/tests/ember-sinon-qunit/test';
+import test from 'ember-sinon-qunit/test-support/test';
 
 import { getConditions, getLastSession } from 'exp-player/randomizers/pref-phys';
 
@@ -61,7 +61,8 @@ test('New conditions correctly depend on previous conditions: wraparound', funct
 
 test('If no prev conditions are specified, a random frame is returned', function (assert) {
     // Stub out RNG so it always returns 0, and results are predictable
-    this.stub(Math, 'random', () => 0);
+    // See https://sinonjs.org/releases/v5.0.3/stubs/ about updated stub syntax
+    this.stub(Math, 'random').callsFake(() => 0);
 
     let actualResult = getConditions(null, 'frameName');
     const expectedResult = {

@@ -4,15 +4,18 @@ import {moduleForComponent, skip} from 'ember-qunit';
 
 import sinon from 'sinon';
 
-import hbs from 'htmlbars-inline-precompile';
-
-
 /**
  * These tests work when inside an app, but not when they are part of an addon.
  * There may be some weird rules for addons/ registry/ dynamic templates to be resolved before we can make this work
  */
 
+/*
+// yarn add ember-cli-htmlbars-inline-precompile leads to ember test failing with:
+// The "path" argument must be of type string. Received type undefined
+import hbs from 'htmlbars-inline-precompile';
+
 // The component doesn't actually have a template, so generate one that can be used to trigger actions
+
 const BasicTemplate = hbs`<button id="save-frame" {{action 'saveHandler'}}>Save</button>
   <button id="go-next" {{action 'next'}}>Next</button>`;
 
@@ -34,6 +37,7 @@ moduleForComponent('exp-frame-base', 'Integration | Component | exp frame base',
         this.errorSpy = errorSpy;
     }
 });
+*/
 
 skip('it shows an error and does not advance when it encounters an adapter 400 error', function (assert) {
     assert.expect(3);

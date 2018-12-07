@@ -1420,7 +1420,7 @@ function assignVideos(startType, showStay, whichObjects) {
         // pair objects and comparison types
         var events = [];
         for (var iEvent = 0; iEvent < eventTypeList.length; iEvent++) {
-	        var outcomeL, outcomeR;
+            var outcomeL, outcomeR;
             if (onLeft[iEvent] === 'moreProb') {
                 outcomeL = eventTypeList[iEvent][1];
                 outcomeR = eventTypeList[iEvent][2];
@@ -1443,7 +1443,7 @@ function assignVideos(startType, showStay, whichObjects) {
                 outcomeR: outcomeR,
                 object: objList[iEvent],
                 camera: cameraAngles[eventTypeList[iEvent][0]][iCamera],
-		        background: backgrounds[eventTypeList[iEvent][0]][iBackground],
+                background: backgrounds[eventTypeList[iEvent][0]][iBackground],
                 flip: flips[eventTypeList[iEvent][0]][iFlip]
             });
         }

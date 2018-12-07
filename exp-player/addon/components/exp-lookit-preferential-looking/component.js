@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from './template';
-import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
@@ -72,6 +72,11 @@ let {
 * specified using stubs MUST be
 * organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.
 *
+* This frame is displayed fullscreen; if the frame before it is not, that frame
+* needs to include a manual "next" button so that there's a user interaction
+* event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
+* without a user event.)
+*
 * Example usage:
 
 ```json
@@ -135,8 +140,13 @@ let {
         "loopTestAudio": false
     }
 * ```
+<<<<<<< HEAD
 * @class ExpLookitPreferentialLooking
 * @extends ExpFrameBaseUnsafe
+=======
+* @class ExpLookitVideo
+* @extends ExpFrameBase
+>>>>>>> f4bcc44fe45c1ff9d797c00995c6301ea42f3688
 * @uses FullScreen
 * @uses MediaReload
 * @uses VideoRecord
@@ -148,9 +158,7 @@ let {
 // utility to move to next task within list. For each segment, allow video/image/text
 // stimuli.
 
-export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use "unsafe" saves (in order for
-    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
     layout: layout,
     type: 'exp-lookit-preferential-looking',
 
