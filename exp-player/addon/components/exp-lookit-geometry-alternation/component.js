@@ -27,6 +27,11 @@ let {
  * The geometry randomizer generates a series of ExpLookitGeometryAlternation
  * frames.
  *
+ * This frame is displayed fullscreen; if the frame before it is not, that frame
+ * needs to include a manual "next" button so that there's a user interaction
+ * event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
+ * without a user event.)
+ *
 
 ```json
  "frames": {
