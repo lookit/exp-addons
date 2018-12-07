@@ -214,4 +214,5 @@ export default ExpFrameBaseComponent.extend(Validations, {
             this.set(target, `${value.hours()}:${pad(value.minutes())}`);
         }
     }
+
 });

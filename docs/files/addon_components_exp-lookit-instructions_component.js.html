@@ -43,7 +43,6 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
@@ -108,7 +107,7 @@
 import Ember from &#x27;ember&#x27;;
 
 import layout from &#x27;./template&#x27;;
-import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-unsafe/component&#x27;;
+import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
 
 /**
  * @module exp-player
@@ -116,7 +115,7 @@ import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-un
  */
 
 /**
- * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on). This is intended to come immediately before test trials which may be fullscreen, and is therefore an &#x27;unsafe&#x27; frame (allows proceeding even if data isn&#x27;t saved); no user data from this frame is critical.
+ * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on).
 
 &#x60;&#x60;&#x60;json
  &quot;frames&quot;: {
@@ -190,12 +189,10 @@ import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-un
 
  * &#x60;&#x60;&#x60;
  * @class ExpLookitInstructions
- * @extends ExpFrameBaseUnsafe
+ * @extends ExpFrameBase
  */
 
-export default ExpFrameBaseUnsafeComponent.extend({
-    // &#x27;Unsafe&#x27; allows this component to come immediately before a full-screen
-    // trial component if needed; no user data from this frame is critical.
+export default ExpFrameBaseComponent.extend({
     layout: layout,
     type: &#x27;exp-lookit-instructions&#x27;,
     didFinishSound: false,

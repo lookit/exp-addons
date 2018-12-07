@@ -43,7 +43,6 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
@@ -112,7 +111,7 @@
         </div>
 
         <div class="extends">
-            Extends <a href="../classes/ExpFrameBaseUnsafe.html" class="crosslink">ExpFrameBaseUnsafe</a>
+            Extends <a href="../classes/ExpFrameBase.html" class="crosslink">ExpFrameBase</a>
         </div>
 
         <div class="foundat">
@@ -138,8 +137,10 @@ fullscreen mode.</p>
 automatically when audio finishes (autoProceed).</p>
 <p>Any number of images may be placed on the screen, and their position
 specified. (Aspect ratio will be the same as the original image.)</p>
-<p>These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
-and expected to be repeated.</p>
+<p>This frame is displayed fullscreen; if the frame before it is not, that frame
+needs to include a manual &quot;next&quot; button so that there's a user interaction
+event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
+without a user event.)</p>
 <pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
    &quot;story-intro-1&quot;: {
            &quot;doRecording&quot;: false,
@@ -212,7 +213,7 @@ and expected to be repeated.</p>
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method inherited">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_exitFullscreen">exitFullscreen</a>
 
                             </li>
@@ -224,7 +225,7 @@ and expected to be repeated.</p>
                                 <a href="#method_serializeContent">serializeContent</a>
 
                             </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
@@ -255,12 +256,16 @@ and expected to be repeated.</p>
                                 <a href="#property_doRecording">doRecording</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property inherited inherited">
                                 <a href="#property_fsButtonID">fsButtonID</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property inherited inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
+
+                            </li>
+                            <li class="index-item property inherited inherited">
+                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -279,11 +284,11 @@ and expected to be repeated.</p>
                     <h3>Events</h3>
 
                     <ul class="index-list events extends">
-                            <li class="index-item event inherited">
+                            <li class="index-item event inherited inherited">
                                 <a href="#event_enteredFullscreen">enteredFullscreen</a>
 
                             </li>
-                            <li class="index-item event inherited">
+                            <li class="index-item event inherited inherited">
                                 <a href="#event_leftFullscreen">leftFullscreen</a>
 
                             </li>
@@ -315,8 +320,11 @@ and expected to be repeated.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#method_exitFullscreen">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
         </p>
 
@@ -359,7 +367,7 @@ and expected to be repeated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-frame-base_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:198</code></a>
         </p>
 
 
@@ -446,7 +454,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l330"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:330</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l327"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:327</code></a>
         </p>
 
 
@@ -522,9 +530,12 @@ event sent by a particular frame</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#method_showFullscreen">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l104"><code>addon&#x2F;mixins&#x2F;full-screen.js:104</code></a>
         </p>
 
 
@@ -555,7 +566,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l196"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:196</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:193</code></a>
         </p>
 
 
@@ -622,7 +633,7 @@ values correspond to the ids given in images</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l168"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:168</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l165"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:165</code></a>
         </p>
 
 
@@ -663,7 +674,7 @@ expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l137"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:137</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l134"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:134</code></a>
         </p>
 
 
@@ -689,7 +700,7 @@ replay/next buttons)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l147"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:147</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l144"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:144</code></a>
         </p>
 
 
@@ -724,7 +735,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l127"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:127</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l124"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:124</code></a>
         </p>
 
 
@@ -748,8 +759,11 @@ connection before starting audio if so)</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_fsButtonID">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
         </p>
 
@@ -772,8 +786,11 @@ connection before starting audio if so)</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_fullScreenElementId">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
         </p>
 
@@ -782,6 +799,34 @@ connection before starting audio if so)</p>
 
     <div class="description">
         The element ID of the thing to make full screen (video element, div, etc)
+    </div>
+
+
+
+</div>
+<div id="property_id" class="property item inherited">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_id">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
     </div>
 
 
@@ -798,7 +843,7 @@ connection before starting audio if so)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l291"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:291</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l288"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:288</code></a>
         </p>
 
 
@@ -878,7 +923,7 @@ URL, or relative to baseDir (see baseDir).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l261"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:261</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l258"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:258</code></a>
         </p>
 
 
@@ -953,9 +998,12 @@ to apply to this section, and their values - e.g.
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
+                                <p>Inherited from
+                                <a href="../classes/FullScreen.html#event_enteredFullscreen">
+                                    FullScreen
+                                </a>
+                                but overwritten in
+                            <a href="../files/addon_mixins_full-screen.js.html#l76"><code>addon&#x2F;mixins&#x2F;full-screen.js:76</code></a>
                             </p>
                     
                     
@@ -977,9 +1025,12 @@ to apply to this section, and their values - e.g.
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
+                                <p>Inherited from
+                                <a href="../classes/FullScreen.html#event_leftFullscreen">
+                                    FullScreen
+                                </a>
+                                but overwritten in
+                            <a href="../files/addon_mixins_full-screen.js.html#l88"><code>addon&#x2F;mixins&#x2F;full-screen.js:88</code></a>
                             </p>
                     
                     
@@ -1003,7 +1054,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:232</code></a>
                             </p>
                     
                     
@@ -1028,7 +1079,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:255</code></a>
                             </p>
                     
                     

@@ -3,7 +3,6 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "ExpExitSurvey",
         "ExpFrameBase",
-        "ExpFrameBaseUnsafe",
         "ExpLookitDialoguePage",
         "ExpLookitExitSurvey",
         "ExpLookitGeometryAlternation",

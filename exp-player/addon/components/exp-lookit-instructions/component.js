@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 import layout from './template';
-import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/component';
+import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 
 /**
  * @module exp-player
@@ -9,7 +9,7 @@ import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/
  */
 
 /**
- * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on). This is intended to come immediately before test trials which may be fullscreen, and is therefore an 'unsafe' frame (allows proceeding even if data isn't saved); no user data from this frame is critical.
+ * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on).
 
 ```json
  "frames": {
@@ -83,12 +83,10 @@ import ExpFrameBaseUnsafeComponent from '../../components/exp-frame-base-unsafe/
 
  * ```
  * @class ExpLookitInstructions
- * @extends ExpFrameBaseUnsafe
+ * @extends ExpFrameBase
  */
 
-export default ExpFrameBaseUnsafeComponent.extend({
-    // 'Unsafe' allows this component to come immediately before a full-screen
-    // trial component if needed; no user data from this frame is critical.
+export default ExpFrameBaseComponent.extend({
     layout: layout,
     type: 'exp-lookit-instructions',
     didFinishSound: false,

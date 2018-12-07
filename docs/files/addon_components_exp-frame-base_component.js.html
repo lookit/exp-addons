@@ -43,7 +43,6 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
@@ -108,6 +107,7 @@
 import Ember from &#x27;ember&#x27;;
 
 import config from &#x27;ember-get-config&#x27;;
+import FullScreen from &#x27;../../mixins/full-screen&#x27;;
 
 /**
  * @module exp-player
@@ -154,8 +154,10 @@ import config from &#x27;ember-get-config&#x27;;
     }}
  * &#x60;&#x60;&#x60;
  * @class ExpFrameBase
+ *
+ * @uses FullScreen
  */
-export default Ember.Component.extend({
+export default Ember.Component.extend(FullScreen, {
     toast: Ember.inject.service(),
     // {String} the unique identifier for the _instance_
     id: null,
@@ -242,7 +244,9 @@ export default Ember.Component.extend({
     // Display error messages related to save failures
     displayError(error) { // eslint-disable-line no-unused-vars
         // If the save failure was a server error, warn the user. This error should never disappear.
-        const msg = &#x27;If this problem persists, please contact your study coordinator.&#x27;;
+        // Note: errors are not visible in FS mode, which is generally the desired behavior so as not to silently
+        // bias infant looking time towards right.
+        const msg = &#x27;Check your internet connection. If another error like this still shows up as you continue, please contact lookit-tech@mit.edu to let us know!&#x27;;
         this.get(&#x27;toast&#x27;).error(msg, &#x27;Error: Could not save data&#x27;, {timeOut: 0, extendedTimeOut: 0});
     },
 
@@ -326,6 +330,7 @@ export default Ember.Component.extend({
         },
 
         save() {
+            // Show an error if saving fails
             this._save().catch(err =&gt; this.displayError(err));
         },
 
@@ -336,13 +341,16 @@ export default Ember.Component.extend({
              * @event nextFrame
              */
             this.send(&#x27;setTimeEvent&#x27;, &#x27;nextFrame&#x27;);
-            // Only advance the form if save succeeded
-            this._save()
-                .then(() =&gt; {
-                    this.sendAction(&#x27;next&#x27;);
-                    window.scrollTo(0, 0);
-                })
-                .catch(err =&gt; this.displayError(err));
+            // Note: this will allow participant to proceed even if saving fails. The
+            // reason not to execute &#x27;next&#x27; within this._save().then() is that an action
+            // executed as a promise doesn&#x27;t count as a &#x27;user interaction&#x27; event, so
+            // we wouldn&#x27;t be able to enter FS mode upon starting the next frame. Given
+            // that the user is likely to have limited ability to FIX a save error, and the
+            // only thing they&#x27;ll really be able to do is try again anyway, preventing
+            // them from continuing is unnecessarily disruptive.
+            this.send(&#x27;save&#x27;);
+            this.sendAction(&#x27;next&#x27;);
+            window.scrollTo(0, 0);
         },
 
         last() {
@@ -361,6 +369,30 @@ export default Ember.Component.extend({
             this.sendAction(&#x27;previous&#x27;);
             window.scrollTo(0, 0);
         }
+    },
+
+    didInsertElement() {
+        // Add different classes depending on whether fullscreen mode is
+        // being triggered as part of standard frame operation or as an override to a frame
+        // that is not typically fullscreen. In latter case, keep formatting as close to
+        // before as possible, to enable forms etc. to work ok in fullscreen mode.
+        Ember.$(&#x27;*&#x27;).removeClass(&#x27;player-fullscreen&#x27;);
+        Ember.$(&#x27;*&#x27;).removeClass(&#x27;player-fullscreen-override&#x27;);
+        var $element = Ember.$(&#x60;#${this.get(&#x27;fullScreenElementId&#x27;)}&#x60;);
+        if (this.get(&#x27;displayFullscreenOverride&#x27;) &amp;&amp; !this.get(&#x27;displayFullscreen&#x27;)) {
+            $element.addClass(&#x27;player-fullscreen-override&#x27;);
+        } else {
+            $element.addClass(&#x27;player-fullscreen&#x27;);
+        }
+        // Set to non-fullscreen (or FS if overriding) immediately, except for frames displayed fullscreen.
+        // Note: if this is defined the same way in full-screen.js, it gets called twice
+        // for reasons I don&#x27;t yet understand.
+        if (this.get(&#x27;displayFullscreenOverride&#x27;)) {
+            this.send(&#x27;showFullscreen&#x27;);
+        } else if (!(this.get(&#x27;displayFullscreen&#x27;))) {
+            this.send(&#x27;exitFullscreen&#x27;);
+        }
+        this._super(...arguments);
     }
 });
 

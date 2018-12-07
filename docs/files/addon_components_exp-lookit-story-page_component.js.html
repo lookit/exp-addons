@@ -43,7 +43,6 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
@@ -107,7 +106,7 @@
     <pre class="code prettyprint linenums">
 import Ember from &#x27;ember&#x27;;
 import layout from &#x27;./template&#x27;;
-import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-unsafe/component&#x27;;
+import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
 import FullScreen from &#x27;../../mixins/full-screen&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
 
@@ -139,8 +138,10 @@ let {
  * Any number of images may be placed on the screen, and their position
  * specified. (Aspect ratio will be the same as the original image.)
  *
- * These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
- * and expected to be repeated.
+ * This frame is displayed fullscreen; if the frame before it is not, that frame
+ * needs to include a manual &quot;next&quot; button so that there&#x27;s a user interaction
+ * event to trigger fullscreen mode. (Browsers don&#x27;t allow us to switch to FS
+ * without a user event.)
 
 &#x60;&#x60;&#x60;json
  &quot;frames&quot;: {
@@ -195,17 +196,12 @@ let {
 
  * &#x60;&#x60;&#x60;
  * @class ExpLookitStoryPage
- * @extends ExpFrameBaseUnsafe
+ * @extends ExpFrameBase
  * @uses FullScreen
  * @uses VideoRecord
  */
 
-export default ExpFrameBaseUnsafeComponent.extend(FullScreen, VideoRecord,  {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen
-    // must use &quot;unsafe&quot; saves (in order for the fullscreen event to register as
-    // being user-initiated and not from a promise handler) #LEI-369.
-    // exp-alternation frames are expected to be repeated, so they need to be
-    // unsafe.
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     type: &#x27;exp-lookit-story-page&#x27;,
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component

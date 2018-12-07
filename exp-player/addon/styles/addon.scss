@@ -50,7 +50,7 @@
 }
 
 .vertical-pad {
-    height: 8vh;
+    height: 8vh !important;
 }
 
 .modal-dialog {
@@ -100,4 +100,8 @@ p#pipeClickPowered {
     left: -10000px;
     z-index: -1;
     position: absolute;
+}
+
+#experiment-player {
+    background-color: #FFFFFF !important;
 }
