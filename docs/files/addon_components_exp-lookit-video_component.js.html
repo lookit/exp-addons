@@ -43,7 +43,6 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
@@ -107,7 +106,7 @@
     <pre class="code prettyprint linenums">
 import Ember from &#x27;ember&#x27;;
 import layout from &#x27;./template&#x27;;
-import ExpFrameBaseUnsafeComponent from &#x27;../../components/exp-frame-base-unsafe/component&#x27;;
+import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
 import FullScreen from &#x27;../../mixins/full-screen&#x27;;
 import MediaReload from &#x27;../../mixins/media-reload&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
@@ -177,6 +176,11 @@ let {
 * full URLs and those using stubs within the same directory. However, any stimuli
 * specified using stubs MUST be
 * organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.
+*
+* This frame is displayed fullscreen; if the frame before it is not, that frame
+* needs to include a manual &quot;next&quot; button so that there&#x27;s a user interaction
+* event to trigger fullscreen mode. (Browsers don&#x27;t allow us to switch to FS
+* without a user event.)
 *
 * Example usage:
 
@@ -250,7 +254,7 @@ let {
 
 * &#x60;&#x60;&#x60;
 * @class ExpLookitVideo
-* @extends ExpFrameBaseUnsafe
+* @extends ExpFrameBase
 * @uses FullScreen
 * @uses MediaReload
 * @uses VideoRecord
@@ -258,9 +262,7 @@ let {
 
 // TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
 
-export default ExpFrameBaseUnsafeComponent.extend(FullScreen, MediaReload, VideoRecord, {
-    // In the Lookit use case, the frame BEFORE the one that goes fullscreen must use &quot;unsafe&quot; saves (in order for
-    //   the fullscreen event to register as being user-initiated and not from a promise handler) #LEI-369
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
     layout: layout,
     type: &#x27;exp-lookit-video&#x27;,
 
