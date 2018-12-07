@@ -150,10 +150,10 @@ export default Ember.Mixin.create({
                 document.webkitExitFullscreen();
             }
             this.set('isFullscreen', false);
-            var elementId = this.get('fullScreenElementId');
-            var selector = Ember.$(`#${elementId}`);
-            selector.removeClass('player-fullscreen');
+            // Note: we may be leaving fullscreen from a different frame, and no longer
+            // know which element .player-fullscreen was attached to. Remove it from all
+            // elements, otherwise we don't leave cleanly if a custom ID was specified!
+            Ember.$('*').removeClass('player-fullscreen');
         }
-
     }
 });

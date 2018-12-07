@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 import config from 'ember-get-config';
+import FullScreen from '../../mixins/full-screen';
 
 /**
  * @module exp-player
@@ -47,8 +48,10 @@ import config from 'ember-get-config';
     }}
  * ```
  * @class ExpFrameBase
+ *
+ * @uses FullScreen
  */
-export default Ember.Component.extend({
+export default Ember.Component.extend(FullScreen, {
     toast: Ember.inject.service(),
     // {String} the unique identifier for the _instance_
     id: null,
@@ -260,5 +263,15 @@ export default Ember.Component.extend({
             this.sendAction('previous');
             window.scrollTo(0, 0);
         }
+    },
+
+    // Set to non-fullscreen immediately, except for frames displayed fullscreen.
+    // Note: if this is defined the same way in full-screen.js, it gets called twice
+    // for reasons I don't yet understand.
+    willRender() {
+        if (!(this.get('displayFullscreen'))) {
+            this.send('exitFullscreen');
+        }
+        this._super(...arguments);
     }
 });
