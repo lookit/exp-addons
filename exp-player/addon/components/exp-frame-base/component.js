@@ -265,11 +265,26 @@ export default Ember.Component.extend(FullScreen, {
         }
     },
 
-    // Set to non-fullscreen immediately, except for frames displayed fullscreen.
-    // Note: if this is defined the same way in full-screen.js, it gets called twice
-    // for reasons I don't yet understand.
-    willRender() {
-        if (!(this.get('displayFullscreen'))) {
+    didInsertElement() {
+        // Add different classes depending on whether fullscreen mode is
+        // being triggered as part of standard frame operation or as an override to a frame
+        // that is not typically fullscreen. In latter case, keep formatting as close to
+        // before as possible, to enable forms etc. to work ok in fullscreen mode.
+        Ember.$('*').removeClass('player-fullscreen');
+        Ember.$('*').removeClass('player-fullscreen-override');
+        var $element = Ember.$(`#${this.get('fullScreenElementId')}`);
+        if (this.get('displayFullscreenOverride') && !this.get('displayFullscreen')) {
+            $element.addClass('player-fullscreen-override');
+        }
+        else {
+            $element.addClass('player-fullscreen');
+        }
+        // Set to non-fullscreen (or FS if overriding) immediately, except for frames displayed fullscreen.
+        // Note: if this is defined the same way in full-screen.js, it gets called twice
+        // for reasons I don't yet understand.
+        if (this.get('displayFullscreenOverride')) {
+            this.send('showFullscreen');
+        } else if (!(this.get('displayFullscreen'))) {
             this.send('exitFullscreen');
         }
         this._super(...arguments);
