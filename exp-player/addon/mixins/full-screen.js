@@ -67,8 +67,7 @@ export default Ember.Mixin.create({
         if (isFS) { // just entered FS mode
             if (this.get('displayFullscreenOverride') && !this.get('displayFullscreen')) {
                 $element.addClass('player-fullscreen-override');
-            }
-            else {
+            } else {
                 $element.addClass('player-fullscreen');
             }
             if (this.displayFullscreen && this.fsButtonID) {
@@ -160,7 +159,7 @@ export default Ember.Mixin.create({
     },
 
     meta: {
-       parameters: {
+        parameters: {
             type: 'object',
             properties: {
                 /**

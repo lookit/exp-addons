@@ -275,8 +275,7 @@ export default Ember.Component.extend(FullScreen, {
         var $element = Ember.$(`#${this.get('fullScreenElementId')}`);
         if (this.get('displayFullscreenOverride') && !this.get('displayFullscreen')) {
             $element.addClass('player-fullscreen-override');
-        }
-        else {
+        } else {
             $element.addClass('player-fullscreen');
         }
         // Set to non-fullscreen (or FS if overriding) immediately, except for frames displayed fullscreen.
