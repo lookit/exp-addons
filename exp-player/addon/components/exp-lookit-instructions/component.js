@@ -97,15 +97,6 @@ export default ExpFrameBaseComponent.extend({
             type: 'object',
             properties: {
                 /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                /**
                  * Whether the user should be forced to play the audio clip before leaving the page
                  *
                  * @property {Boolean} mustPlay
@@ -222,7 +213,7 @@ export default ExpFrameBaseComponent.extend({
                     default: 'Start the videos! \n (You\'ll have a moment to turn around.)'
                 }
             },
-            required: ['id']
+            required: []
         },
         data: {
             /**

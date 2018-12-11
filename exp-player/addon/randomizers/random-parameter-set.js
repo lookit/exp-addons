@@ -22,7 +22,6 @@ import Ember from 'ember';
     "test-trials": {
         "sampler": "random-parameter-set",
         "kind": "choice",
-        "id": "test-trials",
         "commonFrameProperties": {
             "kind": "exp-lookit-story-page",
             "baseDir": "https://s3.amazonaws.com/lookitcontents/ingroupobligations/",
@@ -193,12 +192,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      * the documentation for the frameType used.
      *
      * @property {Object} commonFrameProperties
-     */
-
-    /**
-     * Unique string identifying this set of frames
-     *
-     * @property {String} id
      */
 
     /**

@@ -16,7 +16,6 @@
     "test-trials": {
         "sampler": "permute",
         "kind": "choice",
-        "id": "test-trials",
         "commonFrameProperties": {
             "showPreviousButton": false
         },
@@ -55,12 +54,6 @@
 var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 
     // Data provided to randomizer (properties of frameConfig):
-
-    /**
-     * Unique string identifying this set of frames
-     *
-     * @property {String} id
-     */
 
     /**
      * List of frames to be created by this randomizer. Each frame is an

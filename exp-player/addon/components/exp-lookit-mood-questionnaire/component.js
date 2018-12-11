@@ -41,7 +41,6 @@ let pad = function(number) {
  "frames": {
     "mood-survey": {
         "introText": "How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.",
-        "id": "mood-survey",
         "kind": "exp-lookit-mood-questionnaire"
     }
  }
@@ -116,15 +115,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: 'object',
             properties: {
                 /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                /**
                  * Intro paragraph describing why we want mood info
                  *
                  * @property {String} introText
@@ -136,7 +126,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     default: 'How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.'
                 }
             },
-            required: ['id']
+            required: []
         },
         data: {
             /**

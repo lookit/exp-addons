@@ -12,7 +12,6 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 ```json
 "frames": {
     "study-intro": {
-        "id": "geom-intro",
         "blocks": [
             {
                 "emph": true,
@@ -45,15 +44,6 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
                 /**
                  * Whether to show a 'previous' button
                  *
