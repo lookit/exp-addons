@@ -120,7 +120,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 &#x60;&#x60;&#x60;json
 &quot;frames&quot;: {
     &quot;video-quality&quot;: {
-        &quot;id&quot;: &quot;video-quality&quot;,
         &quot;kind&quot;: &quot;exp-video-config-quality&quot;
     }
 }
@@ -149,16 +148,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         parameters: {
             type: &#x27;object&#x27;,
             properties: {
-                /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: &#x27;string&#x27;,
-                    description: &#x27;A unique identifier for this item&#x27;
-                }
             },
-            required: [&#x27;id&#x27;]
+            required: []
         },
         data: {
             type: &#x27;object&#x27;,
