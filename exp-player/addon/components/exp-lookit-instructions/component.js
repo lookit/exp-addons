@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import VideoRecord from '../../mixins/video-record';
 
 /**
  * @module exp-player
@@ -84,9 +85,10 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  * ```
  * @class ExpLookitInstructions
  * @extends ExpFrameBase
+ * @extends VideoRecord
  */
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout: layout,
     type: 'exp-lookit-instructions',
     didFinishSound: false,
@@ -109,11 +111,23 @@ export default ExpFrameBaseComponent.extend({
                  * Whether the user should be forced to play the audio clip before leaving the page
                  *
                  * @property {Boolean} mustPlay
+                 * @default true
                  */
                 mustPlay: {
                     type: 'boolean',
                     description: 'Should the user be forced to play the clip before leaving the page?',
                     default: true
+                },
+                /**
+                 * Whether to display the user's webcam
+                 *
+                 * @property {Boolean} showWebcam
+                 * @default false
+                 */
+                showWebcam: {
+                    type: 'boolean',
+                    description: 'Whether to display the user\'s webcam',
+                    default: false
                 },
                 /**
                  * Object specifying the audio clip to include (optional)
@@ -165,6 +179,52 @@ export default ExpFrameBaseComponent.extend({
                  *   {text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.
                  */
                 blocks: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            title: {
+                                type: 'string'
+                            },
+                            text: {
+                                type: 'string'
+                            },
+                            listblocks: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        text: {
+                                            type: 'string'
+                                        },
+                                        image: {
+                                            type: 'object',
+                                            properties: {
+                                                src: {
+                                                    type: 'string'
+                                                },
+                                                alt: {
+                                                    type: 'string'
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    default: []
+                },
+                /**
+                 * Array of objects specifying text/images of instructions to display under webcam view (if webcam is shown)
+                 *
+                 * @property {Object[]} blocks
+                 *   @param {String} title Title of this section
+                 *   @param {String} text Paragraph text of this section
+                 *   @param {Object[]} listblocks Object specifying bulleted points for this section. Each object is of the form:
+                 *   {text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.
+                 */
+                webcamBlocks: {
                     type: 'array',
                     items: {
                         type: 'object',

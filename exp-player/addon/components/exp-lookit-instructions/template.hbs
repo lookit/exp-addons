@@ -1,40 +1,11 @@
-<div class="row exp-text" id="exp-lookit-instructions">
+<div class="row exp-lookit-instructions">
     <div class="vertical-pad"></div>
-    <div class="col-md-8 col-md-offset-2 exp-lookit-instructions">
+
+    <div class="exp-text {{if showWebcam "col-md-6" "col-md-6 col-md-offset-3"}}">
 
         {{#each blocks as |block|}}
-
-            {{#if block.title}}
-                <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
-            {{/if}}
-
-            {{#if block.text}}
-                <p>
-                    {{exp-format block.text}}
-                </p>
-            {{/if}}
-
-            {{#if block.listblocks}}
-                <ul>
-                    {{#each block.listblocks as |listitem|}}
-                        <li>
-                            {{exp-format listitem.text}}
-
-                            {{#if listitem.image}}
-                                <img class="instructionspic"
-                                    src={{listitem.image.src}}
-                                    alt={{listitem.image.alt}} >
-                            {{/if}}
-
-                        </li>
-                    {{/each}}
-                </ul>
-
-            {{/if}}
-
+            {{exp-text-block block=block}}
         {{/each}}
-
-
 
         {{#if audioBlock}}
 
@@ -51,11 +22,9 @@
                        controls
                        onended={{ if mustPlay (action 'soundPlayed') }}
                 >
-
                     {{#each audioBlock.sources as |source|}}
                         <source src={{source.src}} type={{source.type}}>
                     {{/each}}
-
                 </audio>
 
                 {{#if showWarning}}
@@ -67,20 +36,38 @@
 
         {{/if}}
 
-        {{#if showPreviousButton}}
-            <button class="btn btn-default pull-left" {{ action 'previous' }}>
-                Previous
-            </button>
-        {{/if}}
-
-        <button id="nextbutton" class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
-            {{exp-format nextButtonText}}
-
-        </button>
-
     </div>
 
+    {{#if showWebcam}}
+        <div class="col-md-4 recorder-col">
+            <div class="row exp-video-config recorder-container">
+                <div id="recorder" class="col-xs-12"></div>
+            </div>
+
+            {{#if webcamBlocks}}
+                <div class="vertical-pad"></div>
+                {{#each webcamBlocks as |block|}}
+                    {{exp-text-block block=block}}
+                {{/each}}
+            {{/if}}
+
+        </div>
+    {{/if}}
 
 </div>
 
+<div class="row exp-lookit-instructions">
 
+    <div class="vertical-pad"></div>
+
+    {{#if showPreviousButton}}
+        <button class="btn btn-default pull-left" {{ action 'previous' }}>
+            Previous
+        </button>
+    {{/if}}
+
+    <button id="nextbutton" class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
+        {{exp-format nextButtonText}}
+
+    </button>
+</div>
