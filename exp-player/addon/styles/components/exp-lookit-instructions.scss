@@ -7,9 +7,11 @@
     font-style: normal;
 }
 
-
-.exp-lookit-instructions .instructionspic {
+.exp-lookit-instructions li img.text-block-img {
     float: right;
+}
+
+.exp-lookit-instructions img.text-block-img {
     max-height: 180px;
     border-radius: 10%;
     border: thin solid black;
@@ -30,4 +32,15 @@
 
 .exp-lookit-instructions .sound-warning {
     color: red;
+}
+
+// Pipe video recorder div formatting
+.exp-lookit-instructions .recorder-container {
+    height: 40vh;
+}
+
+.exp-lookit-instructions .recorder-col, .exp-lookit-instructions .recorder-col .recorder-container * {
+    float: right;
+    padding: 0;
+    margin: 0;
 }
