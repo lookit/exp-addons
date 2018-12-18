@@ -35,6 +35,26 @@ let {
  * any fields that fail validation checks and the participant will not be able to proceed until
  * these are addressed.
  *
+ * Alpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy
+ * and paste any object passed to alpaca in the alpaca docs right in as your formSchema to
+ * see that example in action on Lookit. Not all features of alpaca are detailed here,
+ * but they can be used: e.g., advanced users can enter 'views' and 'data' in the
+ * formSchema to customize the layout of their forms and the initial data. A 'dataSource'
+ * may be specified under options to populate a question's potential answers (e.g., to
+ * load a list of countries from some other source rather than hard-coding it, or to
+ * provide checkboxes with vocabulary items from an externally-defined inventory).
+ *
+ * You can also use alpacajs's "dependencies" and "conditional dependencies" functionality to
+ * set up fields that depend on other fields - e.g., asking if the child speaks any
+ * language besides English in the home and only if so displaying a dropdown to select the
+ * language(s), or asking if the child likes Elmo or Grover better and then asking a question
+ * specific to the preferred character. Or if you have questions only relevant to the
+ * birth mother of the child, you could ask if the participant is the birth mother and show
+ * those questions conditionally.
+ *
+ * Note that question titles are interpreted as HTML and can include images, audio/video
+ * elements, and inline CSS.
+ *
  * If a participant returns to this frame after continuing, via a 'Previous' button on the
  * next frame, then the values in this form are pre-filled.
  *
@@ -45,10 +65,9 @@ let {
  * The form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical
  * height of the window (it will scroll to fit).
  *
- * Although this frame provides fairly powerful capabilities via alpacajs, here are some
- * things that would currently still require customization of the frame source code:
- * editing the formatting; displaying images or playing audio/video; custom validation or
- * dynamic addition/removal of fields.
+ * Current limitations: you are NOT
+ * able to provide custom functions (e.g. validators, custom dataSource functions)
+ * directly to the formSchema.
 
 
 ```json
@@ -90,17 +109,15 @@ let {
                 "options": {
                     "fields": {
                         "age": {
-                            "hideInitValidationError": true
+                            "numericEntry": true
                         },
                         "name": {
-                            "placeholder": "a name...",
-                            "hideInitValidationError": true
+                            "placeholder": "a name..."
                         },
                         "species": {
                             "type": "radio",
                             "message": "Seriously, what species??",
-                            "validator": "required-field",
-                            "hideInitValidationError": true
+                            "validator": "required-field"
                         }
                     }
                 }
@@ -233,6 +250,29 @@ export default ExpFrameBaseComponent.extend({
 
         }
     }
+
+// Set defaults for form options. Not needed here because apparently hideInitValidationError
+// IS done by default.
+//     willRender() {
+//         this._super(...arguments);
+//         var formSchemaProcessed = this.get('formSchema');
+//         console.log(formSchemaProcessed);
+//         if (formSchemaProcessed.options.hasOwnProperty('fields')) {
+//             var fields = formSchemaProcessed.options.fields;
+//             console.log(fields);
+//             for (var property in fields) {
+//                 console.log(property);
+//                 if (fields.hasOwnProperty(property)) {
+//                     console.log(property);
+//                     if (!fields[property].hasOwnProperty('hideInitValidationError')) {
+//                         fields[property].hideInitValidationError = true;
+//                     }
+//                 }
+//             }
+//         }
+//         formSchemaProcessed.fields = fields;
+//         this.set('formSchemaProcessed', formSchemaProcessed);
+//     }
 
 });
 
