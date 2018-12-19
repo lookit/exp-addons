@@ -3,38 +3,53 @@
 
     <div class="exp-text {{if showWebcam "col-md-6" "col-md-6 col-md-offset-3"}}">
 
-        {{#each blocks as |block|}}
+        {{#each blocks as |block idx|}}
+
             {{exp-text-block block=block}}
+
+            {{#if block.mediaBlock}}
+
+                <div class="media-wrapper" id="media-{{idx}}">
+                    <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>
+                        {{block.mediaBlock.title}}
+                    </p>
+
+
+
+                    {{#if block.mediaBlock.isVideo}}
+                        <video class="player-media"
+                                   controls
+                                   onended={{action 'mediaPlayed'}}
+                            >
+                                {{#each block.mediaBlock.sources as |source|}}
+                                    <source src={{source.src}} type={{source.type}}>
+                                {{/each}}
+                        </video>
+                    {{else}}
+                        <audio class="player-media"
+                                   controls
+                                   onended={{action 'mediaPlayed'}}
+                            >
+                                {{#each block.mediaBlock.sources as |source|}}
+                                    <source src={{source.src}} type={{source.type}}>
+                                {{/each}}
+                        </audio>
+                    {{/if}}
+
+                    <p>
+                        {{exp-format block.mediaBlock.text}}
+                    </p>
+
+                    {{#if showWarning}}
+                        <div class="media-warning">
+                            * {{block.mediaBlock.warningText}}
+                        </div>
+                    {{/if}}
+                </div>
+
+            {{/if}}
+
         {{/each}}
-
-        {{#if audioBlock}}
-
-            <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>
-                {{audioBlock.title}}
-            </p>
-
-            <p>
-                {{exp-format audioBlock.text}}
-            </p>
-
-            <div id="audio-wrapper">
-                <audio id="player-audio"
-                       controls
-                       onended={{ if mustPlay (action 'soundPlayed') }}
-                >
-                    {{#each audioBlock.sources as |source|}}
-                        <source src={{source.src}} type={{source.type}}>
-                    {{/each}}
-                </audio>
-
-                {{#if showWarning}}
-                    <div class="sound-warning">
-                        * {{audioBlock.warningText}}
-                    </div>
-                {{/if}}
-            </div>
-
-        {{/if}}
 
     </div>
 
