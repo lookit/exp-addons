@@ -75,7 +75,9 @@
         "addon/components/exp-lookit-observation/component.js": {
             "name": "addon/components/exp-lookit-observation/component.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "ExpLookitObservation": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -284,6 +286,7 @@
                 "ExpLookitGeometryAlternation": 1,
                 "ExpLookitInstructions": 1,
                 "ExpLookitMoodQuestionnaire": 1,
+                "ExpLookitObservation": 1,
                 "ExpLookitVideo": 1,
                 "ExpLookitPreviewExplanation": 1,
                 "ExpLookitStoryPage": 1,
@@ -323,6 +326,7 @@
                 "ExpLookitGeometryAlternation": 1,
                 "ExpLookitInstructions": 1,
                 "ExpLookitMoodQuestionnaire": 1,
+                "ExpLookitObservation": 1,
                 "ExpLookitVideo": 1,
                 "ExpLookitPreviewExplanation": 1,
                 "ExpLookitStoryPage": 1,
@@ -533,9 +537,9 @@
             "submodule": "frames",
             "namespace": "",
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 11,
-            "description": "A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on).\n\n```json\n\"frames\": {\n\"final-instructions\": {\n           \"mustPlay\": true,\n           \"kind\": \"exp-lookit-instructions\",\n           \"nextButtonText\": \"Start the videos! \\n (You'll have a moment to turn around.)\",\n           \"id\": \"final-instructions\",\n           \"blocks\": [\n               {\n                   \"text\": \"The video section will take about 6 minutes to complete. After that, you will be able to select a level of privacy for your data.\"\n               },\n               {\n                   \"title\": \"Study overview\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"There will be four videos, each a little over a minute long. \"\n                       },\n                       {\n                           \"text\": \"You’ll hear spoken updates between videos.\"\n                       }\n                   ]\n               },\n               {\n                   \"title\": \"During the videos\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"Please face away from the screen, holding your infant so they can look over your shoulder. Please don't look at the videos yourself, as we may not be able to use your infant’s data in that case.\",\n                           \"image\": {\n                               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg\",\n                               \"alt\": \"Father holding child looking over his shoulder\"\n                           }\n                       },\n                       {\n                           \"text\": \"Don’t worry if your baby isn’t looking at the screen the entire time! Please just try to keep them facing the screen so they can look if they want to.\"\n                       },\n                       {\n                           \"text\": \"If you’d like, you can direct your infant’s attention to the screen by saying things like, 'What’s happening?' But don’t talk about specific things that might be happening in the videos.\"\n                       }\n                   ]\n               },\n               {\n                   \"title\": \"Pausing and stopping\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"If your child gets fussy or distracted, or you need to attend to something else for a moment, you can pause the study during the breaks between videos. \"\n                       },\n                       {\n                           \"text\": \"If you need to end the study early, just close the window or tab. You’ll be prompted to note any technical problems you might be experiencing and to select a privacy level for your videos.\"\n                       }\n                   ]\n               }\n           ],\n           \"audioBlock\": {\n               \"text\": \"You should hear 'Ready to go?'\",\n               \"warningText\": \"Please try playing the sample audio.\",\n               \"title\": \"Test your audio\",\n               \"sources\": [\n                   {\n                       \"src\": \"https://s3.amazonaws.com/lookitcontents/ready.mp3\",\n                       \"type\": \"audio/mp3\"\n                   },\n                   {\n                       \"src\": \"https://s3.amazonaws.com/lookitcontents/ready.ogg\",\n                       \"type\": \"audio/ogg\"\n                   }\n               ]\n           }\n       }\n}\n\n```",
-            "extends": "ExpFrameBase"
+            "line": 12,
+            "description": "A frame to display instructions to the user. The user's webcam may optionally be\ndisplayed, and audio and video clips may be included in the instructions (and may be\nrequired to be played before moving on).\n\nEach element of the 'blocks' parameter is rendered using {{#crossLink \"ExpTextBlock\"}}{{/crossLink}}.\n\n```json\n\"frames\": {\n       \"instructions\": {\n           \"id\": \"instructions\",\n           \"kind\": \"exp-lookit-instructions\",\n           \"blocks\": [\n               {\n                   \"title\": \"Parent's role\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"Follow instructions\"\n                       },\n                       {\n                           \"text\": \"Only do each joke once\"\n                       }\n                   ]\n               },\n               {\n                   \"text\": \"It's important that we can see you\",\n                   \"image\": {\n                       \"alt\": \"Father holding child looking over his shoulder\",\n                       \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg\"\n                   },\n                   \"title\": \"Camera position\"\n               },\n               {\n                   \"text\": \"Here's some audio you have to play\",\n                   \"title\": \"Test\",\n                   \"mediaBlock\": {\n                       \"text\": \"You should hear 'Ready to go?'\",\n                       \"isVideo\": false,\n                       \"sources\": [\n                           {\n                               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.mp3\",\n                               \"type\": \"audio/mp3\"\n                           },\n                           {\n                               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.ogg\",\n                               \"type\": \"audio/ogg\"\n                           }\n                       ],\n                       \"mustPlay\": true,\n                       \"warningText\": \"Please try playing the sample audio.\"\n                   }\n               },\n               {\n                   \"text\": \"Here's a video you don't have to play!\",\n                   \"title\": \"Test\",\n                   \"mediaBlock\": {\n                       \"text\": \"Look at that.\",\n                       \"isVideo\": true,\n                       \"sources\": [\n                           {\n                               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.mp4\",\n                               \"type\": \"video/mp4\"\n                           },\n                           {\n                               \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.webm\",\n                               \"type\": \"video/webm\"\n                           }\n                       ],\n                       \"mustPlay\": false\n                   }\n               }\n           ],\n           \"showWebcam\": true,\n           \"webcamBlocks\": [\n               {\n                   \"title\": \"Some webcam instructions\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"Like this!\"\n                       },\n                       {\n                           \"text\": \"Be careful your webcam does not have tape over it\"\n                       }\n                   ]\n               }\n           ],\n           \"nextButtonText\": \"Next\"\n       }\n}\n\n```",
+            "extends": "VideoRecord"
         },
         "ExpLookitMoodQuestionnaire": {
             "name": "ExpLookitMoodQuestionnaire",
@@ -552,6 +556,22 @@
             "line": 16,
             "description": "A standard mood survey with questions about factors that might affect a\nchild's responses. Includes Likert-type ratings of the CHILD's position on\nthe following scales:\n- Tired - Rested\n- Sick - Healthy\n- Fussy - Happy\n- Calm - Active\n\nand of the PARENT's position on:\n- Tired - Energetic\n- Overwhelmed - On top of things\n- Upset - Happy\n\nIt also asks for a response in hours:minutes for:\n- how long ago the child last woke up from sleep or a nap\n- how long until he/she is due for another nap/sleep (if regular nap schedule)\n- how long ago the child last ate/drank\n\nand for what the child was doing just before this (free-response). Responses\nto all questions are required to move on.\n\nThis frame can be used as a starting point/example for other custom survey frames, or development of a customizable survey frame.\n\n```json\n\"frames\": {\n   \"mood-survey\": {\n       \"introText\": \"How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.\",\n       \"id\": \"mood-survey\",\n       \"kind\": \"exp-lookit-mood-questionnaire\"\n   }\n}\n\n```",
             "extends": "ExpFrameBase"
+        },
+        "ExpLookitObservation": {
+            "name": "ExpLookitObservation",
+            "shortname": "ExpLookitObservation",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "exp-player",
+            "submodule": "frames",
+            "namespace": "",
+            "file": "addon/components/exp-lookit-observation/component.js",
+            "line": 15,
+            "description": "A frame to collect a video observation with the participant's help. By default the\nwebcam is displayed to the participant and they can choose when to start, pause, and\nresume recording. The duration of an individual recording can optionally be limited\nand/or recording can be started automatically. This is intended for cases where we\nwant the parent to perform some test or behavior with the child, rather than\npresenting stimuli ourselves. E.g., you might give instructions to conduct a structured\ninterview and allow the parent to control recording.\n\nEach element of the 'blocks' parameter is rendered using {{#crossLink \"ExpTextBlock\"}}{{/crossLink}}.\n\n```\n   \"frames\": {\n       \"observation\": {\n           \"kind\": \"exp-lookit-observation\",\n           \"blocks\": [\n               {\n                   \"title\": \"Time to do the joke!\",\n                   \"listblocks\": [\n                       {\n                           \"text\": \"Rip the paper\"\n                       },\n                       {\n                           \"text\": \"Wait ten seconds\"\n                       }\n                   ]\n               }\n           ],\n           \"hideWebcam\": true,\n           \"hideControls\": false,\n           \"recordSegmentLength\": 10,\n           \"startRecordingAutomatically\": false,\n           \"nextButtonText\": \"move on\",\n           \"showPreviousButton\": false\n       }\n   }\n```",
+            "extends": "VideoRecord"
         },
         "ExpLookitVideo": {
             "name": "ExpLookitVideo",
@@ -623,7 +643,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-survey/component.js",
             "line": 14,
-            "description": "Basic survey frame allowing researcher to specify question text and types.\n\nThis frame uses ember-cli-dynamic-forms as a wrapper for alpacajs, a powerful\nlibrary for generating online forms. To specify the structure of your form\n(questions, answer types, validation), you provide a single 'formSchema' structure.\nThe 'formSchema' consists of a 'schema' object and an 'options' object, described\nunder Properties.\n\nYou can choose from any question types listed at http://www.alpacajs.org/documentation.html.\nIn that documentation, you will see that each field type - e.g., Checkbox, Radio, Text -\nhas some 'Schema' properties and some 'Options' properties. The properties under 'Schema'\nwill be defined in the 'schema' object of your formSchema. The properties under 'Options'\nwill be defined in the 'options' object of your formSchema.\n\nMany question types allow you to easily validate answers. For instance, for a \"number\"\nfield you can set minimum and maximum values, and entries will automatically be\nrequired to be numeric (http://www.alpacajs.org/docs/fields/number.html). You can also\neither set required: true in the schema->properties entry for this field OR set\nvalidator: required-field in the options->fields entry if you want to require that the\nparticipant enters something. A validation error message will be displayed next to\nany fields that fail validation checks and the participant will not be able to proceed until\nthese are addressed.\n\nIf a participant returns to this frame after continuing, via a 'Previous' button on the\nnext frame, then the values in this form are pre-filled.\n\nNo video recording is conducted on this frame.\n\nA previous button may optionally be included on this frame.\n\nThe form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical\nheight of the window (it will scroll to fit).\n\nAlthough this frame provides fairly powerful capabilities via alpacajs, here are some\nthings that would currently still require customization of the frame source code:\nediting the formatting; displaying images or playing audio/video; custom validation or\ndynamic addition/removal of fields.\n\n\n```json\n\"frames\": {\n       \"pet-survey\": {\n           \"id\": \"pet-survey\",\n           \"kind\": \"exp-lookit-survey\",\n           \"formSchema\": {\n               \"schema\": {\n                   \"type\": \"object\",\n                   \"title\": \"Tell us about your pet!\",\n                   \"properties\": {\n                       \"age\": {\n                           \"type\": \"integer\",\n                           \"title\": \"Age\",\n                           \"maximum\": 200,\n                           \"minimum\": 0,\n                           \"required\": true\n                       },\n                       \"name\": {\n                           \"type\": \"string\",\n                           \"title\": \"Name\",\n                           \"required\": true\n                       },\n                       \"species\": {\n                           \"enum\": [\n                               \"dog\",\n                               \"cat\",\n                               \"fish\",\n                               \"bird\",\n                               \"raccoon\"\n                           ],\n                           \"type\": \"string\",\n                           \"title\": \"What type of animal?\",\n                           \"default\": \"\"\n                       }\n                   }\n               },\n               \"options\": {\n                   \"fields\": {\n                       \"age\": {\n                           \"hideInitValidationError\": true\n                       },\n                       \"name\": {\n                           \"placeholder\": \"a name...\",\n                           \"hideInitValidationError\": true\n                       },\n                       \"species\": {\n                           \"type\": \"radio\",\n                           \"message\": \"Seriously, what species??\",\n                           \"validator\": \"required-field\",\n                           \"hideInitValidationError\": true\n                       }\n                   }\n               }\n           },\n           \"nextButtonText\": \"Moving on...\"\n       }\n   }\n\n```",
+            "description": "Basic survey frame allowing researcher to specify question text and types.\n\nThis frame uses ember-cli-dynamic-forms as a wrapper for alpacajs, a powerful\nlibrary for generating online forms. To specify the structure of your form\n(questions, answer types, validation), you provide a single 'formSchema' structure.\nThe 'formSchema' consists of a 'schema' object and an 'options' object, described\nunder Properties.\n\nYou can choose from any question types listed at http://www.alpacajs.org/documentation.html.\nIn that documentation, you will see that each field type - e.g., Checkbox, Radio, Text -\nhas some 'Schema' properties and some 'Options' properties. The properties under 'Schema'\nwill be defined in the 'schema' object of your formSchema. The properties under 'Options'\nwill be defined in the 'options' object of your formSchema.\n\nMany question types allow you to easily validate answers. For instance, for a \"number\"\nfield you can set minimum and maximum values, and entries will automatically be\nrequired to be numeric (http://www.alpacajs.org/docs/fields/number.html). You can also\neither set required: true in the schema->properties entry for this field OR set\nvalidator: required-field in the options->fields entry if you want to require that the\nparticipant enters something. A validation error message will be displayed next to\nany fields that fail validation checks and the participant will not be able to proceed until\nthese are addressed.\n\nAlpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy\nand paste any object passed to alpaca in the alpaca docs right in as your formSchema to\nsee that example in action on Lookit. Not all features of alpaca are detailed here,\nbut they can be used: e.g., advanced users can enter 'views' and 'data' in the\nformSchema to customize the layout of their forms and the initial data. A 'dataSource'\nmay be specified under options to populate a question's potential answers (e.g., to\nload a list of countries from some other source rather than hard-coding it, or to\nprovide checkboxes with vocabulary items from an externally-defined inventory).\n\nYou can also use alpacajs's \"dependencies\" and \"conditional dependencies\" functionality to\nset up fields that depend on other fields - e.g., asking if the child speaks any\nlanguage besides English in the home and only if so displaying a dropdown to select the\nlanguage(s), or asking if the child likes Elmo or Grover better and then asking a question\nspecific to the preferred character. Or if you have questions only relevant to the\nbirth mother of the child, you could ask if the participant is the birth mother and show\nthose questions conditionally.\n\nNote that question titles are interpreted as HTML and can include images, audio/video\nelements, and inline CSS.\n\nIf a participant returns to this frame after continuing, via a 'Previous' button on the\nnext frame, then the values in this form are pre-filled.\n\nNo video recording is conducted on this frame.\n\nA previous button may optionally be included on this frame.\n\nThe form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical\nheight of the window (it will scroll to fit).\n\nCurrent limitations: you are NOT\nable to provide custom functions (e.g. validators, custom dataSource functions)\ndirectly to the formSchema.\n\n\n```json\n\"frames\": {\n       \"pet-survey\": {\n           \"id\": \"pet-survey\",\n           \"kind\": \"exp-lookit-survey\",\n           \"formSchema\": {\n               \"schema\": {\n                   \"type\": \"object\",\n                   \"title\": \"Tell us about your pet!\",\n                   \"properties\": {\n                       \"age\": {\n                           \"type\": \"integer\",\n                           \"title\": \"Age\",\n                           \"maximum\": 200,\n                           \"minimum\": 0,\n                           \"required\": true\n                       },\n                       \"name\": {\n                           \"type\": \"string\",\n                           \"title\": \"Name\",\n                           \"required\": true\n                       },\n                       \"species\": {\n                           \"enum\": [\n                               \"dog\",\n                               \"cat\",\n                               \"fish\",\n                               \"bird\",\n                               \"raccoon\"\n                           ],\n                           \"type\": \"string\",\n                           \"title\": \"What type of animal?\",\n                           \"default\": \"\"\n                       }\n                   }\n               },\n               \"options\": {\n                   \"fields\": {\n                       \"age\": {\n                           \"numericEntry\": true\n                       },\n                       \"name\": {\n                           \"placeholder\": \"a name...\"\n                       },\n                       \"species\": {\n                           \"type\": \"radio\",\n                           \"message\": \"Seriously, what species??\",\n                           \"validator\": \"required-field\"\n                       }\n                   }\n               }\n           },\n           \"nextButtonText\": \"Moving on...\"\n       }\n   }\n\n```",
             "extends": "ExpFrameBase"
         },
         "ExpLookitText": {
@@ -1688,7 +1708,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 99,
+            "line": 118,
             "description": "A unique identifier for this item",
             "itemtype": "property",
             "name": "id",
@@ -1699,52 +1719,53 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 108,
-            "description": "Whether the user should be forced to play the audio clip before leaving the page",
+            "line": 127,
+            "description": "Whether to display the user's webcam",
             "itemtype": "property",
-            "name": "mustPlay",
+            "name": "showWebcam",
             "type": "Boolean",
+            "default": "false",
             "class": "ExpLookitInstructions",
             "module": "exp-player",
             "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 118,
-            "description": "Object specifying the audio clip to include (optional)",
+            "line": 139,
+            "description": "Array of blocks for {{#crossLink \"ExpTextBlock\"}}{{/crossLink}}, specifying text/images of instructions to display",
             "itemtype": "property",
-            "name": "audioBlock",
-            "type": "Object",
+            "name": "blocks",
+            "type": "Object[]",
             "class": "ExpLookitInstructions",
             "module": "exp-player",
             "submodule": "frames",
             "subprops": [
                 {
                     "name": "title",
-                    "description": "Title text to show above audio controls",
+                    "description": "Title of this section",
                     "type": "String"
                 },
                 {
                     "name": "text",
-                    "description": "Text to show below audio controls",
+                    "description": "Paragraph text of this section",
                     "type": "String"
                 },
                 {
-                    "name": "warningText",
-                    "description": "Text to show in red if user tries to proceed but hasn't played audio; only used if mustPlay is true",
-                    "type": "String"
-                },
-                {
-                    "name": "sources",
-                    "description": "Array of {src: 'url', type: 'MIMEtype'} objects specifying audio sources",
+                    "name": "listblocks",
+                    "description": "Object specifying bulleted points for this section. Each object is of the form:\n  {text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.",
                     "type": "Object[]"
+                },
+                {
+                    "name": "mediaBlock",
+                    "description": "Object specifying audio or video clip to include (optional). mediaBlock should be of form:\n  {title: 'title text to show above audio', text: 'text to show below controls', warningText: 'Text to show in red if user tries to proceed but hasn't played; only used if mustPlay is true', sources: 'sources Array of {src: 'url', type: 'MIMEtype'} objects specifying audio sources', isVideo: 'boolean, whether video or audio', mustPlay: 'boolean, whether clip has to be played to proceed'}",
+                    "type": "Object"
                 }
             ]
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 158,
-            "description": "Array of objects specifying text/images of instructions to display",
+            "line": 225,
+            "description": "Array of objects specifying text/images of instructions to display under webcam view (if webcam is shown)",
             "itemtype": "property",
             "name": "blocks",
             "type": "Object[]",
@@ -1771,7 +1792,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 204,
+            "line": 271,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -1783,7 +1804,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 214,
+            "line": 281,
             "description": "Text to display on the 'next frame' button",
             "itemtype": "property",
             "name": "nextButtonText",
@@ -1795,7 +1816,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 228,
+            "line": 295,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -1920,13 +1941,14 @@
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 29,
-            "description": "Array of objects specifying text/images of instructions to display",
+            "line": 76,
+            "description": "Array of blocks for {{#crossLink \"ExpTextBlock\"}}{{/crossLink}}, specifying text/images of instructions to display",
             "itemtype": "property",
             "name": "blocks",
             "type": "Object[]",
-            "class": "ExpLookitVideo",
+            "class": "ExpLookitObservation",
             "module": "exp-player",
+            "submodule": "frames",
             "subprops": [
                 {
                     "name": "title",
@@ -1947,51 +1969,79 @@
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 75,
+            "line": 122,
             "description": "Number of seconds to record for before automatically pausing. Use\n0 for no limit.",
             "itemtype": "property",
             "name": "recordSegmentLength",
             "type": "String",
             "default": "300",
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 86,
+            "line": 133,
             "description": "Whether to automatically begin recording upon frame load",
             "itemtype": "property",
             "name": "startRecordingAutomatically",
             "type": "Boolean",
             "default": "false",
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 96,
+            "line": 143,
+            "description": "Whether to hide video recording controls (only use with startRecordingAutomatically)",
+            "itemtype": "property",
+            "name": "hideControls",
+            "type": "Boolean",
+            "default": "false",
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-observation/component.js",
+            "line": 153,
+            "description": "Whether to hide webcam view when frame loads (participant will still be able to show manually)",
+            "itemtype": "property",
+            "name": "hideWebcam",
+            "type": "Boolean",
+            "default": "false",
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
+        },
+        {
+            "file": "addon/components/exp-lookit-observation/component.js",
+            "line": 163,
             "description": "Text to display on the 'next frame' button",
             "itemtype": "property",
             "name": "nextButtonText",
             "type": "String",
             "default": "'Next'",
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 106,
+            "line": 173,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
             "type": "Boolean",
             "default": "true",
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 119,
+            "line": 186,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2016,17 +2066,19 @@
                 "description": "The payload sent to the server",
                 "type": "Object"
             },
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-observation/component.js",
-            "line": 202,
+            "line": 249,
             "description": "Video recording automatically paused upon reaching time limit",
             "itemtype": "event",
-            "name": "recorderReady",
-            "class": "ExpLookitVideo",
-            "module": "exp-player"
+            "name": "recorderTimeout",
+            "class": "ExpLookitObservation",
+            "module": "exp-player",
+            "submodule": "frames"
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
@@ -2783,7 +2835,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 126,
+            "line": 143,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -2795,7 +2847,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 136,
+            "line": 153,
             "description": "Text to display on the 'next frame' button",
             "itemtype": "property",
             "name": "nextButtonText",
@@ -2807,7 +2859,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 146,
+            "line": 163,
             "description": "Object specifying the content of the form. This is in the same format as\nthe example definition of the const 'schema' at http://toddjordan.github.io/ember-cli-dynamic-forms/#/demos/data:\na schema and options are designated separately. Each field of the form\nmust be defined in schema. Options may additionally be specified in options.",
             "itemtype": "property",
             "name": "formSchema",
@@ -2830,7 +2882,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 182,
+            "line": 199,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3452,7 +3504,7 @@
         },
         {
             "file": "addon/components/exp-video-config/component.js",
-            "line": 65,
+            "line": 64,
             "description": "A unique identifier for this item",
             "itemtype": "property",
             "name": "id",
@@ -3463,7 +3515,7 @@
         },
         {
             "file": "addon/components/exp-video-config/component.js",
-            "line": 73,
+            "line": 72,
             "description": "Text to show as the introduction to the troubleshooting tips section",
             "itemtype": "property",
             "name": "troubleshootingIntro",
@@ -3475,7 +3527,7 @@
         },
         {
             "file": "addon/components/exp-video-config-quality/component.js",
-            "line": 46,
+            "line": 39,
             "description": "A unique identifier for this item",
             "itemtype": "property",
             "name": "id",
