@@ -48,7 +48,6 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
-                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -143,32 +142,16 @@ validator: required-field in the options-&gt;fields entry if you want to require
 participant enters something. A validation error message will be displayed next to
 any fields that fail validation checks and the participant will not be able to proceed until
 these are addressed.</p>
-<p>Alpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy
-and paste any object passed to alpaca in the alpaca docs right in as your formSchema to
-see that example in action on Lookit. Not all features of alpaca are detailed here,
-but they can be used: e.g., advanced users can enter 'views' and 'data' in the
-formSchema to customize the layout of their forms and the initial data. A 'dataSource'
-may be specified under options to populate a question's potential answers (e.g., to
-load a list of countries from some other source rather than hard-coding it, or to
-provide checkboxes with vocabulary items from an externally-defined inventory).</p>
-<p>You can also use alpacajs's &quot;dependencies&quot; and &quot;conditional dependencies&quot; functionality to
-set up fields that depend on other fields - e.g., asking if the child speaks any
-language besides English in the home and only if so displaying a dropdown to select the
-language(s), or asking if the child likes Elmo or Grover better and then asking a question
-specific to the preferred character. Or if you have questions only relevant to the
-birth mother of the child, you could ask if the participant is the birth mother and show
-those questions conditionally.</p>
-<p>Note that question titles are interpreted as HTML and can include images, audio/video
-elements, and inline CSS.</p>
 <p>If a participant returns to this frame after continuing, via a 'Previous' button on the
 next frame, then the values in this form are pre-filled.</p>
 <p>No video recording is conducted on this frame.</p>
 <p>A previous button may optionally be included on this frame.</p>
 <p>The form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical
 height of the window (it will scroll to fit).</p>
-<p>Current limitations: you are NOT
-able to provide custom functions (e.g. validators, custom dataSource functions)
-directly to the formSchema.</p>
+<p>Although this frame provides fairly powerful capabilities via alpacajs, here are some
+things that would currently still require customization of the frame source code:
+editing the formatting; displaying images or playing audio/video; custom validation or
+dynamic addition/removal of fields.</p>
 <pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
        &quot;pet-survey&quot;: {
            &quot;id&quot;: &quot;pet-survey&quot;,
@@ -207,15 +190,17 @@ directly to the formSchema.</p>
                &quot;options&quot;: {
                    &quot;fields&quot;: {
                        &quot;age&quot;: {
-                           &quot;numericEntry&quot;: true
+                           &quot;hideInitValidationError&quot;: true
                        },
                        &quot;name&quot;: {
-                           &quot;placeholder&quot;: &quot;a name...&quot;
+                           &quot;placeholder&quot;: &quot;a name...&quot;,
+                           &quot;hideInitValidationError&quot;: true
                        },
                        &quot;species&quot;: {
                            &quot;type&quot;: &quot;radio&quot;,
                            &quot;message&quot;: &quot;Seriously, what species??&quot;,
-                           &quot;validator&quot;: &quot;required-field&quot;
+                           &quot;validator&quot;: &quot;required-field&quot;,
+                           &quot;hideInitValidationError&quot;: true
                        }
                    }
                }
@@ -468,7 +453,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l199"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:199</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l182"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:182</code></a>
         </p>
 
 
@@ -578,7 +563,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l163"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:163</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l146"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:146</code></a>
         </p>
 
 
@@ -715,7 +700,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l153"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:153</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l136"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:136</code></a>
         </p>
 
 
@@ -741,7 +726,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l143"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:143</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l126"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:126</code></a>
         </p>
 
 
