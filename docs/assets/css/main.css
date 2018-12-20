@@ -795,3 +795,12 @@ img.logo {
 li.module-sidebar-exp-player {
   display: none;
 }
+
+.class-screenshot {
+  border: medium solid #369;
+  display:inline;
+  max-height: 30em;
+  min-height: 0em;
+  box-shadow: 7px 7px 10px #bbb;
+  margin-left: 10%;
+}
