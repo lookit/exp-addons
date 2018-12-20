@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 import config from 'ember-get-config';
+import FullScreen from '../../mixins/full-screen';
 
 /**
  * @module exp-player
@@ -47,8 +48,10 @@ import config from 'ember-get-config';
     }}
  * ```
  * @class ExpFrameBase
+ *
+ * @uses FullScreen
  */
-export default Ember.Component.extend({
+export default Ember.Component.extend(FullScreen, {
     toast: Ember.inject.service(),
     // {String} the unique identifier for the _instance_
     id: null,
@@ -135,7 +138,9 @@ export default Ember.Component.extend({
     // Display error messages related to save failures
     displayError(error) { // eslint-disable-line no-unused-vars
         // If the save failure was a server error, warn the user. This error should never disappear.
-        const msg = 'If this problem persists, please contact your study coordinator.';
+        // Note: errors are not visible in FS mode, which is generally the desired behavior so as not to silently
+        // bias infant looking time towards right.
+        const msg = 'Check your internet connection. If another error like this still shows up as you continue, please contact lookit-tech@mit.edu to let us know!';
         this.get('toast').error(msg, 'Error: Could not save data', {timeOut: 0, extendedTimeOut: 0});
     },
 
@@ -219,6 +224,7 @@ export default Ember.Component.extend({
         },
 
         save() {
+            // Show an error if saving fails
             this._save().catch(err => this.displayError(err));
         },
 
@@ -229,13 +235,16 @@ export default Ember.Component.extend({
              * @event nextFrame
              */
             this.send('setTimeEvent', 'nextFrame');
-            // Only advance the form if save succeeded
-            this._save()
-                .then(() => {
-                    this.sendAction('next');
-                    window.scrollTo(0, 0);
-                })
-                .catch(err => this.displayError(err));
+            // Note: this will allow participant to proceed even if saving fails. The
+            // reason not to execute 'next' within this._save().then() is that an action
+            // executed as a promise doesn't count as a 'user interaction' event, so
+            // we wouldn't be able to enter FS mode upon starting the next frame. Given
+            // that the user is likely to have limited ability to FIX a save error, and the
+            // only thing they'll really be able to do is try again anyway, preventing
+            // them from continuing is unnecessarily disruptive.
+            this.send('save');
+            this.sendAction('next');
+            window.scrollTo(0, 0);
         },
 
         last() {
@@ -254,5 +263,29 @@ export default Ember.Component.extend({
             this.sendAction('previous');
             window.scrollTo(0, 0);
         }
+    },
+
+    didInsertElement() {
+        // Add different classes depending on whether fullscreen mode is
+        // being triggered as part of standard frame operation or as an override to a frame
+        // that is not typically fullscreen. In latter case, keep formatting as close to
+        // before as possible, to enable forms etc. to work ok in fullscreen mode.
+        Ember.$('*').removeClass('player-fullscreen');
+        Ember.$('*').removeClass('player-fullscreen-override');
+        var $element = Ember.$(`#${this.get('fullScreenElementId')}`);
+        if (this.get('displayFullscreenOverride') && !this.get('displayFullscreen')) {
+            $element.addClass('player-fullscreen-override');
+        } else {
+            $element.addClass('player-fullscreen');
+        }
+        // Set to non-fullscreen (or FS if overriding) immediately, except for frames displayed fullscreen.
+        // Note: if this is defined the same way in full-screen.js, it gets called twice
+        // for reasons I don't yet understand.
+        if (this.get('displayFullscreenOverride')) {
+            this.send('showFullscreen');
+        } else if (!(this.get('displayFullscreen'))) {
+            this.send('exitFullscreen');
+        }
+        this._super(...arguments);
     }
 });

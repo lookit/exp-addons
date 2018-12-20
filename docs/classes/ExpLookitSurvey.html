@@ -43,12 +43,12 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -117,6 +117,12 @@
 </div>
 
 
+<div>
+
+    <img src="../assets/screenshots/ExpLookitSurvey.png" class="class-screenshot">
+
+</div>
+
 <div class="box intro">
     <p>Basic survey frame allowing researcher to specify question text and types.</p>
 <p>This frame uses ember-cli-dynamic-forms as a wrapper for alpacajs, a powerful
@@ -137,16 +143,32 @@ validator: required-field in the options-&gt;fields entry if you want to require
 participant enters something. A validation error message will be displayed next to
 any fields that fail validation checks and the participant will not be able to proceed until
 these are addressed.</p>
+<p>Alpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy
+and paste any object passed to alpaca in the alpaca docs right in as your formSchema to
+see that example in action on Lookit. Not all features of alpaca are detailed here,
+but they can be used: e.g., advanced users can enter 'views' and 'data' in the
+formSchema to customize the layout of their forms and the initial data. A 'dataSource'
+may be specified under options to populate a question's potential answers (e.g., to
+load a list of countries from some other source rather than hard-coding it, or to
+provide checkboxes with vocabulary items from an externally-defined inventory).</p>
+<p>You can also use alpacajs's &quot;dependencies&quot; and &quot;conditional dependencies&quot; functionality to
+set up fields that depend on other fields - e.g., asking if the child speaks any
+language besides English in the home and only if so displaying a dropdown to select the
+language(s), or asking if the child likes Elmo or Grover better and then asking a question
+specific to the preferred character. Or if you have questions only relevant to the
+birth mother of the child, you could ask if the participant is the birth mother and show
+those questions conditionally.</p>
+<p>Note that question titles are interpreted as HTML and can include images, audio/video
+elements, and inline CSS.</p>
 <p>If a participant returns to this frame after continuing, via a 'Previous' button on the
 next frame, then the values in this form are pre-filled.</p>
 <p>No video recording is conducted on this frame.</p>
 <p>A previous button may optionally be included on this frame.</p>
 <p>The form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical
 height of the window (it will scroll to fit).</p>
-<p>Although this frame provides fairly powerful capabilities via alpacajs, here are some
-things that would currently still require customization of the frame source code:
-editing the formatting; displaying images or playing audio/video; custom validation or
-dynamic addition/removal of fields.</p>
+<p>Current limitations: you are NOT
+able to provide custom functions (e.g. validators, custom dataSource functions)
+directly to the formSchema.</p>
 <pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
        &quot;pet-survey&quot;: {
            &quot;id&quot;: &quot;pet-survey&quot;,
@@ -185,17 +207,15 @@ dynamic addition/removal of fields.</p>
                &quot;options&quot;: {
                    &quot;fields&quot;: {
                        &quot;age&quot;: {
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;numericEntry&quot;: true
                        },
                        &quot;name&quot;: {
-                           &quot;placeholder&quot;: &quot;a name...&quot;,
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;placeholder&quot;: &quot;a name...&quot;
                        },
                        &quot;species&quot;: {
                            &quot;type&quot;: &quot;radio&quot;,
                            &quot;message&quot;: &quot;Seriously, what species??&quot;,
-                           &quot;validator&quot;: &quot;required-field&quot;,
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;validator&quot;: &quot;required-field&quot;
                        }
                    }
                }
@@ -227,11 +247,19 @@ dynamic addition/removal of fields.</p>
 
                     <ul class="index-list methods extends">
                             <li class="index-item method inherited">
+                                <a href="#method_exitFullscreen">exitFullscreen</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_makeTimeEvent">makeTimeEvent</a>
 
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_serializeContent">serializeContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
                     </ul>
@@ -243,6 +271,18 @@ dynamic addition/removal of fields.</p>
                     <ul class="index-list properties extends">
                             <li class="index-item property">
                                 <a href="#property_formSchema">formSchema</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_fsButtonID">fsButtonID</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_fullScreenElementId">fullScreenElementId</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -262,6 +302,14 @@ dynamic addition/removal of fields.</p>
 
                     <ul class="index-list events extends">
                             <li class="index-item event inherited">
+                                <a href="#event_enteredFullscreen">enteredFullscreen</a>
+
+                            </li>
+                            <li class="index-item event inherited">
+                                <a href="#event_leftFullscreen">leftFullscreen</a>
+
+                            </li>
+                            <li class="index-item event inherited">
                                 <a href="#event_nextFrame">nextFrame</a>
 
                             </li>
@@ -276,6 +324,36 @@ dynamic addition/removal of fields.</p>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_exitFullscreen" class="method item inherited">
+    <h3 class="name"><code>exitFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Exit fullscreen mode
+    </div>
+
+
+
+
+</div>
 <div id="method_makeTimeEvent" class="method item inherited">
     <h3 class="name"><code>makeTimeEvent</code></h3>
 
@@ -303,7 +381,7 @@ dynamic addition/removal of fields.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-frame-base_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:198</code></a>
         </p>
 
 
@@ -390,7 +468,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l182"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:182</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l199"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:199</code></a>
         </p>
 
 
@@ -454,6 +532,36 @@ event sent by a particular frame</p>
 
 
 </div>
+<div id="method_showFullscreen" class="method item inherited">
+    <h3 class="name"><code>showFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l104"><code>addon&#x2F;mixins&#x2F;full-screen.js:104</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Make a specified element fullscreen
+    </div>
+
+
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
@@ -470,7 +578,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l146"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:146</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l163"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:163</code></a>
         </p>
 
 
@@ -523,6 +631,79 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
             </li>
         </ul>
 </div>
+<div id="property_fsButtonID" class="property item inherited">
+    <h3 class="name"><code>fsButtonID</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of a button to show if the user leaves fullscreen mode
+    </div>
+
+
+
+</div>
+<div id="property_fullScreenElementId" class="property item inherited">
+    <h3 class="name"><code>fullScreenElementId</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of the thing to make full screen (video element, div, etc)
+    </div>
+
+
+
+</div>
+<div id="property_id" class="property item inherited">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_id">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
+    </div>
+
+
+
+</div>
 <div id="property_nextButtonText" class="property item">
     <h3 class="name"><code>nextButtonText</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
@@ -534,7 +715,7 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l136"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:136</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l153"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:153</code></a>
         </p>
 
 
@@ -560,7 +741,7 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l126"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:126</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l143"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:143</code></a>
         </p>
 
 
@@ -581,6 +762,54 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
+                    <div id="event_enteredFullscreen" class="events item inherited">
+                        <h3 class="name"><code>enteredFullscreen</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l76"><code>addon&#x2F;mixins&#x2F;full-screen.js:76</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            Upon detecting change to fullscreen mode
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_leftFullscreen" class="events item inherited">
+                        <h3 class="name"><code>leftFullscreen</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l88"><code>addon&#x2F;mixins&#x2F;full-screen.js:88</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            Upon detecting change out of fullscreen mode
+                        </div>
+                    
+                    
+                    
+                    </div>
                     <div id="event_nextFrame" class="events item inherited">
                         <h3 class="name"><code>nextFrame</code></h3>
                         <span class="type"></span>
@@ -592,7 +821,7 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:232</code></a>
                             </p>
                     
                     
@@ -617,7 +846,7 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:255</code></a>
                             </p>
                     
                     

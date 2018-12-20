@@ -43,12 +43,12 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -112,7 +112,7 @@
         </div>
 
         <div class="extends">
-            Extends <a href="../classes/ExpFrameBaseUnsafe.html" class="crosslink">ExpFrameBaseUnsafe</a>
+            Extends <a href="../classes/ExpFrameBase.html" class="crosslink">ExpFrameBase</a>
         </div>
 
         <div class="foundat">
@@ -123,6 +123,12 @@
 
 </div>
 
+
+<div>
+
+    <img src="../assets/screenshots/ExpLookitGeometryAlternation.png" class="class-screenshot">
+
+</div>
 
 <div class="box intro">
     <p>Deprecated: not yet adapted for use with webrtc recorder. Currently kept in codebase
@@ -135,8 +141,10 @@ shape change, on the other only size changes. Frame is displayed fullscreen
 and video recording is conducted during calibration/test.</p>
 <p>The geometry randomizer generates a series of ExpLookitGeometryAlternation
 frames.</p>
-<p>These frames extend ExpFrameBaseUnsafe because they are displayed fullscreen
-and expected to be repeated.</p>
+<p>This frame is displayed fullscreen; if the frame before it is not, that frame
+needs to include a manual &quot;next&quot; button so that there's a user interaction
+event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
+without a user event.)</p>
 <pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
    &quot;alt-trial&quot;: {
        &quot;kind&quot;: &quot;exp-lookit-geometry-alternation&quot;,
@@ -262,7 +270,7 @@ and expected to be repeated.</p>
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method inherited">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_exitFullscreen">exitFullscreen</a>
 
                             </li>
@@ -274,7 +282,7 @@ and expected to be repeated.</p>
                                 <a href="#method_serializeContent">serializeContent</a>
 
                             </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
@@ -321,12 +329,16 @@ and expected to be repeated.</p>
                                 <a href="#property_fsAudio">fsAudio</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property inherited inherited">
                                 <a href="#property_fsButtonID">fsButtonID</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property inherited inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
+
+                            </li>
+                            <li class="index-item property inherited inherited">
+                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -369,11 +381,11 @@ and expected to be repeated.</p>
                                 <a href="#event_clearTriangles">clearTriangles</a>
 
                             </li>
-                            <li class="index-item event inherited">
+                            <li class="index-item event inherited inherited">
                                 <a href="#event_enteredFullscreen">enteredFullscreen</a>
 
                             </li>
-                            <li class="index-item event inherited">
+                            <li class="index-item event inherited inherited">
                                 <a href="#event_leftFullscreen">leftFullscreen</a>
 
                             </li>
@@ -429,8 +441,11 @@ and expected to be repeated.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#method_exitFullscreen">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
         </p>
 
@@ -473,7 +488,7 @@ and expected to be repeated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-frame-base_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:198</code></a>
         </p>
 
 
@@ -566,7 +581,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l473"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:473</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l474"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:474</code></a>
         </p>
 
 
@@ -664,9 +679,12 @@ event sent by a particular frame</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l99"><code>addon&#x2F;mixins&#x2F;full-screen.js:99</code></a>
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#method_showFullscreen">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l104"><code>addon&#x2F;mixins&#x2F;full-screen.js:104</code></a>
         </p>
 
 
@@ -697,7 +715,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l203"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:203</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l204"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:204</code></a>
         </p>
 
 
@@ -723,7 +741,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l236"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:236</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l237"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:237</code></a>
         </p>
 
 
@@ -749,7 +767,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l269"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:269</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l270"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:270</code></a>
         </p>
 
 
@@ -775,7 +793,7 @@ instructions during attention-getter video</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l336"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:336</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l337"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:337</code></a>
         </p>
 
 
@@ -801,7 +819,7 @@ calibration audio (played 4 times during calibration)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l258"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:258</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l259"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:259</code></a>
         </p>
 
 
@@ -827,7 +845,7 @@ calibration audio (played 4 times during calibration)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l358"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:358</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l359"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:359</code></a>
         </p>
 
 
@@ -854,7 +872,7 @@ calibration)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l192"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:192</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:193</code></a>
         </p>
 
 
@@ -880,7 +898,7 @@ calibration)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l313"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:313</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l314"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:314</code></a>
         </p>
 
 
@@ -907,7 +925,7 @@ trial &quot;okay to open your eyes now&quot; announcement)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l447"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:447</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l448"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:448</code></a>
         </p>
 
 
@@ -931,8 +949,11 @@ audio played when study is paused due to not being fullscreen</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_fsButtonID">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
         </p>
 
@@ -955,8 +976,11 @@ audio played when study is paused due to not being fullscreen</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_fullScreenElementId">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
         </p>
 
@@ -965,6 +989,34 @@ audio played when study is paused due to not being fullscreen</p>
 
     <div class="description">
         The element ID of the thing to make full screen (video element, div, etc)
+    </div>
+
+
+
+</div>
+<div id="property_id" class="property item inherited">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_id">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
     </div>
 
 
@@ -981,7 +1033,7 @@ audio played when study is paused due to not being fullscreen</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l291"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:291</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l292"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:292</code></a>
         </p>
 
 
@@ -1007,7 +1059,7 @@ music during trial</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l403"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:403</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l404"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:404</code></a>
         </p>
 
 
@@ -1033,7 +1085,7 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l247"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:247</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l248"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:248</code></a>
         </p>
 
 
@@ -1059,7 +1111,7 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l214"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:214</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l215"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:215</code></a>
         </p>
 
 
@@ -1085,7 +1137,7 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l225"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:225</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:226</code></a>
         </p>
 
 
@@ -1111,7 +1163,7 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l425"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:425</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l426"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:426</code></a>
         </p>
 
 
@@ -1137,7 +1189,7 @@ audio played upon unpausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l381"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:381</code></a>
+        <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l382"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:382</code></a>
         </p>
 
 
@@ -1169,7 +1221,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l705"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:705</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l706"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:706</code></a>
                             </p>
                     
                     
@@ -1192,9 +1244,12 @@ attention-getter video (should be loopable)</p>
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l72"><code>addon&#x2F;mixins&#x2F;full-screen.js:72</code></a>
+                                <p>Inherited from
+                                <a href="../classes/FullScreen.html#event_enteredFullscreen">
+                                    FullScreen
+                                </a>
+                                but overwritten in
+                            <a href="../files/addon_mixins_full-screen.js.html#l76"><code>addon&#x2F;mixins&#x2F;full-screen.js:76</code></a>
                             </p>
                     
                     
@@ -1216,9 +1271,12 @@ attention-getter video (should be loopable)</p>
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l83"><code>addon&#x2F;mixins&#x2F;full-screen.js:83</code></a>
+                                <p>Inherited from
+                                <a href="../classes/FullScreen.html#event_leftFullscreen">
+                                    FullScreen
+                                </a>
+                                but overwritten in
+                            <a href="../files/addon_mixins_full-screen.js.html#l88"><code>addon&#x2F;mixins&#x2F;full-screen.js:88</code></a>
                             </p>
                     
                     
@@ -1242,7 +1300,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:232</code></a>
                             </p>
                     
                     
@@ -1267,7 +1325,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:255</code></a>
                             </p>
                     
                     
@@ -1292,7 +1350,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l887"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:887</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l888"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:888</code></a>
                             </p>
                     
                     
@@ -1317,7 +1375,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l582"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:582</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l583"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:583</code></a>
                             </p>
                     
                     
@@ -1359,7 +1417,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l547"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:547</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l548"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:548</code></a>
                             </p>
                     
                     
@@ -1384,7 +1442,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l611"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:611</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l612"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:612</code></a>
                             </p>
                     
                     
@@ -1409,7 +1467,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l529"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:529</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l530"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:530</code></a>
                             </p>
                     
                     
@@ -1434,7 +1492,7 @@ attention-getter video (should be loopable)</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l659"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:659</code></a>
+                            <a href="../files/addon_components_exp-lookit-geometry-alternation_component.js.html#l660"><code>addon&#x2F;components&#x2F;exp-lookit-geometry-alternation&#x2F;component.js:660</code></a>
                             </p>
                     
                     

@@ -43,12 +43,12 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -142,6 +142,26 @@ let {
  * any fields that fail validation checks and the participant will not be able to proceed until
  * these are addressed.
  *
+ * Alpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy
+ * and paste any object passed to alpaca in the alpaca docs right in as your formSchema to
+ * see that example in action on Lookit. Not all features of alpaca are detailed here,
+ * but they can be used: e.g., advanced users can enter &#x27;views&#x27; and &#x27;data&#x27; in the
+ * formSchema to customize the layout of their forms and the initial data. A &#x27;dataSource&#x27;
+ * may be specified under options to populate a question&#x27;s potential answers (e.g., to
+ * load a list of countries from some other source rather than hard-coding it, or to
+ * provide checkboxes with vocabulary items from an externally-defined inventory).
+ *
+ * You can also use alpacajs&#x27;s &quot;dependencies&quot; and &quot;conditional dependencies&quot; functionality to
+ * set up fields that depend on other fields - e.g., asking if the child speaks any
+ * language besides English in the home and only if so displaying a dropdown to select the
+ * language(s), or asking if the child likes Elmo or Grover better and then asking a question
+ * specific to the preferred character. Or if you have questions only relevant to the
+ * birth mother of the child, you could ask if the participant is the birth mother and show
+ * those questions conditionally.
+ *
+ * Note that question titles are interpreted as HTML and can include images, audio/video
+ * elements, and inline CSS.
+ *
  * If a participant returns to this frame after continuing, via a &#x27;Previous&#x27; button on the
  * next frame, then the values in this form are pre-filled.
  *
@@ -152,10 +172,9 @@ let {
  * The form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical
  * height of the window (it will scroll to fit).
  *
- * Although this frame provides fairly powerful capabilities via alpacajs, here are some
- * things that would currently still require customization of the frame source code:
- * editing the formatting; displaying images or playing audio/video; custom validation or
- * dynamic addition/removal of fields.
+ * Current limitations: you are NOT
+ * able to provide custom functions (e.g. validators, custom dataSource functions)
+ * directly to the formSchema.
 
 
 &#x60;&#x60;&#x60;json
@@ -197,17 +216,15 @@ let {
                 &quot;options&quot;: {
                     &quot;fields&quot;: {
                         &quot;age&quot;: {
-                            &quot;hideInitValidationError&quot;: true
+                            &quot;numericEntry&quot;: true
                         },
                         &quot;name&quot;: {
-                            &quot;placeholder&quot;: &quot;a name...&quot;,
-                            &quot;hideInitValidationError&quot;: true
+                            &quot;placeholder&quot;: &quot;a name...&quot;
                         },
                         &quot;species&quot;: {
                             &quot;type&quot;: &quot;radio&quot;,
                             &quot;message&quot;: &quot;Seriously, what species??&quot;,
-                            &quot;validator&quot;: &quot;required-field&quot;,
-                            &quot;hideInitValidationError&quot;: true
+                            &quot;validator&quot;: &quot;required-field&quot;
                         }
                     }
                 }
@@ -340,6 +357,29 @@ export default ExpFrameBaseComponent.extend({
 
         }
     }
+
+// Set defaults for form options. Not needed here because apparently hideInitValidationError
+// IS done by default.
+//     willRender() {
+//         this._super(...arguments);
+//         var formSchemaProcessed = this.get(&#x27;formSchema&#x27;);
+//         console.log(formSchemaProcessed);
+//         if (formSchemaProcessed.options.hasOwnProperty(&#x27;fields&#x27;)) {
+//             var fields = formSchemaProcessed.options.fields;
+//             console.log(fields);
+//             for (var property in fields) {
+//                 console.log(property);
+//                 if (fields.hasOwnProperty(property)) {
+//                     console.log(property);
+//                     if (!fields[property].hasOwnProperty(&#x27;hideInitValidationError&#x27;)) {
+//                         fields[property].hideInitValidationError = true;
+//                     }
+//                 }
+//             }
+//         }
+//         formSchemaProcessed.fields = fields;
+//         this.set(&#x27;formSchemaProcessed&#x27;, formSchemaProcessed);
+//     }
 
 });
 

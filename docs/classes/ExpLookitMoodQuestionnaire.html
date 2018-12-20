@@ -43,12 +43,12 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -117,6 +117,12 @@
 </div>
 
 
+<div>
+
+    <img src="../assets/screenshots/ExpLookitMoodQuestionnaire.png" class="class-screenshot">
+
+</div>
+
 <div class="box intro">
     <p>A standard mood survey with questions about factors that might affect a
 child's responses. Includes Likert-type ratings of the CHILD's position on
@@ -173,11 +179,19 @@ to all questions are required to move on.</p>
 
                     <ul class="index-list methods extends">
                             <li class="index-item method inherited">
+                                <a href="#method_exitFullscreen">exitFullscreen</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_makeTimeEvent">makeTimeEvent</a>
 
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_serializeContent">serializeContent</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
                     </ul>
@@ -187,7 +201,15 @@ to all questions are required to move on.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
+                                <a href="#property_fsButtonID">fsButtonID</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_fullScreenElementId">fullScreenElementId</a>
+
+                            </li>
+                            <li class="index-item property inherited">
                                 <a href="#property_id">id</a>
 
                             </li>
@@ -204,6 +226,14 @@ to all questions are required to move on.</p>
 
                     <ul class="index-list events extends">
                             <li class="index-item event inherited">
+                                <a href="#event_enteredFullscreen">enteredFullscreen</a>
+
+                            </li>
+                            <li class="index-item event inherited">
+                                <a href="#event_leftFullscreen">leftFullscreen</a>
+
+                            </li>
+                            <li class="index-item event inherited">
                                 <a href="#event_nextFrame">nextFrame</a>
 
                             </li>
@@ -218,6 +248,36 @@ to all questions are required to move on.</p>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_exitFullscreen" class="method item inherited">
+    <h3 class="name"><code>exitFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Exit fullscreen mode
+    </div>
+
+
+
+
+</div>
 <div id="method_makeTimeEvent" class="method item inherited">
     <h3 class="name"><code>makeTimeEvent</code></h3>
 
@@ -245,7 +305,7 @@ to all questions are required to move on.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-frame-base_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:198</code></a>
         </p>
 
 
@@ -522,11 +582,89 @@ event sent by a particular frame</p>
 
 
 </div>
+<div id="method_showFullscreen" class="method item inherited">
+    <h3 class="name"><code>showFullscreen</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l104"><code>addon&#x2F;mixins&#x2F;full-screen.js:104</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Make a specified element fullscreen
+    </div>
+
+
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_fsButtonID" class="property item inherited">
+    <h3 class="name"><code>fsButtonID</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of a button to show if the user leaves fullscreen mode
+    </div>
+
+
+
+</div>
+<div id="property_fullScreenElementId" class="property item inherited">
+    <h3 class="name"><code>fullScreenElementId</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The element ID of the thing to make full screen (video element, div, etc)
+    </div>
+
+
+
+</div>
 <div id="property_id" class="property item">
     <h3 class="name"><code>id</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
@@ -536,8 +674,11 @@ event sent by a particular frame</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_id">
+                FullScreen
+            </a>
+            but overwritten in
         <a href="../files/addon_components_exp-lookit-mood-questionnaire_component.js.html#l118"><code>addon&#x2F;components&#x2F;exp-lookit-mood-questionnaire&#x2F;component.js:118</code></a>
         </p>
 
@@ -584,6 +725,54 @@ event sent by a particular frame</p>
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
+                    <div id="event_enteredFullscreen" class="events item inherited">
+                        <h3 class="name"><code>enteredFullscreen</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l76"><code>addon&#x2F;mixins&#x2F;full-screen.js:76</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            Upon detecting change to fullscreen mode
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_leftFullscreen" class="events item inherited">
+                        <h3 class="name"><code>leftFullscreen</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>Inherited from
+                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
+                            <a href="../files/addon_mixins_full-screen.js.html#l88"><code>addon&#x2F;mixins&#x2F;full-screen.js:88</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            Upon detecting change out of fullscreen mode
+                        </div>
+                    
+                    
+                    
+                    </div>
                     <div id="event_nextFrame" class="events item inherited">
                         <h3 class="name"><code>nextFrame</code></h3>
                         <span class="type"></span>
@@ -595,7 +784,7 @@ event sent by a particular frame</p>
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l226"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:226</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:232</code></a>
                             </p>
                     
                     
@@ -620,7 +809,7 @@ event sent by a particular frame</p>
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:246</code></a>
+                            <a href="../files/addon_components_exp-frame-base_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:255</code></a>
                             </p>
                     
                     

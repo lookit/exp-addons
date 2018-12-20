@@ -43,12 +43,12 @@
                         <ul id="api-classes" class="apis classes">
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
-                            <li><a href="../classes/ExpFrameBaseUnsafe.html">ExpFrameBaseUnsafe</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
                             <li><a href="../classes/ExpLookitExitSurvey.html">ExpLookitExitSurvey</a></li>
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -125,7 +125,7 @@ export default Ember.Mixin.create({
      *  The element ID of the thing to make full screen (video element, div, etc)
      * @property {String} fullScreenElementId
      */
-    fullScreenElementId: null,
+    fullScreenElementId: &#x27;experiment-player&#x27;,
     displayFullscreen: false,
 
     /**
@@ -171,8 +171,12 @@ export default Ember.Mixin.create({
         this.set(&#x27;isFullscreen&#x27;, isFS);
 
         var $button = $(&#x60;#${this.get(&#x27;fsButtonID&#x27;)}&#x60;);
-        if (isFS) {
-            $element.addClass(&#x27;player-fullscreen&#x27;);
+        if (isFS) { // just entered FS mode
+            if (this.get(&#x27;displayFullscreenOverride&#x27;) &amp;&amp; !this.get(&#x27;displayFullscreen&#x27;)) {
+                $element.addClass(&#x27;player-fullscreen-override&#x27;);
+            } else {
+                $element.addClass(&#x27;player-fullscreen&#x27;);
+            }
             if (this.displayFullscreen &amp;&amp; this.fsButtonID) {
                 $button.hide();
             }
@@ -182,8 +186,9 @@ export default Ember.Mixin.create({
              * @event enteredFullscreen
             */
             this.send(&#x27;setTimeEvent&#x27;, &#x27;enteredFullscreen&#x27;);
-        } else {
+        } else { // just exited FS mode
             $element.removeClass(&#x27;player-fullscreen&#x27;);
+            $element.removeClass(&#x27;player-fullscreen-override&#x27;);
             if (this.displayFullscreen &amp;&amp; this.fsButtonID) {
                 $button.show();
             }
@@ -208,11 +213,6 @@ export default Ember.Mixin.create({
          * @method showFullscreen
          */
         showFullscreen: function () {
-
-            if (!this.get(&#x27;displayFullscreen&#x27;)) {
-                this.send(&#x27;exitFullscreen&#x27;);
-                return;
-            }
 
             var elementId = this.get(&#x27;fullScreenElementId&#x27;);
             if (!elementId) {
@@ -257,12 +257,32 @@ export default Ember.Mixin.create({
                 document.webkitExitFullscreen();
             }
             this.set(&#x27;isFullscreen&#x27;, false);
-            var elementId = this.get(&#x27;fullScreenElementId&#x27;);
-            var selector = Ember.$(&#x60;#${elementId}&#x60;);
-            selector.removeClass(&#x27;player-fullscreen&#x27;);
+            // Note: we may be leaving fullscreen from a different frame, and no longer
+            // know which element .player-fullscreen was attached to. Remove it from all
+            // elements, otherwise we don&#x27;t leave cleanly if a custom ID was specified!
+            Ember.$(&#x27;*&#x27;).removeClass(&#x27;player-fullscreen&#x27;);
+            Ember.$(&#x27;*&#x27;).removeClass(&#x27;player-fullscreen-override&#x27;);
         }
+    },
 
-    }
+    meta: {
+        parameters: {
+            type: &#x27;object&#x27;,
+            properties: {
+                /**
+                 * Whether to display this frame as fullscreen, even though it is not
+                 * generally used that way.
+                 *
+                 * @property {String} id
+                 */
+                displayFullscreenOverride: {
+                    type: &#x27;boolean&#x27;,
+                    description: &#x27;Whether to override default and display this frame as fullscreen&#x27;,
+                    default: false
+                }
+            }
+        }
+    },
 });
 
     </pre>
