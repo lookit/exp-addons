@@ -7,18 +7,65 @@ let {
     $
 } = Em;
 
+/**
+ * @module exp-player
+ * @submodule frames
+ */
+
+/**
+ * A frame to collect a video observation with the participant's help. By default the
+ * webcam is displayed to the participant and they can choose when to start, pause, and
+ * resume recording. The duration of an individual recording can optionally be limited
+ * and/or recording can be started automatically. This is intended for cases where we
+ * want the parent to perform some test or behavior with the child, rather than
+ * presenting stimuli ourselves. E.g., you might give instructions to conduct a structured
+ * interview and allow the parent to control recording.
+ *
+ * Each element of the 'blocks' parameter is rendered using {{#crossLink "ExpTextBlock"}}{{/crossLink}}.
+ *
+ ```
+    "frames": {
+        "observation": {
+            "kind": "exp-lookit-observation",
+            "blocks": [
+                {
+                    "title": "Time to do the joke!",
+                    "listblocks": [
+                        {
+                            "text": "Rip the paper"
+                        },
+                        {
+                            "text": "Wait ten seconds"
+                        }
+                    ]
+                }
+            ],
+            "hideWebcam": true,
+            "hideControls": false,
+            "recordSegmentLength": 10,
+            "startRecordingAutomatically": false,
+            "nextButtonText": "move on",
+            "showPreviousButton": false
+        }
+    }
+```
+ * @class ExpLookitObservation
+ * @extends ExpFrameBase
+ * @extends VideoRecord
+ */
+
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     type: 'exp-lookit-observation',
     layout: layout,
 
     recordingTimer: null,
+    progressTimer: null,
+    timerStart: null,
     hasStartedRecording: false,
-    recorder: null,
     recordingStarted: false,
-    warning: null,
-    showVideoWarning: false,
     toggling: false,
     hidden: false,
+    recorderElement: '#recorder',
 
     meta: {
         name: 'ExpLookitObservation',
@@ -27,7 +74,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             type: 'object',
             properties: {
                 /**
-                 * Array of objects specifying text/images of instructions to display
+                 * Array of blocks for {{#crossLink "ExpTextBlock"}}{{/crossLink}}, specifying text/images of instructions to display
                  *
                  * @property {Object[]} blocks
                  *   @param {String} title Title of this section
@@ -94,6 +141,26 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     default: false
                 },
                 /**
+                 * Whether to hide video recording controls (only use with startRecordingAutomatically)
+                 *
+                 * @property {Boolean} hideControls
+                 * @default false
+                 */
+                hideControls: {
+                    type: 'boolean',
+                    default: false
+                },
+                /**
+                 * Whether to hide webcam view when frame loads (participant will still be able to show manually)
+                 *
+                 * @property {Boolean} hideWebcam
+                 * @default false
+                 */
+                hideWebcam: {
+                    type: 'boolean',
+                    default: false
+                },
+                /**
                  * Text to display on the 'next frame' button
                  *
                  * @property {String} nextButtonText
@@ -139,46 +206,24 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         }
     },
 
-    disableRecord: Em.computed('recorder.recording', 'recorder.hasCamAccess', function () {
-        return !this.get('recorder.hasCamAccess') || this.get('recorder.recording');
-    }),
-
     // Override to deal with whether or not recording is starting automatically
     whenPossibleToRecord: function() {
         if (this.get('startRecordingAutomatically')) {
-            var _this = this;
-            if (this.get('hasCamAccess') && this.get('recorderReady')) {
-                this.startRecorder().then(() => {
-                    _this.set('recorderReady', false);
-                });
+            if (this.get('recorder.hasCamAccess') && this.get('recorderReady')) {
+                this.send('record');
             }
         } else {
             $('#recordButton').show();
             $('#recordingText').text('Not recording yet');
         }
-    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
-    showWarning() {
-        if (!this.get('showVideoWarning')) {
-            this.set('showVideoWarning', true);
-            this.send('setTimeEvent', 'webcamNotConfigured');
-
-            // If webcam error, save the partial frame payload immediately, so that we don't lose timing events if
-            // the user is unable to move on.
-            this.send('save');
-
-            var recorder = this.get('recorder');
-            recorder.show();
-            recorder.on('onCamAccessConfirm', () => {
-                this.send('removeWarning');
-                this.startRecorder();
-            });
+        if (this.get('hideWebcam')) {
+            $('#webcamToggleButton').html('Show');
+            $('#hiddenWebcamMessage').show();
+            $(this.get('recorderElement') + ' div').addClass('exp-lookit-observation-hidevideo');
+            this.set('hidden', true);
         }
-    },
-
-    removeWarning() {
-        this.set('showVideoWarning', false);
-    },
+    }.observes('recorder.hasCamAccess', 'recorderReady'),
 
     didInsertElement() { // initial state of all buttons/text
         $('#hiddenWebcamMessage').hide();
@@ -198,15 +243,21 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             var _this = this;
             if (this.get('recordSegmentLength')) { // no timer if 0
                 window.clearTimeout(this.get('recordingTimer')); // as a precaution in case still running
+                window.clearInterval(this.get('progressTimer'));
+                this.set('timerStart', new Date().getTime());
                 this.set('recordingTimer', window.setTimeout(function() {
                     /**
                      * Video recording automatically paused upon reaching time limit
                      *
-                     * @event recorderReady
+                     * @event recorderTimeout
                      */
                     _this.send('setTimeEvent', 'recorderTimeout');
                     _this.send('pause');
                 }, _this.get('recordSegmentLength') * 1000));
+                this.set('progressTimer', window.setInterval(function() {
+                    var prctDone =  (_this.get('recordSegmentLength') * 1000 - (new Date().getTime() - _this.get('timerStart') )) / (_this.get('recordSegmentLength') * 10);
+                    $('.progress-bar').css('width', prctDone + '%');
+                }, 100));
             }
             $('#pauseButton').show();
             $('#recordButton').hide();
@@ -215,20 +266,24 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             $('#recordButtonText').text('Resume');
         },
 
-        proceed() {
+        proceed() { // make sure 'next' fires while still on this frame
             this.stopRecorder().then(() => {
                 this.destroyRecorder();
                 this.send('next');
             });
         },
         pause() {
-            window.clearTimeout(this.get('recordingTimer')); // no need for current timer
+            var _this = this;
             this.stopRecorder().then(() => {
+                window.clearTimeout(_this.get('recordingTimer')); // no need for current timer
+                window.clearInterval(_this.get('progressTimer'));
+                $('.progress-bar').css('width', '100%');
                 $('#pauseButton').hide();
                 $('#recordButton').show();
                 $('#recordingIndicator').hide();
                 $('#recordingText').text('Paused');
-                this.setupRecorder(this.$('.recorder'), false);
+                _this.destroyRecorder();
+                _this.setupRecorder(_this.$(_this.get('recorderElement')), false);
             });
         },
         toggleWebcamButton() {
@@ -237,12 +292,12 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 if (!this.get('hidden')) {
                     $('#webcamToggleButton').html('Show');
                     $('#hiddenWebcamMessage').show();
-                    $('.recorder div').addClass('exp-lookit-observation-hidevideo');
+                    $(this.get('recorderElement') + ' div').addClass('exp-lookit-observation-hidevideo');
                     this.set('hidden', true);
                 } else {
                     $('#webcamToggleButton').html('Hide');
                     $('#hiddenWebcamMessage').hide();
-                    $('.recorder div').removeClass('exp-lookit-observation-hidevideo');
+                    $(this.get('recorderElement') + ' div').removeClass('exp-lookit-observation-hidevideo');
                     this.set('hidden', false);
                 }
                 this.set('toggling', false);
