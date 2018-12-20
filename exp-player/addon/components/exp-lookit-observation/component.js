@@ -222,6 +222,12 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             $('#hiddenWebcamMessage').show();
             $(this.get('recorderElement') + ' div').addClass('exp-lookit-observation-hidevideo');
             this.set('hidden', true);
+            /**
+             * Webcam display hidden from participant
+             *
+             * @event hideWebcam
+             */
+            _this.send('setTimeEvent', 'hideWebcam');
         }
     }.observes('recorder.hasCamAccess', 'recorderReady'),
 
@@ -294,11 +300,23 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     $('#hiddenWebcamMessage').show();
                     $(this.get('recorderElement') + ' div').addClass('exp-lookit-observation-hidevideo');
                     this.set('hidden', true);
+                    /**
+                     * Webcam display hidden from participant
+                     *
+                     * @event hideWebcam
+                     */
+                    _this.send('setTimeEvent', 'hideWebcam');
                 } else {
                     $('#webcamToggleButton').html('Hide');
                     $('#hiddenWebcamMessage').hide();
                     $(this.get('recorderElement') + ' div').removeClass('exp-lookit-observation-hidevideo');
                     this.set('hidden', false);
+                    /**
+                     * Webcam display shown to participant
+                     *
+                     * @event showWebcam
+                     */
+                    _this.send('setTimeEvent', 'showWebcam');
                 }
                 this.set('toggling', false);
             }
