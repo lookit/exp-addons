@@ -8,7 +8,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "ExpLookitGeometryAlternation",
         "ExpLookitInstructions",
         "ExpLookitMoodQuestionnaire",
-        "ExpLookitObservation",
         "ExpLookitPreviewExplanation",
         "ExpLookitStoryPage",
         "ExpLookitSurvey",
