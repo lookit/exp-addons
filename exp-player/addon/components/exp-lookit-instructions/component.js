@@ -1,8 +1,12 @@
-import Ember from 'ember';
+import Em from 'ember';
 
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import VideoRecord from '../../mixins/video-record';
+
+let {
+    $
+} = Em;
 
 /**
  * @module exp-player
@@ -106,7 +110,7 @@ import VideoRecord from '../../mixins/video-record';
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout: layout,
     type: 'exp-lookit-instructions',
-    didFinishSound: false,
+    doUseCamera: Em.computed.alias('showWebcam'),
     meta: {
         name: 'ExpLookitInstructions',
         description: 'A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working.',
@@ -295,21 +299,16 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @method serializeContent
              * @param {Boolean} showWarning whether the warning about sound being played is currently shown
-             * @param {Boolean} didFinishSound whether the user played the sound clip
              * @return {Object} The payload sent to the server
              */
             type: 'object',
             properties: {
-                didFinishSound: {
-                    type: 'boolean',
-                    default: false
-                },
                 showWarning: {
                     type: 'boolean',
                     default: false
                 }
             },
-            required: ['didFinishSound', 'showWarning']
+            required: ['showWarning']
         }
     },
 
@@ -348,24 +347,5 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
            }
        }
        return !done;
-
   }
-
-
-
-
-
-            //$('audio').each(function (idx, elem) {
-            //    if ($(elem).attr('completed') != 'true') {
-            //        doneAudio = false;
-            //        $(elem).parent().attr('showWarning', true);
-            //    }
-            //});
-
-            //return !doneAudio;
-
-            // Optionally force user to listen to clip before continuing
-            //return !this.get('didFinishSound');
-        //}
-    //}
 });
