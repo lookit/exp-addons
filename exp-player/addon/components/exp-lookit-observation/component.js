@@ -60,6 +60,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
 
     recordingTimer: null,
     progressTimer: null,
+    okayToProceedTimer: null,
+
     timerStart: null,
     hasStartedRecording: false,
     recordingStarted: false,
@@ -139,6 +141,18 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 startRecordingAutomatically: {
                     type: 'boolean',
                     default: false
+                },
+                /**
+                 * Whether a recording must be made to proceed to next frame. 'Next' button
+                 * will be disabled until recording is made if so. 0 to not require recording;
+                 * any positive number to require that many seconds of recording
+                 *
+                 * @property {Boolean} startRecordingAutomatically
+                 * @default false
+                 */
+                recordingRequired: {
+                    type: 'number',
+                    default: 0
                 },
                 /**
                  * Whether to hide video recording controls (only use with startRecordingAutomatically)
@@ -227,7 +241,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
              *
              * @event hideWebcam
              */
-            _this.send('setTimeEvent', 'hideWebcam');
+            this.send('setTimeEvent', 'hideWebcam');
         }
     }.observes('recorder.hasCamAccess', 'recorderReady'),
 
@@ -238,7 +252,16 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         $('#recordingIndicator').hide();
         $('#recordingText').text('');
         $('#recordButtonText').text('Record');
+        if (this.get('recordingRequired')) {
+            $('#nextbutton').prop('disabled', true);
+            $('#nextbutton').text('Recording required to continue');
+        }
         this._super(...arguments);
+    },
+
+    enableNext() {
+        $('#nextbutton').prop('disabled', false);
+        $('#nextbutton').text(this.get('nextButtonText'));
     },
 
     actions: {
@@ -250,6 +273,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             if (this.get('recordSegmentLength')) { // no timer if 0
                 window.clearTimeout(this.get('recordingTimer')); // as a precaution in case still running
                 window.clearInterval(this.get('progressTimer'));
+                window.clearTimeout(this.get('okayToProceedTimer'));
                 this.set('timerStart', new Date().getTime());
                 this.set('recordingTimer', window.setTimeout(function() {
                     /**
@@ -264,6 +288,11 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     var prctDone =  (_this.get('recordSegmentLength') * 1000 - (new Date().getTime() - _this.get('timerStart') )) / (_this.get('recordSegmentLength') * 10);
                     $('.progress-bar').css('width', prctDone + '%');
                 }, 100));
+                if (this.get('recordingRequired')) {
+                    this.set('okayToProceedTimer', window.setTimeout(function() {
+                        _this.enableNext();
+                    }, 1000 * this.get('recordingRequired')));
+                }
             }
             $('#pauseButton').show();
             $('#recordButton').hide();
@@ -273,20 +302,25 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         },
 
         proceed() { // make sure 'next' fires while still on this frame
-            this.stopRecorder().then(() => {
+            window.clearTimeout(this.get('recordingTimer')); // no need for current timer
+            window.clearTimeout(this.get('okayToProceedTimer'));
+            window.clearInterval(this.get('progressTimer'));
+            this.stopRecorder().finally(() => {
                 this.destroyRecorder();
                 this.send('next');
             });
         },
         pause() {
             var _this = this;
-            this.stopRecorder().then(() => {
-                window.clearTimeout(_this.get('recordingTimer')); // no need for current timer
-                window.clearInterval(_this.get('progressTimer'));
-                $('.progress-bar').css('width', '100%');
-                $('#pauseButton').hide();
+            $('#recordingText').text('Stopping and uploading...');
+            $('#pauseButton').hide();
+            window.clearTimeout(_this.get('recordingTimer')); // no need for current timer
+            window.clearTimeout(this.get('okayToProceedTimer'));
+            window.clearInterval(_this.get('progressTimer'));
+            $('.progress-bar').css('width', '100%');
+            $('#recordingIndicator').hide();
+            this.stopRecorder().finally(() => {
                 $('#recordButton').show();
-                $('#recordingIndicator').hide();
                 $('#recordingText').text('Paused');
                 _this.destroyRecorder();
                 _this.setupRecorder(_this.$(_this.get('recorderElement')), false);
@@ -305,7 +339,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                      *
                      * @event hideWebcam
                      */
-                    _this.send('setTimeEvent', 'hideWebcam');
+                    this.send('setTimeEvent', 'hideWebcam');
                 } else {
                     $('#webcamToggleButton').html('Hide');
                     $('#hiddenWebcamMessage').hide();
@@ -316,7 +350,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                      *
                      * @event showWebcam
                      */
-                    _this.send('setTimeEvent', 'showWebcam');
+                    this.send('setTimeEvent', 'showWebcam');
                 }
                 this.set('toggling', false);
             }
