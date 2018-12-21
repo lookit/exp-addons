@@ -70,6 +70,8 @@ const VideoRecorder = Ember.Object.extend({
     recording: Ember.computed.alias('_recording').readOnly(),
     flashReady: Ember.computed.alias('_recorderReady').readOnly(),
     connected: false,
+    uploadTimeout: null, // timer counting from attempt to stop until we should just
+        //resolve the stopPromise
 
     debug: false,
     _started: false,
@@ -209,7 +211,6 @@ const VideoRecorder = Ember.Object.extend({
         var timeLeft = 3 - this.getTime();
         if (this.get('hasCamAccess') && (timeLeft > 0)) {
             // sleep time expects milliseconds
-
             return sleep(timeLeft * 1000).then(() => this.stop());
         } else {
             var recorder = this.get('recorder');
@@ -224,6 +225,14 @@ const VideoRecorder = Ember.Object.extend({
                     this.set('_recording', false);
                 });
             }
+
+            var _this = this;
+
+            // If we don't end up uploading within 10 seconds, call reject
+            this.set('uploadTimeout', window.setTimeout(function() {
+                window.clearTimeout(_this.get('uploadTimeout'));
+                _this.get('_stopPromise').reject();
+                }, 10000));
 
             var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {
                 this.set('_stopPromise', {
@@ -282,6 +291,7 @@ const VideoRecorder = Ember.Object.extend({
 
     _onUploadDone(streamName, streamDuration, userId, recorderId) { // eslint-disable-line no-unused-vars
         //this.destroy();
+        window.clearTimeout(this.get('uploadTimeout'));
         if (this.get('_stopPromise')) {
             console.log('Resolving stop promise...');
             console.log(streamName);
