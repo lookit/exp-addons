@@ -147,7 +147,6 @@ let pad = function(number) {
  &quot;frames&quot;: {
     &quot;mood-survey&quot;: {
         &quot;introText&quot;: &quot;How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.&quot;,
-        &quot;id&quot;: &quot;mood-survey&quot;,
         &quot;kind&quot;: &quot;exp-lookit-mood-questionnaire&quot;
     }
  }
@@ -222,15 +221,6 @@ export default ExpFrameBaseComponent.extend(Validations, {
             type: &#x27;object&#x27;,
             properties: {
                 /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: &#x27;string&#x27;,
-                    description: &#x27;A unique identifier for this item&#x27;
-                },
-                /**
                  * Intro paragraph describing why we want mood info
                  *
                  * @property {String} introText
@@ -242,7 +232,7 @@ export default ExpFrameBaseComponent.extend(Validations, {
                     default: &#x27;How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.&#x27;
                 }
             },
-            required: [&#x27;id&#x27;]
+            required: []
         },
         data: {
             /**

@@ -65,14 +65,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
             type: 'object',
             properties: {
                 /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                /**
                 Object specifying information to show on second page of exit survey, before returning to main Lookit site.
                 @property {Object} debriefing
                     @param {String} title Title of debriefing page
@@ -105,7 +97,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                         }
                     }
                 },
-                required: ['id', 'debriefing']
+                required: ['debriefing']
             }
         },
         data: {

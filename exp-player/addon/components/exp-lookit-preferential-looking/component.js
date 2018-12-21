@@ -81,7 +81,6 @@ let {
 
 ```json
     "sample-trial": {
-        "id": "sample-looking-trial",
         "kind": "exp-lookit-preferential-looking",
         "isLast": false,
         "baseDir": "https://s3.amazonaws.com/lookitcontents/labelsconcepts/",

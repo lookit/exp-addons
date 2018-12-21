@@ -39,7 +39,6 @@ Consent document can be downloaded as PDF document by participant.
                 "title": "Contact information"
             }
         ],
-        "id": "video-consent",
         "prompt": "\"I have read and understand the consent document. I am this child's parent or legal guardian and we both agree to participate in this study.\"",
         "kind": "exp-video-consent"
     }
@@ -61,15 +60,6 @@ export default ExpLookitVideoConsent.extend(VideoRecord, {
         parameters: {
             type: 'object',
             properties: {
-                /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-
                 /**
                 Title of the consent document
                 @property {String} title

@@ -17,11 +17,12 @@ let {
  * A frame to display instructions to the user. The user's webcam may optionally be
  * displayed, and audio and video clips may be included in the instructions (and may be
  * required to be played before moving on).
+ *
+ * Each element of the 'blocks' parameter is rendered using {{#crossLink "ExpTextBlock"}}{{/crossLink}}.
 
 ```json
  "frames": {
         "instructions": {
-            "id": "instructions",
             "kind": "exp-lookit-instructions",
             "blocks": [
                 {
@@ -118,15 +119,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             type: 'object',
             properties: {
                 /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                /**
                  * Whether to display the user's webcam
                  *
                  * @property {Boolean} showWebcam
@@ -139,7 +131,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 },
 
                 /**
-                 * Array of objects specifying text/images of instructions to display
+                 * Array of blocks for {{#crossLink "ExpTextBlock"}}{{/crossLink}}, specifying text/images of instructions to display
                  *
                  * @property {Object[]} blocks
                  *   @param {String} title Title of this section
@@ -291,7 +283,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     default: 'Start the videos! \n (You\'ll have a moment to turn around.)'
                 }
             },
-            required: ['id']
+            required: []
         },
         data: {
             /**

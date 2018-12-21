@@ -50,11 +50,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
         parameters: {
             type: 'object',
             properties: {
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                required: ['id']
             }
         },
         data: {

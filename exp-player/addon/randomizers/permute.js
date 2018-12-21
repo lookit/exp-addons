@@ -16,7 +16,6 @@
     "test-trials": {
         "sampler": "permute",
         "kind": "choice",
-        "id": "test-trials",
         "commonFrameProperties": {
             "showPreviousButton": false
         },
@@ -57,14 +56,8 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     // Data provided to randomizer (properties of frameConfig):
 
     /**
-     * Unique string identifying this set of frames
-     *
-     * @property {String} id
-     */
 
-    /**
-     * List of frames to be created by this randomizer. These are the frames that
-     * will be shown in random order, once each. Each frame is an
+     * List of frames to be created by this randomizer. Each frame is an
      * object with any necessary frame-specific properties specified. The
      * 'kind' of frame can be specified either here (per frame) or in
      * commonFrameProperties. If a property is defined for a given frame both

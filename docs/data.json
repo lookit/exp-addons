@@ -474,7 +474,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
             "line": 16,
-            "description": "Frame to implement a storybook page with dialogue spoken by characters.\nFirst, characters appear and any main narration audio is played.\nNext, the user can click on the characters to play additional audio\nassociated with each character image, or (for a choice trial) the user clicks\none of the images to select it as an answer. Once main narration audio has\nbeen played and either a selection has been made (for a choice trial,\nisChoiceFrame: true) or all\nrequired character audio has been played (for a non-choice trial), the user\ncan proceed by pressing 'next'. (A trial with only main narration audio can\nalso simply auto-proceed when audio is finished.)\n\nRecording is optional. If webcam recording is conducted (doRecording: true)\nthen audio does not start until recording does, to ensure the entire trial\nis recorded.\n\nThe character images are specified in 'images', including an image source,\npositioning on the screen, any animation at the start of the trial, any\nassociated audio, and whether that audio is required.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nThe examples below show a few expected uses of this frame. In phase-2,\ntwo characters are shown; the protagonist is already present, and speaker1\nflies in from the left. Speaker1 has associated audio (dialogue). After\nthe narrative audio, the user can click on speaker1 to play the audio, and\nwill then be able to proceed.\n\nphase-5 is a choice trial, where the user has to click on one of the two\nimages before proceeding.\n\n```json\n\"frames\":\n       \"phase-2\": {\n           \"kind\": \"exp-lookit-dialogue-page\",\n           \"id\": \"phase-2\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/politeness/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"backgroundImage\": \"order1_test1_background.png\",\n           \"doRecording\": false,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"some instructions\",\n               \"emph\": true,\n               \"css\": {\n                   \"color\": \"red\",\n                   \"font-size\": \"12px\"\n               }\n           },\n           \"images\": [\n               {\n                   \"id\": \"protagonist\",\n                   \"src\": \"order1_test1_listener1.png\",\n                   \"left\": \"40\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               },\n               {\n                   \"id\": \"speaker1\",\n                   \"text\": \"Click to hear what he said!\",\n                   \"src\": \"order1_test1_speaker1.png\",\n                   \"left\": \"20\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\",\n                   \"animate\": \"flyleft\",\n                   \"requireAudio\": true,\n                   \"imageAudio\": [\n                       {\n                           \"stub\": \"polcon_example_2_2speaker1polite\"\n                       }\n                   ]\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"polcon_example_2_1intro\"\n                       }\n                   ]\n               }\n           ]\n       },\n       \"phase-5\": {\n           \"kind\": \"exp-lookit-dialogue-page\",\n           \"id\": \"phase-5\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/politeness/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"backgroundImage\": \"order1_test1_background.png\",\n           \"doRecording\": false,\n           \"autoProceed\": false,\n           \"isChoiceFrame\": true,\n           \"parentTextBlock\": {\n               \"title\": \"Parents:\",\n               \"text\": \"click on the character your child selects.\",\n               \"emph\": true\n           },\n           \"images\": [\n               {\n                   \"id\": \"speaker1\",\n                   \"src\": \"order1_test1_speaker1.png\",\n                   \"left\": \"20\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               },\n               {\n                   \"id\": \"speaker2\",\n                   \"src\": \"order1_test1_speaker2.png\",\n                   \"left\": \"60\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"polcon_example_5q1\"\n                       }\n                   ]\n               }\n           ]\n       }\n}\n\n```",
+            "description": "Frame to implement a storybook page with dialogue spoken by characters.\nFirst, characters appear and any main narration audio is played.\nNext, the user can click on the characters to play additional audio\nassociated with each character image, or (for a choice trial) the user clicks\none of the images to select it as an answer. Once main narration audio has\nbeen played and either a selection has been made (for a choice trial,\nisChoiceFrame: true) or all\nrequired character audio has been played (for a non-choice trial), the user\ncan proceed by pressing 'next'. (A trial with only main narration audio can\nalso simply auto-proceed when audio is finished.)\n\nRecording is optional. If webcam recording is conducted (doRecording: true)\nthen audio does not start until recording does, to ensure the entire trial\nis recorded.\n\nThe character images are specified in 'images', including an image source,\npositioning on the screen, any animation at the start of the trial, any\nassociated audio, and whether that audio is required.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nThe examples below show a few expected uses of this frame. In phase-2,\ntwo characters are shown; the protagonist is already present, and speaker1\nflies in from the left. Speaker1 has associated audio (dialogue). After\nthe narrative audio, the user can click on speaker1 to play the audio, and\nwill then be able to proceed.\n\nphase-5 is a choice trial, where the user has to click on one of the two\nimages before proceeding.\n\n```json\n\"frames\":\n       \"phase-2\": {\n           \"kind\": \"exp-lookit-dialogue-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/politeness/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"backgroundImage\": \"order1_test1_background.png\",\n           \"doRecording\": false,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"some instructions\",\n               \"emph\": true,\n               \"css\": {\n                   \"color\": \"red\",\n                   \"font-size\": \"12px\"\n               }\n           },\n           \"images\": [\n               {\n                   \"id\": \"protagonist\",\n                   \"src\": \"order1_test1_listener1.png\",\n                   \"left\": \"40\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               },\n               {\n                   \"id\": \"speaker1\",\n                   \"text\": \"Click to hear what he said!\",\n                   \"src\": \"order1_test1_speaker1.png\",\n                   \"left\": \"20\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\",\n                   \"animate\": \"flyleft\",\n                   \"requireAudio\": true,\n                   \"imageAudio\": [\n                       {\n                           \"stub\": \"polcon_example_2_2speaker1polite\"\n                       }\n                   ]\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"polcon_example_2_1intro\"\n                       }\n                   ]\n               }\n           ]\n       },\n       \"phase-5\": {\n           \"kind\": \"exp-lookit-dialogue-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/politeness/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"backgroundImage\": \"order1_test1_background.png\",\n           \"doRecording\": false,\n           \"autoProceed\": false,\n           \"isChoiceFrame\": true,\n           \"parentTextBlock\": {\n               \"title\": \"Parents:\",\n               \"text\": \"click on the character your child selects.\",\n               \"emph\": true\n           },\n           \"images\": [\n               {\n                   \"id\": \"speaker1\",\n                   \"src\": \"order1_test1_speaker1.png\",\n                   \"left\": \"20\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               },\n               {\n                   \"id\": \"speaker2\",\n                   \"src\": \"order1_test1_speaker2.png\",\n                   \"left\": \"60\",\n                   \"bottom\": \"2\",\n                   \"height\": \"60\"\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"polcon_example_5q1\"\n                       }\n                   ]\n               }\n           ]\n       }\n}\n\n```",
             "extends": "ExpFrameBase",
             "uses": [
                 "FullScreen",
@@ -550,7 +550,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-mood-questionnaire/component.js",
             "line": 16,
-            "description": "A standard mood survey with questions about factors that might affect a\nchild's responses. Includes Likert-type ratings of the CHILD's position on\nthe following scales:\n- Tired - Rested\n- Sick - Healthy\n- Fussy - Happy\n- Calm - Active\n\nand of the PARENT's position on:\n- Tired - Energetic\n- Overwhelmed - On top of things\n- Upset - Happy\n\nIt also asks for a response in hours:minutes for:\n- how long ago the child last woke up from sleep or a nap\n- how long until he/she is due for another nap/sleep (if regular nap schedule)\n- how long ago the child last ate/drank\n\nand for what the child was doing just before this (free-response). Responses\nto all questions are required to move on.\n\nThis frame can be used as a starting point/example for other custom survey frames, or development of a customizable survey frame.\n\n```json\n\"frames\": {\n   \"mood-survey\": {\n       \"introText\": \"How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.\",\n       \"id\": \"mood-survey\",\n       \"kind\": \"exp-lookit-mood-questionnaire\"\n   }\n}\n\n```",
+            "description": "A standard mood survey with questions about factors that might affect a\nchild's responses. Includes Likert-type ratings of the CHILD's position on\nthe following scales:\n- Tired - Rested\n- Sick - Healthy\n- Fussy - Happy\n- Calm - Active\n\nand of the PARENT's position on:\n- Tired - Energetic\n- Overwhelmed - On top of things\n- Upset - Happy\n\nIt also asks for a response in hours:minutes for:\n- how long ago the child last woke up from sleep or a nap\n- how long until he/she is due for another nap/sleep (if regular nap schedule)\n- how long ago the child last ate/drank\n\nand for what the child was doing just before this (free-response). Responses\nto all questions are required to move on.\n\nThis frame can be used as a starting point/example for other custom survey frames, or development of a customizable survey frame.\n\n```json\n\"frames\": {\n   \"mood-survey\": {\n       \"introText\": \"How are you two doing? We really want to know: we’re interested in how your child’s mood affects his or her looking preferences.\",\n       \"kind\": \"exp-lookit-mood-questionnaire\"\n   }\n}\n\n```",
             "extends": "ExpFrameBase"
         },
         "ExpLookitVideo": {
@@ -566,7 +566,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-video/component.js",
             "line": 17,
-            "description": "Basic video display for looking measures (e.g. preferential looking, looking time).\nTrial consists of four phases, each of which is optional.\n\n1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.\n\n2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.\n\n3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.\n\n4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.\n\nSpecifying media locations:\nFor any parameters that expect a list of audio/video sources, you can EITHER provide\na list of src/type pairs with full paths like this:\n```json\n   [\n       {\n           'src': 'http://.../video1.mp4',\n           'type': 'video/mp4'\n       },\n       {\n           'src': 'http://.../video1.webm',\n           'type': 'video/webm'\n       }\n   ]\n```\nOR you can provide a list with a single object with a 'stub', which will be expanded\nbased on the parameter baseDir and the media types expected - either audioTypes or\nvideoTypes as appropriate. For example, if you provide the audio source\n```json\n   [\n       {\n           'stub': 'intro'\n       }\n   ]\n```\nand baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this\nwill be expanded to:\n```json\n                [\n                       {\n                           src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',\n                           type: 'audio/mp3'\n                       },\n                       {\n                           src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',\n                           type: 'audio/ogg'\n                       }\n               ]\n```\nThis allows you to simplify your JSON document a bit and also easily switch to a\nnew version of your stimuli without changing every URL. You can mix source objects with\nfull URLs and those using stubs within the same directory. However, any stimuli\nspecified using stubs MUST be\norganized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nExample usage:\n\n```json\n       \"sample-intermodal-trial-2\": {\n           \"id\": \"sample-intermodal-trial-2\",\n           \"kind\": \"exp-lookit-video\",\n           \"isLast\": false,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/intermodal/\",\n           \"sources\": [\n               {\n                   \"stub\": \"sbs_ramp_down_up_apple_c1_b1_NN\"\n               }\n           ],\n           \"testCount\": 2,\n           \"altSources\": [\n               {\n                   \"stub\": \"sbs_ramp_up_down_apple_c1_b1_NN\"\n               }\n           ],\n           \"audioTypes\": [\n               \"ogg\",\n               \"mp3\"\n           ],\n           \"pauseAudio\": [\n               {\n                   \"stub\": \"pause\"\n               }\n           ],\n           \"videoTypes\": [\n               \"webm\",\n               \"mp4\"\n           ],\n           \"attnSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"stub\": \"video_02\"\n               }\n           ],\n           \"introSources\": [\n               {\n                   \"stub\": \"cropped_book\"\n               }\n           ],\n           \"musicSources\": [\n               {\n                   \"stub\": \"music_02\"\n               }\n           ],\n           \"unpauseAudio\": [\n               {\n                   \"stub\": \"return_after_pause\"\n               }\n           ],\n           \"calibrationLength\": 3000,\n           \"calibrationAudioSources\": [\n               {\n                   \"stub\": \"chimes\"\n               }\n           ],\n           \"calibrationVideoSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ]\n       }\n\n```",
+            "description": "Basic video display for looking measures (e.g. preferential looking, looking time).\nTrial consists of four phases, each of which is optional.\n\n1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.\n\n2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.\n\n3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.\n\n4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.\n\nSpecifying media locations:\nFor any parameters that expect a list of audio/video sources, you can EITHER provide\na list of src/type pairs with full paths like this:\n```json\n   [\n       {\n           'src': 'http://.../video1.mp4',\n           'type': 'video/mp4'\n       },\n       {\n           'src': 'http://.../video1.webm',\n           'type': 'video/webm'\n       }\n   ]\n```\nOR you can provide a list with a single object with a 'stub', which will be expanded\nbased on the parameter baseDir and the media types expected - either audioTypes or\nvideoTypes as appropriate. For example, if you provide the audio source\n```json\n   [\n       {\n           'stub': 'intro'\n       }\n   ]\n```\nand baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this\nwill be expanded to:\n```json\n                [\n                       {\n                           src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',\n                           type: 'audio/mp3'\n                       },\n                       {\n                           src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',\n                           type: 'audio/ogg'\n                       }\n               ]\n```\nThis allows you to simplify your JSON document a bit and also easily switch to a\nnew version of your stimuli without changing every URL. You can mix source objects with\nfull URLs and those using stubs within the same directory. However, any stimuli\nspecified using stubs MUST be\norganized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nExample usage:\n\n```json\n       \"sample-intermodal-trial-2\": {\n           \"kind\": \"exp-lookit-video\",\n           \"isLast\": false,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/intermodal/\",\n           \"sources\": [\n               {\n                   \"stub\": \"sbs_ramp_down_up_apple_c1_b1_NN\"\n               }\n           ],\n           \"testCount\": 2,\n           \"altSources\": [\n               {\n                   \"stub\": \"sbs_ramp_up_down_apple_c1_b1_NN\"\n               }\n           ],\n           \"audioTypes\": [\n               \"ogg\",\n               \"mp3\"\n           ],\n           \"pauseAudio\": [\n               {\n                   \"stub\": \"pause\"\n               }\n           ],\n           \"videoTypes\": [\n               \"webm\",\n               \"mp4\"\n           ],\n           \"attnSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"stub\": \"video_02\"\n               }\n           ],\n           \"introSources\": [\n               {\n                   \"stub\": \"cropped_book\"\n               }\n           ],\n           \"musicSources\": [\n               {\n                   \"stub\": \"music_02\"\n               }\n           ],\n           \"unpauseAudio\": [\n               {\n                   \"stub\": \"return_after_pause\"\n               }\n           ],\n           \"calibrationLength\": 3000,\n           \"calibrationAudioSources\": [\n               {\n                   \"stub\": \"chimes\"\n               }\n           ],\n           \"calibrationVideoSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ]\n       }\n\n```",
             "extends": "ExpFrameBase",
             "uses": [
                 "FullScreen",
@@ -587,7 +587,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
             "line": 9,
-            "description": "A frame that to explain any blinding procedures to parents, and offer them the option to preview stimuli before the study. Two buttons allow the user to move forward: one goes to the next frame (if the parent wants to preview stimuli), and one skips the next frame and goes to the one after that (if the parent declins). Therefore, this frame should be followed by an {{#crossLink \"ExpVideoPreview\"}}{{/crossLink}} frame.\n\n```json\n\"frames\": {\n   \"my-video-preview-explanation\": {\n       \"introBlock\": {\n           \"text\": \"During the videos, we'll ask that you hold your child over your shoulder like this, so that you're facing face away from the screen.\"\n       },\n       \"image\": {\n           \"alt\": \"Father holding child looking over his shoulder\",\n           \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg\"\n       },\n       \"kind\": \"exp-lookit-preview-explanation\",\n       \"skipButtonText\": \"Skip preview\",\n       \"previewButtonText\": \"I'd like to preview the videos\",\n       \"id\": \"video-preview-explanation\",\n       \"blocks\": [\n           {\n               \"text\": \"The reason we ask this is that your child is learning from you all the time. Even if he or she can't see where you're looking, you may unconsciously shift towards one side or the other and influence your child's attention. We want to make sure we're measuring your child's preferences, not yours!\"\n           },\n           {\n               \"text\": \"If you'd like to see the videos your child will be shown, you can take a look ahead of time now. It's important that you preview the videos without your child, so that the videos will still be new to them.\"\n           }\n       ],\n       \"showPreviousButton\": true\n   }\n}\n\n```",
+            "description": "A frame that to explain any blinding procedures to parents, and offer them the option to preview stimuli before the study. Two buttons allow the user to move forward: one goes to the next frame (if the parent wants to preview stimuli), and one skips the next frame and goes to the one after that (if the parent declins). Therefore, this frame should be followed by an {{#crossLink \"ExpVideoPreview\"}}{{/crossLink}} frame.\n\n```json\n\"frames\": {\n   \"my-video-preview-explanation\": {\n       \"introBlock\": {\n           \"text\": \"During the videos, we'll ask that you hold your child over your shoulder like this, so that you're facing face away from the screen.\"\n       },\n       \"image\": {\n           \"alt\": \"Father holding child looking over his shoulder\",\n           \"src\": \"https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg\"\n       },\n       \"kind\": \"exp-lookit-preview-explanation\",\n       \"skipButtonText\": \"Skip preview\",\n       \"previewButtonText\": \"I'd like to preview the videos\",\n       \"blocks\": [\n           {\n               \"text\": \"The reason we ask this is that your child is learning from you all the time. Even if he or she can't see where you're looking, you may unconsciously shift towards one side or the other and influence your child's attention. We want to make sure we're measuring your child's preferences, not yours!\"\n           },\n           {\n               \"text\": \"If you'd like to see the videos your child will be shown, you can take a look ahead of time now. It's important that you preview the videos without your child, so that the videos will still be new to them.\"\n           }\n       ],\n       \"showPreviousButton\": true\n   }\n}\n\n```",
             "extends": "ExpFrameBase"
         },
         "ExpLookitStoryPage": {
@@ -603,7 +603,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-story-page/component.js",
             "line": 16,
-            "description": "Frame to implement a basic \"storybook page\" trial, with images placed on the\nscreen within a display area and a sequence of audio files played.\nOptionally, images may be highlighted at specified times during the audio\nfiles.\n\nWebcam recording may be turned on or off; if on, the page is not displayed\nor audio started until recording begins.\n\nFrame is displayed fullscreen, but is not paused or otherwise disabled if the\nuser leaves fullscreen. A button appears prompting the user to return to\nfullscreen mode.\n\nThe parent may press 'next' to proceed, or the study may proceed\nautomatically when audio finishes (autoProceed).\n\nAny number of images may be placed on the screen, and their position\nspecified. (Aspect ratio will be the same as the original image.)\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\n```json\n\"frames\": {\n   \"story-intro-1\": {\n           \"doRecording\": false,\n           \"autoProceed\": true,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"some instructions\",\n               \"emph\": true,\n               \"css\": {\n                   \"color\": \"red\",\n                   \"font-size\": \"12px\"\n               }\n           },\n           \"images\": [\n               {\n                   \"id\": \"leftA\",\n                   \"src\": \"flurps1.jpg\",\n                   \"left\": \"10\",\n                   \"width\": \"30\",\n                   \"top\": \"34.47\"\n               },\n               {\n                   \"id\": \"rightA\",\n                   \"src\": \"zazzes1.jpg\",\n                   \"left\": \"60\",\n                   \"width\": \"30\",\n                   \"top\": \"34.47\"\n               }\n           ],\n           \"kind\": \"exp-lookit-story-page\",\n           \"id\": \"story-intro-1\",\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"intro1\"\n                       }\n                   ],\n                   \"highlights\": [\n                       {\"range\": [3.017343,\t5.600283], \"image\": \t\"leftA\"},\n                       {\"range\": [5.752911,\t8.899402], \"image\": \t\"rightA\"}\n                   ]\n               }\n           ]\n       }\n}\n\n```",
+            "description": "Frame to implement a basic \"storybook page\" trial, with images placed on the\nscreen within a display area and a sequence of audio files played.\nOptionally, images may be highlighted at specified times during the audio\nfiles.\n\nWebcam recording may be turned on or off; if on, the page is not displayed\nor audio started until recording begins.\n\nFrame is displayed fullscreen, but is not paused or otherwise disabled if the\nuser leaves fullscreen. A button appears prompting the user to return to\nfullscreen mode.\n\nThe parent may press 'next' to proceed, or the study may proceed\nautomatically when audio finishes (autoProceed).\n\nAny number of images may be placed on the screen, and their position\nspecified. (Aspect ratio will be the same as the original image.)\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\n```json\n\"frames\": {\n   \"story-intro-1\": {\n           \"doRecording\": false,\n           \"autoProceed\": true,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"some instructions\",\n               \"emph\": true,\n               \"css\": {\n                   \"color\": \"red\",\n                   \"font-size\": \"12px\"\n               }\n           },\n           \"images\": [\n               {\n                   \"id\": \"leftA\",\n                   \"src\": \"flurps1.jpg\",\n                   \"left\": \"10\",\n                   \"width\": \"30\",\n                   \"top\": \"34.47\"\n               },\n               {\n                   \"id\": \"rightA\",\n                   \"src\": \"zazzes1.jpg\",\n                   \"left\": \"60\",\n                   \"width\": \"30\",\n                   \"top\": \"34.47\"\n               }\n           ],\n           \"kind\": \"exp-lookit-story-page\",\n           \"audioSources\": [\n               {\n                   \"audioId\": \"firstAudio\",\n                   \"sources\": [\n                       {\n                           \"stub\": \"intro1\"\n                       }\n                   ],\n                   \"highlights\": [\n                       {\"range\": [3.017343,\t5.600283], \"image\": \t\"leftA\"},\n                       {\"range\": [5.752911,\t8.899402], \"image\": \t\"rightA\"}\n                   ]\n               }\n           ]\n       }\n}\n\n```",
             "extends": "ExpFrameBase",
             "uses": [
                 "FullScreen",
@@ -623,7 +623,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-survey/component.js",
             "line": 14,
-            "description": "Basic survey frame allowing researcher to specify question text and types.\n\nThis frame uses ember-cli-dynamic-forms as a wrapper for alpacajs, a powerful\nlibrary for generating online forms. To specify the structure of your form\n(questions, answer types, validation), you provide a single 'formSchema' structure.\nThe 'formSchema' consists of a 'schema' object and an 'options' object, described\nunder Properties.\n\nYou can choose from any question types listed at http://www.alpacajs.org/documentation.html.\nIn that documentation, you will see that each field type - e.g., Checkbox, Radio, Text -\nhas some 'Schema' properties and some 'Options' properties. The properties under 'Schema'\nwill be defined in the 'schema' object of your formSchema. The properties under 'Options'\nwill be defined in the 'options' object of your formSchema.\n\nMany question types allow you to easily validate answers. For instance, for a \"number\"\nfield you can set minimum and maximum values, and entries will automatically be\nrequired to be numeric (http://www.alpacajs.org/docs/fields/number.html). You can also\neither set required: true in the schema->properties entry for this field OR set\nvalidator: required-field in the options->fields entry if you want to require that the\nparticipant enters something. A validation error message will be displayed next to\nany fields that fail validation checks and the participant will not be able to proceed until\nthese are addressed.\n\nIf a participant returns to this frame after continuing, via a 'Previous' button on the\nnext frame, then the values in this form are pre-filled.\n\nNo video recording is conducted on this frame.\n\nA previous button may optionally be included on this frame.\n\nThe form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical\nheight of the window (it will scroll to fit).\n\nAlthough this frame provides fairly powerful capabilities via alpacajs, here are some\nthings that would currently still require customization of the frame source code:\nediting the formatting; displaying images or playing audio/video; custom validation or\ndynamic addition/removal of fields.\n\n\n```json\n\"frames\": {\n       \"pet-survey\": {\n           \"id\": \"pet-survey\",\n           \"kind\": \"exp-lookit-survey\",\n           \"formSchema\": {\n               \"schema\": {\n                   \"type\": \"object\",\n                   \"title\": \"Tell us about your pet!\",\n                   \"properties\": {\n                       \"age\": {\n                           \"type\": \"integer\",\n                           \"title\": \"Age\",\n                           \"maximum\": 200,\n                           \"minimum\": 0,\n                           \"required\": true\n                       },\n                       \"name\": {\n                           \"type\": \"string\",\n                           \"title\": \"Name\",\n                           \"required\": true\n                       },\n                       \"species\": {\n                           \"enum\": [\n                               \"dog\",\n                               \"cat\",\n                               \"fish\",\n                               \"bird\",\n                               \"raccoon\"\n                           ],\n                           \"type\": \"string\",\n                           \"title\": \"What type of animal?\",\n                           \"default\": \"\"\n                       }\n                   }\n               },\n               \"options\": {\n                   \"fields\": {\n                       \"age\": {\n                           \"hideInitValidationError\": true\n                       },\n                       \"name\": {\n                           \"placeholder\": \"a name...\",\n                           \"hideInitValidationError\": true\n                       },\n                       \"species\": {\n                           \"type\": \"radio\",\n                           \"message\": \"Seriously, what species??\",\n                           \"validator\": \"required-field\",\n                           \"hideInitValidationError\": true\n                       }\n                   }\n               }\n           },\n           \"nextButtonText\": \"Moving on...\"\n       }\n   }\n\n```",
+            "description": "Basic survey frame allowing researcher to specify question text and types.\n\nThis frame uses ember-cli-dynamic-forms as a wrapper for alpacajs, a powerful\nlibrary for generating online forms. To specify the structure of your form\n(questions, answer types, validation), you provide a single 'formSchema' structure.\nThe 'formSchema' consists of a 'schema' object and an 'options' object, described\nunder Properties.\n\nYou can choose from any question types listed at http://www.alpacajs.org/documentation.html.\nIn that documentation, you will see that each field type - e.g., Checkbox, Radio, Text -\nhas some 'Schema' properties and some 'Options' properties. The properties under 'Schema'\nwill be defined in the 'schema' object of your formSchema. The properties under 'Options'\nwill be defined in the 'options' object of your formSchema.\n\nMany question types allow you to easily validate answers. For instance, for a \"number\"\nfield you can set minimum and maximum values, and entries will automatically be\nrequired to be numeric (http://www.alpacajs.org/docs/fields/number.html). You can also\neither set required: true in the schema->properties entry for this field OR set\nvalidator: required-field in the options->fields entry if you want to require that the\nparticipant enters something. A validation error message will be displayed next to\nany fields that fail validation checks and the participant will not be able to proceed until\nthese are addressed.\n\nIf a participant returns to this frame after continuing, via a 'Previous' button on the\nnext frame, then the values in this form are pre-filled.\n\nNo video recording is conducted on this frame.\n\nA previous button may optionally be included on this frame.\n\nThe form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical\nheight of the window (it will scroll to fit).\n\nAlthough this frame provides fairly powerful capabilities via alpacajs, here are some\nthings that would currently still require customization of the frame source code:\nediting the formatting; displaying images or playing audio/video; custom validation or\ndynamic addition/removal of fields.\n\n\n```json\n\"frames\": {\n       \"pet-survey\": {\n           \"kind\": \"exp-lookit-survey\",\n           \"formSchema\": {\n               \"schema\": {\n                   \"type\": \"object\",\n                   \"title\": \"Tell us about your pet!\",\n                   \"properties\": {\n                       \"age\": {\n                           \"type\": \"integer\",\n                           \"title\": \"Age\",\n                           \"maximum\": 200,\n                           \"minimum\": 0,\n                           \"required\": true\n                       },\n                       \"name\": {\n                           \"type\": \"string\",\n                           \"title\": \"Name\",\n                           \"required\": true\n                       },\n                       \"species\": {\n                           \"enum\": [\n                               \"dog\",\n                               \"cat\",\n                               \"fish\",\n                               \"bird\",\n                               \"raccoon\"\n                           ],\n                           \"type\": \"string\",\n                           \"title\": \"What type of animal?\",\n                           \"default\": \"\"\n                       }\n                   }\n               },\n               \"options\": {\n                   \"fields\": {\n                       \"age\": {\n                           \"hideInitValidationError\": true\n                       },\n                       \"name\": {\n                           \"placeholder\": \"a name...\",\n                           \"hideInitValidationError\": true\n                       },\n                       \"species\": {\n                           \"type\": \"radio\",\n                           \"message\": \"Seriously, what species??\",\n                           \"validator\": \"required-field\",\n                           \"hideInitValidationError\": true\n                       }\n                   }\n               }\n           },\n           \"nextButtonText\": \"Moving on...\"\n       }\n   }\n\n```",
             "extends": "ExpFrameBase"
         },
         "ExpLookitText": {
@@ -639,7 +639,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-text/component.js",
             "line": 9,
-            "description": "A frame to display text-only instructions, etc. to the user.\n\n```json\n\"frames\": {\n   \"study-intro\": {\n       \"id\": \"geom-intro\",\n       \"blocks\": [\n           {\n               \"emph\": true,\n               \"text\": \"Important: your child does not need to be with you until the videos begin. First, let's go over what will happen!\",\n               \"title\": \"Your baby, the physicist\"\n           },\n           {\n               \"text\": \"Some introductory text about this study.\"\n           },\n           {\n               \"text\": \"Another paragraph about this study.\"\n           }\n       ],\n       \"showPreviousButton\": false,\n       \"kind\": \"exp-lookit-text\"\n   }\n}\n\n```",
+            "description": "A frame to display text-only instructions, etc. to the user.\n\n```json\n\"frames\": {\n   \"study-intro\": {\n       \"blocks\": [\n           {\n               \"emph\": true,\n               \"text\": \"Important: your child does not need to be with you until the videos begin. First, let's go over what will happen!\",\n               \"title\": \"Your baby, the physicist\"\n           },\n           {\n               \"text\": \"Some introductory text about this study.\"\n           },\n           {\n               \"text\": \"Another paragraph about this study.\"\n           }\n       ],\n       \"showPreviousButton\": false,\n       \"kind\": \"exp-lookit-text\"\n   }\n}\n\n```",
             "extends": "ExpFrameBase"
         },
         "ExpLookitVideoConsent": {
@@ -655,7 +655,7 @@
             "namespace": "",
             "file": "addon/components/exp-lookit-video-consent/component.js",
             "line": 16,
-            "description": "Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. A standard consent\ndocument is displayed, with additional study-specific information provided by the researcher, in accordance with the Lookit terms of use. Consent document can be downloaded as PDF document by participant.\n\n```json\n\"frames\": {\n    \"video-consent\": {\n        \"id\": \"video-consent\",\n        \"kind\": \"exp-lookit-video-consent\",\n        \"PIName\": \"Jane Smith\",\n        \"institution\": \"Science University\",\n        \"PIContact\": \"Jane Smith at 123 456 7890\",\n        \"purpose\": \"Why do babies love cats? This study will help us find out whether babies love cats because of their soft fur or their twitchy tails.\",\n        \"procedures\": \"Your child will be shown pictures of lots of different cats, along with noises that cats make like meowing and purring. We are interested in which pictures and sounds make your child smile. We will ask you (the parent) to turn around to avoid influencing your child's responses. There are no anticipated risks associated with participating.\",\n        \"payment\": \"After you finish the study, we will email you a $5 BabyStore gift card within approximately three days. To be eligible for the gift card your child must be in the age range for this study, you need to submit a valid consent statement, and we need to see that there is a child with you. But we will send a gift card even if you do not finish the whole study or we are not able to use your child's data! There are no other direct benefits to you or your child from participating, but we hope you will enjoy the experience.\",\n        \"datause\": \"We are primarily interested in your child's emotional reactions to the images and sounds. A research assistant will watch your video to measure the precise amount of delight in your child's face as he or she sees each cat picture.\"\n    }\n}\n```",
+            "description": "Video consent frame for Lookit studies, with consent document displayed at left and instructions to start recording, read a statement out loud, and send. A standard consent\ndocument is displayed, with additional study-specific information provided by the researcher, in accordance with the Lookit terms of use. Consent document can be downloaded as PDF document by participant.\n\n```json\n\"frames\": {\n    \"video-consent\": {\n        \"kind\": \"exp-lookit-video-consent\",\n        \"PIName\": \"Jane Smith\",\n        \"institution\": \"Science University\",\n        \"PIContact\": \"Jane Smith at 123 456 7890\",\n        \"purpose\": \"Why do babies love cats? This study will help us find out whether babies love cats because of their soft fur or their twitchy tails.\",\n        \"procedures\": \"Your child will be shown pictures of lots of different cats, along with noises that cats make like meowing and purring. We are interested in which pictures and sounds make your child smile. We will ask you (the parent) to turn around to avoid influencing your child's responses. There are no anticipated risks associated with participating.\",\n        \"payment\": \"After you finish the study, we will email you a $5 BabyStore gift card within approximately three days. To be eligible for the gift card your child must be in the age range for this study, you need to submit a valid consent statement, and we need to see that there is a child with you. But we will send a gift card even if you do not finish the whole study or we are not able to use your child's data! There are no other direct benefits to you or your child from participating, but we hope you will enjoy the experience.\",\n        \"datause\": \"We are primarily interested in your child's emotional reactions to the images and sounds. A research assistant will watch your video to measure the precise amount of delight in your child's face as he or she sees each cat picture.\"\n    }\n}\n```",
             "extends": "ExpFrameBase",
             "uses": [
                 "VideoRecord"
@@ -689,7 +689,7 @@
             "namespace": "",
             "file": "addon/components/exp-video-config/component.js",
             "line": 12,
-            "description": "Video configuration frame guiding user through making sure permissions are set appropriately and microphone is working, with troubleshooting text. All content is hard-coded for a general-purpose technical setup frame.\n\n```json\n\"frames\": {\n    \"video-config\": {\n        \"id\": \"video-config\",\n        \"kind\": \"exp-video-config\"\n    }\n}\n```",
+            "description": "Video configuration frame guiding user through making sure permissions are set appropriately and microphone is working, with troubleshooting text. All content is hard-coded for a general-purpose technical setup frame.\n\n```json\n\"frames\": {\n    \"video-config\": {\n        \"kind\": \"exp-video-config\"\n    }\n}\n```",
             "extends": "VideoRecord"
         },
         "ExpVideoConfigQuality": {
@@ -705,7 +705,7 @@
             "namespace": "",
             "file": "addon/components/exp-video-config-quality/component.js",
             "line": 11,
-            "description": "Video configuration frame showing webcam view at right and instructions for checking video quality for preferential looking setup at left, with pictures. Content is hard-coded for preferential looking requirements and images; this frame can serve as a template for other applications (e.g., verbal responses, where we might care less about lighting but want to generally be able to see the child's face) or can be generalized to show an arbitrary set of instructions/images.\n\n```json\n\"frames\": {\n    \"video-quality\": {\n        \"id\": \"video-quality\",\n        \"kind\": \"exp-video-config-quality\"\n    }\n}\n```",
+            "description": "Video configuration frame showing webcam view at right and instructions for checking video quality for preferential looking setup at left, with pictures. Content is hard-coded for preferential looking requirements and images; this frame can serve as a template for other applications (e.g., verbal responses, where we might care less about lighting but want to generally be able to see the child's face) or can be generalized to show an arbitrary set of instructions/images.\n\n```json\n\"frames\": {\n    \"video-quality\": {\n        \"kind\": \"exp-video-config-quality\"\n    }\n}\n```",
             "extends": "VideoRecord"
         },
         "ExpVideoConsent": {
@@ -721,7 +721,7 @@
             "namespace": "",
             "file": "addon/components/exp-video-consent/component.js",
             "line": 11,
-            "description": "Video consent frame for Lookit studies UNDER INITIAL MIT PROTOCOL ONLY, with consent document displayed at left and instructions to start recording, read a statement out loud, and send.\nThis version allows custom specification of consent form text.\nFor studies by researchers who have signed the Lookit Usage Agreement and have approval from their own IRB, please use exp-lookit-video-consent frame.\nConsent document can be downloaded as PDF document by participant.\n\n```json\n\"frames\": {\n    \"video-consent\": {\n        \"blocks\": [\n            {\n                 \"text\": \"Observing your child's behavior during this experimental session will help us to understand how infants and children use evidence to learn and make predictions about the world.\",\n                \"title\": \"About the study\"\n            },\n            {\n                \"text\": \"Your and your child's participation in this session are completely voluntary. If you and your child choose to participate, you may stop the session at any point with no penalty. Please pause or stop the session if your child becomes very fussy or does not want to participate. If this is a study with multiple sessions, there are no penalties for not completing all sessions.\",\n                \"title\": \"Participation\"\n            },\n            {\n                \"text\": \"During the session, you and your child will be recorded via your computer's webcam and microphone while watching a video or completing an activity. Video recordings and other data you enter are sent securely to our lab. At the end of the session, or when you end it early, you will be prompted to choose a privacy level for your webcam recordings. \",\n                \"title\": \"Webcam recording\"\n            },\n            {\n                \"text\": \"Recordings and survey responses will be stored on a password-protected server and accessed only by the Lookit researchers working on this study and any other groups you allow when selecting a privacy level. A researcher may transcribe responses or record information such as where you or your child is looking. Data will not be used to identify you or your child. The results of the research may be presented at scientific meetings or published in scientific journals, but no video clips will be shared unless you allow this when selecting a privacy level.\\n\\nRaw data may also be published when it can not identify children; for instance, we may publish children’s looking times to the left versus right of the screen, or parent comments with children’s names removed. We may also study your child’s responses in connection with his or her previous responses to this or other studies, siblings’ responses, or demographic survey responses. We never publish children’s birthdates or names, and we never publish your demographic data in conjunction with your child’s video.\",\n                \"title\": \"Use of data\"\n            },\n            {\n                \"text\": \"If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: {contact}\",\n                \"title\": \"Contact information\"\n            }\n        ],\n        \"id\": \"video-consent\",\n        \"prompt\": \"\\\"I have read and understand the consent document. I am this child's parent or legal guardian and we both agree to participate in this study.\\\"\",\n        \"kind\": \"exp-video-consent\"\n    }\n}\n```",
+            "description": "Video consent frame for Lookit studies UNDER INITIAL MIT PROTOCOL ONLY, with consent document displayed at left and instructions to start recording, read a statement out loud, and send.\nThis version allows custom specification of consent form text.\nFor studies by researchers who have signed the Lookit Usage Agreement and have approval from their own IRB, please use exp-lookit-video-consent frame.\nConsent document can be downloaded as PDF document by participant.\n\n```json\n\"frames\": {\n    \"video-consent\": {\n        \"blocks\": [\n            {\n                 \"text\": \"Observing your child's behavior during this experimental session will help us to understand how infants and children use evidence to learn and make predictions about the world.\",\n                \"title\": \"About the study\"\n            },\n            {\n                \"text\": \"Your and your child's participation in this session are completely voluntary. If you and your child choose to participate, you may stop the session at any point with no penalty. Please pause or stop the session if your child becomes very fussy or does not want to participate. If this is a study with multiple sessions, there are no penalties for not completing all sessions.\",\n                \"title\": \"Participation\"\n            },\n            {\n                \"text\": \"During the session, you and your child will be recorded via your computer's webcam and microphone while watching a video or completing an activity. Video recordings and other data you enter are sent securely to our lab. At the end of the session, or when you end it early, you will be prompted to choose a privacy level for your webcam recordings. \",\n                \"title\": \"Webcam recording\"\n            },\n            {\n                \"text\": \"Recordings and survey responses will be stored on a password-protected server and accessed only by the Lookit researchers working on this study and any other groups you allow when selecting a privacy level. A researcher may transcribe responses or record information such as where you or your child is looking. Data will not be used to identify you or your child. The results of the research may be presented at scientific meetings or published in scientific journals, but no video clips will be shared unless you allow this when selecting a privacy level.\\n\\nRaw data may also be published when it can not identify children; for instance, we may publish children’s looking times to the left versus right of the screen, or parent comments with children’s names removed. We may also study your child’s responses in connection with his or her previous responses to this or other studies, siblings’ responses, or demographic survey responses. We never publish children’s birthdates or names, and we never publish your demographic data in conjunction with your child’s video.\",\n                \"title\": \"Use of data\"\n            },\n            {\n                \"text\": \"If you or your child have any questions or concerns about this research, you may contact Professor Laura Schulz: {contact}\",\n                \"title\": \"Contact information\"\n            }\n        ],\n        \"prompt\": \"\\\"I have read and understand the consent document. I am this child's parent or legal guardian and we both agree to participate in this study.\\\"\",\n        \"kind\": \"exp-video-consent\"\n    }\n}\n```",
             "extends": "ExpLookitVideoConsent",
             "uses": [
                 "VideoRecord"
@@ -811,7 +811,7 @@
             "namespace": "",
             "file": "addon/randomizers/permute.js",
             "line": 6,
-            "description": "Randomizer to allow random ordering of a list of frames. Intended to be\nuseful for e.g. randomly permuting the order of particular stimuli used during\na set of trials (although frames need not be of the same kind to permute).\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"permute\",\nas shown below, in addition to the parameters described under 'properties'.\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"permute\",\n       \"kind\": \"choice\",\n       \"id\": \"test-trials\",\n       \"commonFrameProperties\": {\n           \"showPreviousButton\": false\n       },\n       \"frameOptions\": [\n           {\n               \"blocks\": [\n                   {\n                       \"emph\": true,\n                       \"text\": \"Let's think about hippos!\",\n                       \"title\": \"hippos!\"\n                   },\n                   {\n                       \"text\": \"Some more about hippos...\"\n                   }\n               ],\n               \"kind\": \"exp-lookit-text\"\n           },\n           {\n               \"blocks\": [\n                   {\n                       \"emph\": false,\n                       \"text\": \"Let's think about dolphins!\",\n                       \"title\": \"dolphins!\"\n                   }\n               ],\n               \"kind\": \"exp-lookit-text\"\n           }\n       ]\n   }\n}\n\n```"
+            "description": "Randomizer to allow random ordering of a list of frames. Intended to be\nuseful for e.g. randomly permuting the order of particular stimuli used during\na set of trials (although frames need not be of the same kind to permute).\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"permute\",\nas shown below, in addition to the parameters described under 'properties'.\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"permute\",\n       \"kind\": \"choice\",\n       \"commonFrameProperties\": {\n           \"showPreviousButton\": false\n       },\n       \"frameOptions\": [\n           {\n               \"blocks\": [\n                   {\n                       \"emph\": true,\n                       \"text\": \"Let's think about hippos!\",\n                       \"title\": \"hippos!\"\n                   },\n                   {\n                       \"text\": \"Some more about hippos...\"\n                   }\n               ],\n               \"kind\": \"exp-lookit-text\"\n           },\n           {\n               \"blocks\": [\n                   {\n                       \"emph\": false,\n                       \"text\": \"Let's think about dolphins!\",\n                       \"title\": \"dolphins!\"\n                   }\n               ],\n               \"kind\": \"exp-lookit-text\"\n           }\n       ]\n   }\n}\n\n```"
         },
         "randomParameterSet": {
             "name": "randomParameterSet",
@@ -826,7 +826,7 @@
             "namespace": "",
             "file": "addon/randomizers/random-parameter-set.js",
             "line": 8,
-            "description": "Randomizer to implement flexible condition assignment and counterbalancing by\nallowing the user to specify an arbitrary sequence of frames to create. A\nset of parameters is randomly selected from a list of available parameterSets,\nand these parameters are substituted in to the parameters specified in the\nlist of frames.\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"random-parameter-set\",\nas shown below, in addition to the parameters described under 'properties'.\n\nThis\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"random-parameter-set\",\n       \"kind\": \"choice\",\n       \"id\": \"test-trials\",\n       \"commonFrameProperties\": {\n           \"kind\": \"exp-lookit-story-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"doRecording\": true,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"Common instructions across test trials here\",\n               \"emph\": true\n           }\n       },\n       \"frameList\": [\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG1\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG1\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG1\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION1AUDIO\"}],\n                       \"highlights\": \"QUESTION1HIGHLIGHTS\"\n                   }\n               ]\n           },\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG2\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG2\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG2\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION2AUDIO\"}],\n                       \"highlights\": \"QUESTION2HIGHLIGHTS\"\n                   }\n               ]\n           }\n       ],\n       \"parameterSets\": [\n           {\n               \"AGENTIMG1\": \"flurpagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"flurpleftmean1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.399293,\t3.617124], \"image\": \"agent\"},\n                   {\"range\": [5.085112,\t6.811467], \"image\": \"left\"},\n                   {\"range\": [6.905418,\t8.702236], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"flurpagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"flurpleftinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.372569,\t5.309110], \"image\": \"agent\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"left\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"right\"},\n                   {\"range\": [9.966225,\t11.922212], \"image\": \"left\"},\n                   {\"range\": [12.052612,\t14.008600], \"image\": \"right\"}\n               ]\n           },\n           {\n               \"AGENTIMG1\": \"zazzagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"zazzrightnice1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.348454,\t3.736871], \"image\": \"agent\"},\n                   {\"range\": [5.395033,\t6.884975], \"image\": \"left\"},\n                   {\"range\": [6.969085,\t8.975701], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"zazzagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"zazzrightinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.572920,\t5.138376], \"image\": \"agent\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"left\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"right\"},\n                   {\"range\": [9.721735,\t11.565821], \"image\": \"left\"},\n                   {\"range\": [11.655340,\t13.535233], \"image\": \"right\"}\n               ]\n           }\n       ],\n       \"parameterSetWeights\": [1, 1]\n   }\n}\n\n```"
+            "description": "Randomizer to implement flexible condition assignment and counterbalancing by\nallowing the user to specify an arbitrary sequence of frames to create. A\nset of parameters is randomly selected from a list of available parameterSets,\nand these parameters are substituted in to the parameters specified in the\nlist of frames.\n\nTo use, define a frame with \"kind\": \"choice\" and \"sampler\": \"random-parameter-set\",\nas shown below, in addition to the parameters described under 'properties'.\n\nThis\n\n```json\n\"frames\": {\n   \"test-trials\": {\n       \"sampler\": \"random-parameter-set\",\n       \"kind\": \"choice\",\n       \"commonFrameProperties\": {\n           \"kind\": \"exp-lookit-story-page\",\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/ingroupobligations/\",\n           \"audioTypes\": [\"mp3\", \"ogg\"],\n           \"doRecording\": true,\n           \"autoProceed\": false,\n           \"parentTextBlock\": {\n               \"title\": \"Parents!\",\n               \"text\": \"Common instructions across test trials here\",\n               \"emph\": true\n           }\n       },\n       \"frameList\": [\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG1\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG1\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG1\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION1AUDIO\"}],\n                       \"highlights\": \"QUESTION1HIGHLIGHTS\"\n                   }\n               ]\n           },\n           {\n               \"images\": [\n                   {\n                       \"id\": \"agent\",\n                       \"src\": \"AGENTIMG2\",\n                       \"left\": \"40\",\n                       \"width\": \"20\",\n                       \"top\": \"10\"\n                   },\n                   {\n                       \"id\": \"left\",\n                       \"src\": \"LEFTIMG2\",\n                       \"left\": \"10\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   },\n                   {\n                       \"id\": \"right\",\n                       \"src\": \"RIGHTIMG2\",\n                       \"left\": \"70\",\n                       \"width\": \"20\",\n                       \"top\": \"50\"\n                   }\n               ],\n               \"audioSources\": [\n                   {\n                       \"audioId\": \"questionaudio\",\n                       \"sources\": [{\"stub\": \"QUESTION2AUDIO\"}],\n                       \"highlights\": \"QUESTION2HIGHLIGHTS\"\n                   }\n               ]\n           }\n       ],\n       \"parameterSets\": [\n           {\n               \"AGENTIMG1\": \"flurpagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"flurpleftmean1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.399293,\t3.617124], \"image\": \"agent\"},\n                   {\"range\": [5.085112,\t6.811467], \"image\": \"left\"},\n                   {\"range\": [6.905418,\t8.702236], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"flurpagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"flurpleftinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.372569,\t5.309110], \"image\": \"agent\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"left\"},\n                   {\"range\": [5.495395,\t7.209213], \"image\": \"right\"},\n                   {\"range\": [9.966225,\t11.922212], \"image\": \"left\"},\n                   {\"range\": [12.052612,\t14.008600], \"image\": \"right\"}\n               ]\n           },\n           {\n               \"AGENTIMG1\": \"zazzagent1.jpg\",\n               \"LEFTIMG1\": \"flurpvictim1.jpg\",\n               \"RIGHTIMG1\": \"zazzvictim1.jpg\",\n               \"QUESTION1AUDIO\": \"zazzrightnice1\",\n               \"QUESTION1HIGHLIGHTS\": [\n                   {\"range\": [0.348454,\t3.736871], \"image\": \"agent\"},\n                   {\"range\": [5.395033,\t6.884975], \"image\": \"left\"},\n                   {\"range\": [6.969085,\t8.975701], \"image\": \"right\"}\n               ],\n               \"AGENTIMG2\": \"zazzagent2.jpg\",\n               \"LEFTIMG2\": \"flurpvictim2.jpg\",\n               \"RIGHTIMG2\": \"zazzvictim2.jpg\",\n               \"QUESTION2AUDIO\": \"zazzrightinduct1\",\n               \"QUESTION2HIGHLIGHTS\": [\n                   {\"range\": [0.572920,\t5.138376], \"image\": \"agent\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"left\"},\n                   {\"range\": [5.335317,\t7.089884], \"image\": \"right\"},\n                   {\"range\": [9.721735,\t11.565821], \"image\": \"left\"},\n                   {\"range\": [11.655340,\t13.535233], \"image\": \"right\"}\n               ]\n           }\n       ],\n       \"parameterSetWeights\": [1, 1]\n   }\n}\n\n```"
         },
         "VideoRecorderObject": {
             "name": "VideoRecorderObject",
@@ -931,7 +931,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 213,
+            "line": 211,
             "description": "Phase number (just included as a convenience & sent to server, to make handling collected data simpler)",
             "itemtype": "property",
             "name": "nPhase",
@@ -943,7 +943,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 224,
+            "line": 222,
             "description": "Trial number (just included as a convenience & sent to server, to make handling collected data simpler)",
             "itemtype": "property",
             "name": "nTrial",
@@ -955,7 +955,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 235,
+            "line": 233,
             "description": "URL of background image; will be stretched to width of page",
             "itemtype": "property",
             "name": "backgroundImage",
@@ -966,7 +966,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 244,
+            "line": 242,
             "description": "Whether this is a frame where the user needs to click to\nselect one of the images before proceeding",
             "itemtype": "property",
             "name": "isChoiceFrame",
@@ -978,7 +978,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 255,
+            "line": 253,
             "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
             "itemtype": "property",
             "name": "baseDir",
@@ -990,7 +990,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 276,
+            "line": 274,
             "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "audioTypes",
@@ -1002,7 +1002,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 304,
+            "line": 302,
             "description": "Whether to do webcam recording (will wait for webcam\nconnection before starting audio if so)",
             "itemtype": "property",
             "name": "doRecording",
@@ -1013,7 +1013,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 314,
+            "line": 312,
             "description": "Whether to proceed automatically after audio (and hide\nreplay/next buttons)",
             "itemtype": "property",
             "name": "autoProceed",
@@ -1024,7 +1024,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 324,
+            "line": 322,
             "description": "Array of objects describing audio to play at the start of\nthis frame. Each element describes a separate audio segment.",
             "itemtype": "property",
             "name": "audioSources",
@@ -1052,7 +1052,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 389,
+            "line": 387,
             "description": "Text block to display to parent. (Each field is optional)",
             "itemtype": "property",
             "name": "parentTextBlock",
@@ -1085,7 +1085,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 419,
+            "line": 417,
             "description": "Array of images to display and information about their placement",
             "itemtype": "property",
             "name": "images",
@@ -1143,7 +1143,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 491,
+            "line": 489,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -1179,7 +1179,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 547,
+            "line": 545,
             "description": "When one of the images is clicked during a choice frame",
             "itemtype": "event",
             "name": "clickSpeaker",
@@ -1196,7 +1196,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 578,
+            "line": 576,
             "description": "When image audio is started",
             "itemtype": "event",
             "name": "startSpeakerAudio",
@@ -1213,7 +1213,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 597,
+            "line": 595,
             "description": "When image audio is played (recorded even if not completed)",
             "itemtype": "event",
             "name": "playSpeakerAudio",
@@ -1230,7 +1230,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 643,
+            "line": 641,
             "description": "When narration audio is completed",
             "itemtype": "event",
             "name": "completeMainAudio",
@@ -1241,17 +1241,6 @@
         {
             "file": "addon/components/exp-lookit-exit-survey/component.js",
             "line": 67,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitExitSurvey",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-exit-survey/component.js",
-            "line": 75,
             "description": "Object specifying information to show on second page of exit survey, before returning to main Lookit site.",
             "itemtype": "property",
             "name": "debriefing",
@@ -1279,7 +1268,7 @@
         },
         {
             "file": "addon/components/exp-lookit-exit-survey/component.js",
-            "line": 112,
+            "line": 104,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -1689,17 +1678,6 @@
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
             "line": 99,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitInstructions",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 108,
             "description": "Whether the user should be forced to play the audio clip before leaving the page",
             "itemtype": "property",
             "name": "mustPlay",
@@ -1710,7 +1688,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 118,
+            "line": 109,
             "description": "Object specifying the audio clip to include (optional)",
             "itemtype": "property",
             "name": "audioBlock",
@@ -1743,7 +1721,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 158,
+            "line": 149,
             "description": "Array of objects specifying text/images of instructions to display",
             "itemtype": "property",
             "name": "blocks",
@@ -1771,7 +1749,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 204,
+            "line": 195,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -1783,7 +1761,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 214,
+            "line": 205,
             "description": "Text to display on the 'next frame' button",
             "itemtype": "property",
             "name": "nextButtonText",
@@ -1795,7 +1773,7 @@
         },
         {
             "file": "addon/components/exp-lookit-instructions/component.js",
-            "line": 228,
+            "line": 219,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -1821,18 +1799,7 @@
         },
         {
             "file": "addon/components/exp-lookit-mood-questionnaire/component.js",
-            "line": 118,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitMoodQuestionnaire",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-mood-questionnaire/component.js",
-            "line": 127,
+            "line": 117,
             "description": "Intro paragraph describing why we want mood info",
             "itemtype": "property",
             "name": "introText",
@@ -1844,7 +1811,7 @@
         },
         {
             "file": "addon/components/exp-lookit-mood-questionnaire/component.js",
-            "line": 142,
+            "line": 132,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2030,7 +1997,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 200,
+            "line": 199,
             "description": "Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). If none provided, skip test phase.\n\nExample value:\n\n```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```",
             "itemtype": "property",
             "name": "testVideo",
@@ -2054,7 +2021,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 217,
+            "line": 216,
             "description": "Array of objects specifying video src and type for alternate test video, as for testVideo. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altTestVideo is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).",
             "itemtype": "property",
             "name": "altTestVideo",
@@ -2078,7 +2045,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 230,
+            "line": 229,
             "description": "Array of objects specifying intro video src and type, as for testVideo.\nIf empty, intro segment will be skipped.",
             "itemtype": "property",
             "name": "introVideo",
@@ -2102,7 +2069,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 244,
+            "line": 243,
             "description": "Array of objects specifying attention-grabber video src and type, as for testVideo. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.",
             "itemtype": "property",
             "name": "announcementVideo",
@@ -2126,7 +2093,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 256,
+            "line": 255,
             "description": "minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announcementLength and the duration of any announcement audio.",
             "itemtype": "property",
             "name": "announcementLength",
@@ -2138,7 +2105,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 267,
+            "line": 266,
             "description": "List of objects specifying intro announcement src and type. If empty and minimum announcementLength is 0, announcement is skipped.\nExample: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`",
             "itemtype": "property",
             "name": "announcementAudio",
@@ -2162,7 +2129,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 281,
+            "line": 280,
             "description": "URL of image to show on left, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
             "itemtype": "property",
             "name": "leftImage",
@@ -2173,7 +2140,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 292,
+            "line": 291,
             "description": "URL of image to show on right, if any. Can be a full URL or a\nstub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
             "itemtype": "property",
             "name": "right",
@@ -2184,7 +2151,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 303,
+            "line": 302,
             "description": "URL of image to show at center, if any. Can be a full URL or\na stub that will be appended to `baseDir` + `img/` (see\nbaseDir).",
             "itemtype": "property",
             "name": "centerImage",
@@ -2195,7 +2162,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 315,
+            "line": 314,
             "description": "List of objects specifying test audio src and type, as for announcementAudio.\nIf empty, no additional test audio is played besides any audio in testVideo.",
             "itemtype": "property",
             "name": "testAudio",
@@ -2223,7 +2190,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 330,
+            "line": 329,
             "description": "Whether test audio should loop",
             "itemtype": "property",
             "name": "loopTestAudio",
@@ -2235,7 +2202,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 341,
+            "line": 340,
             "description": "Whether to allow participant to pause study during test. If no, study still\npauses but upon unpausing moves to next trial. If yes, study restarts from\nbeginning upon unpausing (with alternate sources).",
             "itemtype": "property",
             "name": "allowPauseDuringTest",
@@ -2247,7 +2214,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 354,
+            "line": 353,
             "description": "Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.",
             "itemtype": "property",
             "name": "testLength",
@@ -2259,7 +2226,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 365,
+            "line": 364,
             "description": "Number of times to play test video before moving on. This is ignored if\ntestLength is set to a finite value.",
             "itemtype": "property",
             "name": "testCount",
@@ -2271,7 +2238,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 377,
+            "line": 376,
             "description": "Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.",
             "itemtype": "property",
             "name": "doRecording",
@@ -2283,7 +2250,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 387,
+            "line": 386,
             "description": "length of single calibration segment in ms. 0 to skip calibration.",
             "itemtype": "property",
             "name": "calibrationLength",
@@ -2295,7 +2262,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 398,
+            "line": 397,
             "description": "Ordered list of positions to show calibration segment in. Options are\n\"center\", \"left\", \"right\". Ignored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationPositions",
@@ -2307,7 +2274,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 410,
+            "line": 409,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration audio (played at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationAudio",
@@ -2319,7 +2286,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 434,
+            "line": 433,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration video (played from start at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationVideo",
@@ -2331,7 +2298,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 458,
+            "line": 457,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon pausing study",
             "itemtype": "property",
             "name": "pauseAudio",
@@ -2343,7 +2310,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 481,
+            "line": 480,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon unpausing study. Unpausing audio will always be played\nbefore proceeding to next trial, even if this trial will not be redone\n(e.g. because it was paused during test and allowPauseDuringTest is\nset to false)",
             "itemtype": "property",
             "name": "unpauseAudio",
@@ -2355,7 +2322,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 507,
+            "line": 506,
             "description": "Text to show under \"Study paused / Press space to resume\" when study is paused.\nDefault: (You'll have a moment to turn around again.)",
             "itemtype": "property",
             "name": "pauseText",
@@ -2367,7 +2334,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 520,
+            "line": 519,
             "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
             "itemtype": "property",
             "name": "baseDir",
@@ -2379,7 +2346,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 541,
+            "line": 540,
             "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "audioTypes",
@@ -2391,7 +2358,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 569,
+            "line": 568,
             "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an video source\nis given as [{'stub': 'intro'}], the video source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "videoTypes",
@@ -2403,7 +2370,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 601,
+            "line": 600,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2454,7 +2421,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 849,
+            "line": 848,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -2471,7 +2438,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 1075,
+            "line": 1074,
             "description": "Observer that starts recording once recorder is ready. Override to do additional\nstuff at this point!",
             "itemtype": "method",
             "name": "whenPossibleToRecord",
@@ -2481,18 +2448,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 52,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitPreviewExplanation",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 61,
+            "line": 51,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -2504,7 +2460,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 71,
+            "line": 61,
             "description": "Array of text blocks (paragraphs) to display after the image.",
             "itemtype": "property",
             "name": "blocks",
@@ -2532,7 +2488,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 97,
+            "line": 87,
             "description": "Object specifying first block of text (pre-image) to display.",
             "itemtype": "property",
             "name": "introBlock",
@@ -2560,7 +2516,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 119,
+            "line": 109,
             "description": "Image to display after the intro block. (Displayed centered,\nwith border, max height 220px.) E.g., a picture of a parent\nholding a child looking over their shoulder.",
             "itemtype": "property",
             "name": "image",
@@ -2583,7 +2539,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 139,
+            "line": 129,
             "description": "Text to display on the button to go to the next frame",
             "itemtype": "property",
             "name": "previewButtonText",
@@ -2595,7 +2551,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preview-explanation/component.js",
-            "line": 149,
+            "line": 139,
             "description": "Text to display on the button to skip the next frame",
             "itemtype": "property",
             "name": "skipButtonText",
@@ -2607,7 +2563,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 124,
+            "line": 123,
             "description": "Whether to do webcam recording (will wait for webcam\nconnection before starting audio if so)",
             "itemtype": "property",
             "name": "doRecording",
@@ -2618,7 +2574,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 134,
+            "line": 133,
             "description": "Whether to proceed automatically after audio (and hide\nreplay/next buttons)",
             "itemtype": "property",
             "name": "autoProceed",
@@ -2629,7 +2585,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 144,
+            "line": 143,
             "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
             "itemtype": "property",
             "name": "baseDir",
@@ -2641,7 +2597,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 165,
+            "line": 164,
             "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "audioTypes",
@@ -2653,7 +2609,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 193,
+            "line": 192,
             "description": "Array of objects describing audio to play at the start of\nthis frame. Each element describes a separate audio segment.",
             "itemtype": "property",
             "name": "audioSources",
@@ -2681,7 +2637,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 258,
+            "line": 257,
             "description": "Text block to display to parent.  (Each field is optional)",
             "itemtype": "property",
             "name": "parentTextBlock",
@@ -2714,7 +2670,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 288,
+            "line": 287,
             "description": "Array of images to display and information about their placement",
             "itemtype": "property",
             "name": "images",
@@ -2752,7 +2708,7 @@
         },
         {
             "file": "addon/components/exp-lookit-story-page/component.js",
-            "line": 327,
+            "line": 326,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2783,7 +2739,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 126,
+            "line": 125,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -2795,7 +2751,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 136,
+            "line": 135,
             "description": "Text to display on the 'next frame' button",
             "itemtype": "property",
             "name": "nextButtonText",
@@ -2807,7 +2763,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 146,
+            "line": 145,
             "description": "Object specifying the content of the form. This is in the same format as\nthe example definition of the const 'schema' at http://toddjordan.github.io/ember-cli-dynamic-forms/#/demos/data:\na schema and options are designated separately. Each field of the form\nmust be defined in schema. Options may additionally be specified in options.",
             "itemtype": "property",
             "name": "formSchema",
@@ -2830,7 +2786,7 @@
         },
         {
             "file": "addon/components/exp-lookit-survey/component.js",
-            "line": 182,
+            "line": 181,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2861,18 +2817,7 @@
         },
         {
             "file": "addon/components/exp-lookit-text/component.js",
-            "line": 48,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitText",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-text/component.js",
-            "line": 57,
+            "line": 47,
             "description": "Whether to show a 'previous' button",
             "itemtype": "property",
             "name": "showPreviousButton",
@@ -2884,7 +2829,7 @@
         },
         {
             "file": "addon/components/exp-lookit-text/component.js",
-            "line": 67,
+            "line": 57,
             "description": "Array of text blocks (paragraphs) to display.",
             "itemtype": "property",
             "name": "blocks",
@@ -2912,7 +2857,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 203,
+            "line": 202,
             "description": "Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). If none provided, skip test phase.\n\nExample value:\n\n```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```",
             "itemtype": "property",
             "name": "sources",
@@ -2936,7 +2881,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 220,
+            "line": 219,
             "description": "Array of objects specifying video src and type for alternate test video, as for sources. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altSources is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).",
             "itemtype": "property",
             "name": "altSources",
@@ -2960,7 +2905,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 233,
+            "line": 232,
             "description": "Array of objects specifying intro video src and type, as for sources.\nIf empty, intro segment will be skipped.",
             "itemtype": "property",
             "name": "introSources",
@@ -2984,7 +2929,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 247,
+            "line": 246,
             "description": "Array of objects specifying attention-grabber video src and type, as for sources. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.",
             "itemtype": "property",
             "name": "attnSources",
@@ -3008,7 +2953,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 259,
+            "line": 258,
             "description": "minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announceLength and the duration of any announcement audio.",
             "itemtype": "property",
             "name": "announceLength",
@@ -3020,7 +2965,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 270,
+            "line": 269,
             "description": "List of objects specifying intro announcement src and type. If empty and minimum announceLength is 0, announcement is skipped.\nExample: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`",
             "itemtype": "property",
             "name": "audioSources",
@@ -3044,7 +2989,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 284,
+            "line": 283,
             "description": "List of objects specifying music audio src and type, as for audioSources.\nIf empty, no music is played.",
             "itemtype": "property",
             "name": "musicSources",
@@ -3072,7 +3017,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 299,
+            "line": 298,
             "description": "Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.",
             "itemtype": "property",
             "name": "testLength",
@@ -3084,7 +3029,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 310,
+            "line": 309,
             "description": "Number of times to play test video before moving on. This is ignored if\ntestLength is set to a finite value.",
             "itemtype": "property",
             "name": "testCount",
@@ -3096,7 +3041,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 322,
+            "line": 321,
             "description": "Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.",
             "itemtype": "property",
             "name": "doRecording",
@@ -3108,7 +3053,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 332,
+            "line": 331,
             "description": "length of single calibration segment in ms. 0 to skip calibration.",
             "itemtype": "property",
             "name": "calibrationLength",
@@ -3120,7 +3065,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 343,
+            "line": 342,
             "description": "Ordered list of positions to show calibration segment in. Options are\n\"center\", \"left\", \"right\". Ignored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationPositions",
@@ -3132,7 +3077,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 355,
+            "line": 354,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration audio (played at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationAudioSources",
@@ -3144,7 +3089,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 379,
+            "line": 378,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration video (played from start at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationVideoSources",
@@ -3156,7 +3101,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 403,
+            "line": 402,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon pausing study",
             "itemtype": "property",
             "name": "pauseAudio",
@@ -3168,7 +3113,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 426,
+            "line": 425,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon unpausing study",
             "itemtype": "property",
             "name": "unpauseAudio",
@@ -3180,7 +3125,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 449,
+            "line": 448,
             "description": "Text to show under \"Study paused / Press space to resume\" when study is paused.\nDefault: (You'll have a moment to turn around again.)",
             "itemtype": "property",
             "name": "pauseText",
@@ -3192,7 +3137,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 462,
+            "line": 461,
             "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
             "itemtype": "property",
             "name": "baseDir",
@@ -3204,7 +3149,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 483,
+            "line": 482,
             "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "audioTypes",
@@ -3216,7 +3161,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 511,
+            "line": 510,
             "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an video source\nis given as [{'stub': 'intro'}], the video source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
             "itemtype": "property",
             "name": "videoTypes",
@@ -3228,7 +3173,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 543,
+            "line": 542,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3259,7 +3204,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 755,
+            "line": 754,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -3276,7 +3221,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 951,
+            "line": 950,
             "description": "Observer that starts recording once recorder is ready. Override to do additional\nstuff at this point!",
             "itemtype": "method",
             "name": "whenPossibleToRecord",
@@ -3286,7 +3231,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 116,
+            "line": 115,
             "description": "When participant downloads consent form",
             "itemtype": "event",
             "name": "downloadConsentForm",
@@ -3296,18 +3241,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 131,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpLookitVideoConsent",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 140,
+            "line": 130,
             "description": "Name of PI running this study",
             "itemtype": "property",
             "name": "PIName",
@@ -3318,7 +3252,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 149,
+            "line": 139,
             "description": "Name of institution running this study (if ambiguous, list institution whose IRB approved the study)",
             "itemtype": "property",
             "name": "institution",
@@ -3329,7 +3263,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 158,
+            "line": 148,
             "description": "Contact information for PI or lab in case of participant questions or concerns. This will directly follow the phrase \"please contact\", so format accordingly: e.g., \"the XYZ lab at xyz@science.edu\" or \"Mary Smith at 123 456 7890\".",
             "itemtype": "property",
             "name": "PIContact",
@@ -3340,7 +3274,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 167,
+            "line": 157,
             "description": "Brief description of purpose of study - 1-2 sentences that describe what you are trying to find out. Language should be as straightforward and accessible as possible! E.g., \"Why do babies love cats? This study will help us find out whether babies love cats because of their soft fur or their twitchy tails.\"",
             "itemtype": "property",
             "name": "purpose",
@@ -3351,7 +3285,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 176,
+            "line": 166,
             "description": "Brief description of study procedures, including any risks or a statement that there are no anticipated risks. We add a statement about the duration (from your study definition) to the start (e.g., \"This study takes about 10 minutes to complete\"), so you don't need to include that. It can be in third person or addressed to the parent. E.g., \"Your child will be shown pictures of lots of different cats, along with noises that cats make like meowing and purring. We are interested in which pictures and sounds make your child smile. We will ask you (the parent) to turn around to avoid influencing your child's responses. There are no anticipated risks associated with participating.\"",
             "itemtype": "property",
             "name": "procedures",
@@ -3362,7 +3296,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 185,
+            "line": 175,
             "description": "Statement about payment/compensation for participation, including a statement that there are no additional benefits anticipated to the participant. E.g., \"After you finish the study, we will email you a $5 BabyStore gift card within approximately three days. To be eligible for the gift card your child must be in the age range for this study, you need to submit a valid consent statement, and we need to see that there is a child with you. But we will send a gift card even if you do not finish the whole study or we are not able to use your child's data! There are no other direct benefits to you or your child from participating, but we hope you will enjoy the experience.\"",
             "itemtype": "property",
             "name": "payment",
@@ -3373,7 +3307,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 194,
+            "line": 184,
             "description": "Study-specific data use statement (optional). This will follow the following more general text: \"The research group led by [PIName] at [institution] will have access to video and other data collected during this session. We will also have access to your account profile, demographic survey, and the child profile for the child who is participating, including changes you make in the future to any of this information. We may study your child’s responses in connection with his or her previous responses to this or other studies run by our group, siblings’ responses to this or other studies run by our group, or demographic survey responses.\"\nYou may want to note what measures you will actually be coding for (looking time, facial expressions, parent-child interaction, etc.) and other more specific information about your use of data from this study here. For instance, you would note if you were building a corpus of naturalistic data that may be used to answer a variety of questions (rather than just collecting data for a single planned study).",
             "itemtype": "property",
             "name": "datause",
@@ -3384,7 +3318,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video-consent/component.js",
-            "line": 207,
+            "line": 197,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3452,18 +3386,7 @@
         },
         {
             "file": "addon/components/exp-video-config/component.js",
-            "line": 65,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpVideoConfig",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-video-config/component.js",
-            "line": 73,
+            "line": 64,
             "description": "Text to show as the introduction to the troubleshooting tips section",
             "itemtype": "property",
             "name": "troubleshootingIntro",
@@ -3474,30 +3397,8 @@
             "submodule": "frames"
         },
         {
-            "file": "addon/components/exp-video-config-quality/component.js",
-            "line": 46,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpVideoConfigQuality",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 64,
-            "description": "A unique identifier for this item",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "ExpVideoConsent",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-video-consent/component.js",
-            "line": 73,
+            "line": 63,
             "description": "Title of the consent document",
             "itemtype": "property",
             "name": "title",
@@ -3509,7 +3410,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 83,
+            "line": 73,
             "description": "Array of paragraphs of the consent document, each with title and text.",
             "itemtype": "property",
             "name": "blocks",
@@ -3533,7 +3434,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 106,
+            "line": 96,
             "description": "Text the user is asked to read aloud to consent",
             "itemtype": "property",
             "name": "prompt",
@@ -3545,7 +3446,7 @@
         },
         {
             "file": "addon/components/exp-video-consent/component.js",
-            "line": 118,
+            "line": 108,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -4046,18 +3947,7 @@
         },
         {
             "file": "addon/randomizers/permute.js",
-            "line": 59,
-            "description": "Unique string identifying this set of frames",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "permute",
-            "module": "exp-player",
-            "submodule": "randomizers"
-        },
-        {
-            "file": "addon/randomizers/permute.js",
-            "line": 65,
+            "line": 58,
             "description": "List of frames to be created by this randomizer. Each frame is an\nobject with any necessary frame-specific properties specified. The\n'kind' of frame can be specified either here (per frame) or in\ncommonFrameProperties. If a property is defined for a given frame both\nin this frame list and in commonFrameProperties, the value in the frame\nlist will take precedence.\n\n(E.g., you could include 'kind': 'normal-frame' in\ncommmonFrameProperties, but for a single frame in frameOptions, include\n'kind': 'special-frame'.)",
             "itemtype": "property",
             "name": "frameOptions",
@@ -4068,7 +3958,7 @@
         },
         {
             "file": "addon/randomizers/permute.js",
-            "line": 80,
+            "line": 73,
             "description": "Object describing common parameters to use in EVERY frame created\nby this randomizer. Parameter names and values are as described in\nthe documentation for the frameType used.",
             "itemtype": "property",
             "name": "commonFrameProperties",
@@ -4079,7 +3969,7 @@
         },
         {
             "file": "addon/randomizers/permute.js",
-            "line": 115,
+            "line": 108,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "conditions",
@@ -4116,7 +4006,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 190,
+            "line": 189,
             "description": "Object describing common parameters to use in EVERY frame created\nby this randomizer. Parameter names and values are as described in\nthe documentation for the frameType used.",
             "itemtype": "property",
             "name": "commonFrameProperties",
@@ -4127,18 +4017,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 198,
-            "description": "Unique string identifying this set of frames",
-            "itemtype": "property",
-            "name": "id",
-            "type": "String",
-            "class": "randomParameterSet",
-            "module": "exp-player",
-            "submodule": "randomizers"
-        },
-        {
-            "file": "addon/randomizers/random-parameter-set.js",
-            "line": 204,
+            "line": 197,
             "description": "List of frames to be created by this randomizer. Each frame is an\nobject with any necessary frame-specific properties specified. The\n'kind' of frame can be specified either here (per frame) or in\ncommonFrameProperties. If a property is defined for a given frame both\nin this frame list and in commonFrameProperties, the value in the frame\nlist will take precedence.\n\n(E.g., you could include 'kind': 'normal-frame' in\ncommmonFrameProperties, but for a single frame in frameList, include\n'kind': 'special-frame'.)\n\nAny property VALUES within any of the frames in this list which match\na property NAME in the selected parameterSet will be replaced by the\ncorresponding parameterSet value. E.g., suppose a frame in frameList is\n\n```\n  {'leftImage': 'LEFTIMAGE1',\n  'rightImage': 'frog.jpg',\n  'size': 'IMAGESIZE'}\n```\n\nand the row that has been selected randomly of parameterSets is\n\n```\n{'LEFTIMAGE1': 'toad.jpg',\n       'LEFTIMAGE2': 'dog.jpg',\n       'IMAGESIZE': 250}\n```\n\nThen the frame would be transformed into:\n```\n  {'leftImage': 'toad.jpg',\n  'rightImage': 'frog.jpg',\n  'size': 250}\n```\n\nThe same values may be applied across multiple frames. For instance,\nsuppose frameList is\n\n```\n      [\n           {\n               'leftImage': 'LEFTIMAGE1',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           },\n           {\n               'leftImage': 'LEFTIMAGE2',\n               'rightImage': 'frog.jpg',\n               'size': 'IMAGESIZE'\n           }\n       ]\n```\n\nThen the corresponding processed frames would include the values\n```\n      [\n           {\n               'leftImage': 'toad.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           },\n           {\n               'leftImage': 'dog.jpg',\n               'rightImage': 'frog.jpg',\n               'size': 250\n           }\n       ]\n```\nA property value like 'IMAGESIZE' may be placed in a frame definition\nnested within another object (at any depth) or within a list and\nwill still be replaced.",
             "itemtype": "property",
             "name": "frameList",
@@ -4149,7 +4028,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 281,
+            "line": 274,
             "description": "Array of parameter sets to randomly select from in order to determine\nthe parameters for each frame in this session.\n\nA single element of parameterSets will be applied to a given session.",
             "itemtype": "property",
             "name": "parameterSets",
@@ -4160,7 +4039,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 290,
+            "line": 283,
             "description": "[Optional] Array of weights for parameter sets; elements correspond to\nelements of parameterSets. The probability of selecting an element\nparameterSets[i] is parameterSetWeights[i]/sum(parameterSetWeights).\n\nIf not provided, all parameterSets are weighted equally.\n\nThis is intended to allow manual control of counterbalancing during\ndata collection, e.g. to allow one condition to \"catch up\" if it was\nrandomly selected less often.",
             "itemtype": "property",
             "name": "parameterSetWeights",
@@ -4171,7 +4050,7 @@
         },
         {
             "file": "addon/randomizers/random-parameter-set.js",
-            "line": 340,
+            "line": 333,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "conditions",

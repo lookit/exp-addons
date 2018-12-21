@@ -51,7 +51,6 @@ let {
  "frames":
         "phase-2": {
             "kind": "exp-lookit-dialogue-page",
-            "id": "phase-2",
             "baseDir": "https://s3.amazonaws.com/lookitcontents/politeness/",
             "audioTypes": ["mp3", "ogg"],
             "backgroundImage": "order1_test1_background.png",
@@ -103,7 +102,6 @@ let {
         },
         "phase-5": {
             "kind": "exp-lookit-dialogue-page",
-            "id": "phase-5",
             "baseDir": "https://s3.amazonaws.com/lookitcontents/politeness/",
             "audioTypes": ["mp3", "ogg"],
             "backgroundImage": "order1_test1_background.png",

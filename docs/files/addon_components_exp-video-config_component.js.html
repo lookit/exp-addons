@@ -121,7 +121,6 @@ Video configuration frame guiding user through making sure permissions are set a
 &#x60;&#x60;&#x60;json
 &quot;frames&quot;: {
     &quot;video-config&quot;: {
-        &quot;id&quot;: &quot;video-config&quot;,
         &quot;kind&quot;: &quot;exp-video-config&quot;
     }
 }
@@ -169,14 +168,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             type: &#x27;object&#x27;,
             properties: {
                 /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: &#x27;string&#x27;,
-                    description: &#x27;A unique identifier for this item&#x27;
-                },
-                /**
                 Text to show as the introduction to the troubleshooting tips section
                 @property {String} troubleshootingIntro
                 @default &quot;Some families are having trouble initially getting their webcams to work on Lookit. We&#x27;re sorry, and we&#x27;re working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems.&quot;
@@ -188,7 +179,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 }
 
             },
-            required: [&#x27;id&#x27;]
+            required: []
         },
         data: {
             type: &#x27;object&#x27;,

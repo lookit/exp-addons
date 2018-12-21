@@ -70,7 +70,6 @@ let {
                 }
             ],
             "kind": "exp-lookit-story-page",
-            "id": "story-intro-1",
             "audioSources": [
                 {
                     "audioId": "firstAudio",

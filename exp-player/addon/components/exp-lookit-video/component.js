@@ -80,7 +80,6 @@ let {
 
 ```json
         "sample-intermodal-trial-2": {
-            "id": "sample-intermodal-trial-2",
             "kind": "exp-lookit-video",
             "isLast": false,
             "baseDir": "https://s3.amazonaws.com/lookitcontents/intermodal/",

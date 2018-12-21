@@ -73,7 +73,6 @@ let {
 ```json
  "frames": {
         "pet-survey": {
-            "id": "pet-survey",
             "kind": "exp-lookit-survey",
             "formSchema": {
                 "schema": {
