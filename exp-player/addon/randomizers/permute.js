@@ -103,10 +103,10 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      * @property {Object} commonFrameProperties
      */
 
-     // TODO: input checking. Make sure all parameters are given or impute empty vals if
-     // not; make sure orderedFrameOptions.length == frameOptions.length if both are given
+    // TODO: input checking. Make sure all parameters are given or impute empty vals if
+    // not; make sure orderedFrameOptions.length == frameOptions.length if both are given
 
-     // TODO: allow optional specification of how many frames to create!
+    // TODO: allow optional specification of how many frames to create!
 
     /*
      * Randomize array element order in-place.
@@ -137,9 +137,9 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         if (frameConfig.hasOwnProperty('orderedFrameOptions') && frameConfig.orderedFrameOptions.length > iFrame) {
             if (frameConfig.orderedFrameOptions[iFrame].hasOwnProperty('parameterSets') && thisFrame.hasOwnProperty('parameterSets')) {
                 for (var iPS = 0; iPS < thisFrame.parameterSets.length; iPS++) {
-                    Object.assign(thisFrame.parameterSets[iPS], frameConfig.orderedFrameOptions[iFrame].parameterSets[iPS])
+                    Object.assign(thisFrame.parameterSets[iPS], frameConfig.orderedFrameOptions[iFrame].parameterSets[iPS]);
                 }
-                delete frameConfig.orderedFrameOptions[iFrame].parameterSets
+                delete frameConfig.orderedFrameOptions[iFrame].parameterSets;
             }
             Object.assign(thisFrame, frameConfig.orderedFrameOptions[iFrame]);
         }

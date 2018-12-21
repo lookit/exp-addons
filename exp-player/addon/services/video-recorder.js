@@ -71,7 +71,7 @@ const VideoRecorder = Ember.Object.extend({
     flashReady: Ember.computed.alias('_recorderReady').readOnly(),
     connected: false,
     uploadTimeout: null, // timer counting from attempt to stop until we should just
-        //resolve the stopPromise
+    //resolve the stopPromise
 
     debug: false,
     _started: false,
@@ -230,8 +230,8 @@ const VideoRecorder = Ember.Object.extend({
 
             // If we don't end up uploading within 10 seconds, call reject
             this.set('uploadTimeout', window.setTimeout(function() {
-                window.clearTimeout(_this.get('uploadTimeout'));
-                _this.get('_stopPromise').reject();
+                    window.clearTimeout(_this.get('uploadTimeout'));
+                    _this.get('_stopPromise').reject();
                 }, 10000));
 
             var _stopPromise = new Ember.RSVP.Promise((resolve, reject) => {

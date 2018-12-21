@@ -327,10 +327,10 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     },
 
     shouldPreventNext() {
-       var done = true;
-       var blocks = this.get('blocks');
-       for (var iBlock = 0; iBlock < blocks.length; iBlock++) { // for each block
-           if (blocks[iBlock].hasOwnProperty('mediaBlock')) {   // if it has a mediaBlock
+        var done = true;
+        var blocks = this.get('blocks');
+        for (var iBlock = 0; iBlock < blocks.length; iBlock++) { // for each block
+            if (blocks[iBlock].hasOwnProperty('mediaBlock')) {   // if it has a mediaBlock
                 // find the appropriate element
                 var $elem = $('#media-' + iBlock + ' .player-media');
                 if (blocks[iBlock].mediaBlock.hasOwnProperty('mustPlay') && blocks[iBlock].mediaBlock.mustPlay) { // if the mediaBlock must be played
@@ -344,8 +344,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     // so the warning isn't visible, although :not([showWarning])
                     // selector should handle in almost all browsers
                 }
-           }
-       }
-       return !done;
-  }
+            }
+        }
+        return !done;
+    }
 });

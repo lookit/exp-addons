@@ -91,7 +91,7 @@ ExperimentParser.prototype._resolveFrame = function (frameId, frame) {
             console.log(`Experiment definition specifies an unknown kind of frame: ${frame.kind}`);
             throw `Experiment definition specifies an unknown kind of frame: ${frame.kind}`;
         }
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     }
 };

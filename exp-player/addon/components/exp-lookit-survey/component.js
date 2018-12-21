@@ -251,28 +251,28 @@ export default ExpFrameBaseComponent.extend({
         }
     }
 
-// Set defaults for form options. Not needed here because apparently hideInitValidationError
-// IS done by default.
-//     willRender() {
-//         this._super(...arguments);
-//         var formSchemaProcessed = this.get('formSchema');
-//         console.log(formSchemaProcessed);
-//         if (formSchemaProcessed.options.hasOwnProperty('fields')) {
-//             var fields = formSchemaProcessed.options.fields;
-//             console.log(fields);
-//             for (var property in fields) {
-//                 console.log(property);
-//                 if (fields.hasOwnProperty(property)) {
-//                     console.log(property);
-//                     if (!fields[property].hasOwnProperty('hideInitValidationError')) {
-//                         fields[property].hideInitValidationError = true;
-//                     }
-//                 }
-//             }
-//         }
-//         formSchemaProcessed.fields = fields;
-//         this.set('formSchemaProcessed', formSchemaProcessed);
-//     }
+    // Set defaults for form options. Not needed here because apparently hideInitValidationError
+    // IS done by default.
+    //     willRender() {
+    //         this._super(...arguments);
+    //         var formSchemaProcessed = this.get('formSchema');
+    //         console.log(formSchemaProcessed);
+    //         if (formSchemaProcessed.options.hasOwnProperty('fields')) {
+    //             var fields = formSchemaProcessed.options.fields;
+    //             console.log(fields);
+    //             for (var property in fields) {
+    //                 console.log(property);
+    //                 if (fields.hasOwnProperty(property)) {
+    //                     console.log(property);
+    //                     if (!fields[property].hasOwnProperty('hideInitValidationError')) {
+    //                         fields[property].hideInitValidationError = true;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         formSchemaProcessed.fields = fields;
+    //         this.set('formSchemaProcessed', formSchemaProcessed);
+    //     }
 
 });
 

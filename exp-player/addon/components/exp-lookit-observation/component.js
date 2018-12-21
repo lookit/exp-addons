@@ -285,7 +285,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                     _this.send('pause');
                 }, _this.get('recordSegmentLength') * 1000));
                 this.set('progressTimer', window.setInterval(function() {
-                    var prctDone =  (_this.get('recordSegmentLength') * 1000 - (new Date().getTime() - _this.get('timerStart') )) / (_this.get('recordSegmentLength') * 10);
+                    var prctDone =  (_this.get('recordSegmentLength') * 1000 - (new Date().getTime() - _this.get('timerStart'))) / (_this.get('recordSegmentLength') * 10);
                     $('.progress-bar').css('width', prctDone + '%');
                 }, 100));
                 if (this.get('recordingRequired')) {
