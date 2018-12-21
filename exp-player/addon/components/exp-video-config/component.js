@@ -34,11 +34,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
 
     actions: {
 
-        next() {
-            this.destroyRecorder();
-            this._super(...arguments);
-        },
-
         checkAudioThenNext() {
             if (!this.get('micChecked')) {
                 this.set('showWarning', true);

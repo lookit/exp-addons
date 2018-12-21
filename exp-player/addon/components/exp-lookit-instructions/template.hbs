@@ -14,8 +14,6 @@
                         {{block.mediaBlock.title}}
                     </p>
 
-
-
                     {{#if block.mediaBlock.isVideo}}
                         <video class="player-media"
                                    controls
@@ -69,20 +67,17 @@
         </div>
     {{/if}}
 
-</div>
+    <div class="exp-text {{if showWebcam "col-md-10" "col-md-6 col-md-offset-3"}}">
+        <div class="vertical-pad"></div>
 
-<div class="row exp-lookit-instructions">
+            {{#if showPreviousButton}}
+                <button class="btn btn-default pull-left" {{ action 'previous' }}>
+                    Previous
+                </button>
+            {{/if}}
 
-    <div class="vertical-pad"></div>
-
-    {{#if showPreviousButton}}
-        <button class="btn btn-default pull-left" {{ action 'previous' }}>
-            Previous
-        </button>
-    {{/if}}
-
-    <button id="nextbutton" class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
-        {{exp-format nextButtonText}}
+            <button id="nextbutton" class="btn btn-success pull-right" {{ action 'checkAudioThenNext' }}>
+                {{exp-format nextButtonText}}
 
     </button>
 </div>

@@ -17,6 +17,8 @@ let {
  * A frame to display instructions to the user. The user's webcam may optionally be
  * displayed, and audio and video clips may be included in the instructions (and may be
  * required to be played before moving on).
+ *
+ * Each element of the 'blocks' parameter is rendered using {{#crossLink "ExpTextBlock"}}{{/crossLink}}.
 
 ```json
  "frames": {
@@ -129,7 +131,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 },
 
                 /**
-                 * Array of objects specifying text/images of instructions to display
+                 * Array of blocks for {{#crossLink "ExpTextBlock"}}{{/crossLink}}, specifying text/images of instructions to display
                  *
                  * @property {Object[]} blocks
                  *   @param {String} title Title of this section
