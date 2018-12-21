@@ -1,7 +1,12 @@
-import Ember from 'ember';
+import Em from 'ember';
 
 import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
+import VideoRecord from '../../mixins/video-record';
+
+let {
+    $
+} = Em;
 
 /**
  * @module exp-player
@@ -9,87 +14,102 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
  */
 
 /**
- * A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working (this may, optionally, be required to move on).
+ * A frame to display instructions to the user. The user's webcam may optionally be
+ * displayed, and audio and video clips may be included in the instructions (and may be
+ * required to be played before moving on).
 
 ```json
  "frames": {
-"final-instructions": {
-            "mustPlay": true,
+        "instructions": {
             "kind": "exp-lookit-instructions",
-            "nextButtonText": "Start the videos! \n (You'll have a moment to turn around.)",
-            "id": "final-instructions",
             "blocks": [
                 {
-                    "text": "The video section will take about 6 minutes to complete. After that, you will be able to select a level of privacy for your data."
-                },
-                {
-                    "title": "Study overview",
+                    "title": "Parent's role",
                     "listblocks": [
                         {
-                            "text": "There will be four videos, each a little over a minute long. "
+                            "text": "Follow instructions"
                         },
                         {
-                            "text": "You’ll hear spoken updates between videos."
+                            "text": "Only do each joke once"
                         }
                     ]
                 },
                 {
-                    "title": "During the videos",
-                    "listblocks": [
-                        {
-                            "text": "Please face away from the screen, holding your infant so they can look over your shoulder. Please don't look at the videos yourself, as we may not be able to use your infant’s data in that case.",
-                            "image": {
-                                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg",
-                                "alt": "Father holding child looking over his shoulder"
+                    "text": "It's important that we can see you",
+                    "image": {
+                        "alt": "Father holding child looking over his shoulder",
+                        "src": "https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg"
+                    },
+                    "title": "Camera position"
+                },
+                {
+                    "text": "Here's some audio you have to play",
+                    "title": "Test",
+                    "mediaBlock": {
+                        "text": "You should hear 'Ready to go?'",
+                        "isVideo": false,
+                        "sources": [
+                            {
+                                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.mp3",
+                                "type": "audio/mp3"
+                            },
+                            {
+                                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.ogg",
+                                "type": "audio/ogg"
                             }
-                        },
-                        {
-                            "text": "Don’t worry if your baby isn’t looking at the screen the entire time! Please just try to keep them facing the screen so they can look if they want to."
-                        },
-                        {
-                            "text": "If you’d like, you can direct your infant’s attention to the screen by saying things like, 'What’s happening?' But don’t talk about specific things that might be happening in the videos."
-                        }
-                    ]
+                        ],
+                        "mustPlay": true,
+                        "warningText": "Please try playing the sample audio."
+                    }
                 },
                 {
-                    "title": "Pausing and stopping",
+                    "text": "Here's a video you don't have to play!",
+                    "title": "Test",
+                    "mediaBlock": {
+                        "text": "Look at that.",
+                        "isVideo": true,
+                        "sources": [
+                            {
+                                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.mp4",
+                                "type": "video/mp4"
+                            },
+                            {
+                                "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.webm",
+                                "type": "video/webm"
+                            }
+                        ],
+                        "mustPlay": false
+                    }
+                }
+            ],
+            "showWebcam": true,
+            "webcamBlocks": [
+                {
+                    "title": "Some webcam instructions",
                     "listblocks": [
                         {
-                            "text": "If your child gets fussy or distracted, or you need to attend to something else for a moment, you can pause the study during the breaks between videos. "
+                            "text": "Like this!"
                         },
                         {
-                            "text": "If you need to end the study early, just close the window or tab. You’ll be prompted to note any technical problems you might be experiencing and to select a privacy level for your videos."
+                            "text": "Be careful your webcam does not have tape over it"
                         }
                     ]
                 }
             ],
-            "audioBlock": {
-                "text": "You should hear 'Ready to go?'",
-                "warningText": "Please try playing the sample audio.",
-                "title": "Test your audio",
-                "sources": [
-                    {
-                        "src": "https://s3.amazonaws.com/lookitcontents/ready.mp3",
-                        "type": "audio/mp3"
-                    },
-                    {
-                        "src": "https://s3.amazonaws.com/lookitcontents/ready.ogg",
-                        "type": "audio/ogg"
-                    }
-                ]
-            }
+            "nextButtonText": "Next"
         }
  }
 
  * ```
  * @class ExpLookitInstructions
  * @extends ExpFrameBase
+ * @extends VideoRecord
  */
 
-export default ExpFrameBaseComponent.extend({
+export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout: layout,
     type: 'exp-lookit-instructions',
-    didFinishSound: false,
+    doUseCamera: Em.computed.alias('showWebcam'),
     meta: {
         name: 'ExpLookitInstructions',
         description: 'A frame to display bulleted instructions to the user, along with an audio clip to make sure sound playback is working.',
@@ -97,55 +117,17 @@ export default ExpFrameBaseComponent.extend({
             type: 'object',
             properties: {
                 /**
-                 * Whether the user should be forced to play the audio clip before leaving the page
+                 * Whether to display the user's webcam
                  *
-                 * @property {Boolean} mustPlay
+                 * @property {Boolean} showWebcam
+                 * @default false
                  */
-                mustPlay: {
+                showWebcam: {
                     type: 'boolean',
-                    description: 'Should the user be forced to play the clip before leaving the page?',
-                    default: true
+                    description: 'Whether to display the user\'s webcam',
+                    default: false
                 },
-                /**
-                 * Object specifying the audio clip to include (optional)
-                 *
-                 * @property {Object} audioBlock
-                 *    @param {String} title Title text to show above audio controls
-                 *    @param {String} text Text to show below audio controls
-                 *    @param {String} warningText Text to show in red if user tries to proceed but hasn't played audio; only used if mustPlay is true
-                 *    @param {Object[]} sources Array of {src: 'url', type: 'MIMEtype'} objects specifying audio sources
-                 */
-                audioBlock: {
-                    type: 'object',
-                    properties: {
-                        title: {
-                            type: 'string',
-                            default: 'Test your audio'
-                        },
-                        text: {
-                            type: 'string',
-                            default: 'You should hear "Ready to go?"'
-                        },
-                        warningText: {
-                            type: 'string',
-                            default: 'Please try playing the sample audio.'
-                        },
-                        sources: {
-                            type: 'array',
-                            items: {
-                                type: 'object',
-                                properties: {
-                                    src: {
-                                        type: 'string'
-                                    },
-                                    type: {
-                                        type: 'string'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
+
                 /**
                  * Array of objects specifying text/images of instructions to display
                  *
@@ -154,8 +136,94 @@ export default ExpFrameBaseComponent.extend({
                  *   @param {String} text Paragraph text of this section
                  *   @param {Object[]} listblocks Object specifying bulleted points for this section. Each object is of the form:
                  *   {text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.
+                 *   @param {Object} mediaBlock Object specifying audio or video clip to include (optional). mediaBlock should be of form:
+                 *   {title: 'title text to show above audio', text: 'text to show below controls', warningText: 'Text to show in red if user tries to proceed but hasn't played; only used if mustPlay is true', sources: 'sources Array of {src: 'url', type: 'MIMEtype'} objects specifying audio sources', isVideo: 'boolean, whether video or audio', mustPlay: 'boolean, whether clip has to be played to proceed'}
+                 *
                  */
                 blocks: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            title: {
+                                type: 'string'
+                            },
+                            text: {
+                                type: 'string'
+                            },
+                            listblocks: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        text: {
+                                            type: 'string'
+                                        },
+                                        image: {
+                                            type: 'object',
+                                            properties: {
+                                                src: {
+                                                    type: 'string'
+                                                },
+                                                alt: {
+                                                    type: 'string'
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            mediaBlock: {
+                                type: 'object',
+                                default: {},
+                                properties: {
+                                    title: {
+                                        type: 'string'
+                                    },
+                                    text: {
+                                        type: 'string'
+                                    },
+                                    warningText: {
+                                        type: 'string'
+                                    },
+                                    sources: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                src: {
+                                                    type: 'string'
+                                                },
+                                                type: {
+                                                    type: 'string'
+                                                }
+                                            }
+                                        }
+                                    },
+                                    isVideo: {
+                                        type: 'boolean',
+                                        default: false
+                                    },
+                                    mustPlay: {
+                                        type: 'boolean',
+                                        default: false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    default: []
+                },
+                /**
+                 * Array of objects specifying text/images of instructions to display under webcam view (if webcam is shown)
+                 *
+                 * @property {Object[]} blocks
+                 *   @param {String} title Title of this section
+                 *   @param {String} text Paragraph text of this section
+                 *   @param {Object[]} listblocks Object specifying bulleted points for this section. Each object is of the form:
+                 *   {text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.
+                 */
+                webcamBlocks: {
                     type: 'array',
                     items: {
                         type: 'object',
@@ -221,32 +289,26 @@ export default ExpFrameBaseComponent.extend({
              *
              * @method serializeContent
              * @param {Boolean} showWarning whether the warning about sound being played is currently shown
-             * @param {Boolean} didFinishSound whether the user played the sound clip
              * @return {Object} The payload sent to the server
              */
             type: 'object',
             properties: {
-                didFinishSound: {
-                    type: 'boolean',
-                    default: false
-                },
                 showWarning: {
                     type: 'boolean',
                     default: false
                 }
             },
-            required: ['didFinishSound', 'showWarning']
+            required: ['showWarning']
         }
     },
 
     actions: {
-        soundPlayed() {
-            this.set('didFinishSound', true);
-            this.set('preventNext', false);
-            this.set('showWarning', false);
+        mediaPlayed(e) {
+            $(e.srcElement).attr('completed', true);
+            $(e.srcElement).parent().attr('showWarning', false);
         },
         checkAudioThenNext() {
-            if (this.get('preventNext')) {
+            if (this.shouldPreventNext()) {
                 this.set('showWarning', true);
             } else {
                 this.send('next');
@@ -254,12 +316,26 @@ export default ExpFrameBaseComponent.extend({
         }
     },
 
-    preventNext: Ember.computed('mustPlay', 'didFinishSound', function() {
-        if (!this.get('mustPlay')) {
-            return false;
-        } else {
-            // Optionally force user to listen to clip before continuing
-            return !this.get('didFinishSound');
+    shouldPreventNext() {
+        var done = true;
+        var blocks = this.get('blocks');
+        for (var iBlock = 0; iBlock < blocks.length; iBlock++) { // for each block
+            if (blocks[iBlock].hasOwnProperty('mediaBlock')) {   // if it has a mediaBlock
+                // find the appropriate element
+                var $elem = $('#media-' + iBlock + ' .player-media');
+                if (blocks[iBlock].mediaBlock.hasOwnProperty('mustPlay') && blocks[iBlock].mediaBlock.mustPlay) { // if the mediaBlock must be played
+                    // if it's not completed
+                    if ($elem.attr('completed') != 'true') {
+                        done = false;
+                        $elem.parent().attr('showWarning', true);
+                    }
+                } else { // does not have to be played
+                    $elem.parent().attr('showWarning', false); // Set this explicitly
+                    // so the warning isn't visible, although :not([showWarning])
+                    // selector should handle in almost all browsers
+                }
+            }
         }
-    })
+        return !done;
+    }
 });
