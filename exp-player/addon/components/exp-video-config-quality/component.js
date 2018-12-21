@@ -29,13 +29,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
 
-    actions: {
-        next() {
-            this.destroyRecorder();
-            this._super(...arguments);
-        }
-    },
-
     type: 'exp-video-config-quality',
     meta: {
         name: 'Video Recorder Configuration for preferential looking',

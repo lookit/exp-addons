@@ -4,35 +4,9 @@
 
         <div class="col-sm-6 exp-text">
 
-            {{#each blocks as |block|}}
+            {{#each blocks as |block idx|}}
 
-                {{#if block.title}}
-                    <p class={{if (eq size 'large') 'exp-text-large' 'exp-text-medium'}}>{{block.title}}</p>
-                {{/if}}
-
-                {{#if block.text}}
-                    <p>
-                        {{exp-format block.text}}
-                    </p>
-                {{/if}}
-
-                {{#if block.listblocks}}
-                    <ul>
-                        {{#each block.listblocks as |listitem|}}
-                            <li>
-                                {{exp-format listitem.text}}
-
-                                {{#if listitem.image}}
-                                    <img class="instructionspic"
-                                        src={{listitem.image.src}}
-                                        alt={{listitem.image.alt}} >
-                                {{/if}}
-
-                            </li>
-                        {{/each}}
-                    </ul>
-
-                {{/if}}
+                {{exp-text-block block=block}}
 
             {{/each}}
 
@@ -46,27 +20,39 @@
 
 
             <div class="row recorder-container">
-                <div class="recorder col-xs-12">
+                <div id="recorder" class="recorder col-xs-12">
                     <div id="hiddenWebcamMessage"> Webcam feed <br>not displayed </div>
+                    {{#if recordSegmentLength}}
+                        <div class="progress" id="progressbar">
+                            <div class="progress-bar bg-info progress-bar-striped" role="progressbar" style="width:100%" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {{/if}}
                 </div>
+
             </div>
 
             <div id="recordingControls">
+
+
 
                 <span id="recordingStatus">
                     <i class="fa fa-circle text-danger Blink" id="recordingIndicator"></i>
                     <span id="recordingText"> Recording... </span>
                 </span>
 
-                <button class="btn btn-default pull-right" id="pauseButton" {{action 'pause'}}>
-                    <i class="fa fa-pause" id="pauseButtonIcon"></i>
-                    <span id="pauseButtonText">Pause</span>
-                </button>
 
-                <button class="btn btn-default pull-right" id="recordButton" {{action 'record'}}>
-                    <i class="fa fa-play" id="recordButtonIcon"></i>
-                    <span id="recordButtonText">Resume</span>
-                </button>
+
+                {{#unless hideControls}}
+                    <button class="btn btn-default pull-right" id="pauseButton" {{action 'pause'}}>
+                        <i class="fa fa-pause" id="pauseButtonIcon"></i>
+                        <span id="pauseButtonText">Pause</span>
+                    </button>
+
+                    <button class="btn btn-default pull-right" id="recordButton" {{action 'record'}}>
+                        <i class="fa fa-play" id="recordButtonIcon"></i>
+                        <span id="recordButtonText">Resume</span>
+                    </button>
+                {{/unless}}
             </div>
         </div>
 

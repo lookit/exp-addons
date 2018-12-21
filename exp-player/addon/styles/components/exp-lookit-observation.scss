@@ -29,7 +29,7 @@
 	margin: 0px;
 }
 
-.exp-lookit-observation .recorder div.exp-lookit-observation-hidevideo :not(#hiddenWebcamMessage) {
+.exp-lookit-observation .recorder div.exp-lookit-observation-hidevideo :not(#hiddenWebcamMessage) :not(#progressbar) {
     top: -10000px;
     left: -10000px;
     z-index: -1;
@@ -53,7 +53,7 @@
     position: absolute;
     font-size: 2em;
     text-align: center;
-    padding: 30%;
+    margin: 30% 0 0 30%;
 }
 
 .exp-lookit-observation #webcamToggleButton {
@@ -76,3 +76,18 @@
     margin: 0;
     width: 100%;
 }
+
+.exp-lookit-observation .progress {
+    position:absolute;
+    z-index:100;
+    right:0;
+    left:0;
+    height:5px;
+    clear:both;
+    background-color: transparent;
+    bottom:0px;
+    margin:0;
+    margin-top:5px;
+}
+
+
