@@ -75,19 +75,24 @@ ExperimentParser.prototype._resolveBlock = function (frame) {
  * Centrally dispatches logic for all other frame types
  */
 ExperimentParser.prototype._resolveFrame = function (frameId, frame) {
-    frame = frame || this.frames[frameId];
-    if (frameNamePattern.test(frame.kind)) {
-        // Base case: this is a plain experiment frame
-        frame.id = frame.id || frameId;
-        return [[
-            this._resolveDependencies(frame)
-        ], null];
-    } else if (frame.kind === 'block') {
-        return this._resolveBlock(frame, frameId);
-    } else if (frame.kind === 'choice') {
-        return this._resolveRandom(frame, frameId);
-    } else {
-        throw `Experiment definition specifies an unknown kind of frame: ${frame.kind}`;
+    try {
+        frame = frame || this.frames[frameId];
+        if (frameNamePattern.test(frame.kind)) {
+            // Base case: this is a plain experiment frame
+            frame.id = frame.id || frameId;
+            return [[
+                this._resolveDependencies(frame)
+            ], null];
+        } else if (frame.kind === 'block') {
+            return this._resolveBlock(frame, frameId);
+        } else if (frame.kind === 'choice') {
+            return this._resolveRandom(frame, frameId);
+        } else {
+            console.log(`Experiment definition specifies an unknown kind of frame: ${frame.kind}`);
+            throw `Experiment definition specifies an unknown kind of frame: ${frame.kind}`;
+        }
+    } catch(error) {
+        console.error(error);
     }
 };
 ExperimentParser.prototype.parse = function () {
