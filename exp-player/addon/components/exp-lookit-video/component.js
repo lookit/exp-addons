@@ -965,6 +965,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     willDestroyElement() { // remove event handler
         $(document).off('keyup.pauser');
+        window.clearInterval(this.get('testTimer'));
+        window.clearInterval(this.get('announceTimer'));
+        window.clearInterval(this.get('calTimer'));
         this._super(...arguments);
     }
 });
