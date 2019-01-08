@@ -1,7 +1,7 @@
 <div class="row exp-lookit-instructions">
     <div class="vertical-pad"></div>
 
-    <div class="exp-text {{if showWebcam "col-md-6" "col-md-6 col-md-offset-3"}}">
+    <div class="{{if showWebcam "col-md-6" "exp-text"}}">
 
         {{#each blocks as |block idx|}}
 
@@ -52,6 +52,7 @@
     </div>
 
     {{#if showWebcam}}
+        <div class="col-md-2"></div>
         <div class="col-md-4 recorder-col">
             <div class="row exp-video-config recorder-container">
                 <div id="recorder" class="col-xs-12"></div>
@@ -67,7 +68,10 @@
         </div>
     {{/if}}
 
-    <div class="exp-text {{if showWebcam "col-md-10" "col-md-6 col-md-offset-3"}}">
+</div>
+
+<div class="row exp-lookit-instructions">
+    <div class="{{if showWebcam "col-md-12" "exp-text"}}">
         <div class="vertical-pad"></div>
 
         {{#if showPreviousButton}}
