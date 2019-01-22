@@ -129,5 +129,11 @@ export default ExpLookitVideoConsent.extend(VideoRecord, {
             },
             required: ['videoId']
         }
+    },
+    actions: {
+        finish() {
+            console.log("Adding isConsented property to model");
+            this._super(...arguments);
+        }
     }
 });
