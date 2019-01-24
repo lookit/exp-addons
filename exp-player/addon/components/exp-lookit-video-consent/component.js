@@ -58,7 +58,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         finish() {
             if (!this.get('stoppedRecording')) {
                 this.stopRecorder().then(() => {
-                    this.session.set('participantHasConsented', true);
+                    this.session.set('completedConsentFrame', true);
                     this.set('stoppedRecording', true);
                     this.send('next');
                 });
