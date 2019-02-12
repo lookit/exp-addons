@@ -115,7 +115,8 @@ let {
         "loopTestAudio": false
     }
 * ```
-* @class ExpLookitVideo
+*
+* @class ExpLookitPreferentialLooking
 * @extends ExpFrameBase
 * @uses FullScreen
 * @uses MediaReload
