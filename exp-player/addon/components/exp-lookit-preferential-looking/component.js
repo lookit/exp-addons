@@ -4,6 +4,7 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
+import ExpandAssets from '../../mixins/expand-assets';
 
 let {
     $
@@ -18,13 +19,27 @@ let {
 * Basic video display for looking measures (e.g. preferential looking, looking time).
 * Trial consists of four phases, each of which is optional.
 *
-* 1. Announcement: The audio in announcementAudio is played while the announcementVideo video is played centrally, looping as needed. This lasts for announcementLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announcementLength to 0 and do not provide announcementAudio.
+* 1. Announcement: The audio in announcementAudio is played while the announcementVideo
+* video is played centrally, looping as needed. This lasts for announcementLength seconds
+* or the duration of the audio, whichever is longer. To skip this phase, set
+* announcementLength to 0 and do not provide announcementAudio.
 *
-* 2. Intro: The introVideo video is played centrally until it ends. To skip this phase, do not provide introVideo.
+* 2. Intro: The introVideo video is played centrally until it ends. To skip this phase,
+* do not provide introVideo.
 *
-* 3. Calibration: The video in calibrationVideo is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudio is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.
+* 3. Calibration: The video in calibrationVideo is played (looping as needed) in each of
+* the locations specified in calibrationPositions in turn, remaining in each position for
+* calibrationLength ms. At the start of each position the audio in calibrationAudio is
+* played once. (Audio will be paused and restarted if it is longer than calibrationLength.)
+* Set calibrationLength to 0 to skip calibration.
 *
-* 4. Test: The video in testVideo and audio in testAudio (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altTestVideo will be used again (defaulting to the same video if altTestVideo is not provided).
+* 4. Test: The video in testVideo and audio in testAudio (optional) are played until
+* either: testLength seconds have elapsed (with video looping if needed), or the video
+* has been played testCount times. If testLength is set, it overrides testCount - for
+* example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times.
+* If the participant pauses the study during the test phase, then after restarting the
+* trial, the video in altTestVideo will be used again (defaulting to the same video if
+* altTestVideo is not provided).
 *
 * Specifying media locations:
 * For any parameters that expect a list of audio/video sources, you can EITHER provide
@@ -41,18 +56,11 @@ let {
         }
     ]
 ```
-* OR you can provide a list with a single object with a 'stub', which will be expanded
+* OR you can provide a string 'stub', which will be expanded
 * based on the parameter baseDir. Expected audio/video locations will be based on either audioTypes or
 * videoTypes as appropriate; images will be expected to all be in an img/ subdirectory.
-* For example, if you provide the audio source
-```json
-    [
-        {
-            'stub': 'intro'
-        }
-    ]
-```
-* and baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this
+* For example, if you provide the audio source `intro`,
+* and baseDir is `https://mystimuli.org/mystudy/`, with audioTypes `['mp3', 'ogg']`, then this
 * will be expanded to:
 ```json
                  [
@@ -70,7 +78,7 @@ let {
 * new version of your stimuli without changing every URL. You can mix source objects with
 * full URLs and those using stubs within the same directory. However, any stimuli
 * specified using stubs MUST be
-* organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.
+* organized as expected under `baseDir/MEDIATYPE/filename.MEDIATYPE`.
 *
 * This frame is displayed fullscreen; if the frame before it is not, that frame
 * needs to include a manual "next" button so that there's a user interaction
@@ -90,52 +98,20 @@ let {
             "ogg",
             "mp3"
         ],
-        "pauseAudio": [
-            {
-                "stub": "pause"
-            }
-        ],
+        "pauseAudio": "pause",
         "rightImage": "novel_02.jpg",
         "videoTypes": [
             "webm",
             "mp4"
         ],
-        "announcementVideo": [
-            {
-                "stub": "attentiongrabber"
-            }
-        ],
-        "announcementAudio": [
-            {
-                "stub": "video_02"
-            }
-        ],
-        "introVideo": [
-            {
-                "stub": "cropped_book"
-            }
-        ],
-        "testAudio": [
-            {
-                "stub": "400Hz_tones"
-            }
-        ],
-        "unpauseAudio": [
-            {
-                "stub": "return_after_pause"
-            }
-        ],
+        "announcementVideo": "attentiongrabber",
+        "announcementAudio": "video_02",
+        "introVideo": "cropped_book",
+        "testAudio": "400Hz_tones",
+        "unpauseAudio": "return_after_pause",
         "calibrationLength": 0,
-        "calibrationAudio": [
-            {
-                "stub": "chimes"
-            }
-        ],
-        "calibrationVideo": [
-            {
-                "stub": "attentiongrabber"
-            }
-        ],
+        "calibrationAudio": "chimes",
+        "calibrationVideo": "attentiongrabber",
         "loopTestAudio": false
     }
 * ```
@@ -144,6 +120,7 @@ let {
 * @uses FullScreen
 * @uses MediaReload
 * @uses VideoRecord
+* @uses ExpandAssets
 */
 
 // TODO: refactor into cleaner structure with segments announcement, intro, calibration,
@@ -152,7 +129,7 @@ let {
 // utility to move to next task within list. For each segment, allow video/image/text
 // stimuli.
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, ExpandAssets, {
     layout: layout,
     type: 'exp-lookit-preferential-looking',
 
@@ -162,6 +139,28 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     // Override setting in VideoRecord mixin - only use camera if doing recording
     doUseCamera: Ember.computed.alias('doRecording'),
+
+    assetsToExpand: {
+        'audio': [
+            'announcementAudio',
+            'testAudio',
+            'calibrationAudio',
+            'pauseAudio',
+            'unpauseAudio'
+        ],
+        'video': [
+            'testVideo',
+            'altTestVideo',
+            'introVideo',
+            'announcementVideo',
+            'calibrationVideo'
+        ],
+        'image': [
+            'leftImage',
+            'rightImage',
+            'centerImage'
+        ]
+    },
 
     completedAnnouncementAudio: false,
     completedAnnouncementTime: false,
@@ -973,85 +972,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         );
     },
 
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
-    expandAsset(asset, type) {
-        var fullAsset = asset;
-        var _this = this;
-
-        if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
-            // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + 'img/' + asset;
-        } else {
-            var types = [];
-            if (type === 'audio') {
-                types = this.audioTypes;
-            } else if (type === 'video') {
-                types = this.videoTypes;
-            }
-            // Replace any source objects that have a
-            // 'stub' attribute with the appropriate expanded source
-            // objects
-            fullAsset = [];
-            asset.forEach(function(srcObj) {
-                if (srcObj.hasOwnProperty('stub')) {
-                    for (var iType = 0; iType < types.length; iType++) {
-                        fullAsset.push({
-                            src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
-                            type: type + '/' + types[iType]
-                        });
-                    }
-                } else {
-                    fullAsset.push(srcObj);
-                }
-            });
-        }
-        return fullAsset;
-    },
-
     didInsertElement() {
         this._super(...arguments);
-
-        // Expand any audio/video src stubs
-        var audSrcParameterNames = [
-            'announcementAudio',
-            'testAudio',
-            'calibrationAudio',
-            'pauseAudio',
-            'unpauseAudio'
-        ];
-        var vidSrcParameterNames = [
-            'testVideo',
-            'altTestVideo',
-            'introVideo',
-            'announcementVideo',
-            'calibrationVideo'
-        ];
-        var imgSrcParameterNames = [
-            'leftImage',
-            'rightImage',
-            'centerImage'
-        ];
-
-        var _this = this;
-        audSrcParameterNames.forEach((paraName) => {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'audio'));
-            }
-        });
-        vidSrcParameterNames.forEach((paraName) => {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'video'));
-            }
-        });
-        imgSrcParameterNames.forEach((paraName) => {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'image'));
-            }
-        });
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {
