@@ -247,55 +247,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAsset
                     description: 'Whether this is a frame where the user needs to click to select one of the images before proceeding'
                 },
                 /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with `baseDir` + `img/`. Any audio/video src values that are strings
-                 * rather than objects with 'src' and 'type' will be
-                 * expanded out to
-                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir should include a trailing slash
-                 * (e.g., `http://stimuli.org/myexperiment/`, not
-                 * `http://stimuli.org/myexperiment`)
-                 *
-                 * @property {String} baseDir
-                 * @default ''
-                 */
-                baseDir: {
-                    type: 'string',
-                    default: '',
-                    description: 'Base directory for all stimuli'
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is `['typeA', 'typeB']` and an audio source
-                 * is given as `intro, the audio source will be
-                 * expanded out to
-                 *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/intro.typeA',
-                            type: 'audio/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/intro.typeB',
-                            type: 'audio/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} audioTypes
-                 * @default ['mp3', 'ogg']
-                 */
-                audioTypes: {
-                    type: 'array',
-                    default: ['mp3', 'ogg'],
-                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
-                },
-                /**
                  * Whether to do webcam recording (will wait for webcam
                  * connection before starting audio if so)
                  *
