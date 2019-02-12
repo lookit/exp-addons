@@ -51,7 +51,7 @@ let {
  * - **Images**: Suppose the list `assetsToExpand['image']` contains `centerStimulus`. If
  *   `centerStimulus` is provided as a full URL (with `://` in it), nothing will happen to
  *   it. But if `centerStimulus` is a string that is not a full URL, it will be transformed
- *   during the `didInsertElement` hook to `baseDir + 'img/' + centerStimulus`.
+ *   during the `didReceiveAttrs` hook to `baseDir + 'img/' + centerStimulus`.
  *
  * - **Audio**: Suppose the list `assetsToExpand['audio']` contains `utterance1`. If
  *   `utterance1` is a nonempty string (rather than an object/Array), e.g., `goodmorning`,
@@ -72,7 +72,7 @@ let {
  *
  * - **Video**: Same as audio, but using the types from `videoTypes`.
  *
- * **Important**: During the `didInsertElement` hook, your frame will acquire new properties `[parameterName]_parsed`
+ * **Important**: During the `didReceiveAttrs` hook, your frame will acquire new properties `[parameterName]_parsed`
  * for each of the parameters named in `assetsToExpand`. These properties will hold the
  * expanded values. E.g., in the example above, you would now have a `centerStimulus_parsed`
  * property. This is what you should use for showing/playing images/audio/video in your
@@ -223,7 +223,7 @@ export default Ember.Mixin.create({
 
 
 
-    didInsertElement() {
+    didReceiveAttrs() {
 
         this._super(...arguments);
 
@@ -255,13 +255,13 @@ export default Ember.Mixin.create({
                             if (Array.isArray(sources)) {  //expand this[parameterName][i][propName] for all i
                                 sources.forEach( (elem) => {
                                     if (elem.hasOwnProperty(propName)) {
-                                        elem[propName] = _this.expandAsset(elem[propName], type);
+                                        Ember.set(elem, propName, _this.expandAsset(elem[propName], type));
                                     }
                                 });
                                 _this.set(baseName + '_parsed', sources);
                             } else { //expand this[parameterName][propName]
                                 if (sources.hasOwnProperty(propName)) {
-                                    sources[propName] = _this.expandAsset(sources[propName], type);
+                                    Ember.set(sources, propName, _this.expandAsset(sources[propName], type));
                                 }
                                 _this.set(baseName + '_parsed', sources);
                             }

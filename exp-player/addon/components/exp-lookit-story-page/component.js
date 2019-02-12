@@ -154,7 +154,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAsset
                  *   @param {Object[]} sources Array of {src: 'url', type:
                  *      'MIMEtype'} objects with audio sources for this segment
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
+                 * Can also give a single string `filename`, which will
                  * be expanded out to the appropriate array based on `baseDir`
                  * and `audioTypes` values; see `audioTypes`.
                  *
@@ -181,9 +181,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAsset
                                             type: 'string'
                                         },
                                         'type': {
-                                            type: 'string'
-                                        },
-                                        'stub': {
                                             type: 'string'
                                         }
                                     }
