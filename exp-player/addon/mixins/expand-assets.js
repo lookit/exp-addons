@@ -191,37 +191,35 @@ export default Ember.Mixin.create({
         var typesDict = {
             'audio': this.get('audioTypes'),
             'video': this.get('videoTypes')
-            };
+        };
 
         switch (type) {
-          case 'image':
-            if (typeof asset === 'string' && !(asset.includes('://'))) {
-                // Image: replace stub with full URL if needed
-                fullAsset = this.baseDir + 'img/' + asset;
-            }
-            return fullAsset;
-            break;
-          case 'audio':
-          case 'video':
-            var types = typesDict[type];
-            // Replace any string sources with the appropriate expanded source objects
-            if (typeof asset === 'string' && asset) {
-                fullAsset = [];
-                for (var iType = 0; iType < types.length; iType++) {
-                    fullAsset.push({
-                        src: _this.baseDir + types[iType] + '/' + asset + '.' + types[iType],
-                        type: type + '/' + types[iType]
-                    });
+            case 'image':
+                if (typeof asset === 'string' && !(asset.includes('://'))) {
+                    // Image: replace stub with full URL if needed
+                    fullAsset = this.baseDir + 'img/' + asset;
                 }
-            }
-            return fullAsset;
-            break;
-          default:
-            throw "Unrecognized type of asset to expand. Options are 'image', 'audio', and 'video'.";
+                return fullAsset;
+                break;
+            case 'audio':
+            case 'video':
+                var types = typesDict[type];
+                // Replace any string sources with the appropriate expanded source objects
+                if (typeof asset === 'string' && asset) {
+                    fullAsset = [];
+                    for (var iType = 0; iType < types.length; iType++) {
+                        fullAsset.push({
+                            src: _this.baseDir + types[iType] + '/' + asset + '.' + types[iType],
+                            type: type + '/' + types[iType]
+                        });
+                    }
+                }
+                return fullAsset;
+                break;
+            default:
+                throw "Unrecognized type of asset to expand. Options are 'image', 'audio', and 'video'.";
         }
     },
-
-
 
     didReceiveAttrs() {
 
@@ -253,7 +251,7 @@ export default Ember.Mixin.create({
                         var sources = _this.get(baseName, {});
                         if (sources) {
                             if (Array.isArray(sources)) {  //expand this[parameterName][i][propName] for all i
-                                sources.forEach( (elem) => {
+                                sources.forEach((elem) => {
                                     if (elem.hasOwnProperty(propName)) {
                                         Ember.set(elem, propName, _this.expandAsset(elem[propName], type));
                                     }
@@ -267,7 +265,7 @@ export default Ember.Mixin.create({
                             }
                         }
                     } else { // Have something like 'a/b/c' with two or more slashes, not handled yet
-                        throw "Nesting of parameter names to expand beyond two levels not supported (max one slash).";
+                        throw 'Nesting of parameter names to expand beyond two levels not supported (max one slash).';
                     }
 
                 });

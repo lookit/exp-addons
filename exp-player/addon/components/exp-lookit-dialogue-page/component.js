@@ -645,8 +645,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAsset
             this.send('playNextAudioSegment');
         }
 
-
-
     },
 
     willDestroyElement() {
