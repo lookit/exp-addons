@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -106,6 +109,7 @@
             Uses
             <ul class="inline commas">
                     <li><a href="FullScreen.html">FullScreen</a></li>
+                    <li><a href="ExpandAssets.html">ExpandAssets</a></li>
                     <li><a href="VideoRecord.html">VideoRecord</a></li>
             </ul>
         </div>
@@ -115,7 +119,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l16"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:16</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l17"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:17</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -191,21 +195,13 @@ images before proceeding.</p>
                    &quot;height&quot;: &quot;60&quot;,
                    &quot;animate&quot;: &quot;flyleft&quot;,
                    &quot;requireAudio&quot;: true,
-                   &quot;imageAudio&quot;: [
-                       {
-                           &quot;stub&quot;: &quot;polcon_example_2_2speaker1polite&quot;
-                       }
-                   ]
+                   &quot;imageAudio&quot;: &quot;polcon_example_2_2speaker1polite&quot;
                }
            ],
            &quot;audioSources&quot;: [
                {
                    &quot;audioId&quot;: &quot;firstAudio&quot;,
-                   &quot;sources&quot;: [
-                       {
-                           &quot;stub&quot;: &quot;polcon_example_2_1intro&quot;
-                       }
-                   ]
+                   &quot;sources&quot;: &quot;polcon_example_2_1intro&quot;
                }
            ]
        },
@@ -241,11 +237,7 @@ images before proceeding.</p>
            &quot;audioSources&quot;: [
                {
                    &quot;audioId&quot;: &quot;firstAudio&quot;,
-                   &quot;sources&quot;: [
-                       {
-                           &quot;stub&quot;: &quot;polcon_example_5q1&quot;
-                       }
-                   ]
+                   &quot;sources&quot;: &quot;polcon_example_5q1&quot;
                }
            ]
        }
@@ -296,11 +288,15 @@ images before proceeding.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property inherited">
+                                <a href="#property_assetsToExpand">assetsToExpand</a>
+
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_audioSources">audioSources</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_audioTypes">audioTypes</a>
 
                             </li>
@@ -312,8 +308,12 @@ images before proceeding.</p>
                                 <a href="#property_backgroundImage">backgroundImage</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_baseDir">baseDir</a>
+
+                            </li>
+                            <li class="index-item property inherited inherited">
+                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
 
                             </li>
                             <li class="index-item property">
@@ -326,10 +326,6 @@ images before proceeding.</p>
                             </li>
                             <li class="index-item property inherited inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
-
-                            </li>
-                            <li class="index-item property inherited inherited">
-                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -350,6 +346,10 @@ images before proceeding.</p>
                             </li>
                             <li class="index-item property">
                                 <a href="#property_parentTextBlock">parentTextBlock</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_videoTypes">videoTypes</a>
 
                             </li>
                     </ul>
@@ -549,7 +549,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l489"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:489</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l479"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:479</code></a>
         </p>
 
 
@@ -663,6 +663,30 @@ final selected choice for a choice trial.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_assetsToExpand" class="property item inherited">
+    <h3 class="name"><code>assetsToExpand</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_assetsToExpand">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l95"><code>addon&#x2F;mixins&#x2F;expand-assets.js:95</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Object describing which properties may need expansion
+    </div>
+
+
+
+</div>
 <div id="property_audioSources" class="property item">
     <h3 class="name"><code>audioSources</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -674,7 +698,7 @@ final selected choice for a choice trial.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l322"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:322</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l318"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:318</code></a>
         </p>
 
 
@@ -709,7 +733,7 @@ audio segment</p>
                 <div class="param-description">
                     <p>Array of {src: 'url', type:
 'MIMEtype'} objects with audio sources for this segment.</p>
-<p>Can also give a single element {stub: 'filename'}, which will
+<p>Can also give a single string 'filename', which will
 be expanded out to the appropriate array based on <code>baseDir</code>
 and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
 
@@ -739,9 +763,12 @@ values correspond to the ids given in images</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l274"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:274</code></a>
+            <p>Inherited from
+            <a href="../classes/ExpandAssets.html#property_audioTypes">
+                ExpandAssets
+            </a>
+            but overwritten in
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l270"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:270</code></a>
         </p>
 
 
@@ -750,8 +777,8 @@ values correspond to the ids given in images</p>
     <div class="description">
         <p>List of audio types to expect for any audio specified just
 with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an audio source
-is given as [{'stub': 'intro'}], the audio source will be
+If audioTypes is <code>['typeA', 'typeB']</code> and an audio source
+is given as `intro, the audio source will be
 expanded out to</p>
 <pre class="code prettyprint"><code class="language-json">                [
                        {
@@ -782,7 +809,7 @@ expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l312"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:312</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l308"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:308</code></a>
         </p>
 
 
@@ -808,7 +835,7 @@ replay/next buttons)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l233"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:233</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l229"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:229</code></a>
         </p>
 
 
@@ -831,9 +858,12 @@ replay/next buttons)</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l253"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:253</code></a>
+            <p>Inherited from
+            <a href="../classes/ExpandAssets.html#property_baseDir">
+                ExpandAssets
+            </a>
+            but overwritten in
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l249"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:249</code></a>
         </p>
 
 
@@ -842,18 +872,46 @@ replay/next buttons)</p>
     <div class="description">
         <p>Base directory for where to find stimuli. Any image src
 values that are not full paths will be expanded by prefixing
-with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that give
-a value for 'stub' rather than 'src' and 'type' will be
+with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that are strings
+rather than objects with 'src' and 'type' will be
 expanded out to
 <code>baseDir/avtype/[stub].avtype</code>, where the potential avtypes
 are given by audioTypes and videoTypes.</p>
-<p>Note that baseDir SHOULD include a trailing slash
+<p>Note that baseDir should include a trailing slash
 (e.g., <code>http://stimuli.org/myexperiment/</code>, not
 <code>http://stimuli.org/myexperiment</code>)</p>
 
     </div>
 
         <p><strong>Default:</strong> &#x27;&#x27;</p>
+
+
+</div>
+<div id="property_displayFullscreenOverride" class="property item inherited">
+    <h3 class="name"><code>displayFullscreenOverride</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_displayFullscreenOverride">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
+    </div>
+
 
 
 </div>
@@ -868,7 +926,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l302"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:302</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l298"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:298</code></a>
         </p>
 
 
@@ -937,34 +995,6 @@ connection before starting audio if so)</p>
 
 
 </div>
-<div id="property_id" class="property item inherited">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-            <p>Inherited from
-            <a href="../classes/FullScreen.html#property_id">
-                FullScreen
-            </a>
-            but overwritten in
-        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Whether to display this frame as fullscreen, even though it is not
-generally used that way.
-    </div>
-
-
-
-</div>
 <div id="property_images" class="property item">
     <h3 class="name"><code>images</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -976,7 +1006,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l417"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:417</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l410"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:410</code></a>
         </p>
 
 
@@ -1069,7 +1099,7 @@ generally used that way.
                 <div class="param-description">
                     <p>sources Array of {src: 'url',
 type: 'MIMEtype'} objects with audio sources for audio to play when this image is clicked, if any. (Omit to not associate audio with this image.)</p>
-<p>Can also give a single element {stub: 'filename'}, which will
+<p>Can also give a single string <code>filename</code>, which will
 be expanded out to the appropriate array based on <code>baseDir</code>
 and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
 
@@ -1099,7 +1129,7 @@ and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l242"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:242</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l238"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:238</code></a>
         </p>
 
 
@@ -1126,7 +1156,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l211"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:211</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l207"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:207</code></a>
         </p>
 
 
@@ -1152,7 +1182,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l222"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:222</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l218"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:218</code></a>
         </p>
 
 
@@ -1178,7 +1208,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l387"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:387</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l380"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:380</code></a>
         </p>
 
 
@@ -1238,6 +1268,47 @@ to apply to this section, and their values - e.g.
             </li>
         </ul>
 </div>
+<div id="property_videoTypes" class="property item inherited">
+    <h3 class="name"><code>videoTypes</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_videoTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l153"><code>addon&#x2F;mixins&#x2F;expand-assets.js:153</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        List of video types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If vidioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and a video source
+is given as <code>intro</code>, the video source will be
+expanded out to
+
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'video/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'video/typeB'
+        }
+    ]
+    </div>
+
+        <p><strong>Default:</strong> [&#x27;mp4&#x27;, &#x27;webm&#x27;]</p>
+
+
+</div>
             </div>
 
 
@@ -1255,7 +1326,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l545"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:545</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l535"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:535</code></a>
                             </p>
                     
                     
@@ -1296,7 +1367,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l641"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:641</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l631"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:631</code></a>
                             </p>
                     
                     
@@ -1400,7 +1471,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l595"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:595</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l585"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:585</code></a>
                             </p>
                     
                     
@@ -1466,7 +1537,7 @@ to apply to this section, and their values - e.g.
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l576"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:576</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l566"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:566</code></a>
                             </p>
                     
                     

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ExpVideoPreview - exp-player</title>
+    <title>ExpLookitObservation - exp-player</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <link rel="stylesheet" href="https://yui-s.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
@@ -103,15 +103,15 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ExpVideoPreview Class</h1>
+<h1>ExpLookitObservation Class</h1>
 <div class="box meta">
 
         <div class="extends">
-            Extends <a href="../classes/ExpFrameBase.html" class="crosslink">ExpFrameBase</a>
+            Extends VideoRecord
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-video-preview_component.js.html#l13"><code>addon&#x2F;components&#x2F;exp-video-preview&#x2F;component.js:13</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-observation_component.js.html#l15"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:15</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -121,35 +121,43 @@
 
 <div>
 
-    <img src="../assets/screenshots/ExpVideoPreview.png" class="class-screenshot">
+    <img src="../assets/screenshots/ExpLookitObservation.png" class="class-screenshot">
 
 </div>
 
 <div class="box intro">
-    <p>A frame that displays a series of videos to preview, without collecting data as a live experiment. User can go through these at their own pace and video controls are shown. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.</p>
-<pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
-   &quot;my-sample-frame&quot;: {
-       &quot;id&quot;: &quot;video-preview&quot;,
-       &quot;kind&quot;: &quot;exp-video-preview&quot;,
-       &quot;text&quot;: &quot;Here are the videos your child will see in this study. You can watch them ahead of time--please just don't show your child yet!&quot;,
-       &quot;prompt&quot;: &quot;My child can NOT see the screen. Start the preview!&quot;,
-       &quot;videos&quot;: [
-          {
-            &quot;caption&quot;: &quot;User-facing text that appears below the video&quot;,
-            &quot;sources&quot;: [
-              {
-                &quot;type&quot;: &quot;video/webm&quot;,
-                &quot;src&quot;: &quot;https://url.com/example_intro.webm&quot;
-              },
-              {
-                &quot;type&quot;: &quot;video/mp4&quot;,
-                &quot;src&quot;: &quot;https://url.com/example_intro.webm&quot;
-              }
-            ]
-          }
-        ]
+    <p>A frame to collect a video observation with the participant's help. By default the
+webcam is displayed to the participant and they can choose when to start, pause, and
+resume recording. The duration of an individual recording can optionally be limited
+and/or recording can be started automatically. This is intended for cases where we
+want the parent to perform some test or behavior with the child, rather than
+presenting stimuli ourselves. E.g., you might give instructions to conduct a structured
+interview and allow the parent to control recording.</p>
+<p>Each element of the 'blocks' parameter is rendered using ExpTextBlock.</p>
+<pre class="code prettyprint"><code>   "frames": {
+       "observation": {
+           "kind": "exp-lookit-observation",
+           "blocks": [
+               {
+                   "title": "Time to do the joke!",
+                   "listblocks": [
+                       {
+                           "text": "Rip the paper"
+                       },
+                       {
+                           "text": "Wait ten seconds"
+                       }
+                   ]
+               }
+           ],
+           "hideWebcam": true,
+           "hideControls": false,
+           "recordSegmentLength": 10,
+           "startRecordingAutomatically": false,
+           "nextButtonText": "move on",
+           "showPreviousButton": false
+       }
    }
-
 </code></pre>
 
 </div>
@@ -172,20 +180,8 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method inherited">
-                                <a href="#method_exitFullscreen">exitFullscreen</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_makeTimeEvent">makeTimeEvent</a>
-
-                            </li>
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_serializeContent">serializeContent</a>
-
-                            </li>
-                            <li class="index-item method inherited">
-                                <a href="#method_showFullscreen">showFullscreen</a>
 
                             </li>
                     </ul>
@@ -195,28 +191,36 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property inherited">
-                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_fsButtonID">fsButtonID</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_fullScreenElementId">fullScreenElementId</a>
+                            <li class="index-item property">
+                                <a href="#property_blocks">blocks</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_prompt">prompt</a>
+                                <a href="#property_hideControls">hideControls</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_text">text</a>
+                                <a href="#property_hideWebcam">hideWebcam</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_videos">videos</a>
+                                <a href="#property_nextButtonText">nextButtonText</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_recordSegmentLength">recordSegmentLength</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_showPreviousButton">showPreviousButton</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_startRecordingAutomatically">startRecordingAutomatically</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_startRecordingAutomatically">startRecordingAutomatically</a>
 
                             </li>
                     </ul>
@@ -227,20 +231,20 @@
                     <h3>Events</h3>
 
                     <ul class="index-list events extends">
-                            <li class="index-item event inherited">
-                                <a href="#event_enteredFullscreen">enteredFullscreen</a>
+                            <li class="index-item event">
+                                <a href="#event_hideWebcam">hideWebcam</a>
 
                             </li>
-                            <li class="index-item event inherited">
-                                <a href="#event_leftFullscreen">leftFullscreen</a>
+                            <li class="index-item event">
+                                <a href="#event_hideWebcam">hideWebcam</a>
 
                             </li>
-                            <li class="index-item event inherited">
-                                <a href="#event_nextFrame">nextFrame</a>
+                            <li class="index-item event">
+                                <a href="#event_recorderTimeout">recorderTimeout</a>
 
                             </li>
-                            <li class="index-item event inherited">
-                                <a href="#event_previousFrame">previousFrame</a>
+                            <li class="index-item event">
+                                <a href="#event_showWebcam">showWebcam</a>
 
                             </li>
                     </ul>
@@ -250,117 +254,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_exitFullscreen" class="method item inherited">
-    <h3 class="name"><code>exitFullscreen</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_exitFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l137"><code>addon&#x2F;mixins&#x2F;full-screen.js:137</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        Exit fullscreen mode
-    </div>
-
-
-
-
-</div>
-<div id="method_makeTimeEvent" class="method item inherited">
-    <h3 class="name"><code>makeTimeEvent</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>eventName</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[extra]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/ExpFrameBase.html#method_makeTimeEvent">ExpFrameBase</a>:
-        <a href="../files/addon_components_exp-frame-base_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:198</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Create the time event payload for a particular frame / event. This can be overridden to add fields to every
-event sent by a particular frame</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">eventName</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[extra]</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <p>An object with additional properties to be sent to the server</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
-                    <p>Event type, time, and any additional metadata provided</p>
-
-            </div>
-        </div>
-
-
-</div>
 <div id="method_serializeContent" class="method item">
     <h3 class="name"><code>serializeContent</code></h3>
 
@@ -389,12 +282,9 @@ event sent by a particular frame</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpFrameBase.html#method_serializeContent">
-                ExpFrameBase
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-video-preview_component.js.html#l177"><code>addon&#x2F;components&#x2F;exp-video-preview&#x2F;component.js:177</code></a>
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l200"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:200</code></a>
         </p>
 
 
@@ -457,117 +347,14 @@ event sent by a particular frame</p>
 
 
 </div>
-<div id="method_showFullscreen" class="method item inherited">
-    <h3 class="name"><code>showFullscreen</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#method_showFullscreen">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l104"><code>addon&#x2F;mixins&#x2F;full-screen.js:104</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        Make a specified element fullscreen
-    </div>
-
-
-
-
-</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_displayFullscreenOverride" class="property item inherited">
-    <h3 class="name"><code>displayFullscreenOverride</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_displayFullscreenOverride">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Whether to display this frame as fullscreen, even though it is not
-generally used that way.
-    </div>
-
-
-
-</div>
-<div id="property_fsButtonID" class="property item inherited">
-    <h3 class="name"><code>fsButtonID</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fsButtonID">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l24"><code>addon&#x2F;mixins&#x2F;full-screen.js:24</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The element ID of a button to show if the user leaves fullscreen mode
-    </div>
-
-
-
-</div>
-<div id="property_fullScreenElementId" class="property item inherited">
-    <h3 class="name"><code>fullScreenElementId</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_fullScreenElementId">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l17"><code>addon&#x2F;mixins&#x2F;full-screen.js:17</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The element ID of the thing to make full screen (video element, div, etc)
-    </div>
-
-
-
-</div>
-<div id="property_prompt" class="property item">
-    <h3 class="name"><code>prompt</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+<div id="property_blocks" class="property item">
+    <h3 class="name"><code>blocks</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
 
 
 
@@ -576,64 +363,14 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-preview_component.js.html#l144"><code>addon&#x2F;components&#x2F;exp-video-preview&#x2F;component.js:144</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l78"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:78</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Text on the button prompt asking the user to continue to the videos</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_text" class="property item">
-    <h3 class="name"><code>text</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-preview_component.js.html#l162"><code>addon&#x2F;components&#x2F;exp-video-preview&#x2F;component.js:162</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Informational text to display to the user before videos are shown, along with button to continue</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_videos" class="property item">
-    <h3 class="name"><code>videos</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-video-preview_component.js.html#l102"><code>addon&#x2F;components&#x2F;exp-video-preview&#x2F;component.js:102</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A series of preview videos to display within a single frame, defined as an array of objects.</p>
+        <p>Array of blocks for ExpTextBlock, specifying text/images of instructions to display</p>
 
     </div>
 
@@ -643,36 +380,222 @@ generally used that way.
 
         <ul class="params-list">
             <li class="param">
-                    <code class="param-name">caption</code>
+                    <code class="param-name">title</code>
                     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
                 <div class="param-description">
-                    <p>Some text to appear under this video</p>
+                    <p>Title of this section</p>
 
                 </div>
 
             </li>
             <li class="param">
-                    <code class="param-name">sources</code>
+                    <code class="param-name">text</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                    <p>Paragraph text of this section</p>
+
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">listblocks</code>
                     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
 
                 <div class="param-description">
-                    <p>Array of {src: 'url', type: 'MIMEtype'} objects.</p>
-
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">imgSrc</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                    <p>URL of image to display (optional; each preview video should designate either sources or imgSrc)</p>
+                    <p>Object specifying bulleted points for this section. Each object is of the form:
+{text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.</p>
 
                 </div>
 
             </li>
         </ul>
+</div>
+<div id="property_hideControls" class="property item">
+    <h3 class="name"><code>hideControls</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l157"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:157</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to hide video recording controls (only use with startRecordingAutomatically)</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_hideWebcam" class="property item">
+    <h3 class="name"><code>hideWebcam</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l167"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to hide webcam view when frame loads (participant will still be able to show manually)</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_nextButtonText" class="property item">
+    <h3 class="name"><code>nextButtonText</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l177"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:177</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Text to display on the 'next frame' button</p>
+
+    </div>
+
+        <p><strong>Default:</strong> &#x27;Next&#x27;</p>
+
+
+</div>
+<div id="property_recordSegmentLength" class="property item">
+    <h3 class="name"><code>recordSegmentLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l124"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:124</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Number of seconds to record for before automatically pausing. Use
+0 for no limit.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 300</p>
+
+
+</div>
+<div id="property_showPreviousButton" class="property item">
+    <h3 class="name"><code>showPreviousButton</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l187"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:187</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to show a 'previous' button</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_startRecordingAutomatically" class="property item">
+    <h3 class="name"><code>startRecordingAutomatically</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l135"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:135</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to automatically begin recording upon frame load</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_startRecordingAutomatically" class="property item">
+    <h3 class="name"><code>startRecordingAutomatically</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l145"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:145</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether a recording must be made to proceed to next frame. 'Next' button
+will be disabled until recording is made if so. 0 to not require recording;
+any positive number to require that many seconds of recording</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
 </div>
             </div>
 
@@ -680,8 +603,8 @@ generally used that way.
             <div id="events" class="api-class-tabpanel">
                 <h2 class="off-left">Events</h2>
 
-                    <div id="event_enteredFullscreen" class="events item inherited">
-                        <h3 class="name"><code>enteredFullscreen</code></h3>
+                    <div id="event_hideWebcam" class="events item">
+                        <h3 class="name"><code>hideWebcam</code></h3>
                         <span class="type"></span>
                     
                     
@@ -689,72 +612,24 @@ generally used that way.
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_enteredFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l76"><code>addon&#x2F;mixins&#x2F;full-screen.js:76</code></a>
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l239"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:239</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            Upon detecting change to fullscreen mode
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="event_leftFullscreen" class="events item inherited">
-                        <h3 class="name"><code>leftFullscreen</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/FullScreen.html#event_leftFullscreen">FullScreen</a>:
-                            <a href="../files/addon_mixins_full-screen.js.html#l88"><code>addon&#x2F;mixins&#x2F;full-screen.js:88</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            Upon detecting change out of fullscreen mode
-                        </div>
-                    
-                    
-                    
-                    </div>
-                    <div id="event_nextFrame" class="events item inherited">
-                        <h3 class="name"><code>nextFrame</code></h3>
-                        <span class="type"></span>
-                    
-                    
-                    
-                    
-                    
-                        <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/ExpFrameBase.html#event_nextFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:232</code></a>
-                            </p>
-                    
-                    
-                        </div>
-                    
-                        <div class="description">
-                            <p>Move to next frame</p>
+                            <p>Webcam display hidden from participant</p>
                     
                         </div>
                     
                     
                     
                     </div>
-                    <div id="event_previousFrame" class="events item inherited">
-                        <h3 class="name"><code>previousFrame</code></h3>
+                    <div id="event_hideWebcam" class="events item">
+                        <h3 class="name"><code>hideWebcam</code></h3>
                         <span class="type"></span>
                     
                     
@@ -762,16 +637,66 @@ generally used that way.
                     
                     
                         <div class="meta">
-                                    <p>Inherited from
-                                    <a href="../classes/ExpFrameBase.html#event_previousFrame">ExpFrameBase</a>:
-                            <a href="../files/addon_components_exp-frame-base_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-frame-base&#x2F;component.js:255</code></a>
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l337"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:337</code></a>
                             </p>
                     
                     
                         </div>
                     
                         <div class="description">
-                            <p>Move to previous frame</p>
+                            <p>Webcam display hidden from participant</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_recorderTimeout" class="events item">
+                        <h3 class="name"><code>recorderTimeout</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l279"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:279</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Video recording automatically paused upon reaching time limit</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_showWebcam" class="events item">
+                        <h3 class="name"><code>showWebcam</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l348"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:348</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Webcam display shown to participant</p>
                     
                         </div>
                     
