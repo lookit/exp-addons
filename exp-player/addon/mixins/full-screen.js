@@ -168,7 +168,7 @@ export default Ember.Mixin.create({
                  * Whether to display this frame as fullscreen, even though it is not
                  * generally used that way.
                  *
-                 * @property {String} id
+                 * @property {String} displayFullscreenOverride
                  */
                 displayFullscreenOverride: {
                     type: 'boolean',
