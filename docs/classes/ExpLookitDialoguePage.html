@@ -549,7 +549,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l479"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:479</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l430"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:430</code></a>
         </p>
 
 
@@ -698,7 +698,7 @@ final selected choice for a choice trial.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l318"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:318</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l269"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:269</code></a>
         </p>
 
 
@@ -754,7 +754,7 @@ values correspond to the ids given in images</p>
             </li>
         </ul>
 </div>
-<div id="property_audioTypes" class="property item">
+<div id="property_audioTypes" class="property item inherited">
     <h3 class="name"><code>audioTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -763,35 +763,32 @@ values correspond to the ids given in images</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpandAssets.html#property_audioTypes">
-                ExpandAssets
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l270"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:270</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_audioTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l125"><code>addon&#x2F;mixins&#x2F;expand-assets.js:125</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of audio types to expect for any audio specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is <code>['typeA', 'typeB']</code> and an audio source
-is given as `intro, the audio source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of audio types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If audioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and an audio source
+is given as <code>intro</code>, the audio source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'audio/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'audio/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp3&#x27;, &#x27;ogg&#x27;]</p>
@@ -809,7 +806,7 @@ expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l308"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:308</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l259"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:259</code></a>
         </p>
 
 
@@ -849,7 +846,7 @@ replay/next buttons)</p>
 
 
 </div>
-<div id="property_baseDir" class="property item">
+<div id="property_baseDir" class="property item inherited">
     <h3 class="name"><code>baseDir</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
@@ -858,29 +855,25 @@ replay/next buttons)</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpandAssets.html#property_baseDir">
-                ExpandAssets
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l249"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:249</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_baseDir">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l105"><code>addon&#x2F;mixins&#x2F;expand-assets.js:105</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Base directory for where to find stimuli. Any image src
+        Base directory for where to find stimuli. Any image src
 values that are not full paths will be expanded by prefixing
-with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that are strings
-rather than objects with 'src' and 'type' will be
-expanded out to
-<code>baseDir/avtype/[stub].avtype</code>, where the potential avtypes
-are given by audioTypes and videoTypes.</p>
-<p>Note that baseDir should include a trailing slash
-(e.g., <code>http://stimuli.org/myexperiment/</code>, not
-<code>http://stimuli.org/myexperiment</code>)</p>
+with <code>baseDir</code> + <code>img&#x2F;</code>. Any audio/video src values provided as
+strings rather than objects with <code>src</code> and <code>type</code> will be
+expanded out to <code>baseDir&#x2F;avtype&#x2F;[stub].avtype</code>, where the potential
+avtypes are given by <code>audioTypes</code> and <code>videoTypes</code>.
 
+baseDir should include a trailing slash
+(e.g., <code>http:&#x2F;&#x2F;stimuli.org&#x2F;myexperiment&#x2F;</code>); if a value is provided that
+does not end in a slash, one will be added.
     </div>
 
         <p><strong>Default:</strong> &#x27;&#x27;</p>
@@ -926,7 +919,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l298"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:298</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l249"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:249</code></a>
         </p>
 
 
@@ -1006,7 +999,7 @@ connection before starting audio if so)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l410"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:410</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l361"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:361</code></a>
         </p>
 
 
@@ -1208,7 +1201,7 @@ select one of the images before proceeding</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l380"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:380</code></a>
+        <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l331"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:331</code></a>
         </p>
 
 
@@ -1326,7 +1319,7 @@ expanded out to
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l535"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:535</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l486"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:486</code></a>
                             </p>
                     
                     
@@ -1367,7 +1360,7 @@ expanded out to
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l631"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:631</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l582"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:582</code></a>
                             </p>
                     
                     
@@ -1471,7 +1464,7 @@ expanded out to
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l585"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:585</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l536"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:536</code></a>
                             </p>
                     
                     
@@ -1537,7 +1530,7 @@ expanded out to
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l566"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:566</code></a>
+                            <a href="../files/addon_components_exp-lookit-dialogue-page_component.js.html#l517"><code>addon&#x2F;components&#x2F;exp-lookit-dialogue-page&#x2F;component.js:517</code></a>
                             </p>
                     
                     

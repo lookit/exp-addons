@@ -111,6 +111,7 @@
                     <li><a href="FullScreen.html">FullScreen</a></li>
                     <li><a href="MediaReload.html">MediaReload</a></li>
                     <li><a href="VideoRecord.html">VideoRecord</a></li>
+                    <li><a href="ExpandAssets.html">ExpandAssets</a></li>
             </ul>
         </div>
 
@@ -119,7 +120,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-video_component.js.html#l17"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:17</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-video_component.js.html#l18"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:18</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -164,16 +165,10 @@ a list of src/type pairs with full paths like this:</p>
        }
    ]
 </code></pre>
-<p>OR you can provide a list with a single object with a 'stub', which will be expanded
+<p>OR you can provide a single string 'stub', which will be expanded
 based on the parameter baseDir and the media types expected - either audioTypes or
-videoTypes as appropriate. For example, if you provide the audio source</p>
-<pre class="code prettyprint"><code class="language-json">   [
-       {
-           'stub': 'intro'
-       }
-   ]
-</code></pre>
-<p>and baseDir is <a href="https://mystimuli.org/mystudy/">https://mystimuli.org/mystudy/</a>, with audioTypes ['mp3', 'ogg'], then this
+videoTypes as appropriate. For example, if you provide the audio source <code>intro</code>
+and baseDir is <a href="https://mystimuli.org/mystudy/">https://mystimuli.org/mystudy/</a>, with audioTypes ['mp3', 'ogg'], then this
 will be expanded to:</p>
 <pre class="code prettyprint"><code class="language-json">                [
                        {
@@ -200,66 +195,26 @@ without a user event.)</p>
            &quot;kind&quot;: &quot;exp-lookit-video&quot;,
            &quot;isLast&quot;: false,
            &quot;baseDir&quot;: &quot;https://s3.amazonaws.com/lookitcontents/intermodal/&quot;,
-           &quot;sources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;sbs_ramp_down_up_apple_c1_b1_NN&quot;
-               }
-           ],
+           &quot;sources&quot;: &quot;sbs_ramp_down_up_apple_c1_b1_NN&quot;,
            &quot;testCount&quot;: 2,
-           &quot;altSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;sbs_ramp_up_down_apple_c1_b1_NN&quot;
-               }
-           ],
+           &quot;altSources&quot;: &quot;sbs_ramp_up_down_apple_c1_b1_NN&quot;,
            &quot;audioTypes&quot;: [
                &quot;ogg&quot;,
                &quot;mp3&quot;
            ],
-           &quot;pauseAudio&quot;: [
-               {
-                   &quot;stub&quot;: &quot;pause&quot;
-               }
-           ],
+           &quot;pauseAudio&quot;: &quot;pause&quot;,
            &quot;videoTypes&quot;: [
                &quot;webm&quot;,
                &quot;mp4&quot;
            ],
-           &quot;attnSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;attentiongrabber&quot;
-               }
-           ],
-           &quot;audioSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;video_02&quot;
-               }
-           ],
-           &quot;introSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;cropped_book&quot;
-               }
-           ],
-           &quot;musicSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;music_02&quot;
-               }
-           ],
-           &quot;unpauseAudio&quot;: [
-               {
-                   &quot;stub&quot;: &quot;return_after_pause&quot;
-               }
-           ],
+           &quot;attnSources&quot;: &quot;attentiongrabber&quot;,
+           &quot;audioSources&quot;: &quot;video_02&quot;,
+           &quot;introSources&quot;: &quot;cropped_book&quot;,
+           &quot;musicSources&quot;: &quot;music_02&quot;,
+           &quot;unpauseAudio&quot;: &quot;return_after_pause&quot;,
            &quot;calibrationLength&quot;: 3000,
-           &quot;calibrationAudioSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;chimes&quot;
-               }
-           ],
-           &quot;calibrationVideoSources&quot;: [
-               {
-                   &quot;stub&quot;: &quot;attentiongrabber&quot;
-               }
-           ]
+           &quot;calibrationAudioSources&quot;: &quot;chimes&quot;,
+           &quot;calibrationVideoSources&quot;: &quot;attentiongrabber&quot;
        }
 
 </code></pre>
@@ -319,6 +274,10 @@ without a user event.)</p>
                                 <a href="#property_announceLength">announceLength</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_assetsToExpand">assetsToExpand</a>
+
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_attnSources">attnSources</a>
 
@@ -327,11 +286,11 @@ without a user event.)</p>
                                 <a href="#property_audioSources">audioSources</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_audioTypes">audioTypes</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_baseDir">baseDir</a>
 
                             </li>
@@ -399,7 +358,7 @@ without a user event.)</p>
                                 <a href="#property_unpauseAudio">unpauseAudio</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_videoTypes">videoTypes</a>
 
                             </li>
@@ -585,7 +544,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l542"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:542</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l439"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:439</code></a>
         </p>
 
 
@@ -696,7 +655,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l950"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:950</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l781"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:781</code></a>
         </p>
 
 
@@ -729,7 +688,7 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l219"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:219</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:193</code></a>
         </p>
 
 
@@ -777,7 +736,7 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l258"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:258</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:232</code></a>
         </p>
 
 
@@ -792,6 +751,30 @@ stuff at this point!</p>
 
 
 </div>
+<div id="property_assetsToExpand" class="property item inherited">
+    <h3 class="name"><code>assetsToExpand</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_assetsToExpand">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l95"><code>addon&#x2F;mixins&#x2F;expand-assets.js:95</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Object describing which properties may need expansion
+    </div>
+
+
+
+</div>
 <div id="property_attnSources" class="property item">
     <h3 class="name"><code>attnSources</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
@@ -803,7 +786,7 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l246"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:246</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l220"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:220</code></a>
         </p>
 
 
@@ -851,7 +834,7 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l269"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:269</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l243"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:243</code></a>
         </p>
 
 
@@ -889,7 +872,7 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
             </li>
         </ul>
 </div>
-<div id="property_audioTypes" class="property item">
+<div id="property_audioTypes" class="property item inherited">
     <h3 class="name"><code>audioTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -898,39 +881,39 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l482"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:482</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_audioTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l125"><code>addon&#x2F;mixins&#x2F;expand-assets.js:125</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of audio types to expect for any audio specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an audio source
-is given as [{'stub': 'intro'}], the audio source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of audio types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If audioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and an audio source
+is given as <code>intro</code>, the audio source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'audio/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'audio/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp3&#x27;, &#x27;ogg&#x27;]</p>
 
 
 </div>
-<div id="property_baseDir" class="property item">
+<div id="property_baseDir" class="property item inherited">
     <h3 class="name"><code>baseDir</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
@@ -939,26 +922,25 @@ expanded out to</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l461"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:461</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_baseDir">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l105"><code>addon&#x2F;mixins&#x2F;expand-assets.js:105</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Base directory for where to find stimuli. Any image src
+        Base directory for where to find stimuli. Any image src
 values that are not full paths will be expanded by prefixing
-with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that give
-a value for 'stub' rather than 'src' and 'type' will be
-expanded out to
-<code>baseDir/avtype/[stub].avtype</code>, where the potential avtypes
-are given by audioTypes and videoTypes.</p>
-<p>Note that baseDir SHOULD include a trailing slash
-(e.g., <code>http://stimuli.org/myexperiment/</code>, not
-<code>http://stimuli.org/myexperiment</code>)</p>
+with <code>baseDir</code> + <code>img&#x2F;</code>. Any audio/video src values provided as
+strings rather than objects with <code>src</code> and <code>type</code> will be
+expanded out to <code>baseDir&#x2F;avtype&#x2F;[stub].avtype</code>, where the potential
+avtypes are given by <code>audioTypes</code> and <code>videoTypes</code>.
 
+baseDir should include a trailing slash
+(e.g., <code>http:&#x2F;&#x2F;stimuli.org&#x2F;myexperiment&#x2F;</code>); if a value is provided that
+does not end in a slash, one will be added.
     </div>
 
         <p><strong>Default:</strong> &#x27;&#x27;</p>
@@ -976,7 +958,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l354"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:354</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l328"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:328</code></a>
         </p>
 
 
@@ -1004,7 +986,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l331"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:331</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l305"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:305</code></a>
         </p>
 
 
@@ -1030,7 +1012,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l342"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:342</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l316"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:316</code></a>
         </p>
 
 
@@ -1057,7 +1039,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l378"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:378</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l352"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:352</code></a>
         </p>
 
 
@@ -1113,7 +1095,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l321"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:321</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l295"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:295</code></a>
         </p>
 
 
@@ -1193,7 +1175,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:232</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l206"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:206</code></a>
         </p>
 
 
@@ -1242,7 +1224,7 @@ If empty, intro segment will be skipped.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l283"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:283</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l257"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:257</code></a>
         </p>
 
 
@@ -1300,7 +1282,7 @@ If empty, no music is played.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l402"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:402</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l376"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:376</code></a>
         </p>
 
 
@@ -1327,7 +1309,7 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l448"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:448</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l422"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:422</code></a>
         </p>
 
 
@@ -1354,7 +1336,7 @@ Default: (You'll have a moment to turn around again.)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l202"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:202</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l176"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:176</code></a>
         </p>
 
 
@@ -1404,7 +1386,7 @@ Default: (You'll have a moment to turn around again.)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l309"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:309</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l283"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:283</code></a>
         </p>
 
 
@@ -1431,7 +1413,7 @@ testLength is set to a finite value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l298"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:298</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l272"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:272</code></a>
         </p>
 
 
@@ -1457,7 +1439,7 @@ testLength is set to a finite value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l425"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:425</code></a>
+        <a href="../files/addon_components_exp-lookit-video_component.js.html#l399"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:399</code></a>
         </p>
 
 
@@ -1473,7 +1455,7 @@ audio played upon unpausing study</p>
 
 
 </div>
-<div id="property_videoTypes" class="property item">
+<div id="property_videoTypes" class="property item inherited">
     <h3 class="name"><code>videoTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -1482,32 +1464,32 @@ audio played upon unpausing study</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l510"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:510</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_videoTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l153"><code>addon&#x2F;mixins&#x2F;expand-assets.js:153</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of video types to expect for any video specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an video source
-is given as [{'stub': 'intro'}], the video source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of video types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If vidioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and a video source
+is given as <code>intro</code>, the video source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'video/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'video/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp4&#x27;, &#x27;webm&#x27;]</p>
@@ -1635,7 +1617,7 @@ expanded out to</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-video_component.js.html#l754"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:754</code></a>
+                            <a href="../files/addon_components_exp-lookit-video_component.js.html#l651"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:651</code></a>
                             </p>
                     
                     

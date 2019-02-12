@@ -591,7 +591,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l600"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:600</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l523"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:523</code></a>
         </p>
 
 
@@ -746,7 +746,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l997"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:997</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l920"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:920</code></a>
         </p>
 
 
@@ -991,7 +991,7 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
 
 
 </div>
-<div id="property_audioTypes" class="property item">
+<div id="property_audioTypes" class="property item inherited">
     <h3 class="name"><code>audioTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -1000,42 +1000,39 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpandAssets.html#property_audioTypes">
-                ExpandAssets
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l540"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:540</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_audioTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l125"><code>addon&#x2F;mixins&#x2F;expand-assets.js:125</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of audio types to expect for any audio specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an audio source
-is given as [{'stub': 'intro'}], the audio source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of audio types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If audioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and an audio source
+is given as <code>intro</code>, the audio source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'audio/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'audio/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp3&#x27;, &#x27;ogg&#x27;]</p>
 
 
 </div>
-<div id="property_baseDir" class="property item">
+<div id="property_baseDir" class="property item inherited">
     <h3 class="name"><code>baseDir</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
@@ -1044,29 +1041,25 @@ expanded out to</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpandAssets.html#property_baseDir">
-                ExpandAssets
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l519"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:519</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_baseDir">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l105"><code>addon&#x2F;mixins&#x2F;expand-assets.js:105</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Base directory for where to find stimuli. Any image src
+        Base directory for where to find stimuli. Any image src
 values that are not full paths will be expanded by prefixing
-with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that give
-a value for 'stub' rather than 'src' and 'type' will be
-expanded out to
-<code>baseDir/avtype/[stub].avtype</code>, where the potential avtypes
-are given by audioTypes and videoTypes.</p>
-<p>Note that baseDir SHOULD include a trailing slash
-(e.g., <code>http://stimuli.org/myexperiment/</code>, not
-<code>http://stimuli.org/myexperiment</code>)</p>
+with <code>baseDir</code> + <code>img&#x2F;</code>. Any audio/video src values provided as
+strings rather than objects with <code>src</code> and <code>type</code> will be
+expanded out to <code>baseDir&#x2F;avtype&#x2F;[stub].avtype</code>, where the potential
+avtypes are given by <code>audioTypes</code> and <code>videoTypes</code>.
 
+baseDir should include a trailing slash
+(e.g., <code>http:&#x2F;&#x2F;stimuli.org&#x2F;myexperiment&#x2F;</code>); if a value is provided that
+does not end in a slash, one will be added.
     </div>
 
         <p><strong>Default:</strong> &#x27;&#x27;</p>
@@ -1691,7 +1684,7 @@ set to false)</p>
 
 
 </div>
-<div id="property_videoTypes" class="property item">
+<div id="property_videoTypes" class="property item inherited">
     <h3 class="name"><code>videoTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -1700,35 +1693,32 @@ set to false)</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/ExpandAssets.html#property_videoTypes">
-                ExpandAssets
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l568"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:568</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_videoTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l153"><code>addon&#x2F;mixins&#x2F;expand-assets.js:153</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of video types to expect for any video specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an video source
-is given as [{'stub': 'intro'}], the video source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of video types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If vidioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and a video source
+is given as <code>intro</code>, the video source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'video/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'video/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp4&#x27;, &#x27;webm&#x27;]</p>
@@ -1856,7 +1846,7 @@ expanded out to</p>
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l848"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:848</code></a>
+                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l771"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:771</code></a>
                             </p>
                     
                     

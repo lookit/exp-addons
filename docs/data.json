@@ -358,7 +358,7 @@
             "module": "exp-player",
             "namespace": "",
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 13,
+            "line": 14,
             "description": "Reusable frames that can be used as part of user-defined experiments. This is the main reference for researchers\n  looking to build their own experiment definitions on the experimenter platform.",
             "tag": "main",
             "itemtype": "main"
@@ -692,13 +692,14 @@
             "submodule": "frames",
             "namespace": "",
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 17,
-            "description": "Basic video display for looking measures (e.g. preferential looking, looking time).\nTrial consists of four phases, each of which is optional.\n\n1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.\n\n2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.\n\n3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.\n\n4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.\n\nSpecifying media locations:\nFor any parameters that expect a list of audio/video sources, you can EITHER provide\na list of src/type pairs with full paths like this:\n```json\n   [\n       {\n           'src': 'http://.../video1.mp4',\n           'type': 'video/mp4'\n       },\n       {\n           'src': 'http://.../video1.webm',\n           'type': 'video/webm'\n       }\n   ]\n```\nOR you can provide a list with a single object with a 'stub', which will be expanded\nbased on the parameter baseDir and the media types expected - either audioTypes or\nvideoTypes as appropriate. For example, if you provide the audio source\n```json\n   [\n       {\n           'stub': 'intro'\n       }\n   ]\n```\nand baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this\nwill be expanded to:\n```json\n                [\n                       {\n                           src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',\n                           type: 'audio/mp3'\n                       },\n                       {\n                           src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',\n                           type: 'audio/ogg'\n                       }\n               ]\n```\nThis allows you to simplify your JSON document a bit and also easily switch to a\nnew version of your stimuli without changing every URL. You can mix source objects with\nfull URLs and those using stubs within the same directory. However, any stimuli\nspecified using stubs MUST be\norganized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nExample usage:\n\n```json\n       \"sample-intermodal-trial-2\": {\n           \"kind\": \"exp-lookit-video\",\n           \"isLast\": false,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/intermodal/\",\n           \"sources\": [\n               {\n                   \"stub\": \"sbs_ramp_down_up_apple_c1_b1_NN\"\n               }\n           ],\n           \"testCount\": 2,\n           \"altSources\": [\n               {\n                   \"stub\": \"sbs_ramp_up_down_apple_c1_b1_NN\"\n               }\n           ],\n           \"audioTypes\": [\n               \"ogg\",\n               \"mp3\"\n           ],\n           \"pauseAudio\": [\n               {\n                   \"stub\": \"pause\"\n               }\n           ],\n           \"videoTypes\": [\n               \"webm\",\n               \"mp4\"\n           ],\n           \"attnSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ],\n           \"audioSources\": [\n               {\n                   \"stub\": \"video_02\"\n               }\n           ],\n           \"introSources\": [\n               {\n                   \"stub\": \"cropped_book\"\n               }\n           ],\n           \"musicSources\": [\n               {\n                   \"stub\": \"music_02\"\n               }\n           ],\n           \"unpauseAudio\": [\n               {\n                   \"stub\": \"return_after_pause\"\n               }\n           ],\n           \"calibrationLength\": 3000,\n           \"calibrationAudioSources\": [\n               {\n                   \"stub\": \"chimes\"\n               }\n           ],\n           \"calibrationVideoSources\": [\n               {\n                   \"stub\": \"attentiongrabber\"\n               }\n           ]\n       }\n\n```",
+            "line": 18,
+            "description": "Basic video display for looking measures (e.g. preferential looking, looking time).\nTrial consists of four phases, each of which is optional.\n\n1. Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.\n\n2. Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.\n\n3. Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.\n\n4. Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.\n\nSpecifying media locations:\nFor any parameters that expect a list of audio/video sources, you can EITHER provide\na list of src/type pairs with full paths like this:\n```json\n   [\n       {\n           'src': 'http://.../video1.mp4',\n           'type': 'video/mp4'\n       },\n       {\n           'src': 'http://.../video1.webm',\n           'type': 'video/webm'\n       }\n   ]\n```\nOR you can provide a single string 'stub', which will be expanded\nbased on the parameter baseDir and the media types expected - either audioTypes or\nvideoTypes as appropriate. For example, if you provide the audio source `intro`\nand baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this\nwill be expanded to:\n```json\n                [\n                       {\n                           src: 'https://mystimuli.org/mystudy/mp3/intro.mp3',\n                           type: 'audio/mp3'\n                       },\n                       {\n                           src: 'https://mystimuli.org/mystudy/ogg/intro.ogg',\n                           type: 'audio/ogg'\n                       }\n               ]\n```\nThis allows you to simplify your JSON document a bit and also easily switch to a\nnew version of your stimuli without changing every URL. You can mix source objects with\nfull URLs and those using stubs within the same directory. However, any stimuli\nspecified using stubs MUST be\norganized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.\n\nThis frame is displayed fullscreen; if the frame before it is not, that frame\nneeds to include a manual \"next\" button so that there's a user interaction\nevent to trigger fullscreen mode. (Browsers don't allow us to switch to FS\nwithout a user event.)\n\nExample usage:\n\n```json\n       \"sample-intermodal-trial-2\": {\n           \"kind\": \"exp-lookit-video\",\n           \"isLast\": false,\n           \"baseDir\": \"https://s3.amazonaws.com/lookitcontents/intermodal/\",\n           \"sources\": \"sbs_ramp_down_up_apple_c1_b1_NN\",\n           \"testCount\": 2,\n           \"altSources\": \"sbs_ramp_up_down_apple_c1_b1_NN\",\n           \"audioTypes\": [\n               \"ogg\",\n               \"mp3\"\n           ],\n           \"pauseAudio\": \"pause\",\n           \"videoTypes\": [\n               \"webm\",\n               \"mp4\"\n           ],\n           \"attnSources\": \"attentiongrabber\",\n           \"audioSources\": \"video_02\",\n           \"introSources\": \"cropped_book\",\n           \"musicSources\": \"music_02\",\n           \"unpauseAudio\": \"return_after_pause\",\n           \"calibrationLength\": 3000,\n           \"calibrationAudioSources\": \"chimes\",\n           \"calibrationVideoSources\": \"attentiongrabber\"\n       }\n\n```",
             "extends": "ExpFrameBase",
             "uses": [
                 "FullScreen",
                 "MediaReload",
-                "VideoRecord"
+                "VideoRecord",
+                "ExpandAssets"
             ]
         },
         "ExpLookitVideoConsent": {
@@ -798,9 +799,14 @@
             "submodule": "frames",
             "namespace": "",
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 13,
-            "description": "A frame that displays a series of videos to preview, without collecting data as a live experiment. User can go through these at their own pace and video controls are shown. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.\n```json\n\"frames\": {\n   \"my-sample-frame\": {\n       \"id\": \"video-preview\",\n       \"kind\": \"exp-video-preview\",\n       \"text\": \"Here are the videos your child will see in this study. You can watch them ahead of time--please just don't show your child yet!\",\n       \"prompt\": \"My child can NOT see the screen. Start the preview!\",\n       \"videos\": [\n          {\n            \"caption\": \"User-facing text that appears below the video\",\n            \"sources\": [\n              {\n                \"type\": \"video/webm\",\n                \"src\": \"https://url.com/example_intro.webm\"\n              },\n              {\n                \"type\": \"video/mp4\",\n                \"src\": \"https://url.com/example_intro.webm\"\n              }\n            ]\n          }\n        ]\n   }\n\n```",
-            "extends": "ExpFrameBase"
+            "line": 14,
+            "description": "A frame that displays a series of videos to preview, without collecting data as a live experiment. User can go through these at their own pace and video controls are shown. Webcam video is recorded starting once the user presses a button to actually display the videos, so that researchers can check that the participant (infant/child) did not see the videos ahead of time.\n```json\n\"frames\": {\n   \"my-sample-frame\": {\n       \"id\": \"video-preview\",\n       \"kind\": \"exp-video-preview\",\n       \"text\": \"Here are the videos your child will see in this study. You can watch them ahead of time--please just don't show your child yet!\",\n       \"prompt\": \"My child can NOT see the screen. Start the preview!\",\n       \"videos\": [\n          {\n            \"caption\": \"User-facing text that appears below the video\",\n            \"baseDir\": \"https://url.com/\",\n            \"sources\": \"example_intro\",\n            \"videoTypes\": [\"webm\", \"mp4\"]\n          }\n        ]\n   }\n\n```",
+            "extends": "ExpFrameBase",
+            "uses": [
+                "ExpandAssets",
+                "VideoRecord",
+                "MediaReload"
+            ]
         },
         "ExpandAssets": {
             "name": "ExpandAssets",
@@ -812,7 +818,9 @@
             "extension_for": [
                 "ExpLookitDialoguePage",
                 "ExpLookitPreferentialLooking",
-                "ExpLookitStoryPage"
+                "ExpLookitStoryPage",
+                "ExpLookitVideo",
+                "ExpVideoPreview"
             ],
             "module": "exp-player",
             "submodule": "mixins",
@@ -854,7 +862,8 @@
             "plugin_for": [],
             "extension_for": [
                 "ExpLookitPreferentialLooking",
-                "ExpLookitVideo"
+                "ExpLookitVideo",
+                "ExpVideoPreview"
             ],
             "module": "exp-player",
             "submodule": "mixins",
@@ -1059,30 +1068,6 @@
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
             "line": 249,
-            "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that are strings\nrather than objects with 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir should include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
-            "itemtype": "property",
-            "name": "baseDir",
-            "type": "String",
-            "default": "''",
-            "class": "ExpLookitDialoguePage",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 270,
-            "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is `['typeA', 'typeB']` and an audio source\nis given as `intro, the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
-            "itemtype": "property",
-            "name": "audioTypes",
-            "type": "String[]",
-            "default": "['mp3', 'ogg']",
-            "class": "ExpLookitDialoguePage",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 298,
             "description": "Whether to do webcam recording (will wait for webcam\nconnection before starting audio if so)",
             "itemtype": "property",
             "name": "doRecording",
@@ -1093,7 +1078,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 308,
+            "line": 259,
             "description": "Whether to proceed automatically after audio (and hide\nreplay/next buttons)",
             "itemtype": "property",
             "name": "autoProceed",
@@ -1104,7 +1089,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 318,
+            "line": 269,
             "description": "Array of objects describing audio to play at the start of\nthis frame. Each element describes a separate audio segment.",
             "itemtype": "property",
             "name": "audioSources",
@@ -1132,7 +1117,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 380,
+            "line": 331,
             "description": "Text block to display to parent. (Each field is optional)",
             "itemtype": "property",
             "name": "parentTextBlock",
@@ -1165,7 +1150,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 410,
+            "line": 361,
             "description": "Array of images to display and information about their placement",
             "itemtype": "property",
             "name": "images",
@@ -1223,7 +1208,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 479,
+            "line": 430,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -1259,7 +1244,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 535,
+            "line": 486,
             "description": "When one of the images is clicked during a choice frame",
             "itemtype": "event",
             "name": "clickSpeaker",
@@ -1276,7 +1261,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 566,
+            "line": 517,
             "description": "When image audio is started",
             "itemtype": "event",
             "name": "startSpeakerAudio",
@@ -1293,7 +1278,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 585,
+            "line": 536,
             "description": "When image audio is played (recorded even if not completed)",
             "itemtype": "event",
             "name": "playSpeakerAudio",
@@ -1310,7 +1295,7 @@
         },
         {
             "file": "addon/components/exp-lookit-dialogue-page/component.js",
-            "line": 631,
+            "line": 582,
             "description": "When narration audio is completed",
             "itemtype": "event",
             "name": "completeMainAudio",
@@ -2483,43 +2468,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 519,
-            "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
-            "itemtype": "property",
-            "name": "baseDir",
-            "type": "String",
-            "default": "''",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 540,
-            "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
-            "itemtype": "property",
-            "name": "audioTypes",
-            "type": "String[]",
-            "default": "['mp3', 'ogg']",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 568,
-            "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an video source\nis given as [{'stub': 'intro'}], the video source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
-            "itemtype": "property",
-            "name": "videoTypes",
-            "type": "String[]",
-            "default": "['mp4', 'webm']",
-            "class": "ExpLookitPreferentialLooking",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 600,
+            "line": 523,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -2570,7 +2519,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 848,
+            "line": 771,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -2587,7 +2536,7 @@
         },
         {
             "file": "addon/components/exp-lookit-preferential-looking/component.js",
-            "line": 997,
+            "line": 920,
             "description": "Observer that starts recording once recorder is ready. Override to do additional\nstuff at this point!",
             "itemtype": "method",
             "name": "whenPossibleToRecord",
@@ -2982,7 +2931,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 202,
+            "line": 176,
             "description": "Array of objects specifying video src and type for test video (these should be the same video, but multiple sources--e.g. mp4 and webm--are generally needed for cross-browser support). If none provided, skip test phase.\n\nExample value:\n\n```[{'src': 'http://.../video1.mp4', 'type': 'video/mp4'}, {'src': 'http://.../video1.webm', 'type': 'video/webm'}]```",
             "itemtype": "property",
             "name": "sources",
@@ -3006,7 +2955,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 219,
+            "line": 193,
             "description": "Array of objects specifying video src and type for alternate test video, as for sources. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altSources is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).",
             "itemtype": "property",
             "name": "altSources",
@@ -3030,7 +2979,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 232,
+            "line": 206,
             "description": "Array of objects specifying intro video src and type, as for sources.\nIf empty, intro segment will be skipped.",
             "itemtype": "property",
             "name": "introSources",
@@ -3054,7 +3003,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 246,
+            "line": 220,
             "description": "Array of objects specifying attention-grabber video src and type, as for sources. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.",
             "itemtype": "property",
             "name": "attnSources",
@@ -3078,7 +3027,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 258,
+            "line": 232,
             "description": "minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announceLength and the duration of any announcement audio.",
             "itemtype": "property",
             "name": "announceLength",
@@ -3090,7 +3039,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 269,
+            "line": 243,
             "description": "List of objects specifying intro announcement src and type. If empty and minimum announceLength is 0, announcement is skipped.\nExample: `[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]`",
             "itemtype": "property",
             "name": "audioSources",
@@ -3114,7 +3063,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 283,
+            "line": 257,
             "description": "List of objects specifying music audio src and type, as for audioSources.\nIf empty, no music is played.",
             "itemtype": "property",
             "name": "musicSources",
@@ -3142,7 +3091,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 298,
+            "line": 272,
             "description": "Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.",
             "itemtype": "property",
             "name": "testLength",
@@ -3154,7 +3103,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 309,
+            "line": 283,
             "description": "Number of times to play test video before moving on. This is ignored if\ntestLength is set to a finite value.",
             "itemtype": "property",
             "name": "testCount",
@@ -3166,7 +3115,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 321,
+            "line": 295,
             "description": "Whether to do any video recording during this frame. Default true. Set to false for e.g. last frame where just doing an announcement.",
             "itemtype": "property",
             "name": "doRecording",
@@ -3178,7 +3127,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 331,
+            "line": 305,
             "description": "length of single calibration segment in ms. 0 to skip calibration.",
             "itemtype": "property",
             "name": "calibrationLength",
@@ -3190,7 +3139,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 342,
+            "line": 316,
             "description": "Ordered list of positions to show calibration segment in. Options are\n\"center\", \"left\", \"right\". Ignored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationPositions",
@@ -3202,7 +3151,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 354,
+            "line": 328,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration audio (played at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationAudioSources",
@@ -3214,7 +3163,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 378,
+            "line": 352,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\ncalibration video (played from start at each calibration position).\nIgnored if calibrationLength is 0.",
             "itemtype": "property",
             "name": "calibrationVideoSources",
@@ -3226,7 +3175,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 402,
+            "line": 376,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon pausing study",
             "itemtype": "property",
             "name": "pauseAudio",
@@ -3238,7 +3187,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 425,
+            "line": 399,
             "description": "Sources Array of {src: 'url', type: 'MIMEtype'} objects for\naudio played upon unpausing study",
             "itemtype": "property",
             "name": "unpauseAudio",
@@ -3250,7 +3199,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 448,
+            "line": 422,
             "description": "Text to show under \"Study paused / Press space to resume\" when study is paused.\nDefault: (You'll have a moment to turn around again.)",
             "itemtype": "property",
             "name": "pauseText",
@@ -3262,43 +3211,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 461,
-            "description": "Base directory for where to find stimuli. Any image src\nvalues that are not full paths will be expanded by prefixing\nwith `baseDir` + `img/`. Any audio/video src values that give\na value for 'stub' rather than 'src' and 'type' will be\nexpanded out to\n`baseDir/avtype/[stub].avtype`, where the potential avtypes\nare given by audioTypes and videoTypes.\n\nNote that baseDir SHOULD include a trailing slash\n(e.g., `http://stimuli.org/myexperiment/`, not\n`http://stimuli.org/myexperiment`)",
-            "itemtype": "property",
-            "name": "baseDir",
-            "type": "String",
-            "default": "''",
-            "class": "ExpLookitVideo",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-video/component.js",
-            "line": 482,
-            "description": "List of audio types to expect for any audio specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an audio source\nis given as [{'stub': 'intro'}], the audio source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
-            "itemtype": "property",
-            "name": "audioTypes",
-            "type": "String[]",
-            "default": "['mp3', 'ogg']",
-            "class": "ExpLookitVideo",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-video/component.js",
-            "line": 510,
-            "description": "List of video types to expect for any video specified just\nwith a string rather than with a list of src/type pairs.\nIf audioTypes is ['typeA', 'typeB'] and an video source\nis given as [{'stub': 'intro'}], the video source will be\nexpanded out to\n\n```json\n                [\n                       {\n                           src: 'baseDir' + 'typeA/intro.typeA',\n                           type: 'audio/typeA'\n                       },\n                       {\n                           src: 'baseDir' + 'typeB/intro.typeB',\n                           type: 'audio/typeB'\n                       }\n               ]\n```",
-            "itemtype": "property",
-            "name": "videoTypes",
-            "type": "String[]",
-            "default": "['mp4', 'webm']",
-            "class": "ExpLookitVideo",
-            "module": "exp-player",
-            "submodule": "frames"
-        },
-        {
-            "file": "addon/components/exp-lookit-video/component.js",
-            "line": 542,
+            "line": 439,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",
@@ -3329,7 +3242,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 754,
+            "line": 651,
             "description": "Start of EACH calibration segment",
             "itemtype": "event",
             "name": "startCalibration",
@@ -3346,7 +3259,7 @@
         },
         {
             "file": "addon/components/exp-lookit-video/component.js",
-            "line": 950,
+            "line": 781,
             "description": "Observer that starts recording once recorder is ready. Override to do additional\nstuff at this point!",
             "itemtype": "method",
             "name": "whenPossibleToRecord",
@@ -3607,7 +3520,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 102,
+            "line": 105,
             "description": "A series of preview videos to display within a single frame, defined as an array of objects.",
             "itemtype": "property",
             "name": "videos",
@@ -3623,7 +3536,7 @@
                 },
                 {
                     "name": "sources",
-                    "description": "Array of {src: 'url', type: 'MIMEtype'} objects.",
+                    "description": "String indicating video path relative to baseDir (see baseDir), OR Array of {src: 'url', type: 'MIMEtype'} objects.",
                     "type": "Object[]"
                 },
                 {
@@ -3635,7 +3548,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 144,
+            "line": 147,
             "description": "Text on the button prompt asking the user to continue to the videos",
             "itemtype": "property",
             "name": "prompt",
@@ -3646,7 +3559,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 162,
+            "line": 165,
             "description": "Informational text to display to the user before videos are shown, along with button to continue",
             "itemtype": "property",
             "name": "text",
@@ -3657,7 +3570,7 @@
         },
         {
             "file": "addon/components/exp-video-preview/component.js",
-            "line": 177,
+            "line": 180,
             "description": "Parameters captured and sent to the server",
             "itemtype": "method",
             "name": "serializeContent",

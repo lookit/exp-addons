@@ -356,55 +356,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAsset
                     description: &#x27;Whether this is a frame where the user needs to click to select one of the images before proceeding&#x27;
                 },
                 /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with &#x60;baseDir&#x60; + &#x60;img/&#x60;. Any audio/video src values that are strings
-                 * rather than objects with &#x27;src&#x27; and &#x27;type&#x27; will be
-                 * expanded out to
-                 * &#x60;baseDir/avtype/[stub].avtype&#x60;, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir should include a trailing slash
-                 * (e.g., &#x60;http://stimuli.org/myexperiment/&#x60;, not
-                 * &#x60;http://stimuli.org/myexperiment&#x60;)
-                 *
-                 * @property {String} baseDir
-                 * @default &#x27;&#x27;
-                 */
-                baseDir: {
-                    type: &#x27;string&#x27;,
-                    default: &#x27;&#x27;,
-                    description: &#x27;Base directory for all stimuli&#x27;
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is &#x60;[&#x27;typeA&#x27;, &#x27;typeB&#x27;]&#x60; and an audio source
-                 * is given as &#x60;intro, the audio source will be
-                 * expanded out to
-                 *
-&#x60;&#x60;&#x60;json
-                 [
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeA/intro.typeA&#x27;,
-                            type: &#x27;audio/typeA&#x27;
-                        },
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeB/intro.typeB&#x27;,
-                            type: &#x27;audio/typeB&#x27;
-                        }
-                ]
-&#x60;&#x60;&#x60;
-                 *
-                 * @property {String[]} audioTypes
-                 * @default [&#x27;mp3&#x27;, &#x27;ogg&#x27;]
-                 */
-                audioTypes: {
-                    type: &#x27;array&#x27;,
-                    default: [&#x27;mp3&#x27;, &#x27;ogg&#x27;],
-                    description: &#x27;List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs&#x27;
-                },
-                /**
                  * Whether to do webcam recording (will wait for webcam
                  * connection before starting audio if so)
                  *
