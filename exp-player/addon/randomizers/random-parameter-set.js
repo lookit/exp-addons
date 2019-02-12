@@ -434,6 +434,7 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     return [frames, {'conditionNum': parameterSetIndex, 'parameterSet': parameterSet}];
 
 };
+
 export default randomizer;
 
 // Export helper functions to support unit testing

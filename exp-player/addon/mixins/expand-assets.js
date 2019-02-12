@@ -1,9 +1,5 @@
 import Ember from 'ember';
 
-let {
-    $
-} = Ember;
-
 /**
  * @module exp-player
  * @submodule mixins
@@ -200,7 +196,6 @@ export default Ember.Mixin.create({
                     fullAsset = this.baseDir + 'img/' + asset;
                 }
                 return fullAsset;
-                break;
             case 'audio':
             case 'video':
                 var types = typesDict[type];
@@ -215,7 +210,6 @@ export default Ember.Mixin.create({
                     }
                 }
                 return fullAsset;
-                break;
             default:
                 throw "Unrecognized type of asset to expand. Options are 'image', 'audio', and 'video'.";
         }
@@ -234,6 +228,7 @@ export default Ember.Mixin.create({
 
         var _this = this;
         var assetTypes = ['audio', 'video', 'image'];
+        var sources;
 
         assetTypes.forEach((type) => {
             if (_this.get('assetsToExpand', {}).hasOwnProperty(type)) {
@@ -241,14 +236,14 @@ export default Ember.Mixin.create({
                 srcParameterNames.forEach((paraName) => {
                     var paraPieces = paraName.split('/');
                     if (paraPieces.length == 1) { // If we have the full parameter name, just expand that param
-                        var sources = _this.get(paraName);
+                        sources = _this.get(paraName);
                         if (sources) {
                             _this.set(paraName + '_parsed', _this.expandAsset(sources, type));
                         }
                     } else if (paraPieces.length == 2) { // If we have something of the form parameterName/propName
                         var baseName = paraPieces[0];
                         var propName = paraPieces[1]; //paraPieces.slice(1,).join('/');
-                        var sources = _this.get(baseName, {});
+                        sources = _this.get(baseName, {});
                         if (sources) {
                             if (Array.isArray(sources)) {  //expand this[parameterName][i][propName] for all i
                                 sources.forEach((elem) => {
