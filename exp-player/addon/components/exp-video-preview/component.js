@@ -4,6 +4,7 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
+import ExpandAssets from '../../mixins/expand-assets';
 
 /**
  * @module exp-player
@@ -22,16 +23,9 @@ import VideoRecord from '../../mixins/video-record';
         "videos": [
            {
              "caption": "User-facing text that appears below the video",
-             "sources": [
-               {
-                 "type": "video/webm",
-                 "src": "https://url.com/example_intro.webm"
-               },
-               {
-                 "type": "video/mp4",
-                 "src": "https://url.com/example_intro.webm"
-               }
-             ]
+             "baseDir": "https://url.com/",
+             "sources": "example_intro",
+             "videoTypes": ["webm", "mp4"]
            }
          ]
     }
@@ -39,8 +33,11 @@ import VideoRecord from '../../mixins/video-record';
  * ```
  * @class ExpVideoPreview
  * @extends ExpFrameBase
+ * @uses ExpandAssets
+ * @uses VideoRecord
+ * @uses MediaReload
  */
-export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, ExpandAssets, {
     layout,
     videoIndex: 0,
 
@@ -62,6 +59,12 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     disableRecord: Ember.computed('recorder.hasCamAccess', 'recorderReady', function() {
         return !(this.get('recorder.hasCamAccess') && this.get('recorderReady'));
     }),
+
+    assetsToExpand: {
+        'audio': [],
+        'video': ['videos/sources'],
+        'image': []
+    },
 
     actions: {
         accept() {
@@ -104,7 +107,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                  *
                  * @property {Array} videos
                  *   @param {String} caption Some text to appear under this video
-                 *   @param {Object[]} sources Array of {src: 'url', type: 'MIMEtype'} objects.
+                 *   @param {Object[]} sources String indicating video path relative to baseDir (see baseDir), OR Array of {src: 'url', type: 'MIMEtype'} objects.
                  *   @param {String} imgSrc URL of image to display (optional; each preview video should designate either sources or imgSrc)
                  */
                 videos: {
