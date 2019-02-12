@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ExpLookitVideo - exp-player</title>
+    <title>ExpLookitPreferentialLooking - exp-player</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <link rel="stylesheet" href="https://yui-s.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
@@ -103,7 +103,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ExpLookitVideo Class</h1>
+<h1>ExpLookitPreferentialLooking Class</h1>
 <div class="box meta">
         <div class="uses">
             Uses
@@ -120,7 +120,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-video_component.js.html#l18"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:18</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l18"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:18</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -130,7 +130,7 @@
 
 <div>
 
-    <img src="../assets/screenshots/ExpLookitVideo.png" class="class-screenshot">
+    <img src="../assets/screenshots/ExpLookitPreferentialLooking.png" class="class-screenshot">
 
 </div>
 
@@ -139,16 +139,30 @@
 Trial consists of four phases, each of which is optional.</p>
 <ol>
 <li>
-<p>Announcement: The audio in audioSources is played while the attnSources video is played centrally, looping as needed. This lasts for announceLength seconds or the duration of the audio, whichever is longer. To skip this phase, set announceLength to 0 and do not provide audioSources.</p>
+<p>Announcement: The audio in announcementAudio is played while the announcementVideo
+video is played centrally, looping as needed. This lasts for announcementLength seconds
+or the duration of the audio, whichever is longer. To skip this phase, set
+announcementLength to 0 and do not provide announcementAudio.</p>
 </li>
 <li>
-<p>Intro: The introSources video is played centrally until it ends. To skip this phase, do not provide introSources.</p>
+<p>Intro: The introVideo video is played centrally until it ends. To skip this phase,
+do not provide introVideo.</p>
 </li>
 <li>
-<p>Calibration: The video in calibrationVideoSources is played (looping as needed) in each of the locations specified in calibrationPositions in turn, remaining in each position for calibrationLength ms. At the start of each position the audio in calibrationAudioSources is played once. (Audio will be paused and restarted if it is longer than calibrationLength.) Set calibrationLength to 0 to skip calibration.</p>
+<p>Calibration: The video in calibrationVideo is played (looping as needed) in each of
+the locations specified in calibrationPositions in turn, remaining in each position for
+calibrationLength ms. At the start of each position the audio in calibrationAudio is
+played once. (Audio will be paused and restarted if it is longer than calibrationLength.)
+Set calibrationLength to 0 to skip calibration.</p>
 </li>
 <li>
-<p>Test: The video in sources and audio in musicSources (optional) are played until either: testLength seconds have elapsed (with video looping if needed), or the video has been played testCount times. If testLength is set, it overrides testCount - for example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times. If the participant pauses the study during the test phase, then after restarting the trial, the video in altSources will be used again (defaulting to the same video if altSources is not provided). To skip this phase, do not provide sources.</p>
+<p>Test: The video in testVideo and audio in testAudio (optional) are played until
+either: testLength seconds have elapsed (with video looping if needed), or the video
+has been played testCount times. If testLength is set, it overrides testCount - for
+example if testCount is 1 and testLength is 30, a 10-second video will be played 3 times.
+If the participant pauses the study during the test phase, then after restarting the
+trial, the video in altTestVideo will be used again (defaulting to the same video if
+altTestVideo is not provided).</p>
 </li>
 </ol>
 <p>Specifying media locations:
@@ -165,10 +179,11 @@ a list of src/type pairs with full paths like this:</p>
        }
    ]
 </code></pre>
-<p>OR you can provide a single string 'stub', which will be expanded
-based on the parameter baseDir and the media types expected - either audioTypes or
-videoTypes as appropriate. For example, if you provide the audio source <code>intro</code>
-and baseDir is <a href="https://mystimuli.org/mystudy/">https://mystimuli.org/mystudy/</a>, with audioTypes ['mp3', 'ogg'], then this
+<p>OR you can provide a string 'stub', which will be expanded
+based on the parameter baseDir. Expected audio/video locations will be based on either audioTypes or
+videoTypes as appropriate; images will be expected to all be in an img/ subdirectory.
+For example, if you provide the audio source <code>intro</code>,
+and baseDir is <code>https://mystimuli.org/mystudy/</code>, with audioTypes <code>['mp3', 'ogg']</code>, then this
 will be expanded to:</p>
 <pre class="code prettyprint"><code class="language-json">                [
                        {
@@ -185,38 +200,38 @@ will be expanded to:</p>
 new version of your stimuli without changing every URL. You can mix source objects with
 full URLs and those using stubs within the same directory. However, any stimuli
 specified using stubs MUST be
-organized as expected under baseDir/MEDIATYPE/filename.MEDIATYPE.</p>
+organized as expected under <code>baseDir/MEDIATYPE/filename.MEDIATYPE</code>.</p>
 <p>This frame is displayed fullscreen; if the frame before it is not, that frame
 needs to include a manual &quot;next&quot; button so that there's a user interaction
 event to trigger fullscreen mode. (Browsers don't allow us to switch to FS
 without a user event.)</p>
 <p>Example usage:</p>
-<pre class="code prettyprint"><code class="language-json">       &quot;sample-intermodal-trial-2&quot;: {
-           &quot;kind&quot;: &quot;exp-lookit-video&quot;,
-           &quot;isLast&quot;: false,
-           &quot;baseDir&quot;: &quot;https://s3.amazonaws.com/lookitcontents/intermodal/&quot;,
-           &quot;sources&quot;: &quot;sbs_ramp_down_up_apple_c1_b1_NN&quot;,
-           &quot;testCount&quot;: 2,
-           &quot;altSources&quot;: &quot;sbs_ramp_up_down_apple_c1_b1_NN&quot;,
-           &quot;audioTypes&quot;: [
-               &quot;ogg&quot;,
-               &quot;mp3&quot;
-           ],
-           &quot;pauseAudio&quot;: &quot;pause&quot;,
-           &quot;videoTypes&quot;: [
-               &quot;webm&quot;,
-               &quot;mp4&quot;
-           ],
-           &quot;attnSources&quot;: &quot;attentiongrabber&quot;,
-           &quot;audioSources&quot;: &quot;video_02&quot;,
-           &quot;introSources&quot;: &quot;cropped_book&quot;,
-           &quot;musicSources&quot;: &quot;music_02&quot;,
-           &quot;unpauseAudio&quot;: &quot;return_after_pause&quot;,
-           &quot;calibrationLength&quot;: 3000,
-           &quot;calibrationAudioSources&quot;: &quot;chimes&quot;,
-           &quot;calibrationVideoSources&quot;: &quot;attentiongrabber&quot;
-       }
-
+<pre class="code prettyprint"><code class="language-json">   &quot;sample-trial&quot;: {
+       &quot;kind&quot;: &quot;exp-lookit-preferential-looking&quot;,
+       &quot;isLast&quot;: false,
+       &quot;baseDir&quot;: &quot;https://s3.amazonaws.com/lookitcontents/labelsconcepts/&quot;,
+       &quot;leftImage&quot;: &quot;stapler_test_02.jpg&quot;,
+       &quot;testLength&quot;: 8,
+       &quot;audioTypes&quot;: [
+           &quot;ogg&quot;,
+           &quot;mp3&quot;
+       ],
+       &quot;pauseAudio&quot;: &quot;pause&quot;,
+       &quot;rightImage&quot;: &quot;novel_02.jpg&quot;,
+       &quot;videoTypes&quot;: [
+           &quot;webm&quot;,
+           &quot;mp4&quot;
+       ],
+       &quot;announcementVideo&quot;: &quot;attentiongrabber&quot;,
+       &quot;announcementAudio&quot;: &quot;video_02&quot;,
+       &quot;introVideo&quot;: &quot;cropped_book&quot;,
+       &quot;testAudio&quot;: &quot;400Hz_tones&quot;,
+       &quot;unpauseAudio&quot;: &quot;return_after_pause&quot;,
+       &quot;calibrationLength&quot;: 0,
+       &quot;calibrationAudio&quot;: &quot;chimes&quot;,
+       &quot;calibrationVideo&quot;: &quot;attentiongrabber&quot;,
+       &quot;loopTestAudio&quot;: false
+   }
 </code></pre>
 
 </div>
@@ -267,23 +282,27 @@ without a user event.)</p>
 
                     <ul class="index-list properties extends">
                             <li class="index-item property">
-                                <a href="#property_altSources">altSources</a>
+                                <a href="#property_allowPauseDuringTest">allowPauseDuringTest</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_announceLength">announceLength</a>
+                                <a href="#property_altTestVideo">altTestVideo</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_announcementAudio">announcementAudio</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_announcementLength">announcementLength</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_announcementVideo">announcementVideo</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_assetsToExpand">assetsToExpand</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_attnSources">attnSources</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_audioSources">audioSources</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -295,7 +314,7 @@ without a user event.)</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_calibrationAudioSources">calibrationAudioSources</a>
+                                <a href="#property_calibrationAudio">calibrationAudio</a>
 
                             </li>
                             <li class="index-item property">
@@ -307,7 +326,11 @@ without a user event.)</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_calibrationVideoSources">calibrationVideoSources</a>
+                                <a href="#property_calibrationVideo">calibrationVideo</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_centerImage">centerImage</a>
 
                             </li>
                             <li class="index-item property inherited inherited">
@@ -327,11 +350,15 @@ without a user event.)</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_introSources">introSources</a>
+                                <a href="#property_introVideo">introVideo</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_musicSources">musicSources</a>
+                                <a href="#property_leftImage">leftImage</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_loopTestAudio">loopTestAudio</a>
 
                             </li>
                             <li class="index-item property">
@@ -343,7 +370,11 @@ without a user event.)</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_sources">sources</a>
+                                <a href="#property_right">right</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_testAudio">testAudio</a>
 
                             </li>
                             <li class="index-item property">
@@ -352,6 +383,10 @@ without a user event.)</p>
                             </li>
                             <li class="index-item property">
                                 <a href="#property_testLength">testLength</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_testVideo">testVideo</a>
 
                             </li>
                             <li class="index-item property">
@@ -525,6 +560,18 @@ event sent by a particular frame</p>
                 <li class="arg">
                         <code>videoID</code>
                 </li>
+                <li class="arg">
+                        <code>rightImage</code>
+                </li>
+                <li class="arg">
+                        <code>leftImage</code>
+                </li>
+                <li class="arg">
+                        <code>centerImage</code>
+                </li>
+                <li class="arg">
+                        <code>testLength</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -544,7 +591,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l439"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:439</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l523"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:523</code></a>
         </p>
 
 
@@ -588,6 +635,50 @@ event sent by a particular frame</p>
 
                     <div class="param-description">
                         <p>The ID of any webcam video recorded during this frame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">rightImage</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>URL of image shown on right (given as a property of the frame)</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">leftImage</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>URL of image shown on left (given as a property of the frame)</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">centerImage</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+                    <div class="param-description">
+                        <p>URL of image shown at center (given as a property of the frame)</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">testLength</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+
+                    <div class="param-description">
+                        <p>seconds to display images/loop videos (given as a property of the frame), if using time-based limit</p>
 
                     </div>
 
@@ -655,7 +746,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l781"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:781</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l920"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:920</code></a>
         </p>
 
 
@@ -677,8 +768,36 @@ stuff at this point!</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_altSources" class="property item">
-    <h3 class="name"><code>altSources</code></h3>
+<div id="property_allowPauseDuringTest" class="property item">
+    <h3 class="name"><code>allowPauseDuringTest</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l340"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:340</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether to allow participant to pause study during test. If no, study still
+pauses but upon unpausing moves to next trial. If yes, study restarts from
+beginning upon unpausing (with alternate sources).</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_altTestVideo" class="property item">
+    <h3 class="name"><code>altTestVideo</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
@@ -688,14 +807,14 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l216"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:216</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Array of objects specifying video src and type for alternate test video, as for sources. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altSources is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).</p>
+        <p>Array of objects specifying video src and type for alternate test video, as for testVideo. Alternate test video will be shown if the first test is paused, after restarting the trial. If alternate test video is also paused, we just move on. If altTestVideo is not provided, defaults to playing same test video again (but still only one pause of test video allowed per trial).</p>
 
     </div>
 
@@ -725,58 +844,8 @@ stuff at this point!</p>
             </li>
         </ul>
 </div>
-<div id="property_announceLength" class="property item">
-    <h3 class="name"><code>announceLength</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l232"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:232</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announceLength and the duration of any announcement audio.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 2</p>
-
-
-</div>
-<div id="property_assetsToExpand" class="property item inherited">
-    <h3 class="name"><code>assetsToExpand</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/ExpandAssets.html#property_assetsToExpand">ExpandAssets</a>:
-        <a href="../files/addon_mixins_expand-assets.js.html#l95"><code>addon&#x2F;mixins&#x2F;expand-assets.js:95</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Object describing which properties may need expansion
-    </div>
-
-
-
-</div>
-<div id="property_attnSources" class="property item">
-    <h3 class="name"><code>attnSources</code></h3>
+<div id="property_announcementAudio" class="property item">
+    <h3 class="name"><code>announcementAudio</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
@@ -786,62 +855,14 @@ stuff at this point!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l220"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:220</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l266"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:266</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Array of objects specifying attention-grabber video src and type, as for sources. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> []</p>
-
-
-        <h4>Sub-properties:</h4>
-
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">src</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-            <li class="param">
-                    <code class="param-name">type</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-                <div class="param-description">
-                     
-                </div>
-
-            </li>
-        </ul>
-</div>
-<div id="property_audioSources" class="property item">
-    <h3 class="name"><code>audioSources</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l243"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:243</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>List of objects specifying intro announcement src and type. If empty and minimum announceLength is 0, announcement is skipped.
+        <p>List of objects specifying intro announcement src and type. If empty and minimum announcementLength is 0, announcement is skipped.
 Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': 'http://.../audio1.ogg', 'type': 'audio/ogg'}]</code></p>
 
     </div>
@@ -871,6 +892,104 @@ Example: <code>[{'src': 'http://.../audio1.mp3', 'type': 'audio/mp3'}, {'src': '
 
             </li>
         </ul>
+</div>
+<div id="property_announcementLength" class="property item">
+    <h3 class="name"><code>announcementLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l255"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:255</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>minimum amount of time to show attention-getter in seconds. Announcement phase (attention-getter plus audio) will last the minimum of announcementLength and the duration of any announcement audio.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 2</p>
+
+
+</div>
+<div id="property_announcementVideo" class="property item">
+    <h3 class="name"><code>announcementVideo</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l243"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:243</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Array of objects specifying attention-grabber video src and type, as for testVideo. The attention-grabber video is shown (looping) during the announcement phase and when the study is paused.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+        <h4>Sub-properties:</h4>
+
+        <ul class="params-list">
+            <li class="param">
+                    <code class="param-name">src</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+            <li class="param">
+                    <code class="param-name">type</code>
+                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+                <div class="param-description">
+                     
+                </div>
+
+            </li>
+        </ul>
+</div>
+<div id="property_assetsToExpand" class="property item inherited">
+    <h3 class="name"><code>assetsToExpand</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_assetsToExpand">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l95"><code>addon&#x2F;mixins&#x2F;expand-assets.js:95</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Object describing which properties may need expansion
+    </div>
+
+
+
 </div>
 <div id="property_audioTypes" class="property item inherited">
     <h3 class="name"><code>audioTypes</code></h3>
@@ -947,8 +1066,8 @@ does not end in a slash, one will be added.
 
 
 </div>
-<div id="property_calibrationAudioSources" class="property item">
-    <h3 class="name"><code>calibrationAudioSources</code></h3>
+<div id="property_calibrationAudio" class="property item">
+    <h3 class="name"><code>calibrationAudio</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
 
 
@@ -958,7 +1077,7 @@ does not end in a slash, one will be added.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l328"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:328</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l409"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:409</code></a>
         </p>
 
 
@@ -986,7 +1105,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l305"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:305</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l386"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:386</code></a>
         </p>
 
 
@@ -1012,7 +1131,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l316"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:316</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l397"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:397</code></a>
         </p>
 
 
@@ -1028,8 +1147,8 @@ Ignored if calibrationLength is 0.</p>
 
 
 </div>
-<div id="property_calibrationVideoSources" class="property item">
-    <h3 class="name"><code>calibrationVideoSources</code></h3>
+<div id="property_calibrationVideo" class="property item">
+    <h3 class="name"><code>calibrationVideo</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
 
 
@@ -1039,7 +1158,7 @@ Ignored if calibrationLength is 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l352"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:352</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l433"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:433</code></a>
         </p>
 
 
@@ -1053,6 +1172,33 @@ Ignored if calibrationLength is 0.</p>
     </div>
 
         <p><strong>Default:</strong> []</p>
+
+
+</div>
+<div id="property_centerImage" class="property item">
+    <h3 class="name"><code>centerImage</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l302"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:302</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>URL of image to show at center, if any. Can be a full URL or
+a stub that will be appended to <code>baseDir</code> + <code>img/</code> (see
+baseDir).</p>
+
+    </div>
+
 
 
 </div>
@@ -1095,7 +1241,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l295"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:295</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l376"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:376</code></a>
         </p>
 
 
@@ -1164,8 +1310,8 @@ generally used that way.
 
 
 </div>
-<div id="property_introSources" class="property item">
-    <h3 class="name"><code>introSources</code></h3>
+<div id="property_introVideo" class="property item">
+    <h3 class="name"><code>introVideo</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
@@ -1175,14 +1321,14 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l206"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:206</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l229"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:229</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Array of objects specifying intro video src and type, as for sources.
+        <p>Array of objects specifying intro video src and type, as for testVideo.
 If empty, intro segment will be skipped.</p>
 
     </div>
@@ -1213,8 +1359,142 @@ If empty, intro segment will be skipped.</p>
             </li>
         </ul>
 </div>
-<div id="property_musicSources" class="property item">
-    <h3 class="name"><code>musicSources</code></h3>
+<div id="property_leftImage" class="property item">
+    <h3 class="name"><code>leftImage</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l280"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:280</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>URL of image to show on left, if any. Can be a full URL or a
+stub that will be appended to <code>baseDir</code> + <code>img/</code> (see
+baseDir).</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_loopTestAudio" class="property item">
+    <h3 class="name"><code>loopTestAudio</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l329"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:329</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether test audio should loop</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_pauseAudio" class="property item">
+    <h3 class="name"><code>pauseAudio</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l457"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:457</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Sources Array of {src: 'url', type: 'MIMEtype'} objects for
+audio played upon pausing study</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+</div>
+<div id="property_pauseText" class="property item">
+    <h3 class="name"><code>pauseText</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l506"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:506</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Text to show under &quot;Study paused / Press space to resume&quot; when study is paused.
+Default: (You'll have a moment to turn around again.)</p>
+
+    </div>
+
+        <p><strong>Default:</strong> []</p>
+
+
+</div>
+<div id="property_right" class="property item">
+    <h3 class="name"><code>right</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l291"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:291</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>URL of image to show on right, if any. Can be a full URL or a
+stub that will be appended to <code>baseDir</code> + <code>img/</code> (see
+baseDir).</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_testAudio" class="property item">
+    <h3 class="name"><code>testAudio</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
@@ -1224,15 +1504,15 @@ If empty, intro segment will be skipped.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l257"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:257</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l314"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:314</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of objects specifying music audio src and type, as for audioSources.
-If empty, no music is played.</p>
+        <p>List of objects specifying test audio src and type, as for announcementAudio.
+If empty, no additional test audio is played besides any audio in testVideo.</p>
 
     </div>
 
@@ -1243,7 +1523,7 @@ If empty, no music is played.</p>
 
         <ul class="params-list">
             <li class="param">
-                    <code class="param-name">musicSources</code>
+                    <code class="param-name">testAudio</code>
                     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
 
                 <div class="param-description">
@@ -1271,9 +1551,9 @@ If empty, no music is played.</p>
             </li>
         </ul>
 </div>
-<div id="property_pauseAudio" class="property item">
-    <h3 class="name"><code>pauseAudio</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+<div id="property_testCount" class="property item">
+    <h3 class="name"><code>testCount</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
 
 
 
@@ -1282,25 +1562,25 @@ If empty, no music is played.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l376"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:376</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l364"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:364</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-audio played upon pausing study</p>
+        <p>Number of times to play test video before moving on. This is ignored if
+testLength is set to a finite value.</p>
 
     </div>
 
-        <p><strong>Default:</strong> []</p>
+        <p><strong>Default:</strong> 1</p>
 
 
 </div>
-<div id="property_pauseText" class="property item">
-    <h3 class="name"><code>pauseText</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+<div id="property_testLength" class="property item">
+    <h3 class="name"><code>testLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
 
 
 
@@ -1309,24 +1589,23 @@ audio played upon pausing study</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l422"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:422</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l353"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:353</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Text to show under &quot;Study paused / Press space to resume&quot; when study is paused.
-Default: (You'll have a moment to turn around again.)</p>
+        <p>Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.</p>
 
     </div>
 
-        <p><strong>Default:</strong> []</p>
+        <p><strong>Default:</strong> Infinity</p>
 
 
 </div>
-<div id="property_sources" class="property item">
-    <h3 class="name"><code>sources</code></h3>
+<div id="property_testVideo" class="property item">
+    <h3 class="name"><code>testVideo</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
 
 
@@ -1336,7 +1615,7 @@ Default: (You'll have a moment to turn around again.)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l176"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:176</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l199"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:199</code></a>
         </p>
 
 
@@ -1375,59 +1654,6 @@ Default: (You'll have a moment to turn around again.)</p>
             </li>
         </ul>
 </div>
-<div id="property_testCount" class="property item">
-    <h3 class="name"><code>testCount</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l283"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:283</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Number of times to play test video before moving on. This is ignored if
-testLength is set to a finite value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1</p>
-
-
-</div>
-<div id="property_testLength" class="property item">
-    <h3 class="name"><code>testLength</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l272"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:272</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Length to loop test videos, in seconds. Set if you want a time-based limit. E.g., setting testLength to 20 means that the first 20 seconds of the video will be played, with shorter videos looping until they get to 20s. Leave out or set to Infinity  to play the video through to the end a set number of times instead. If a testLength is set, it overrides any value set in testCount.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> Infinity</p>
-
-
-</div>
 <div id="property_unpauseAudio" class="property item">
     <h3 class="name"><code>unpauseAudio</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -1439,7 +1665,7 @@ testLength is set to a finite value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-video_component.js.html#l399"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:399</code></a>
+        <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l480"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:480</code></a>
         </p>
 
 
@@ -1447,7 +1673,10 @@ testLength is set to a finite value.</p>
 
     <div class="description">
         <p>Sources Array of {src: 'url', type: 'MIMEtype'} objects for
-audio played upon unpausing study</p>
+audio played upon unpausing study. Unpausing audio will always be played
+before proceeding to next trial, even if this trial will not be redone
+(e.g. because it was paused during test and allowPauseDuringTest is
+set to false)</p>
 
     </div>
 
@@ -1617,7 +1846,7 @@ expanded out to
                         <div class="meta">
                                     <p>
                                     Defined in
-                            <a href="../files/addon_components_exp-lookit-video_component.js.html#l651"><code>addon&#x2F;components&#x2F;exp-lookit-video&#x2F;component.js:651</code></a>
+                            <a href="../files/addon_components_exp-lookit-preferential-looking_component.js.html#l771"><code>addon&#x2F;components&#x2F;exp-lookit-preferential-looking&#x2F;component.js:771</code></a>
                             </p>
                     
                     

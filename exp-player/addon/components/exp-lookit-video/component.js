@@ -4,6 +4,7 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 import MediaReload from '../../mixins/media-reload';
 import VideoRecord from '../../mixins/video-record';
+import ExpandAssets from '../../mixins/expand-assets';
 
 let {
     $
@@ -41,16 +42,9 @@ let {
         }
     ]
 ```
-* OR you can provide a list with a single object with a 'stub', which will be expanded
+* OR you can provide a single string 'stub', which will be expanded
 * based on the parameter baseDir and the media types expected - either audioTypes or
-* videoTypes as appropriate. For example, if you provide the audio source
-```json
-    [
-        {
-            'stub': 'intro'
-        }
-    ]
-```
+* videoTypes as appropriate. For example, if you provide the audio source `intro`
 * and baseDir is https://mystimuli.org/mystudy/, with audioTypes ['mp3', 'ogg'], then this
 * will be expanded to:
 ```json
@@ -83,66 +77,26 @@ let {
             "kind": "exp-lookit-video",
             "isLast": false,
             "baseDir": "https://s3.amazonaws.com/lookitcontents/intermodal/",
-            "sources": [
-                {
-                    "stub": "sbs_ramp_down_up_apple_c1_b1_NN"
-                }
-            ],
+            "sources": "sbs_ramp_down_up_apple_c1_b1_NN",
             "testCount": 2,
-            "altSources": [
-                {
-                    "stub": "sbs_ramp_up_down_apple_c1_b1_NN"
-                }
-            ],
+            "altSources": "sbs_ramp_up_down_apple_c1_b1_NN",
             "audioTypes": [
                 "ogg",
                 "mp3"
             ],
-            "pauseAudio": [
-                {
-                    "stub": "pause"
-                }
-            ],
+            "pauseAudio": "pause",
             "videoTypes": [
                 "webm",
                 "mp4"
             ],
-            "attnSources": [
-                {
-                    "stub": "attentiongrabber"
-                }
-            ],
-            "audioSources": [
-                {
-                    "stub": "video_02"
-                }
-            ],
-            "introSources": [
-                {
-                    "stub": "cropped_book"
-                }
-            ],
-            "musicSources": [
-                {
-                    "stub": "music_02"
-                }
-            ],
-            "unpauseAudio": [
-                {
-                    "stub": "return_after_pause"
-                }
-            ],
+            "attnSources": "attentiongrabber",
+            "audioSources": "video_02",
+            "introSources": "cropped_book",
+            "musicSources": "music_02",
+            "unpauseAudio": "return_after_pause",
             "calibrationLength": 3000,
-            "calibrationAudioSources": [
-                {
-                    "stub": "chimes"
-                }
-            ],
-            "calibrationVideoSources": [
-                {
-                    "stub": "attentiongrabber"
-                }
-            ]
+            "calibrationAudioSources": "chimes",
+            "calibrationVideoSources": "attentiongrabber"
         }
 
 * ```
@@ -151,17 +105,37 @@ let {
 * @uses FullScreen
 * @uses MediaReload
 * @uses VideoRecord
+* @uses ExpandAssets
 */
 
 // TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, ExpandAssets, {
     layout: layout,
     type: 'exp-lookit-video',
 
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: 'experiment-player',
     fsButtonID: 'fsButton',
+
+    assetsToExpand: {
+        'audio': [
+            'audioSources',
+            'musicSources',
+            'calibrationAudioSources',
+            'pauseAudio',
+            'unpauseAudio'
+        ],
+        'video': [
+            'sources',
+            'altSources',
+            'introSources',
+            'attnSources',
+            'calibrationVideoSources'
+        ],
+        'image': [
+        ]
+    },
 
     // Override setting in VideoRecord mixin - only use camera if doing recording
     doUseCamera: Ember.computed.alias('doRecording'),
@@ -457,83 +431,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     type: 'string',
                     description: 'Text to show under Study paused when study is paused.',
                     default: "(You'll have a moment to turn around again.)"
-                },
-                /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with `baseDir` + `img/`. Any audio/video src values that give
-                 * a value for 'stub' rather than 'src' and 'type' will be
-                 * expanded out to
-                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir SHOULD include a trailing slash
-                 * (e.g., `http://stimuli.org/myexperiment/`, not
-                 * `http://stimuli.org/myexperiment`)
-                 *
-                 * @property {String} baseDir
-                 * @default ''
-                 */
-                baseDir: {
-                    type: 'string',
-                    default: '',
-                    description: 'Base directory for all stimuli'
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is ['typeA', 'typeB'] and an audio source
-                 * is given as [{'stub': 'intro'}], the audio source will be
-                 * expanded out to
-                 *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/intro.typeA',
-                            type: 'audio/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/intro.typeB',
-                            type: 'audio/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} audioTypes
-                 * @default ['mp3', 'ogg']
-                 */
-                audioTypes: {
-                    type: 'array',
-                    default: ['mp3', 'ogg'],
-                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
-                },
-                /**
-                 * List of video types to expect for any video specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is ['typeA', 'typeB'] and an video source
-                 * is given as [{'stub': 'intro'}], the video source will be
-                 * expanded out to
-                 *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/intro.typeA',
-                            type: 'audio/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/intro.typeB',
-                            type: 'audio/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} videoTypes
-                 * @default ['mp4', 'webm']
-                 */
-                videoTypes: {
-                    type: 'array',
-                    default: ['mp4', 'webm'],
-                    description: 'List of audio types to expect for any video sources specified as strings rather than lists of src/type pairs'
                 }
             }
         },
@@ -860,74 +757,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         });
     },
 
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: 'url', type: 'MIMEtype'} objects (for audio/video).
-    expandAsset(asset, type) {
-        var fullAsset = asset;
-        var _this = this;
-
-        if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
-            // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + 'img/' + asset;
-        } else {
-            var types;
-            if (type === 'audio') {
-                types = this.audioTypes;
-            } else if (type === 'video') {
-                types = this.videoTypes;
-            }
-            // Replace any source objects that have a
-            // 'stub' attribute with the appropriate expanded source
-            // objects
-            fullAsset = [];
-            asset.forEach(function(srcObj) {
-                if (srcObj.hasOwnProperty('stub')) {
-                    for (var iType = 0; iType < types.length; iType++) {
-                        fullAsset.push({
-                            src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
-                            type: type + '/' + types[iType]
-                        });
-                    }
-                } else {
-                    fullAsset.push(srcObj);
-                }
-            });
-        }
-        return fullAsset;
-    },
-
     didInsertElement() {
         this._super(...arguments);
-
-        // Expand any audio/video src stubs
-        var audSrcParameterNames = [
-            'audioSources',
-            'musicSources',
-            'calibrationAudioSources',
-            'pauseAudio',
-            'unpauseAudio'
-        ];
-        var vidSrcParameterNames = [
-            'sources',
-            'altSources',
-            'introSources',
-            'attnSources',
-            'calibrationVideoSources'
-        ];
-
-        var _this = this;
-        audSrcParameterNames.forEach((paraName) => {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'audio'));
-            }
-        });
-        vidSrcParameterNames.forEach((paraName) => {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + '_parsed', _this.expandAsset(sources, 'video'));
-            }
-        });
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {

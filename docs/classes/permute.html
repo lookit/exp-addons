@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -200,6 +203,10 @@ as shown below, in addition to the parameters described under 'properties'.</p>
                                 <a href="#property_frameOptions">frameOptions</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_orderedFrameOptions">orderedFrameOptions</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -230,7 +237,7 @@ as shown below, in addition to the parameters described under 'properties'.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_permute.js.html#l108"><code>addon&#x2F;randomizers&#x2F;permute.js:108</code></a>
+        <a href="../files/addon_randomizers_permute.js.html#l143"><code>addon&#x2F;randomizers&#x2F;permute.js:143</code></a>
         </p>
 
 
@@ -279,7 +286,7 @@ as shown below, in addition to the parameters described under 'properties'.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_randomizers_permute.js.html#l73"><code>addon&#x2F;randomizers&#x2F;permute.js:73</code></a>
+        <a href="../files/addon_randomizers_permute.js.html#l90"><code>addon&#x2F;randomizers&#x2F;permute.js:90</code></a>
         </p>
 
 
@@ -322,6 +329,42 @@ list will take precedence.</p>
 <p>(E.g., you could include 'kind': 'normal-frame' in
 commmonFrameProperties, but for a single frame in frameOptions, include
 'kind': 'special-frame'.)</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_orderedFrameOptions" class="property item">
+    <h3 class="name"><code>orderedFrameOptions</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_randomizers_permute.js.html#l73"><code>addon&#x2F;randomizers&#x2F;permute.js:73</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>List of sets of frame properties of the same length as frameOptions. The order
+of this list will be preserved; the properties in orderedFrameOptions[0] will be added to the
+frame shown first, the properties in orderedFrameOptions[1] will be added to the
+frame shown second, etc. Properties are applied in this order:
+commonFrameProperties, frameOptions, orderedFrameOptions
+so orderedFrameOptions properties will take priority over regular frameOptions.
+This allows you to, for instance, do something different during the first or last
+trial (e.g., a practice/training trial or a debriefing trial).
+If <code>parameterSets</code> is included as one of the properties in orderedFrameOptions[n],
+the values will be added to any parameterSets property on the existing frame
+(value-by-value, iterating through corresponding parameterSets)
+rather than overwriting the whole property.</p>
 
     </div>
 

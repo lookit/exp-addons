@@ -56,7 +56,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     // Data provided to randomizer (properties of frameConfig):
 
     /**
-
      * List of frames to be created by this randomizer. Each frame is an
      * object with any necessary frame-specific properties specified. The
      * 'kind' of frame can be specified either here (per frame) or in

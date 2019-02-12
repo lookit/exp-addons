@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -176,6 +179,8 @@ const VideoRecorder = Ember.Object.extend({
     recording: Ember.computed.alias(&#x27;_recording&#x27;).readOnly(),
     flashReady: Ember.computed.alias(&#x27;_recorderReady&#x27;).readOnly(),
     connected: false,
+    uploadTimeout: null, // timer counting from attempt to stop until we should just
+    //resolve the stopPromise
 
     debug: false,
     _started: false,
@@ -315,7 +320,6 @@ const VideoRecorder = Ember.Object.extend({
         var timeLeft = 3 - this.getTime();
         if (this.get(&#x27;hasCamAccess&#x27;) &amp;&amp; (timeLeft &gt; 0)) {
             // sleep time expects milliseconds
-
             return sleep(timeLeft * 1000).then(() =&gt; this.stop());
         } else {
             var recorder = this.get(&#x27;recorder&#x27;);
@@ -330,6 +334,14 @@ const VideoRecorder = Ember.Object.extend({
                     this.set(&#x27;_recording&#x27;, false);
                 });
             }
+
+            var _this = this;
+
+            // If we don&#x27;t end up uploading within 10 seconds, call reject
+            this.set(&#x27;uploadTimeout&#x27;, window.setTimeout(function() {
+                    window.clearTimeout(_this.get(&#x27;uploadTimeout&#x27;));
+                    _this.get(&#x27;_stopPromise&#x27;).reject();
+                }, 10000));
 
             var _stopPromise = new Ember.RSVP.Promise((resolve, reject) =&gt; {
                 this.set(&#x27;_stopPromise&#x27;, {
@@ -388,6 +400,7 @@ const VideoRecorder = Ember.Object.extend({
 
     _onUploadDone(streamName, streamDuration, userId, recorderId) { // eslint-disable-line no-unused-vars
         //this.destroy();
+        window.clearTimeout(this.get(&#x27;uploadTimeout&#x27;));
         if (this.get(&#x27;_stopPromise&#x27;)) {
             console.log(&#x27;Resolving stop promise...&#x27;);
             console.log(streamName);
