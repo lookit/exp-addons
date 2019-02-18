@@ -294,7 +294,7 @@ export default Ember.Mixin.create({
     willDestroyElement() {
         var _this = this;
         if (_this.get('recorder')) {
-            if (_this.get('stoppedRecording')) {
+            if (_this.get('stoppedRecording', true)) {
                 _this.destroyRecorder();
             } else {
                 _this.stopRecorder().then(() => {

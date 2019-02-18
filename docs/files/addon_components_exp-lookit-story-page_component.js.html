@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -109,6 +112,7 @@ import layout from &#x27;./template&#x27;;
 import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
 import FullScreen from &#x27;../../mixins/full-screen&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
+import ExpandAssets from &#x27;../../mixins/expand-assets&#x27;;
 
 let {
     $
@@ -176,15 +180,10 @@ let {
                 }
             ],
             &quot;kind&quot;: &quot;exp-lookit-story-page&quot;,
-            &quot;id&quot;: &quot;story-intro-1&quot;,
             &quot;audioSources&quot;: [
                 {
                     &quot;audioId&quot;: &quot;firstAudio&quot;,
-                    &quot;sources&quot;: [
-                        {
-                            &quot;stub&quot;: &quot;intro1&quot;
-                        }
-                    ],
+                    &quot;sources&quot;: &quot;intro1&quot;,
                     &quot;highlights&quot;: [
                         {&quot;range&quot;: [3.017343,	5.600283], &quot;image&quot;: 	&quot;leftA&quot;},
                         {&quot;range&quot;: [5.752911,	8.899402], &quot;image&quot;: 	&quot;rightA&quot;}
@@ -199,9 +198,10 @@ let {
  * @extends ExpFrameBase
  * @uses FullScreen
  * @uses VideoRecord
+ * @uses ExpandAssets
  */
 
-export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAssets, {
     type: &#x27;exp-lookit-story-page&#x27;,
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -220,6 +220,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     doUseCamera: Ember.computed.alias(&#x27;doRecording&#x27;),
     // Don&#x27;t need to override startRecordingAutomatically as we override the observer
     // whenPossibleToRecord directly.
+
+    assetsToExpand: {
+        &#x27;audio&#x27;: [&#x27;audioSources/sources&#x27;],
+        &#x27;video&#x27;: [],
+        &#x27;image&#x27;: [&#x27;images/src&#x27;]
+    },
 
     meta: {
         name: &#x27;ExpLookitStoryPage&#x27;,
@@ -248,55 +254,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                     description: &#x27;Whether to proceed automatically after audio (and hide replay/next buttons)&#x27;
                 },
                 /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with &#x60;baseDir&#x60; + &#x60;img/&#x60;. Any audio/video src values that give
-                 * a value for &#x27;stub&#x27; rather than &#x27;src&#x27; and &#x27;type&#x27; will be
-                 * expanded out to
-                 * &#x60;baseDir/avtype/[stub].avtype&#x60;, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir SHOULD include a trailing slash
-                 * (e.g., &#x60;http://stimuli.org/myexperiment/&#x60;, not
-                 * &#x60;http://stimuli.org/myexperiment&#x60;)
-                 *
-                 * @property {String} baseDir
-                 * @default &#x27;&#x27;
-                 */
-                baseDir: {
-                    type: &#x27;string&#x27;,
-                    default: &#x27;&#x27;,
-                    description: &#x27;Base directory for all stimuli&#x27;
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is [&#x27;typeA&#x27;, &#x27;typeB&#x27;] and an audio source
-                 * is given as [{&#x27;stub&#x27;: &#x27;intro&#x27;}], the audio source will be
-                 * expanded out to
-                 *
-&#x60;&#x60;&#x60;json
-                 [
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeA/intro.typeA&#x27;,
-                            type: &#x27;audio/typeA&#x27;
-                        },
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeB/intro.typeB&#x27;,
-                            type: &#x27;audio/typeB&#x27;
-                        }
-                ]
-&#x60;&#x60;&#x60;
-                 *
-                 * @property {String[]} audioTypes
-                 * @default [&#x27;mp3&#x27;, &#x27;ogg&#x27;]
-                 */
-                audioTypes: {
-                    type: &#x27;array&#x27;,
-                    default: [&#x27;mp3&#x27;, &#x27;ogg&#x27;],
-                    description: &#x27;List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs&#x27;
-                },
-                /**
                  * Array of objects describing audio to play at the start of
                  * this frame. Each element describes a separate audio segment.
                  *
@@ -306,7 +263,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                  *   @param {Object[]} sources Array of {src: &#x27;url&#x27;, type:
                  *      &#x27;MIMEtype&#x27;} objects with audio sources for this segment
                  *
-                 * Can also give a single element {stub: &#x27;filename&#x27;}, which will
+                 * Can also give a single string &#x60;filename&#x60;, which will
                  * be expanded out to the appropriate array based on &#x60;baseDir&#x60;
                  * and &#x60;audioTypes&#x60; values; see &#x60;audioTypes&#x60;.
                  *
@@ -333,9 +290,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                                             type: &#x27;string&#x27;
                                         },
                                         &#x27;type&#x27;: {
-                                            type: &#x27;string&#x27;
-                                        },
-                                        &#x27;stub&#x27;: {
                                             type: &#x27;string&#x27;
                                         }
                                     }
@@ -520,55 +474,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: &#x27;url&#x27;, type: &#x27;MIMEtype&#x27;} objects (for audio).
-    expandAsset(asset, type) {
-        var fullAsset = asset;
-        var _this = this;
-
-        if (type === &#x27;image&#x27; &amp;&amp; typeof asset === &#x27;string&#x27; &amp;&amp; !(asset.includes(&#x27;://&#x27;))) {
-            // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + &#x27;img/&#x27; + asset;
-        } else if (type === &#x27;audio&#x27;) {
-            // Audio: replace any source objects that have a
-            // &#x27;stub&#x27; attribute with the appropriate expanded source
-            // objects
-            fullAsset = [];
-            var types = this.audioTypes;
-            asset.forEach(function(srcObj) {
-                if (srcObj.hasOwnProperty(&#x27;stub&#x27;)) {
-                    for (var iType = 0; iType &lt; types.length; iType++) {
-                        fullAsset.push({
-                            src: _this.baseDir + types[iType] + &#x27;/&#x27; + srcObj.stub + &#x27;.&#x27; + types[iType],
-                            type: type + &#x27;/&#x27; + types[iType]
-                        });
-                    }
-                } else {
-                    fullAsset.push(srcObj);
-                }
-            });
-        }
-        return fullAsset;
-    },
-
     didInsertElement() {
 
         this._super(...arguments);
-
-        // Expand any image src stubs
-
-        var images = this.get(&#x27;images&#x27;);
-        images.forEach((im) =&gt; {
-            Ember.set(im, &#x27;src&#x27;, this.expandAsset(im.src, &#x27;image&#x27;));
-        });
-        this.set(&#x27;images_parsed&#x27;, images);
-
-        // Expand any audio src stubs
-        var audioSources = this.get(&#x27;audioSources&#x27;);
-        audioSources.forEach((aud) =&gt; {
-            Ember.set(aud, &#x27;sources_parsed&#x27;, this.expandAsset(aud.sources, &#x27;audio&#x27;));
-        });
-        this.set(&#x27;audioSources&#x27;, audioSources);
 
         // Apply user-provided CSS to parent text block
         var parentTextBlock = this.get(&#x27;parentTextBlock&#x27;) || {};

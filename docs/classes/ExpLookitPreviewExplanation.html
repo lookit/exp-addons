@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -136,7 +139,6 @@
        "kind": "exp-lookit-preview-explanation",
        "skipButtonText": "Skip preview",
        "previewButtonText": "I'd like to preview the videos",
-       "id": "video-preview-explanation",
        "blocks": [
            {
                "text": "The reason we ask this is that your child is learning from you all the time. Even if he or she can't see where you're looking, you may unconsciously shift towards one side or the other and influence your child's attention. We want to make sure we're measuring your child's preferences, not yours!"
@@ -199,15 +201,15 @@
 
                             </li>
                             <li class="index-item property inherited">
+                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
+
+                            </li>
+                            <li class="index-item property inherited">
                                 <a href="#property_fsButtonID">fsButtonID</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -490,7 +492,7 @@ may define additional properties that are sent.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l71"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:71</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l61"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:61</code></a>
         </p>
 
 
@@ -537,6 +539,31 @@ may define additional properties that are sent.</p>
 
             </li>
         </ul>
+</div>
+<div id="property_displayFullscreenOverride" class="property item inherited">
+    <h3 class="name"><code>displayFullscreenOverride</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_displayFullscreenOverride">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
+    </div>
+
+
+
 </div>
 <div id="property_fsButtonID" class="property item inherited">
     <h3 class="name"><code>fsButtonID</code></h3>
@@ -586,34 +613,6 @@ may define additional properties that are sent.</p>
 
 
 </div>
-<div id="property_id" class="property item">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-            <p>Inherited from
-            <a href="../classes/FullScreen.html#property_id">
-                FullScreen
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l52"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:52</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A unique identifier for this item</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_image" class="property item">
     <h3 class="name"><code>image</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
@@ -625,7 +624,7 @@ may define additional properties that are sent.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l119"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:119</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l109"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:109</code></a>
         </p>
 
 
@@ -676,7 +675,7 @@ holding a child looking over their shoulder.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l97"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:97</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l87"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:87</code></a>
         </p>
 
 
@@ -735,7 +734,7 @@ holding a child looking over their shoulder.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l139"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:139</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l129"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:129</code></a>
         </p>
 
 
@@ -761,7 +760,7 @@ holding a child looking over their shoulder.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l61"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:61</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l51"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:51</code></a>
         </p>
 
 
@@ -787,7 +786,7 @@ holding a child looking over their shoulder.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l149"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:149</code></a>
+        <a href="../files/addon_components_exp-lookit-preview-explanation_component.js.html#l139"><code>addon&#x2F;components&#x2F;exp-lookit-preview-explanation&#x2F;component.js:139</code></a>
         </p>
 
 

@@ -3,6 +3,7 @@ import layout from './template';
 import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
 import FullScreen from '../../mixins/full-screen';
 import VideoRecord from '../../mixins/video-record';
+import ExpandAssets from '../../mixins/expand-assets';
 
 let {
     $
@@ -70,15 +71,10 @@ let {
                 }
             ],
             "kind": "exp-lookit-story-page",
-            "id": "story-intro-1",
             "audioSources": [
                 {
                     "audioId": "firstAudio",
-                    "sources": [
-                        {
-                            "stub": "intro1"
-                        }
-                    ],
+                    "sources": "intro1",
                     "highlights": [
                         {"range": [3.017343,	5.600283], "image": 	"leftA"},
                         {"range": [5.752911,	8.899402], "image": 	"rightA"}
@@ -93,9 +89,10 @@ let {
  * @extends ExpFrameBase
  * @uses FullScreen
  * @uses VideoRecord
+ * @uses ExpandAssets
  */
 
-export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
+export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord, ExpandAssets, {
     type: 'exp-lookit-story-page',
     layout: layout,
     displayFullscreen: true, // force fullscreen for all uses of this component
@@ -114,6 +111,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
     doUseCamera: Ember.computed.alias('doRecording'),
     // Don't need to override startRecordingAutomatically as we override the observer
     // whenPossibleToRecord directly.
+
+    assetsToExpand: {
+        'audio': ['audioSources/sources'],
+        'video': [],
+        'image': ['images/src']
+    },
 
     meta: {
         name: 'ExpLookitStoryPage',
@@ -142,55 +145,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                     description: 'Whether to proceed automatically after audio (and hide replay/next buttons)'
                 },
                 /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with `baseDir` + `img/`. Any audio/video src values that give
-                 * a value for 'stub' rather than 'src' and 'type' will be
-                 * expanded out to
-                 * `baseDir/avtype/[stub].avtype`, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir SHOULD include a trailing slash
-                 * (e.g., `http://stimuli.org/myexperiment/`, not
-                 * `http://stimuli.org/myexperiment`)
-                 *
-                 * @property {String} baseDir
-                 * @default ''
-                 */
-                baseDir: {
-                    type: 'string',
-                    default: '',
-                    description: 'Base directory for all stimuli'
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is ['typeA', 'typeB'] and an audio source
-                 * is given as [{'stub': 'intro'}], the audio source will be
-                 * expanded out to
-                 *
-```json
-                 [
-                        {
-                            src: 'baseDir' + 'typeA/intro.typeA',
-                            type: 'audio/typeA'
-                        },
-                        {
-                            src: 'baseDir' + 'typeB/intro.typeB',
-                            type: 'audio/typeB'
-                        }
-                ]
-```
-                 *
-                 * @property {String[]} audioTypes
-                 * @default ['mp3', 'ogg']
-                 */
-                audioTypes: {
-                    type: 'array',
-                    default: ['mp3', 'ogg'],
-                    description: 'List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs'
-                },
-                /**
                  * Array of objects describing audio to play at the start of
                  * this frame. Each element describes a separate audio segment.
                  *
@@ -200,7 +154,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                  *   @param {Object[]} sources Array of {src: 'url', type:
                  *      'MIMEtype'} objects with audio sources for this segment
                  *
-                 * Can also give a single element {stub: 'filename'}, which will
+                 * Can also give a single string `filename`, which will
                  * be expanded out to the appropriate array based on `baseDir`
                  * and `audioTypes` values; see `audioTypes`.
                  *
@@ -227,9 +181,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
                                             type: 'string'
                                         },
                                         'type': {
-                                            type: 'string'
-                                        },
-                                        'stub': {
                                             type: 'string'
                                         }
                                     }
@@ -414,55 +365,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, VideoRecord,  {
 
     },
 
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: 'url', type: 'MIMEtype'} objects (for audio).
-    expandAsset(asset, type) {
-        var fullAsset = asset;
-        var _this = this;
-
-        if (type === 'image' && typeof asset === 'string' && !(asset.includes('://'))) {
-            // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + 'img/' + asset;
-        } else if (type === 'audio') {
-            // Audio: replace any source objects that have a
-            // 'stub' attribute with the appropriate expanded source
-            // objects
-            fullAsset = [];
-            var types = this.audioTypes;
-            asset.forEach(function(srcObj) {
-                if (srcObj.hasOwnProperty('stub')) {
-                    for (var iType = 0; iType < types.length; iType++) {
-                        fullAsset.push({
-                            src: _this.baseDir + types[iType] + '/' + srcObj.stub + '.' + types[iType],
-                            type: type + '/' + types[iType]
-                        });
-                    }
-                } else {
-                    fullAsset.push(srcObj);
-                }
-            });
-        }
-        return fullAsset;
-    },
-
     didInsertElement() {
 
         this._super(...arguments);
-
-        // Expand any image src stubs
-
-        var images = this.get('images');
-        images.forEach((im) => {
-            Ember.set(im, 'src', this.expandAsset(im.src, 'image'));
-        });
-        this.set('images_parsed', images);
-
-        // Expand any audio src stubs
-        var audioSources = this.get('audioSources');
-        audioSources.forEach((aud) => {
-            Ember.set(aud, 'sources_parsed', this.expandAsset(aud.sources, 'audio'));
-        });
-        this.set('audioSources', audioSources);
 
         // Apply user-provided CSS to parent text block
         var parentTextBlock = this.get('parentTextBlock') || {};

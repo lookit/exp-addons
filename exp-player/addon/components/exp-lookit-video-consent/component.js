@@ -20,7 +20,6 @@ document is displayed, with additional study-specific information provided by th
 ```json
 "frames": {
     "video-consent": {
-        "id": "video-consent",
         "kind": "exp-lookit-video-consent",
         "PIName": "Jane Smith",
         "institution": "Science University",
@@ -59,6 +58,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         finish() {
             if (!this.get('stoppedRecording')) {
                 this.stopRecorder().then(() => {
+                    this.session.set('completedConsentFrame', true);
                     this.set('stoppedRecording', true);
                     this.send('next');
                 });
@@ -128,15 +128,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         parameters: {
             type: 'object',
             properties: {
-                /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-
                 /**
                 Name of PI running this study
                 @property {String} PIName

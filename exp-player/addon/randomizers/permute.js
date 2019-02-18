@@ -16,7 +16,6 @@
     "test-trials": {
         "sampler": "permute",
         "kind": "choice",
-        "id": "test-trials",
         "commonFrameProperties": {
             "showPreviousButton": false
         },
@@ -57,12 +56,6 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
     // Data provided to randomizer (properties of frameConfig):
 
     /**
-     * Unique string identifying this set of frames
-     *
-     * @property {String} id
-     */
-
-    /**
      * List of frames to be created by this randomizer. Each frame is an
      * object with any necessary frame-specific properties specified. The
      * 'kind' of frame can be specified either here (per frame) or in
@@ -78,12 +71,34 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
      */
 
     /**
+     * List of sets of frame properties of the same length as frameOptions. The order
+     * of this list will be preserved; the properties in orderedFrameOptions[0] will be added to the
+     * frame shown first, the properties in orderedFrameOptions[1] will be added to the
+     * frame shown second, etc. Properties are applied in this order:
+     * commonFrameProperties, frameOptions, orderedFrameOptions
+     * so orderedFrameOptions properties will take priority over regular frameOptions.
+     * This allows you to, for instance, do something different during the first or last
+     * trial (e.g., a practice/training trial or a debriefing trial).
+     * If `parameterSets` is included as one of the properties in orderedFrameOptions[n],
+     * the values will be added to any parameterSets property on the existing frame
+     * (value-by-value, iterating through corresponding parameterSets)
+     * rather than overwriting the whole property.
+     *
+     * @property {Object[]} orderedFrameOptions
+     */
+
+    /**
      * Object describing common parameters to use in EVERY frame created
      * by this randomizer. Parameter names and values are as described in
      * the documentation for the frameType used.
      *
      * @property {Object} commonFrameProperties
      */
+
+    // TODO: input checking. Make sure all parameters are given or impute empty vals if
+    // not; make sure orderedFrameOptions.length == frameOptions.length if both are given
+
+    // TODO: allow optional specification of how many frames to create!
 
     /*
      * Randomize array element order in-place.
@@ -107,6 +122,19 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         // Assign parameters specific to this frame (allow to override
         // common parameters assigned above)
         Object.assign(thisFrame, array[iFrame]);
+
+        // Assign parameters specific to the frame occupying this position
+        // in the ordered list. These override everything else. If `parameterSets` are
+        // included, they are *added* to any parameterSets, rather than overwriting.
+        if (frameConfig.hasOwnProperty('orderedFrameOptions') && frameConfig.orderedFrameOptions.length > iFrame) {
+            if (frameConfig.orderedFrameOptions[iFrame].hasOwnProperty('parameterSets') && thisFrame.hasOwnProperty('parameterSets')) {
+                for (var iPS = 0; iPS < thisFrame.parameterSets.length; iPS++) {
+                    Object.assign(thisFrame.parameterSets[iPS], frameConfig.orderedFrameOptions[iFrame].parameterSets[iPS]);
+                }
+                delete frameConfig.orderedFrameOptions[iFrame].parameterSets;
+            }
+            Object.assign(thisFrame, frameConfig.orderedFrameOptions[iFrame]);
+        }
 
         thisFrame = resolveFrame(frameId, thisFrame)[0];
         frames.push(...thisFrame);

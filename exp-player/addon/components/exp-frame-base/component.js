@@ -129,7 +129,7 @@ export default Ember.Component.extend(FullScreen, {
 
     // Internal save logic
     _save() {
-        var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+        var frameId = `${this.get('id')}`;  // don't prepend frameindex, done by parser
         // When exiting frame, save the data to the base player using the provided saveHandler
         const payload = this.serializeContent();
         return this.attrs.saveHandler(frameId, payload);
@@ -258,7 +258,7 @@ export default Ember.Component.extend(FullScreen, {
              * @event previousFrame
              */
             this.send('setTimeEvent', 'previousFrame');
-            var frameId = `${this.get('frameIndex')}-${this.get('id')}`;
+            var frameId = `${this.get('id')}`; // don't prepend frameindex, done by parser
             console.log(`Previous: Leaving frame ID ${frameId}`);
             this.sendAction('previous');
             window.scrollTo(0, 0);

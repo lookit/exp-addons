@@ -15,7 +15,6 @@ Video configuration frame guiding user through making sure permissions are set a
 ```json
 "frames": {
     "video-config": {
-        "id": "video-config",
         "kind": "exp-video-config"
     }
 }
@@ -34,11 +33,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
     hasWebCam: Em.computed.alias('recorder.hasWebCam'),
 
     actions: {
-
-        next() {
-            this.destroyRecorder();
-            this._super(...arguments);
-        },
 
         checkAudioThenNext() {
             if (!this.get('micChecked')) {
@@ -63,14 +57,6 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
             type: 'object',
             properties: {
                 /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
-                /**
                 Text to show as the introduction to the troubleshooting tips section
                 @property {String} troubleshootingIntro
                 @default "Some families are having trouble initially getting their webcams to work on Lookit. We're sorry, and we're working on switching away from Flash to make recording more reliable! In the meantime, these instructions should fix most problems."
@@ -82,7 +68,7 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
                 }
 
             },
-            required: ['id']
+            required: []
         },
         data: {
             type: 'object',

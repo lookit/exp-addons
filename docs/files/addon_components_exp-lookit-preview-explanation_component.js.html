@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -128,7 +131,6 @@ import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/componen
         &quot;kind&quot;: &quot;exp-lookit-preview-explanation&quot;,
         &quot;skipButtonText&quot;: &quot;Skip preview&quot;,
         &quot;previewButtonText&quot;: &quot;I&#x27;d like to preview the videos&quot;,
-        &quot;id&quot;: &quot;video-preview-explanation&quot;,
         &quot;blocks&quot;: [
             {
                 &quot;text&quot;: &quot;The reason we ask this is that your child is learning from you all the time. Even if he or she can&#x27;t see where you&#x27;re looking, you may unconsciously shift towards one side or the other and influence your child&#x27;s attention. We want to make sure we&#x27;re measuring your child&#x27;s preferences, not yours!&quot;
@@ -155,15 +157,6 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: &#x27;object&#x27;,
             properties: {
-                /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: &#x27;string&#x27;,
-                    description: &#x27;A unique identifier for this item&#x27;
-                },
                 /**
                  * Whether to show a &#x27;previous&#x27; button
                  *

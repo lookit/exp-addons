@@ -28,9 +28,9 @@
         </button>
     {{/unless}}
 
-    {{#each audioSources as |audioSourceObject|}}
+    {{#each audioSources_parsed as |audioSourceObject|}}
         <audio class="player-audio" id={{audioSourceObject.audioId}} onended={{action 'playNextAudioSegment'}} ontimeupdate={{action 'updateCharacterHighlighting'}}>
-            {{#each audioSourceObject.sources_parsed as |stream|}}
+            {{#each audioSourceObject.sources as |stream|}}
                 <source src="{{stream.src}}" type="{{stream.type}}">
             {{/each}}
         </audio>

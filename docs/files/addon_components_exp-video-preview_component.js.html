@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -110,6 +113,7 @@ import layout from &#x27;./template&#x27;;
 import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/component&#x27;;
 import MediaReload from &#x27;../../mixins/media-reload&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
+import ExpandAssets from &#x27;../../mixins/expand-assets&#x27;;
 
 /**
  * @module exp-player
@@ -128,16 +132,9 @@ import VideoRecord from &#x27;../../mixins/video-record&#x27;;
         &quot;videos&quot;: [
            {
              &quot;caption&quot;: &quot;User-facing text that appears below the video&quot;,
-             &quot;sources&quot;: [
-               {
-                 &quot;type&quot;: &quot;video/webm&quot;,
-                 &quot;src&quot;: &quot;https://url.com/example_intro.webm&quot;
-               },
-               {
-                 &quot;type&quot;: &quot;video/mp4&quot;,
-                 &quot;src&quot;: &quot;https://url.com/example_intro.webm&quot;
-               }
-             ]
+             &quot;baseDir&quot;: &quot;https://url.com/&quot;,
+             &quot;sources&quot;: &quot;example_intro&quot;,
+             &quot;videoTypes&quot;: [&quot;webm&quot;, &quot;mp4&quot;]
            }
          ]
     }
@@ -145,8 +142,11 @@ import VideoRecord from &#x27;../../mixins/video-record&#x27;;
  * &#x60;&#x60;&#x60;
  * @class ExpVideoPreview
  * @extends ExpFrameBase
+ * @uses ExpandAssets
+ * @uses VideoRecord
+ * @uses MediaReload
  */
-export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, ExpandAssets, {
     layout,
     videoIndex: 0,
 
@@ -168,6 +168,12 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
     disableRecord: Ember.computed(&#x27;recorder.hasCamAccess&#x27;, &#x27;recorderReady&#x27;, function() {
         return !(this.get(&#x27;recorder.hasCamAccess&#x27;) &amp;&amp; this.get(&#x27;recorderReady&#x27;));
     }),
+
+    assetsToExpand: {
+        &#x27;audio&#x27;: [],
+        &#x27;video&#x27;: [&#x27;videos/sources&#x27;],
+        &#x27;image&#x27;: []
+    },
 
     actions: {
         accept() {
@@ -210,7 +216,7 @@ export default ExpFrameBaseComponent.extend(MediaReload, VideoRecord, {
                  *
                  * @property {Array} videos
                  *   @param {String} caption Some text to appear under this video
-                 *   @param {Object[]} sources Array of {src: &#x27;url&#x27;, type: &#x27;MIMEtype&#x27;} objects.
+                 *   @param {Object[]} sources String indicating video path relative to baseDir (see baseDir), OR Array of {src: &#x27;url&#x27;, type: &#x27;MIMEtype&#x27;} objects.
                  *   @param {String} imgSrc URL of image to display (optional; each preview video should designate either sources or imgSrc)
                  */
                 videos: {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ExpLookitInstructions - exp-player</title>
+    <title>ExpLookitObservation - exp-player</title>
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
     <link rel="stylesheet" href="https://yui-s.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
@@ -103,7 +103,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ExpLookitInstructions Class</h1>
+<h1>ExpLookitObservation Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -111,7 +111,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l16"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:16</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-observation_component.js.html#l15"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:15</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -121,96 +121,43 @@
 
 <div>
 
-    <img src="../assets/screenshots/ExpLookitInstructions.png" class="class-screenshot">
+    <img src="../assets/screenshots/ExpLookitObservation.png" class="class-screenshot">
 
 </div>
 
 <div class="box intro">
-    <p>A frame to display instructions to the user. The user's webcam may optionally be
-displayed, and audio and video clips may be included in the instructions (and may be
-required to be played before moving on).</p>
+    <p>A frame to collect a video observation with the participant's help. By default the
+webcam is displayed to the participant and they can choose when to start, pause, and
+resume recording. The duration of an individual recording can optionally be limited
+and/or recording can be started automatically. This is intended for cases where we
+want the parent to perform some test or behavior with the child, rather than
+presenting stimuli ourselves. E.g., you might give instructions to conduct a structured
+interview and allow the parent to control recording.</p>
 <p>Each element of the 'blocks' parameter is rendered using ExpTextBlock.</p>
-<pre class="code prettyprint"><code class="language-json">"frames": {
-       "instructions": {
-           "kind": "exp-lookit-instructions",
+<pre class="code prettyprint"><code>   "frames": {
+       "observation": {
+           "kind": "exp-lookit-observation",
            "blocks": [
                {
-                   "title": "Parent's role",
+                   "title": "Time to do the joke!",
                    "listblocks": [
                        {
-                           "text": "Follow instructions"
+                           "text": "Rip the paper"
                        },
                        {
-                           "text": "Only do each joke once"
-                       }
-                   ]
-               },
-               {
-                   "text": "It's important that we can see you",
-                   "image": {
-                       "alt": "Father holding child looking over his shoulder",
-                       "src": "https://s3.amazonaws.com/lookitcontents/exp-physics/OverShoulder.jpg"
-                   },
-                   "title": "Camera position"
-               },
-               {
-                   "text": "Here's some audio you have to play",
-                   "title": "Test",
-                   "mediaBlock": {
-                       "text": "You should hear 'Ready to go?'",
-                       "isVideo": false,
-                       "sources": [
-                           {
-                               "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.mp3",
-                               "type": "audio/mp3"
-                           },
-                           {
-                               "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/audio/ready.ogg",
-                               "type": "audio/ogg"
-                           }
-                       ],
-                       "mustPlay": true,
-                       "warningText": "Please try playing the sample audio."
-                   }
-               },
-               {
-                   "text": "Here's a video you don't have to play!",
-                   "title": "Test",
-                   "mediaBlock": {
-                       "text": "Look at that.",
-                       "isVideo": true,
-                       "sources": [
-                           {
-                               "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.mp4",
-                               "type": "video/mp4"
-                           },
-                           {
-                               "src": "https://s3.amazonaws.com/lookitcontents/exp-physics-final/examples/7_control_same.webm",
-                               "type": "video/webm"
-                           }
-                       ],
-                       "mustPlay": false
-                   }
-               }
-           ],
-           "showWebcam": true,
-           "webcamBlocks": [
-               {
-                   "title": "Some webcam instructions",
-                   "listblocks": [
-                       {
-                           "text": "Like this!"
-                       },
-                       {
-                           "text": "Be careful your webcam does not have tape over it"
+                           "text": "Wait ten seconds"
                        }
                    ]
                }
            ],
-           "nextButtonText": "Next"
+           "hideWebcam": true,
+           "hideControls": false,
+           "recordSegmentLength": 10,
+           "startRecordingAutomatically": false,
+           "nextButtonText": "move on",
+           "showPreviousButton": false
        }
-}
-
+   }
 </code></pre>
 
 </div>
@@ -222,6 +169,7 @@ required to be played before moving on).</p>
 
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
     </ul>
 
     <div>
@@ -248,7 +196,11 @@ required to be played before moving on).</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_blocks">blocks</a>
+                                <a href="#property_hideControls">hideControls</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_hideWebcam">hideWebcam</a>
 
                             </li>
                             <li class="index-item property">
@@ -256,17 +208,47 @@ required to be played before moving on).</p>
 
                             </li>
                             <li class="index-item property">
+                                <a href="#property_recordSegmentLength">recordSegmentLength</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_showPreviousButton">showPreviousButton</a>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_showWebcam">showWebcam</a>
+                                <a href="#property_startRecordingAutomatically">startRecordingAutomatically</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_startRecordingAutomatically">startRecordingAutomatically</a>
 
                             </li>
                     </ul>
                 </div>
 
 
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events extends">
+                            <li class="index-item event">
+                                <a href="#event_hideWebcam">hideWebcam</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_hideWebcam">hideWebcam</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_recorderTimeout">recorderTimeout</a>
+
+                            </li>
+                            <li class="index-item event">
+                                <a href="#event_showWebcam">showWebcam</a>
+
+                            </li>
+                    </ul>
+                </div>
         </div>
 
             <div id="methods" class="api-class-tabpanel">
@@ -278,7 +260,13 @@ required to be played before moving on).</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>showWarning</code>
+                        <code>videoID</code>
+                </li>
+                <li class="arg">
+                        <code>videoList</code>
+                </li>
+                <li class="arg">
+                        <code>eventTimings</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -296,7 +284,7 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l289"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:289</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l200"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:200</code></a>
         </p>
 
 
@@ -313,13 +301,34 @@ required to be played before moving on).</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">showWarning</code>
-                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <code class="param-name">videoID</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
 
                     <div class="param-description">
-                        <p>whether the warning about sound being played is currently shown</p>
+                        <p>The ID of any webcam video recorded during this frame</p>
 
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">videoList</code>
+                        <span class="type">List</span>
+
+
+                    <div class="param-description">
+                        <p>a list of webcam video IDs in case there are &gt;1</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">eventTimings</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+
+                    <div class="param-description">
+                         
                     </div>
 
                 </li>
@@ -354,7 +363,7 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l133"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:133</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l78"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:78</code></a>
         </p>
 
 
@@ -401,22 +410,11 @@ required to be played before moving on).</p>
                 </div>
 
             </li>
-            <li class="param">
-                    <code class="param-name">mediaBlock</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
-
-                <div class="param-description">
-                    <p>Object specifying audio or video clip to include (optional). mediaBlock should be of form:
-{title: 'title text to show above audio', text: 'text to show below controls', warningText: 'Text to show in red if user tries to proceed but hasn't played; only used if mustPlay is true', sources: 'sources Array of {src: 'url', type: 'MIMEtype'} objects specifying audio sources', isVideo: 'boolean, whether video or audio', mustPlay: 'boolean, whether clip has to be played to proceed'}</p>
-
-                </div>
-
-            </li>
         </ul>
 </div>
-<div id="property_blocks" class="property item">
-    <h3 class="name"><code>blocks</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+<div id="property_hideControls" class="property item">
+    <h3 class="name"><code>hideControls</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
 
 
 
@@ -425,54 +423,46 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l219"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:219</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l157"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:157</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Array of objects specifying text/images of instructions to display under webcam view (if webcam is shown)</p>
+        <p>Whether to hide video recording controls (only use with startRecordingAutomatically)</p>
 
     </div>
 
+        <p><strong>Default:</strong> false</p>
 
 
-        <h4>Sub-properties:</h4>
+</div>
+<div id="property_hideWebcam" class="property item">
+    <h3 class="name"><code>hideWebcam</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
 
-        <ul class="params-list">
-            <li class="param">
-                    <code class="param-name">title</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
-                <div class="param-description">
-                    <p>Title of this section</p>
 
-                </div>
 
-            </li>
-            <li class="param">
-                    <code class="param-name">text</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
-                <div class="param-description">
-                    <p>Paragraph text of this section</p>
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l167"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:167</code></a>
+        </p>
 
-                </div>
 
-            </li>
-            <li class="param">
-                    <code class="param-name">listblocks</code>
-                    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
+    </div>
 
-                <div class="param-description">
-                    <p>Object specifying bulleted points for this section. Each object is of the form:
-{text: 'text of bullet point', image: {src: 'url', alt: 'alt-text'}}. Images are optional.</p>
+    <div class="description">
+        <p>Whether to hide webcam view when frame loads (participant will still be able to show manually)</p>
 
-                </div>
+    </div>
 
-            </li>
-        </ul>
+        <p><strong>Default:</strong> false</p>
+
+
 </div>
 <div id="property_nextButtonText" class="property item">
     <h3 class="name"><code>nextButtonText</code></h3>
@@ -485,7 +475,7 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l275"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:275</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l177"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:177</code></a>
         </p>
 
 
@@ -496,7 +486,34 @@ required to be played before moving on).</p>
 
     </div>
 
-        <p><strong>Default:</strong> &#x27;Start the videos! \n (You\&#x27;ll have a moment to turn around.)&#x27;</p>
+        <p><strong>Default:</strong> &#x27;Next&#x27;</p>
+
+
+</div>
+<div id="property_recordSegmentLength" class="property item">
+    <h3 class="name"><code>recordSegmentLength</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l124"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:124</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Number of seconds to record for before automatically pausing. Use
+0 for no limit.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 300</p>
 
 
 </div>
@@ -511,7 +528,7 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l265"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:265</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l187"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:187</code></a>
         </p>
 
 
@@ -526,8 +543,8 @@ required to be played before moving on).</p>
 
 
 </div>
-<div id="property_showWebcam" class="property item">
-    <h3 class="name"><code>showWebcam</code></h3>
+<div id="property_startRecordingAutomatically" class="property item">
+    <h3 class="name"><code>startRecordingAutomatically</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
 
 
@@ -537,14 +554,42 @@ required to be played before moving on).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-instructions_component.js.html#l121"><code>addon&#x2F;components&#x2F;exp-lookit-instructions&#x2F;component.js:121</code></a>
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l135"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:135</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Whether to display the user's webcam</p>
+        <p>Whether to automatically begin recording upon frame load</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_startRecordingAutomatically" class="property item">
+    <h3 class="name"><code>startRecordingAutomatically</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/addon_components_exp-lookit-observation_component.js.html#l145"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:145</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether a recording must be made to proceed to next frame. 'Next' button
+will be disabled until recording is made if so. 0 to not require recording;
+any positive number to require that many seconds of recording</p>
 
     </div>
 
@@ -555,6 +600,110 @@ required to be played before moving on).</p>
             </div>
 
 
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                    <div id="event_hideWebcam" class="events item">
+                        <h3 class="name"><code>hideWebcam</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l239"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:239</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Webcam display hidden from participant</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_hideWebcam" class="events item">
+                        <h3 class="name"><code>hideWebcam</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l337"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:337</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Webcam display hidden from participant</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_recorderTimeout" class="events item">
+                        <h3 class="name"><code>recorderTimeout</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l279"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:279</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Video recording automatically paused upon reaching time limit</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+                    <div id="event_showWebcam" class="events item">
+                        <h3 class="name"><code>showWebcam</code></h3>
+                        <span class="type"></span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/addon_components_exp-lookit-observation_component.js.html#l348"><code>addon&#x2F;components&#x2F;exp-lookit-observation&#x2F;component.js:348</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>Webcam display shown to participant</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
     </div>
 </div>
                     </div>

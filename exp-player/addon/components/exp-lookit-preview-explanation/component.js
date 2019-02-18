@@ -22,7 +22,6 @@ import ExpFrameBaseComponent from '../../components/exp-frame-base/component';
         "kind": "exp-lookit-preview-explanation",
         "skipButtonText": "Skip preview",
         "previewButtonText": "I'd like to preview the videos",
-        "id": "video-preview-explanation",
         "blocks": [
             {
                 "text": "The reason we ask this is that your child is learning from you all the time. Even if he or she can't see where you're looking, you may unconsciously shift towards one side or the other and influence your child's attention. We want to make sure we're measuring your child's preferences, not yours!"
@@ -49,15 +48,6 @@ export default ExpFrameBaseComponent.extend({
         parameters: {
             type: 'object',
             properties: {
-                /**
-                 * A unique identifier for this item
-                 *
-                 * @property {String} id
-                 */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                },
                 /**
                  * Whether to show a 'previous' button
                  *

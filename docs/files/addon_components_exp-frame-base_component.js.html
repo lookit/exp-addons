@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -235,7 +238,7 @@ export default Ember.Component.extend(FullScreen, {
 
     // Internal save logic
     _save() {
-        var frameId = &#x60;${this.get(&#x27;frameIndex&#x27;)}-${this.get(&#x27;id&#x27;)}&#x60;;
+        var frameId = &#x60;${this.get(&#x27;id&#x27;)}&#x60;;  // don&#x27;t prepend frameindex, done by parser
         // When exiting frame, save the data to the base player using the provided saveHandler
         const payload = this.serializeContent();
         return this.attrs.saveHandler(frameId, payload);
@@ -364,7 +367,7 @@ export default Ember.Component.extend(FullScreen, {
              * @event previousFrame
              */
             this.send(&#x27;setTimeEvent&#x27;, &#x27;previousFrame&#x27;);
-            var frameId = &#x60;${this.get(&#x27;frameIndex&#x27;)}-${this.get(&#x27;id&#x27;)}&#x60;;
+            var frameId = &#x60;${this.get(&#x27;id&#x27;)}&#x60;; // don&#x27;t prepend frameindex, done by parser
             console.log(&#x60;Previous: Leaving frame ID ${frameId}&#x60;);
             this.sendAction(&#x27;previous&#x27;);
             window.scrollTo(0, 0);

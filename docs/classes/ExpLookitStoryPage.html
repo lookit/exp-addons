@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -107,6 +110,7 @@
             <ul class="inline commas">
                     <li><a href="FullScreen.html">FullScreen</a></li>
                     <li><a href="VideoRecord.html">VideoRecord</a></li>
+                    <li><a href="ExpandAssets.html">ExpandAssets</a></li>
             </ul>
         </div>
 
@@ -115,7 +119,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l16"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:16</code></a>
+            Defined in: <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l17"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:17</code></a>
         </div>
 
             Collection: <a href="../modules/frames.html">frames</a><br>
@@ -179,15 +183,10 @@ without a user event.)</p>
                }
            ],
            &quot;kind&quot;: &quot;exp-lookit-story-page&quot;,
-           &quot;id&quot;: &quot;story-intro-1&quot;,
            &quot;audioSources&quot;: [
                {
                    &quot;audioId&quot;: &quot;firstAudio&quot;,
-                   &quot;sources&quot;: [
-                       {
-                           &quot;stub&quot;: &quot;intro1&quot;
-                       }
-                   ],
+                   &quot;sources&quot;: &quot;intro1&quot;,
                    &quot;highlights&quot;: [
                        {&quot;range&quot;: [3.017343, 5.600283], &quot;image&quot;:     &quot;leftA&quot;},
                        {&quot;range&quot;: [5.752911, 8.899402], &quot;image&quot;:     &quot;rightA&quot;}
@@ -242,11 +241,15 @@ without a user event.)</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property inherited">
+                                <a href="#property_assetsToExpand">assetsToExpand</a>
+
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_audioSources">audioSources</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_audioTypes">audioTypes</a>
 
                             </li>
@@ -254,8 +257,12 @@ without a user event.)</p>
                                 <a href="#property_autoProceed">autoProceed</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_baseDir">baseDir</a>
+
+                            </li>
+                            <li class="index-item property inherited inherited">
+                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
 
                             </li>
                             <li class="index-item property">
@@ -270,16 +277,16 @@ without a user event.)</p>
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
 
                             </li>
-                            <li class="index-item property inherited inherited">
-                                <a href="#property_id">id</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_images">images</a>
 
                             </li>
                             <li class="index-item property">
                                 <a href="#property_parentTextBlock">parentTextBlock</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_videoTypes">videoTypes</a>
 
                             </li>
                     </ul>
@@ -460,7 +467,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l327"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:327</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l278"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:278</code></a>
         </p>
 
 
@@ -561,6 +568,30 @@ event sent by a particular frame</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_assetsToExpand" class="property item inherited">
+    <h3 class="name"><code>assetsToExpand</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_assetsToExpand">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l95"><code>addon&#x2F;mixins&#x2F;expand-assets.js:95</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Object describing which properties may need expansion
+    </div>
+
+
+
+</div>
 <div id="property_audioSources" class="property item">
     <h3 class="name"><code>audioSources</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -572,7 +603,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l193"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:193</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l147"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:147</code></a>
         </p>
 
 
@@ -607,7 +638,7 @@ audio segment</p>
                 <div class="param-description">
                     <p>Array of {src: 'url', type:
 'MIMEtype'} objects with audio sources for this segment</p>
-<p>Can also give a single element {stub: 'filename'}, which will
+<p>Can also give a single string <code>filename</code>, which will
 be expanded out to the appropriate array based on <code>baseDir</code>
 and <code>audioTypes</code> values; see <code>audioTypes</code>.</p>
 
@@ -628,7 +659,7 @@ values correspond to the ids given in images</p>
             </li>
         </ul>
 </div>
-<div id="property_audioTypes" class="property item">
+<div id="property_audioTypes" class="property item inherited">
     <h3 class="name"><code>audioTypes</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
 
@@ -637,32 +668,32 @@ values correspond to the ids given in images</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l165"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:165</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_audioTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l125"><code>addon&#x2F;mixins&#x2F;expand-assets.js:125</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>List of audio types to expect for any audio specified just
-with a string rather than with a list of src/type pairs.
-If audioTypes is ['typeA', 'typeB'] and an audio source
-is given as [{'stub': 'intro'}], the audio source will be
-expanded out to</p>
-<pre class="code prettyprint"><code class="language-json">                [
-                       {
-                           src: 'baseDir' + 'typeA/intro.typeA',
-                           type: 'audio/typeA'
-                       },
-                       {
-                           src: 'baseDir' + 'typeB/intro.typeB',
-                           type: 'audio/typeB'
-                       }
-               ]
-</code></pre>
+        List of audio types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If audioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and an audio source
+is given as <code>intro</code>, the audio source will be
+expanded out to
 
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'audio/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'audio/typeB'
+        }
+    ]
     </div>
 
         <p><strong>Default:</strong> [&#x27;mp3&#x27;, &#x27;ogg&#x27;]</p>
@@ -680,7 +711,7 @@ expanded out to</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l134"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:134</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l137"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:137</code></a>
         </p>
 
 
@@ -695,7 +726,7 @@ replay/next buttons)</p>
 
 
 </div>
-<div id="property_baseDir" class="property item">
+<div id="property_baseDir" class="property item inherited">
     <h3 class="name"><code>baseDir</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
 
@@ -704,29 +735,56 @@ replay/next buttons)</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l144"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:144</code></a>
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_baseDir">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l105"><code>addon&#x2F;mixins&#x2F;expand-assets.js:105</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Base directory for where to find stimuli. Any image src
+        Base directory for where to find stimuli. Any image src
 values that are not full paths will be expanded by prefixing
-with <code>baseDir</code> + <code>img/</code>. Any audio/video src values that give
-a value for 'stub' rather than 'src' and 'type' will be
-expanded out to
-<code>baseDir/avtype/[stub].avtype</code>, where the potential avtypes
-are given by audioTypes and videoTypes.</p>
-<p>Note that baseDir SHOULD include a trailing slash
-(e.g., <code>http://stimuli.org/myexperiment/</code>, not
-<code>http://stimuli.org/myexperiment</code>)</p>
+with <code>baseDir</code> + <code>img&#x2F;</code>. Any audio/video src values provided as
+strings rather than objects with <code>src</code> and <code>type</code> will be
+expanded out to <code>baseDir&#x2F;avtype&#x2F;[stub].avtype</code>, where the potential
+avtypes are given by <code>audioTypes</code> and <code>videoTypes</code>.
 
+baseDir should include a trailing slash
+(e.g., <code>http:&#x2F;&#x2F;stimuli.org&#x2F;myexperiment&#x2F;</code>); if a value is provided that
+does not end in a slash, one will be added.
     </div>
 
         <p><strong>Default:</strong> &#x27;&#x27;</p>
+
+
+</div>
+<div id="property_displayFullscreenOverride" class="property item inherited">
+    <h3 class="name"><code>displayFullscreenOverride</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/FullScreen.html#property_displayFullscreenOverride">
+                FullScreen
+            </a>
+            but overwritten in
+        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
+    </div>
+
 
 
 </div>
@@ -741,7 +799,7 @@ are given by audioTypes and videoTypes.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l124"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:124</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l127"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:127</code></a>
         </p>
 
 
@@ -810,34 +868,6 @@ connection before starting audio if so)</p>
 
 
 </div>
-<div id="property_id" class="property item inherited">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-            <p>Inherited from
-            <a href="../classes/FullScreen.html#property_id">
-                FullScreen
-            </a>
-            but overwritten in
-        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Whether to display this frame as fullscreen, even though it is not
-generally used that way.
-    </div>
-
-
-
-</div>
 <div id="property_images" class="property item">
     <h3 class="name"><code>images</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object[]</a></span>
@@ -849,7 +879,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l288"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:288</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l239"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:239</code></a>
         </p>
 
 
@@ -929,7 +959,7 @@ URL, or relative to baseDir (see baseDir).</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l258"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:258</code></a>
+        <a href="../files/addon_components_exp-lookit-story-page_component.js.html#l209"><code>addon&#x2F;components&#x2F;exp-lookit-story-page&#x2F;component.js:209</code></a>
         </p>
 
 
@@ -988,6 +1018,47 @@ to apply to this section, and their values - e.g.
 
             </li>
         </ul>
+</div>
+<div id="property_videoTypes" class="property item inherited">
+    <h3 class="name"><code>videoTypes</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String[]</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/ExpandAssets.html#property_videoTypes">ExpandAssets</a>:
+        <a href="../files/addon_mixins_expand-assets.js.html#l153"><code>addon&#x2F;mixins&#x2F;expand-assets.js:153</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        List of video types to expect for any audio specified just
+with a string rather than with a list of src/type objects.
+If vidioTypes is <code>[&#x27;typeA&#x27;, &#x27;typeB&#x27;]</code> and a video source
+is given as <code>intro</code>, the video source will be
+expanded out to
+
+
+    [
+        {
+            src: 'baseDir' + 'typeA/intro.typeA',
+            type: 'video/typeA'
+        },
+        {
+            src: 'baseDir' + 'typeB/intro.typeB',
+            type: 'video/typeB'
+        }
+    ]
+    </div>
+
+        <p><strong>Default:</strong> [&#x27;mp4&#x27;, &#x27;webm&#x27;]</p>
+
+
 </div>
             </div>
 

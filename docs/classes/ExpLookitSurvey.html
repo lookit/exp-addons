@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -142,19 +145,34 @@ validator: required-field in the options-&gt;fields entry if you want to require
 participant enters something. A validation error message will be displayed next to
 any fields that fail validation checks and the participant will not be able to proceed until
 these are addressed.</p>
+<p>Alpacajs is fairly powerful, and you are essentially using it directly. In general, you can copy
+and paste any object passed to alpaca in the alpaca docs right in as your formSchema to
+see that example in action on Lookit. Not all features of alpaca are detailed here,
+but they can be used: e.g., advanced users can enter 'views' and 'data' in the
+formSchema to customize the layout of their forms and the initial data. A 'dataSource'
+may be specified under options to populate a question's potential answers (e.g., to
+load a list of countries from some other source rather than hard-coding it, or to
+provide checkboxes with vocabulary items from an externally-defined inventory).</p>
+<p>You can also use alpacajs's &quot;dependencies&quot; and &quot;conditional dependencies&quot; functionality to
+set up fields that depend on other fields - e.g., asking if the child speaks any
+language besides English in the home and only if so displaying a dropdown to select the
+language(s), or asking if the child likes Elmo or Grover better and then asking a question
+specific to the preferred character. Or if you have questions only relevant to the
+birth mother of the child, you could ask if the participant is the birth mother and show
+those questions conditionally.</p>
+<p>Note that question titles are interpreted as HTML and can include images, audio/video
+elements, and inline CSS.</p>
 <p>If a participant returns to this frame after continuing, via a 'Previous' button on the
 next frame, then the values in this form are pre-filled.</p>
 <p>No video recording is conducted on this frame.</p>
 <p>A previous button may optionally be included on this frame.</p>
 <p>The form itself occupies a maximum of 800px horizontally and takes up 80% of the vertical
 height of the window (it will scroll to fit).</p>
-<p>Although this frame provides fairly powerful capabilities via alpacajs, here are some
-things that would currently still require customization of the frame source code:
-editing the formatting; displaying images or playing audio/video; custom validation or
-dynamic addition/removal of fields.</p>
+<p>Current limitations: you are NOT
+able to provide custom functions (e.g. validators, custom dataSource functions)
+directly to the formSchema.</p>
 <pre class="code prettyprint"><code class="language-json">&quot;frames&quot;: {
        &quot;pet-survey&quot;: {
-           &quot;id&quot;: &quot;pet-survey&quot;,
            &quot;kind&quot;: &quot;exp-lookit-survey&quot;,
            &quot;formSchema&quot;: {
                &quot;schema&quot;: {
@@ -190,17 +208,15 @@ dynamic addition/removal of fields.</p>
                &quot;options&quot;: {
                    &quot;fields&quot;: {
                        &quot;age&quot;: {
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;numericEntry&quot;: true
                        },
                        &quot;name&quot;: {
-                           &quot;placeholder&quot;: &quot;a name...&quot;,
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;placeholder&quot;: &quot;a name...&quot;
                        },
                        &quot;species&quot;: {
                            &quot;type&quot;: &quot;radio&quot;,
                            &quot;message&quot;: &quot;Seriously, what species??&quot;,
-                           &quot;validator&quot;: &quot;required-field&quot;,
-                           &quot;hideInitValidationError&quot;: true
+                           &quot;validator&quot;: &quot;required-field&quot;
                        }
                    }
                }
@@ -254,6 +270,10 @@ dynamic addition/removal of fields.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property inherited">
+                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
+
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_formSchema">formSchema</a>
 
@@ -264,10 +284,6 @@ dynamic addition/removal of fields.</p>
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property">
@@ -453,7 +469,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l182"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:182</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l198"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:198</code></a>
         </p>
 
 
@@ -552,6 +568,31 @@ event sent by a particular frame</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_displayFullscreenOverride" class="property item inherited">
+    <h3 class="name"><code>displayFullscreenOverride</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_displayFullscreenOverride">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
+    </div>
+
+
+
+</div>
 <div id="property_formSchema" class="property item">
     <h3 class="name"><code>formSchema</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
@@ -563,7 +604,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l146"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:146</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l162"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:162</code></a>
         </p>
 
 
@@ -664,31 +705,6 @@ desired field described at  <a href="http://www.alpacajs.org/documentation.html"
 
 
 </div>
-<div id="property_id" class="property item inherited">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/FullScreen.html#property_id">FullScreen</a>:
-        <a href="../files/addon_mixins_full-screen.js.html#l165"><code>addon&#x2F;mixins&#x2F;full-screen.js:165</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Whether to display this frame as fullscreen, even though it is not
-generally used that way.
-    </div>
-
-
-
-</div>
 <div id="property_nextButtonText" class="property item">
     <h3 class="name"><code>nextButtonText</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
@@ -700,7 +716,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l136"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:136</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l152"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:152</code></a>
         </p>
 
 
@@ -726,7 +742,7 @@ generally used that way.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l126"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:126</code></a>
+        <a href="../files/addon_components_exp-lookit-survey_component.js.html#l142"><code>addon&#x2F;components&#x2F;exp-lookit-survey&#x2F;component.js:142</code></a>
         </p>
 
 

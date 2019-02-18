@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -171,14 +174,6 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
             type: &#x27;object&#x27;,
             properties: {
                 /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: &#x27;string&#x27;,
-                    description: &#x27;A unique identifier for this item&#x27;
-                },
-                /**
                 Object specifying information to show on second page of exit survey, before returning to main Lookit site.
                 @property {Object} debriefing
                     @param {String} title Title of debriefing page
@@ -211,7 +206,7 @@ export default ExpFrameBaseComponent.extend(Validations, FullScreen, {
                         }
                     }
                 },
-                required: [&#x27;id&#x27;, &#x27;debriefing&#x27;]
+                required: [&#x27;debriefing&#x27;]
             }
         },
         data: {

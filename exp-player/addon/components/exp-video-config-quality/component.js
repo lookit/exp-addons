@@ -14,7 +14,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 ```json
 "frames": {
     "video-quality": {
-        "id": "video-quality",
         "kind": "exp-video-config-quality"
     }
 }
@@ -29,13 +28,6 @@ Video configuration frame showing webcam view at right and instructions for chec
 export default ExpFrameBaseComponent.extend(VideoRecord, {
     layout,
 
-    actions: {
-        next() {
-            this.destroyRecorder();
-            this._super(...arguments);
-        }
-    },
-
     type: 'exp-video-config-quality',
     meta: {
         name: 'Video Recorder Configuration for preferential looking',
@@ -43,16 +35,8 @@ export default ExpFrameBaseComponent.extend(VideoRecord, {
         parameters: {
             type: 'object',
             properties: {
-                /**
-                A unique identifier for this item
-                @property {String} id
-                */
-                id: {
-                    type: 'string',
-                    description: 'A unique identifier for this item'
-                }
             },
-            required: ['id']
+            required: []
         },
         data: {
             type: 'object',

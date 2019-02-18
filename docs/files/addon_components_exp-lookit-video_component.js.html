@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -110,6 +113,7 @@ import ExpFrameBaseComponent from &#x27;../../components/exp-frame-base/componen
 import FullScreen from &#x27;../../mixins/full-screen&#x27;;
 import MediaReload from &#x27;../../mixins/media-reload&#x27;;
 import VideoRecord from &#x27;../../mixins/video-record&#x27;;
+import ExpandAssets from &#x27;../../mixins/expand-assets&#x27;;
 
 let {
     $
@@ -147,16 +151,9 @@ let {
         }
     ]
 &#x60;&#x60;&#x60;
-* OR you can provide a list with a single object with a &#x27;stub&#x27;, which will be expanded
+* OR you can provide a single string &#x27;stub&#x27;, which will be expanded
 * based on the parameter baseDir and the media types expected - either audioTypes or
-* videoTypes as appropriate. For example, if you provide the audio source
-&#x60;&#x60;&#x60;json
-    [
-        {
-            &#x27;stub&#x27;: &#x27;intro&#x27;
-        }
-    ]
-&#x60;&#x60;&#x60;
+* videoTypes as appropriate. For example, if you provide the audio source &#x60;intro&#x60;
 * and baseDir is https://mystimuli.org/mystudy/, with audioTypes [&#x27;mp3&#x27;, &#x27;ogg&#x27;], then this
 * will be expanded to:
 &#x60;&#x60;&#x60;json
@@ -186,70 +183,29 @@ let {
 
 &#x60;&#x60;&#x60;json
         &quot;sample-intermodal-trial-2&quot;: {
-            &quot;id&quot;: &quot;sample-intermodal-trial-2&quot;,
             &quot;kind&quot;: &quot;exp-lookit-video&quot;,
             &quot;isLast&quot;: false,
             &quot;baseDir&quot;: &quot;https://s3.amazonaws.com/lookitcontents/intermodal/&quot;,
-            &quot;sources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;sbs_ramp_down_up_apple_c1_b1_NN&quot;
-                }
-            ],
+            &quot;sources&quot;: &quot;sbs_ramp_down_up_apple_c1_b1_NN&quot;,
             &quot;testCount&quot;: 2,
-            &quot;altSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;sbs_ramp_up_down_apple_c1_b1_NN&quot;
-                }
-            ],
+            &quot;altSources&quot;: &quot;sbs_ramp_up_down_apple_c1_b1_NN&quot;,
             &quot;audioTypes&quot;: [
                 &quot;ogg&quot;,
                 &quot;mp3&quot;
             ],
-            &quot;pauseAudio&quot;: [
-                {
-                    &quot;stub&quot;: &quot;pause&quot;
-                }
-            ],
+            &quot;pauseAudio&quot;: &quot;pause&quot;,
             &quot;videoTypes&quot;: [
                 &quot;webm&quot;,
                 &quot;mp4&quot;
             ],
-            &quot;attnSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;attentiongrabber&quot;
-                }
-            ],
-            &quot;audioSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;video_02&quot;
-                }
-            ],
-            &quot;introSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;cropped_book&quot;
-                }
-            ],
-            &quot;musicSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;music_02&quot;
-                }
-            ],
-            &quot;unpauseAudio&quot;: [
-                {
-                    &quot;stub&quot;: &quot;return_after_pause&quot;
-                }
-            ],
+            &quot;attnSources&quot;: &quot;attentiongrabber&quot;,
+            &quot;audioSources&quot;: &quot;video_02&quot;,
+            &quot;introSources&quot;: &quot;cropped_book&quot;,
+            &quot;musicSources&quot;: &quot;music_02&quot;,
+            &quot;unpauseAudio&quot;: &quot;return_after_pause&quot;,
             &quot;calibrationLength&quot;: 3000,
-            &quot;calibrationAudioSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;chimes&quot;
-                }
-            ],
-            &quot;calibrationVideoSources&quot;: [
-                {
-                    &quot;stub&quot;: &quot;attentiongrabber&quot;
-                }
-            ]
+            &quot;calibrationAudioSources&quot;: &quot;chimes&quot;,
+            &quot;calibrationVideoSources&quot;: &quot;attentiongrabber&quot;
         }
 
 * &#x60;&#x60;&#x60;
@@ -258,17 +214,37 @@ let {
 * @uses FullScreen
 * @uses MediaReload
 * @uses VideoRecord
+* @uses ExpandAssets
 */
 
 // TODO: refactor into cleaner structure with segments announcement, intro, calibration, test, with more general logic for transitions. Construct list at start since some elements optional. Then proceed through - instead of setting task manually, use utility to move to next task within list.
 
-export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, {
+export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord, ExpandAssets, {
     layout: layout,
     type: &#x27;exp-lookit-video&#x27;,
 
     displayFullscreen: true, // force fullscreen for all uses of this component
     fullScreenElementId: &#x27;experiment-player&#x27;,
     fsButtonID: &#x27;fsButton&#x27;,
+
+    assetsToExpand: {
+        &#x27;audio&#x27;: [
+            &#x27;audioSources&#x27;,
+            &#x27;musicSources&#x27;,
+            &#x27;calibrationAudioSources&#x27;,
+            &#x27;pauseAudio&#x27;,
+            &#x27;unpauseAudio&#x27;
+        ],
+        &#x27;video&#x27;: [
+            &#x27;sources&#x27;,
+            &#x27;altSources&#x27;,
+            &#x27;introSources&#x27;,
+            &#x27;attnSources&#x27;,
+            &#x27;calibrationVideoSources&#x27;
+        ],
+        &#x27;image&#x27;: [
+        ]
+    },
 
     // Override setting in VideoRecord mixin - only use camera if doing recording
     doUseCamera: Ember.computed.alias(&#x27;doRecording&#x27;),
@@ -564,83 +540,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     type: &#x27;string&#x27;,
                     description: &#x27;Text to show under Study paused when study is paused.&#x27;,
                     default: &quot;(You&#x27;ll have a moment to turn around again.)&quot;
-                },
-                /**
-                 * Base directory for where to find stimuli. Any image src
-                 * values that are not full paths will be expanded by prefixing
-                 * with &#x60;baseDir&#x60; + &#x60;img/&#x60;. Any audio/video src values that give
-                 * a value for &#x27;stub&#x27; rather than &#x27;src&#x27; and &#x27;type&#x27; will be
-                 * expanded out to
-                 * &#x60;baseDir/avtype/[stub].avtype&#x60;, where the potential avtypes
-                 * are given by audioTypes and videoTypes.
-                 *
-                 * Note that baseDir SHOULD include a trailing slash
-                 * (e.g., &#x60;http://stimuli.org/myexperiment/&#x60;, not
-                 * &#x60;http://stimuli.org/myexperiment&#x60;)
-                 *
-                 * @property {String} baseDir
-                 * @default &#x27;&#x27;
-                 */
-                baseDir: {
-                    type: &#x27;string&#x27;,
-                    default: &#x27;&#x27;,
-                    description: &#x27;Base directory for all stimuli&#x27;
-                },
-                /**
-                 * List of audio types to expect for any audio specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is [&#x27;typeA&#x27;, &#x27;typeB&#x27;] and an audio source
-                 * is given as [{&#x27;stub&#x27;: &#x27;intro&#x27;}], the audio source will be
-                 * expanded out to
-                 *
-&#x60;&#x60;&#x60;json
-                 [
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeA/intro.typeA&#x27;,
-                            type: &#x27;audio/typeA&#x27;
-                        },
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeB/intro.typeB&#x27;,
-                            type: &#x27;audio/typeB&#x27;
-                        }
-                ]
-&#x60;&#x60;&#x60;
-                 *
-                 * @property {String[]} audioTypes
-                 * @default [&#x27;mp3&#x27;, &#x27;ogg&#x27;]
-                 */
-                audioTypes: {
-                    type: &#x27;array&#x27;,
-                    default: [&#x27;mp3&#x27;, &#x27;ogg&#x27;],
-                    description: &#x27;List of audio types to expect for any audio sources specified as strings rather than lists of src/type pairs&#x27;
-                },
-                /**
-                 * List of video types to expect for any video specified just
-                 * with a string rather than with a list of src/type pairs.
-                 * If audioTypes is [&#x27;typeA&#x27;, &#x27;typeB&#x27;] and an video source
-                 * is given as [{&#x27;stub&#x27;: &#x27;intro&#x27;}], the video source will be
-                 * expanded out to
-                 *
-&#x60;&#x60;&#x60;json
-                 [
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeA/intro.typeA&#x27;,
-                            type: &#x27;audio/typeA&#x27;
-                        },
-                        {
-                            src: &#x27;baseDir&#x27; + &#x27;typeB/intro.typeB&#x27;,
-                            type: &#x27;audio/typeB&#x27;
-                        }
-                ]
-&#x60;&#x60;&#x60;
-                 *
-                 * @property {String[]} videoTypes
-                 * @default [&#x27;mp4&#x27;, &#x27;webm&#x27;]
-                 */
-                videoTypes: {
-                    type: &#x27;array&#x27;,
-                    default: [&#x27;mp4&#x27;, &#x27;webm&#x27;],
-                    description: &#x27;List of audio types to expect for any video sources specified as strings rather than lists of src/type pairs&#x27;
                 }
             }
         },
@@ -967,74 +866,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         });
     },
 
-    // Utility to expand stubs into either full URLs (for images) or
-    // array of {src: &#x27;url&#x27;, type: &#x27;MIMEtype&#x27;} objects (for audio/video).
-    expandAsset(asset, type) {
-        var fullAsset = asset;
-        var _this = this;
-
-        if (type === &#x27;image&#x27; &amp;&amp; typeof asset === &#x27;string&#x27; &amp;&amp; !(asset.includes(&#x27;://&#x27;))) {
-            // Image: replace stub with full URL if needed
-            fullAsset = this.baseDir + &#x27;img/&#x27; + asset;
-        } else {
-            var types;
-            if (type === &#x27;audio&#x27;) {
-                types = this.audioTypes;
-            } else if (type === &#x27;video&#x27;) {
-                types = this.videoTypes;
-            }
-            // Replace any source objects that have a
-            // &#x27;stub&#x27; attribute with the appropriate expanded source
-            // objects
-            fullAsset = [];
-            asset.forEach(function(srcObj) {
-                if (srcObj.hasOwnProperty(&#x27;stub&#x27;)) {
-                    for (var iType = 0; iType &lt; types.length; iType++) {
-                        fullAsset.push({
-                            src: _this.baseDir + types[iType] + &#x27;/&#x27; + srcObj.stub + &#x27;.&#x27; + types[iType],
-                            type: type + &#x27;/&#x27; + types[iType]
-                        });
-                    }
-                } else {
-                    fullAsset.push(srcObj);
-                }
-            });
-        }
-        return fullAsset;
-    },
-
     didInsertElement() {
         this._super(...arguments);
-
-        // Expand any audio/video src stubs
-        var audSrcParameterNames = [
-            &#x27;audioSources&#x27;,
-            &#x27;musicSources&#x27;,
-            &#x27;calibrationAudioSources&#x27;,
-            &#x27;pauseAudio&#x27;,
-            &#x27;unpauseAudio&#x27;
-        ];
-        var vidSrcParameterNames = [
-            &#x27;sources&#x27;,
-            &#x27;altSources&#x27;,
-            &#x27;introSources&#x27;,
-            &#x27;attnSources&#x27;,
-            &#x27;calibrationVideoSources&#x27;
-        ];
-
-        var _this = this;
-        audSrcParameterNames.forEach((paraName) =&gt; {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + &#x27;_parsed&#x27;, _this.expandAsset(sources, &#x27;audio&#x27;));
-            }
-        });
-        vidSrcParameterNames.forEach((paraName) =&gt; {
-            var sources = _this.get(paraName);
-            if (sources) {
-                _this.set(paraName + &#x27;_parsed&#x27;, _this.expandAsset(sources, &#x27;video&#x27;));
-            }
-        });
 
         $(document).on(&#x27;keyup.pauser&#x27;, (e) =&gt; {
             if (this.checkFullscreen()) {
@@ -1072,6 +905,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     willDestroyElement() { // remove event handler
         $(document).off(&#x27;keyup.pauser&#x27;);
+        window.clearInterval(this.get(&#x27;testTimer&#x27;));
+        window.clearInterval(this.get(&#x27;announceTimer&#x27;));
+        window.clearInterval(this.get(&#x27;calTimer&#x27;));
         this._super(...arguments);
     }
 });

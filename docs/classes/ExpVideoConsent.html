@@ -41,6 +41,7 @@
                       <input type="search" id="api-filter" placeholder="Type to filter">
                     </div>
                         <ul id="api-classes" class="apis classes">
+                            <li><a href="../classes/ExpandAssets.html">ExpandAssets</a></li>
                             <li><a href="../classes/ExpExitSurvey.html">ExpExitSurvey</a></li>
                             <li><a href="../classes/ExpFrameBase.html">ExpFrameBase</a></li>
                             <li><a href="../classes/ExpLookitDialoguePage.html">ExpLookitDialoguePage</a></li>
@@ -48,6 +49,8 @@
                             <li><a href="../classes/ExpLookitGeometryAlternation.html">ExpLookitGeometryAlternation</a></li>
                             <li><a href="../classes/ExpLookitInstructions.html">ExpLookitInstructions</a></li>
                             <li><a href="../classes/ExpLookitMoodQuestionnaire.html">ExpLookitMoodQuestionnaire</a></li>
+                            <li><a href="../classes/ExpLookitObservation.html">ExpLookitObservation</a></li>
+                            <li><a href="../classes/ExpLookitPreferentialLooking.html">ExpLookitPreferentialLooking</a></li>
                             <li><a href="../classes/ExpLookitPreviewExplanation.html">ExpLookitPreviewExplanation</a></li>
                             <li><a href="../classes/ExpLookitStoryPage.html">ExpLookitStoryPage</a></li>
                             <li><a href="../classes/ExpLookitSurvey.html">ExpLookitSurvey</a></li>
@@ -157,7 +160,6 @@ Consent document can be downloaded as PDF document by participant.</p>
                 &quot;title&quot;: &quot;Contact information&quot;
             }
         ],
-        &quot;id&quot;: &quot;video-consent&quot;,
         &quot;prompt&quot;: &quot;\&quot;I have read and understand the consent document. I am this child's parent or legal guardian and we both agree to participate in this study.\&quot;&quot;,
         &quot;kind&quot;: &quot;exp-video-consent&quot;
     }
@@ -216,15 +218,15 @@ Consent document can be downloaded as PDF document by participant.</p>
 
                             </li>
                             <li class="index-item property inherited">
+                                <a href="#property_displayFullscreenOverride">displayFullscreenOverride</a>
+
+                            </li>
+                            <li class="index-item property inherited">
                                 <a href="#property_fsButtonID">fsButtonID</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_fullScreenElementId">fullScreenElementId</a>
-
-                            </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_id">id</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -441,7 +443,7 @@ event sent by a particular frame</p>
                 ExpFrameBase
             </a>
             but overwritten in
-        <a href="../files/addon_components_exp-video-consent_component.js.html#l118"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:118</code></a>
+        <a href="../files/addon_components_exp-video-consent_component.js.html#l108"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:108</code></a>
         </p>
 
 
@@ -561,7 +563,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-consent_component.js.html#l83"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:83</code></a>
+        <a href="../files/addon_components_exp-video-consent_component.js.html#l73"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:73</code></a>
         </p>
 
 
@@ -609,7 +611,7 @@ event sent by a particular frame</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_datause">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l194"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:194</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l184"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:184</code></a>
         </p>
 
 
@@ -619,6 +621,31 @@ event sent by a particular frame</p>
         <p>Study-specific data use statement (optional). This will follow the following more general text: &quot;The research group led by [PIName] at [institution] will have access to video and other data collected during this session. We will also have access to your account profile, demographic survey, and the child profile for the child who is participating, including changes you make in the future to any of this information. We may study your child’s responses in connection with his or her previous responses to this or other studies run by our group, siblings’ responses to this or other studies run by our group, or demographic survey responses.&quot;
 You may want to note what measures you will actually be coding for (looking time, facial expressions, parent-child interaction, etc.) and other more specific information about your use of data from this study here. For instance, you would note if you were building a corpus of naturalistic data that may be used to answer a variety of questions (rather than just collecting data for a single planned study).</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_displayFullscreenOverride" class="property item inherited">
+    <h3 class="name"><code>displayFullscreenOverride</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/FullScreen.html#property_displayFullscreenOverride">FullScreen</a>:
+        <a href="../files/addon_mixins_full-screen.js.html#l167"><code>addon&#x2F;mixins&#x2F;full-screen.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Whether to display this frame as fullscreen, even though it is not
+generally used that way.
     </div>
 
 
@@ -672,34 +699,6 @@ You may want to note what measures you will actually be coding for (looking time
 
 
 </div>
-<div id="property_id" class="property item">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
-
-
-
-
-
-    <div class="meta">
-            <p>Inherited from
-            <a href="../classes/FullScreen.html#property_id">
-                FullScreen
-            </a>
-            but overwritten in
-        <a href="../files/addon_components_exp-video-consent_component.js.html#l64"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:64</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A unique identifier for this item</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_institution" class="property item inherited">
     <h3 class="name"><code>institution</code></h3>
     <span class="type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
@@ -711,7 +710,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_institution">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l149"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:149</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l139"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:139</code></a>
         </p>
 
 
@@ -736,7 +735,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_payment">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l185"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:185</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l175"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:175</code></a>
         </p>
 
 
@@ -761,7 +760,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_PIContact">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l158"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:158</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l148"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:148</code></a>
         </p>
 
 
@@ -786,7 +785,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_PIName">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l140"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:140</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l130"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:130</code></a>
         </p>
 
 
@@ -811,7 +810,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_procedures">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l176"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:176</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l166"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:166</code></a>
         </p>
 
 
@@ -836,7 +835,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-consent_component.js.html#l106"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:106</code></a>
+        <a href="../files/addon_components_exp-video-consent_component.js.html#l96"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:96</code></a>
         </p>
 
 
@@ -862,7 +861,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/ExpLookitVideoConsent.html#property_purpose">ExpLookitVideoConsent</a>:
-        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l167"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:167</code></a>
+        <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l157"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:157</code></a>
         </p>
 
 
@@ -887,7 +886,7 @@ You may want to note what measures you will actually be coding for (looking time
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/addon_components_exp-video-consent_component.js.html#l73"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:73</code></a>
+        <a href="../files/addon_components_exp-video-consent_component.js.html#l63"><code>addon&#x2F;components&#x2F;exp-video-consent&#x2F;component.js:63</code></a>
         </p>
 
 
@@ -919,7 +918,7 @@ You may want to note what measures you will actually be coding for (looking time
                         <div class="meta">
                                     <p>Inherited from
                                     <a href="../classes/ExpLookitVideoConsent.html#event_downloadConsentForm">ExpLookitVideoConsent</a>:
-                            <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l116"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:116</code></a>
+                            <a href="../files/addon_components_exp-lookit-video-consent_component.js.html#l115"><code>addon&#x2F;components&#x2F;exp-lookit-video-consent&#x2F;component.js:115</code></a>
                             </p>
                     
                     
