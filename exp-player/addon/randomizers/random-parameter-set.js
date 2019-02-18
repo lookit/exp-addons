@@ -417,9 +417,9 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
         thisFrame = replaceValues(thisFrame, parameterSet);
 
         // Assign frame ID
-        thisFrame.id = `${frameId}`;
+        //thisFrame.id = `${frameId}`;
 
-        thisFrame = resolveFrame(thisFrame.id, thisFrame)[0];
+        thisFrame = resolveFrame(frameId, thisFrame)[0];
         frames.push(...thisFrame); // spread syntax important here -- a list of frames is returned by resolveFrame.
     }
 
@@ -438,4 +438,4 @@ var randomizer = function(frameId, frameConfig, pastSessions, resolveFrame) {
 export default randomizer;
 
 // Export helper functions to support unit testing
-export { getRandomElement };
+export { getRandomElement, randomizer };
