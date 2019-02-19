@@ -84,7 +84,6 @@ test('Values are replaced at multiple levels of object hierarchy and within arra
 
     var parser = new ExperimentParser();
     let [actualResult, ] = randomizer(frameId, frameConfig, [], parser._resolveFrame.bind(parser));
-    console.log(actualResult);
 
     assert.deepEqual(actualResult, expectedResult,
         'Strings that are properties of replace should be replaced throughout object'
@@ -93,7 +92,7 @@ test('Values are replaced at multiple levels of object hierarchy and within arra
 });
 
 
-test('Randomizer creates expected frame list', function (assert) {
+test('Randomizer does basic parameter replacement using expected parameter set', function (assert) {
 
     const frameId = 'frame-id';
     const frameConfig = {
@@ -170,3 +169,71 @@ test('Randomizer creates expected frame list', function (assert) {
 
 });
 
+test('Randomizer accepts selector syntax INDEX, RAND, PERM, UNIQ to choose from lists in parameter set', function (assert) {
+
+    const frameId = 'frame-id';
+    const imageList = ['a.jpg', 'b.jpg', 'c.jpg'];
+    const soundList = ['hiss', 'bark', 'meow'];
+    const nameList = ['bob', 'joe', 'suzie', 'jill'];
+
+    const frameConfig = {
+        commonFrameProperties: {
+            'kind': 'exp-lookit-experiment-page'
+        },
+        frameList: [
+            {
+                'leftImage': 'IMAGES#2',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+                'nameList': 'NAMES#PERM',
+            },
+            {
+                'leftImage': 'IMAGES#0',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+            {
+                'leftImage': 'IMAGES#1',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+            {
+                'leftImage': 'IMAGES#1',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+        ],
+        parameterSets: [
+            {
+                'IMAGES': imageList,
+                'SOUNDS': soundList,
+                'NAMES': nameList,
+            },
+        ],
+        parameterSetWeights: [1]
+    };
+
+    var parser = new ExperimentParser();
+    let [actualResult, ] = randomizer(frameId, frameConfig, [], parser._resolveFrame.bind(parser));
+
+    let images = actualResult.map((fr) => fr.leftImage);
+    assert.deepEqual(images, [imageList[2], imageList[0], imageList[1], imageList[1]],
+        'Randomizer did not use #INDEX syntax as expected'
+    );
+
+    let sounds = actualResult.map((fr) => fr.animalNoise);
+    assert.ok(sounds.every((s) => soundList.includes(s)),
+        'Randomizer did not use #RAND syntax as expected'
+    );
+
+    let names = actualResult.map((fr) => fr.animalName);
+    assert.deepEqual(names.sort(), nameList.sort(),
+        'Randomizer did not use #UNIQ syntax as expected'
+    );
+
+    let namePerm = actualResult[0].nameList;
+    assert.deepEqual(namePerm.sort(), nameList.sort(),
+        'Randomizer did not use #PERM syntax as expected'
+    );
+
+});
