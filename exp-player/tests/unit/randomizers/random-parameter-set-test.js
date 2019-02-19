@@ -2,6 +2,7 @@ import { module, skip } from 'qunit';
 import test from 'ember-sinon-qunit/test-support/test';
 
 import { getRandomElement, randomizer } from 'exp-player/randomizers/random-parameter-set';
+import ExperimentParser from '../../../utils/parse-experiment';
 
 module('Unit | Randomizer | random parameter set');
 
@@ -18,67 +19,80 @@ test('Random element selected from weighted list is a possible choice', function
     );
 });
 
-// TODO: replaceValues is now defined within the randomizer so we need to test based on an
-// actual randomization!
-skip('Values are replaced at multiple levels of object hierarchy and within arrays', function (assert) {
+test('Values are replaced at multiple levels of object hierarchy and within arrays', function (assert) {
 
-    const object = {
-        prop0: 'val4',
-        prop1: {
-            setting1: 1,
-            setting2: "val1",
-            setting3: "val1",
-            setting4: [4,"val3",6],
-            setting5: 5
+    const frameId = 'frame-id';
+    const frameConfig = {
+        commonFrameProperties: {
         },
-        prop2: {
-            setting1: {
-                subSetting: "val2"
+        frameList: [
+            {
+                kind: 'exp-lookit-experiment-page',
+                prop0: 'val4',
+                prop1: {
+                    setting1: 1,
+                    setting2: "val1",
+                    setting3: "val1",
+                    setting4: [4,"val3",6],
+                    setting5: 5
+                },
+                prop2: {
+                    setting1: {
+                        subSetting: "val2"
+                    },
+                    setting2: "val3"
+                },
+                prop3: {
+                    setting: "val4"
+                }
             },
-            setting2: "val3"
-        },
-        prop3: {
-            setting: "val4"
-        }
-    };
-
-    const replace = {
-        "val1": "replacedvalue1",
-        "val2": "replacedvalue2",
-        "val3": "replacedvalue3",
-        "val4": "replacedvalue4"
-    };
-
-    const expectedResult = {
-        prop0: 'replacedvalue4',
-        prop1: {
-            setting1: 1,
-            setting2: "replacedvalue1",
-            setting3: "replacedvalue1",
-            setting4: [4,"replacedvalue3",6],
-            setting5: 5
-        },
-        prop2: {
-            setting1: {
-                subSetting: "replacedvalue2"
+        ],
+        parameterSets: [
+            {
+                "val1": "replacedvalue1",
+                "val2": "replacedvalue2",
+                "val3": "replacedvalue3",
+                "val4": "replacedvalue4"
             },
-            setting2: "replacedvalue3"
-        },
-        prop3: {
-            setting: "replacedvalue4"
-        }
+        ],
+        parameterSetWeights: [1]
     };
 
-    let actualResult = replaceValues(object, replace);
+    const expectedResult = [
+            {
+                id: 'frame-id',
+                kind: 'exp-lookit-experiment-page',
+                prop0: 'replacedvalue4',
+                prop1: {
+                    setting1: 1,
+                    setting2: "replacedvalue1",
+                    setting3: "replacedvalue1",
+                    setting4: [4,"replacedvalue3",6],
+                    setting5: 5
+                },
+                prop2: {
+                    setting1: {
+                        subSetting: "replacedvalue2"
+                    },
+                    setting2: "replacedvalue3"
+                },
+                prop3: {
+                    setting: "replacedvalue4"
+                },
+            },
+        ];
+
+    var parser = new ExperimentParser();
+    let [actualResult, ] = randomizer(frameId, frameConfig, [], parser._resolveFrame.bind(parser));
 
     assert.deepEqual(actualResult, expectedResult,
         'Strings that are properties of replace should be replaced throughout object'
     );
+
 });
 
 
-// Object.assign doesn't work in tests; omitting this for now (but have checked manually)
-skip('Randomizer creates expected frame list', function (assert) {
+test('Randomizer does basic parameter replacement using expected parameter set', function (assert) {
 
     const frameId = 'frame-id';
     const frameConfig = {
@@ -121,12 +135,6 @@ skip('Randomizer creates expected frame list', function (assert) {
         parameterSetWeights: [1, 0]
     };
 
-    // just test on regular frame type, don't test resolving choice frames
-    // within randomizer (although that should eventually also work)
-    var resolveFrame = function(_, frame) {
-        return [frame];
-    };
-
     const expectedResult = [
             {
                 'id': 'frame-id',
@@ -151,7 +159,9 @@ skip('Randomizer creates expected frame list', function (assert) {
             },
         ];
 
-    let [actualResult, ] = randomizer(frameId, frameConfig, [], resolveFrame);
+
+    var parser = new ExperimentParser();
+    let [actualResult, ] = randomizer(frameId, frameConfig, [], parser._resolveFrame.bind(parser));
 
     assert.deepEqual(actualResult, expectedResult,
         'Randomizer did not create expected frame list'
@@ -159,3 +169,71 @@ skip('Randomizer creates expected frame list', function (assert) {
 
 });
 
+test('Randomizer accepts selector syntax INDEX, RAND, PERM, UNIQ to choose from lists in parameter set', function (assert) {
+
+    const frameId = 'frame-id';
+    const imageList = ['a.jpg', 'b.jpg', 'c.jpg'];
+    const soundList = ['hiss', 'bark', 'meow'];
+    const nameList = ['bob', 'joe', 'suzie', 'jill'];
+
+    const frameConfig = {
+        commonFrameProperties: {
+            'kind': 'exp-lookit-experiment-page'
+        },
+        frameList: [
+            {
+                'leftImage': 'IMAGES#2',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+                'nameList': 'NAMES#PERM',
+            },
+            {
+                'leftImage': 'IMAGES#0',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+            {
+                'leftImage': 'IMAGES#1',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+            {
+                'leftImage': 'IMAGES#1',
+                'animalNoise': 'SOUNDS#RAND',
+                'animalName': 'NAMES#UNIQ',
+            },
+        ],
+        parameterSets: [
+            {
+                'IMAGES': imageList,
+                'SOUNDS': soundList,
+                'NAMES': nameList,
+            },
+        ],
+        parameterSetWeights: [1]
+    };
+
+    var parser = new ExperimentParser();
+    let [actualResult, ] = randomizer(frameId, frameConfig, [], parser._resolveFrame.bind(parser));
+
+    let images = actualResult.map((fr) => fr.leftImage);
+    assert.deepEqual(images, [imageList[2], imageList[0], imageList[1], imageList[1]],
+        'Randomizer did not use #INDEX syntax as expected'
+    );
+
+    let sounds = actualResult.map((fr) => fr.animalNoise);
+    assert.ok(sounds.every((s) => soundList.includes(s)),
+        'Randomizer did not use #RAND syntax as expected'
+    );
+
+    let names = actualResult.map((fr) => fr.animalName);
+    assert.deepEqual(names.sort(), nameList.sort(),
+        'Randomizer did not use #UNIQ syntax as expected'
+    );
+
+    let namePerm = actualResult[0].nameList;
+    assert.deepEqual(namePerm.sort(), nameList.sort(),
+        'Randomizer did not use #PERM syntax as expected'
+    );
+
+});
