@@ -958,13 +958,13 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         // Replace leftImage, rightImage, centerImage if appropriate
         if (this.get('possibleImages').length) {
             if (!this.get('leftImage') && this.get('leftImageIndex') != -1) {
-                this.set('leftImage', this.get('possibleImages')[this.get('leftImageIndex')];
+                this.set('leftImage', this.get('possibleImages')[this.get('leftImageIndex')]);
             }
             if (!this.get('rightImage') && this.get('rightImageIndex') != -1) {
-                this.set('rightImage', this.get('possibleImages')[this.get('rightImageIndex')];
+                this.set('rightImage', this.get('possibleImages')[this.get('rightImageIndex')]);
             }
             if (!this.get('centerImage') && this.get('centerImageIndex') != -1) {
-                this.set('centerImage', this.get('possibleImages')[this.get('centerImageIndex')];
+                this.set('centerImage', this.get('possibleImages')[this.get('centerImageIndex')]);
             }
         }
 
