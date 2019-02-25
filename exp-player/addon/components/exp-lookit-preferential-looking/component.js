@@ -327,7 +327,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                  */
                 leftImageIndex: {
                     type: 'number',
-                    description: 'index in possibleImages for image to use on left.'
+                    description: 'index in possibleImages for image to use on left.',
                     default: -1
                 },
 
@@ -340,7 +340,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                  */
                 rightImageIndex: {
                     type: 'number',
-                    description: 'index in possibleImages for image to use on right.'
+                    description: 'index in possibleImages for image to use on right.',
                     default: -1
                 },
 
@@ -353,7 +353,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                  */
                 centerImageIndex: {
                     type: 'number',
-                    description: 'index in possibleImages for image to use on center.'
+                    description: 'index in possibleImages for image to use on center.',
                     default: -1
                 },
 
@@ -954,7 +954,9 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         );
     },
 
-    didReceiveAttrs() {
+    didInsertElement() {
+        this._super(...arguments);
+
         // Replace leftImage, rightImage, centerImage if appropriate
         if (this.get('possibleImages').length) {
             if (!this.get('leftImage') && this.get('leftImageIndex') != -1) {
@@ -967,13 +969,6 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 this.set('centerImage', this.get('possibleImages')[this.get('centerImageIndex')]);
             }
         }
-
-        // ...BEFORE expanding assets!
-        this._super(...arguments);
-    },
-
-    didInsertElement() {
-        this._super(...arguments);
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {
