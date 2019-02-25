@@ -159,7 +159,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
         'image': [
             'leftImage',
             'rightImage',
-            'centerImage'
+            'centerImage',
+            'possibleImages'
         ]
     },
 
@@ -293,12 +294,69 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                  * stub that will be appended to `baseDir` + `img/` (see
                  * baseDir).
                  *
-                 * @property {String} right
+                 * @property {String} rightImage
                  */
                 rightImage: {
                     type: 'string',
                     description: 'URL of image to show on left'
                 },
+
+                /**
+                 * List of possible images that may be shown. Can be full URLs or
+                 * stubs that will be appended to `baseDir` + `img/` (see
+                 * baseDir). If leftImageIndex, rightImageIndex, and/or centerImageIndex
+                 * are provided, they indicate the index of the item in this list.
+                 *
+                 * @property {String} possibleImages
+                 */
+                possibleImages: {
+                    type: 'array',
+                    description: 'list of possible images to use for centerImage, leftImage, rightImage',
+                    default: [],
+                    items: {
+                        type: 'string'
+                    }
+                },
+
+               /**
+                 * Index in possibleImages for image to use on left. This will be overridden
+                 * by any actual value provided for leftImage. Index must be in range
+                 * [0, len(possibleImages)]. Omit or -1 not to use.
+                 *
+                 * @property {String} leftImageIndex
+                 */
+                leftImageIndex: {
+                    type: 'number',
+                    description: 'index in possibleImages for image to use on left.',
+                    default: -1
+                },
+
+                /**
+                 * Index in possibleImages for image to use on right. This will be overridden
+                 * by any actual value provided for rightImage. Index must be in range
+                 * [0, len(possibleImages)].  Omit or -1 not to use.
+                 *
+                 * @property {String} rightImageIndex
+                 */
+                rightImageIndex: {
+                    type: 'number',
+                    description: 'index in possibleImages for image to use on right.',
+                    default: -1
+                },
+
+                /**
+                 * Index in possibleImages for center image. This will be overridden
+                 * by any actual value provided for centerImage. Index must be in range
+                 * [0, len(possibleImages)].  Omit or -1 not to use.
+                 *
+                 * @property {String} centerImageIndex
+                 */
+                centerImageIndex: {
+                    type: 'number',
+                    description: 'index in possibleImages for image to use on center.',
+                    default: -1
+                },
+
                 /**
                  * URL of image to show at center, if any. Can be a full URL or
                  * a stub that will be appended to `baseDir` + `img/` (see
@@ -898,6 +956,19 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
 
     didInsertElement() {
         this._super(...arguments);
+
+        // Replace leftImage, rightImage, centerImage if appropriate
+        if (this.get('possibleImages').length) {
+            if (!this.get('leftImage') && this.get('leftImageIndex') != -1) {
+                this.set('leftImage', this.get('possibleImages')[this.get('leftImageIndex')]);
+            }
+            if (!this.get('rightImage') && this.get('rightImageIndex') != -1) {
+                this.set('rightImage', this.get('possibleImages')[this.get('rightImageIndex')]);
+            }
+            if (!this.get('centerImage') && this.get('centerImageIndex') != -1) {
+                this.set('centerImage', this.get('possibleImages')[this.get('centerImageIndex')]);
+            }
+        }
 
         $(document).on('keyup.pauser', (e) => {
             if (this.checkFullscreen()) {

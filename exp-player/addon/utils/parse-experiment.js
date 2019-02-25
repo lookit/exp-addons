@@ -31,7 +31,7 @@ ExperimentParser.prototype._reformatFrame = function (frame, index) {
 ExperimentParser.prototype._resolveRandom = function (frame, frameId) {
     var randomizer = frame.sampler || 'random';  // Random sampling by default
     if (!randomizers[randomizer]) {
-        throw new Error(`Randomizer ${randomizer} not recognized`);
+        throw `Randomizer ${randomizer} not recognized`;
     } else {
         return randomizers[randomizer](
             frameId,
@@ -63,14 +63,7 @@ ExperimentParser.prototype._resolveDependencies = function (frame) {
     });
     return frame;
 };
-/* Convert a block of frames to an array of constituent frame config objects
- */
-ExperimentParser.prototype._resolveBlock = function (frame) {
-    return [
-        frame.items.map((frameId) => this._resolveFrame(frameId)),
-        null
-    ];
-};
+
 /* Convert any frame to a list of constituent frame config objects.
  * Centrally dispatches logic for all other frame types
  */
@@ -83,8 +76,6 @@ ExperimentParser.prototype._resolveFrame = function (frameId, frame) {
             return [[
                 this._resolveDependencies(frame)
             ], null];
-        } else if (frame.kind === 'block') {
-            return this._resolveBlock(frame, frameId);
         } else if (frame.kind === 'choice') {
             return this._resolveRandom(frame, frameId);
         } else {

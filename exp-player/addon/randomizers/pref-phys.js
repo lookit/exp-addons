@@ -1604,7 +1604,8 @@ function toFrames(frameId, eventVideos, BASE_DIR) {
 }
 
 var randomizer = function(frameId, frame, pastSessions, resolveFrame) {
-    var MAX_VIDEOS = 24;
+    var MAX_VIDEOS = frame.MAX_VIDEOS || 24;
+
     var BASE_DIR = 'https://s3.amazonaws.com/lookitcontents/exp-physics-final/';
 
    // TODO: In the future, we may want to identify the specific frame # to fetch instead of generic frame name
