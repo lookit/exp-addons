@@ -589,6 +589,8 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
              * @param {String} leftImage URL of image shown on left (given as a property of the frame)
              * @param {String} centerImage URL of image shown at center (given as a property of the frame)
              * @param {Number} testLength seconds to display images/loop videos (given as a property of the frame), if using time-based limit
+             * @param {String} baseDir location of stimuli
+             * @param {String} testAudio test audio file played, if any
              * @return {Object} The payload sent to the server
              */
             properties: {
@@ -610,6 +612,12 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                 },
                 testLength: {
                     type: 'number'
+                },
+                testAudio: {
+                    type: 'string'
+                },
+                baseDir: {
+                    type: 'string'
                 }
             }
             // No fields are required
