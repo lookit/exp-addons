@@ -1,89 +1,25 @@
 # Experimenter Addons
 
-A shared home for all of our shared addons
+*This repo is deprecated.* It has been merged into 
+[ember-lookit-frameplayer](https://github.com/lookit/ember-lookit-frameplayer), and 
+definitions of specific frames for use in Lookit experiments are now defined there along
+with the frame player. 
 
-# Installation
-
-Before beginning, you will need to install [Yarn](https://yarnpkg.com/en/docs/install), a package manager (like npm). 
-
-## Install the submodule:
-
-This repo module should included as a submodule in the Ember project where you want to use these addons.
-An example setup might be:
-```
-/<ember-project>
-  /ext
-    /exp-addons
-  /app
-    ...    
-```
-
-And the corresponding package.json entry is:
-
-```json
-{
-  ...,
-  "dependencies": {
-    "exp-player": "file:./ext/exp-addons/exp-player"
-  }
-}
-
-```
-
-For example:
+To use with old versions of ember-lookit-frameplayer that have exp-addons as a subrepo, 
+you will need to include exp-addons as a subrepo in the `lib` directory, install 
+dependencies via yarn and bower, and use yarn link if working locally so that your updates
+are reflected.
 
 ```bash
-cd lib && \
-git submodule init && \
-git submodule update && \
-cd exp-player && \
+cd lib
+git submodule init
+git submodule update
+cd exp-player
 yarn install --pure-lockfile
-```
-
-## Development
-
-If your work requires that you make changes to one of the exp-addon modules you can use `yarn link` for
-local development. This allows you to make changes to the code without having to push to github. To do
-this:
-
-```bash
-ROOT=`git rev-parse --show-toplevel`
-cd $ROOT/ext/exp-addons/exp-player && \
-yarn link && \
-cd $ROOT && \
+bower install
+yarn link
+cd ../..
 yarn link exp-player
 ```
 
-### Adding dependencies on other packages
-Sometimes, you will want to install an additional third-party package. In place of npm, this project uses `yarn`. 
-Most of the [commands](https://yarnpkg.com/en/docs/managing-dependencies) are the same, but this alternative tool 
-provides a way for two developers to guarantee they are using the same versions of underlying code. (by running 
-`yarn install --pure-lockfile`) This can help avoid a situation where things break unexpectedly when run on a different 
-computer.
-
-Whenever you choose to update your dependencies (`yarn add x` or `yarn install`), make sure that code still runs, then
-be sure to [commit](https://yarnpkg.com/en/docs/yarn-lock) the modified `yarn.lock` file, which represents the "current 
-known working state" for your app. 
-
-
-Any changes made in exp-player (except adding files, in which case you may need to relink the module) should
-now be automagically reflected in the consuming project.
-
-### Updating docs
-Documentation of `exp-player` components is generated using YUIDoc:
- ```
- $ cd exp-player
- $ yarn run docs
- ```
- 
-At the moment, this is a manual process: whatever 
- files are in the top level `/docs/` folder of the master branch will be served via GitHub pages. New documentation 
- releases will require manually making a new "release" to update the master branch, which can be done on request. 
-
-
-### Releasing a new version
-Within the `exp-player` folder, we provide a simple convenience command for handling new version releases: 
-`yarn run bump-version <MAJOR | MINOR| PATCH>`.
-
-This command handles incrementing the version number, verifying tests pass, and updating the documentation build. You 
-  will be responsible for committing the changes before handling the actual release (using a process such as git flow).
+This repo contained documentation of components generated using YUIdoc (`yarn run docs`).
