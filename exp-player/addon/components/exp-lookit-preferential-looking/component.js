@@ -318,7 +318,7 @@ export default ExpFrameBaseComponent.extend(FullScreen, MediaReload, VideoRecord
                     }
                 },
 
-               /**
+                /**
                  * Index in possibleImages for image to use on left. This will be overridden
                  * by any actual value provided for leftImage. Index must be in range
                  * [0, len(possibleImages)]. Omit or -1 not to use.
